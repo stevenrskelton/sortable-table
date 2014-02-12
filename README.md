@@ -5,9 +5,9 @@ Polymer Web Component that generates a sortable &lt;table> from JSON
 
 > Maintained by [Steven Skelton](https://github.com/stevenrskelton).
 
-## Demo
+> [Live Demo](http://stevenrskelton.ca/)
 
-> [Check it live](http://stevenrskelton.ca/).
+> [Additional Documentation](http://stevenrskelton.ca/)
 
 ## Usage
 
@@ -51,7 +51,7 @@ Attribute  			| Options                   | Default             	| Description
 `title`      		| *string*       			| `name`               	| Text to display in column header
 `formula`   		| *function*                | `null`               	| Single parameter `row`, return will override any value for property in `data`
 `cellTemplate`   	| *string*                 	| `null`              	| Renderer for entire `<td></td>` cell. Access to cell `{{value}}` and original `{{row}}` object from `data`
-`footerTemplate`   	| *string*                 	| `null`              	| Renderer for entire `<td></td>` cell. Access to array of all `{{values}}` in column.
+`footerTemplate`   	| *string*                 	| `null`              	| Renderer for entire `<td></td>` cell. Access to array of all `{{values}}` in column
 
 
 Example of a `footerTemplate` that computes the sum of a column:
@@ -67,6 +67,11 @@ __Note:__  Any filter used (eg: `sum` in above example) must be a member of `Pol
 
 __Note:__  `cellTemplate` and `footerTemplate` are limited to a subset of Javascript within `{{ }}` expressions.  See the [Polymer documentation](http://www.polymer-project.org/docs/polymer/expressions.html).
 
+## History
+
+* February 12, 2014
+	* Initial version
+
 ## Todo
 
 - Performance issues on column change
@@ -76,6 +81,6 @@ __Note:__  `cellTemplate` and `footerTemplate` are limited to a subset of Javasc
 - Allow null columns to be auto-discovered
 - Test for correct sort on mixed alpha+numeric data
 - Test cell templates are accessible from all contexts
-- Internet Explorer is completely broken
+- __Internet Explorer is completely broken__
 
 [MIT License](http://opensource.org/licenses/MIT)
