@@ -1,4 +1,4 @@
-<sortable-table>
+&lt;sortable-table&gt;
 ================
 
 Polymer Web Component that generates a sortable &lt;table> from JSON
@@ -63,8 +63,9 @@ Example of a `footerTemplate` that computes a sum:
   </td>
 </template>
 ```
-__NOTE: any filter used (eg: `sum` in above example) must be a member of `PolymerExpressions.prototype`__
-__NOTE: `cellTemplate` and `footerTemplate` have a limited subset of Javascript that can be used within {{ }} expressions.  See the [documentation](http://www.polymer-project.org/docs/polymer/expressions.html).__
+__NOTE:__ any filter used (eg: `sum` in above example) must be a member of `PolymerExpressions.prototype`
+
+__NOTE:__ `cellTemplate` and `footerTemplate` have a limited subset of Javascript that can be used within {{ }} expressions.  See the [documentation](http://www.polymer-project.org/docs/polymer/expressions.html).
 
 ## Todo
 
