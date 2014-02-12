@@ -3,11 +3,10 @@
 
 Polymer Web Component that generates a sortable &lt;table> from JSON
 
+> [Additional Documentation](http://stevenskelton.ca/)
 > Maintained by [Steven Skelton](https://github.com/stevenrskelton).
 
-> [Live Demo](http://stevenrskelton.ca/)
-
-> [Additional Documentation](http://stevenrskelton.ca/)
+**[Live Demo](http://stevenskelton.ca/)**
 
 ## Usage
 
