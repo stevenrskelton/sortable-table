@@ -75,6 +75,7 @@ __Note:__  `cellTemplate` and `footerTemplate` are limited to a subset of Javasc
 - Row / cell selection
 - Allow null columns to be auto-discovered
 - Test for correct sort on mixed alpha+numeric data
-- Test cell templates are accessible from all contexts.
+- Test cell templates are accessible from all contexts
+- Internet Explorer is completely broken
 
 [MIT License](http://opensource.org/licenses/MIT)
