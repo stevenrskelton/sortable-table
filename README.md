@@ -50,8 +50,8 @@ Attribute  			| Options                   | Default             	| Description
 `name`      		| *string*                 	| _required_           	| Name of row property
 `title`      		| *string*       			| `name`               	| Text to display in column header
 `formula`   		| *function*                | `null`               	| Single parameter `row`, return will override any value for property in `data`
-`cellTemplate`   	| *string*                 	| `null`              	| Renderer for entire `&lt;td&gt;` cell. Access to cell `{{value}}` and original `{{row}}` object from `data`
-`footerTemplate`   	| *string*                 	| `null`              	| Renderer for entire `&lt;td&gt;` cell. Access to array of all `{{values}}` in column.
+`cellTemplate`   	| *string*                 	| `null`              	| Renderer for entire `<td></td>` cell. Access to cell `{{value}}` and original `{{row}}` object from `data`
+`footerTemplate`   	| *string*                 	| `null`              	| Renderer for entire `<td></td>` cell. Access to array of all `{{values}}` in column.
 
 
 Example of a `footerTemplate` that computes the sum of a column:
