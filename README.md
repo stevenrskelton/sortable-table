@@ -50,11 +50,11 @@ Attribute  			| Options                   | Default             	| Description
 `name`      		| *string*                 	| _required_           	| Name of row property
 `title`      		| *string*       			| `name`               	| Text to display in column header
 `formula`   		| *function*                | `null`               	| Single parameter `row`, return will override any value for property in `data`
-`cellTemplate`   	| *string*                 	| `null`              	| Renderer for entire &lt;TD> cell. Access to cell {{value}} and original {{row}} object from `data`
-`footerTemplate`   	| *string*                 	| `null`              	| Renderer for entire &lt;TD> cell. Access to array of all {{values}} in column.
+`cellTemplate`   	| *string*                 	| `null`              	| Renderer for entire `&lt;td&gt;` cell. Access to cell `{{value}}` and original `{{row}}` object from `data`
+`footerTemplate`   	| *string*                 	| `null`              	| Renderer for entire `&lt;td&gt;` cell. Access to array of all `{{values}}` in column.
 
 
-Example of a `footerTemplate` that computes a sum:
+Example of a `footerTemplate` that computes the sum of a column:
 
 ```html
 <template id="sumTemplate">
@@ -63,16 +63,18 @@ Example of a `footerTemplate` that computes a sum:
   </td>
 </template>
 ```
-__NOTE:__ any filter used (eg: `sum` in above example) must be a member of `PolymerExpressions.prototype`
+__Note:__  Any filter used (eg: `sum` in above example) must be a member of `PolymerExpressions.prototype`
 
-__NOTE:__ `cellTemplate` and `footerTemplate` have a limited subset of Javascript that can be used within {{ }} expressions.  See the [documentation](http://www.polymer-project.org/docs/polymer/expressions.html).
+__Note:__  `cellTemplate` and `footerTemplate` are limited to a subset of Javascript within `{{ }}` expressions.  See the [Polymer documentation](http://www.polymer-project.org/docs/polymer/expressions.html).
 
 ## Todo
 
 - Performance issues on column change
 - Cleanup CSS
 - Allow custom styling
-- Row / Cell selection
+- Row / cell selection
 - Allow null columns to be auto-discovered
 - Test for correct sort on mixed alpha+numeric data
 - Test cell templates are accessible from all contexts.
+
+[MIT License](http://opensource.org/licenses/MIT)
