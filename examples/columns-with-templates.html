@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sortable Table using Polymer Web Components</title>
+    <script src="platform-0.1.3.js"></script>
+    <script src="polymer-0.1.3.js"></script>
+    <link rel="import" href="../src/sortable-table.html">
+  </head>
+  <body unresolved>
+    <template id="testTemplate">
+      <td style="border:1px solid {{row.count % 2 == 0 ? 'blue' : 'red'}};color:{{row.count % 2 == 0 ? 'blue' : 'red'}}">
+		ssss{{value}}err{{rrow.minimum}}
+      </td>
+    </template>
+    <template id="hiTemplate">
+      <td class="ssDatatableHeader">
+		hi!
+      </td>
+    </template>
+    <template id="sumTemplate">
+      <td class="ssDatatableHeader" style="text-align:right">
+		{{values | sum}}
+      </td>
+    </template>     
+    <template id="ssTableTemplate" bind>
+      <sortable-table id="ssTable" data="{{data}}" columns="{{columns}}" sortColumn="p50" sortDescending="false"></sortable-table>
+    </template> 
+    <script>
+      var ostrichMetrics = { 
+		"getQuery_01_msec" : {
+			"average" : 388,
+			"count" : 4,
+			"maximum" : 1283,
+			"minimum" : 95,
+			"p50" : 105,
+			"p90" : 1283,
+			"p95" : 1283,
+			"p99" : 1283,
+			"p999" : 1283,
+			"p9999" : 1283,
+			"sum" : 1553
+		},
+		"getQuery_02_msec" : {
+			"average" : 8739,
+			"count" : 12,
+			"maximum" : 31568,
+			"minimum" : 576,
+			"p50" : 2858,
+			"p90" : 31568,
+			"p95" : 31568,
+			"p99" : 31568,
+			"p999" : 31568,
+			"p9999" : 31568,
+			"sum" : 104876
+		},
+		"getQuery_03_msec" : {
+			"average" : 502,
+			"count" : 1,
+			"maximum" : 521,
+			"minimum" : 521,
+			"p50" : 521,
+			"p90" : 521,
+			"p95" : 521,
+			"p99" : 521,
+			"p999" : 521,
+			"p9999" : 521,
+			"sum" : 502
+		},
+		"getQuery_04_msec" : {
+			"average" : 7492,
+			"count" : 6,
+			"maximum" : 19138,
+			"minimum" : 1051,
+			"p50" : 3491,
+			"p90" : 19138,
+			"p95" : 19138,
+			"p99" : 19138,
+			"p999" : 19138,
+			"p9999" : 19138,
+			"sum" : 44955
+		},
+		"getQuery_05_msec" : {
+			"average" : 6583,
+			"count" : 13,
+			"maximum" : 19138,
+			"minimum" : 950,
+			"p50" : 5210,
+			"p90" : 12825,
+			"p95" : 19138,
+			"p99" : 19138,
+			"p999" : 19138,
+			"p9999" : 19138,
+			"sum" : 85587
+		},
+		"getQuery_06_msec"  : {
+			"average" : 448,
+			"count" : 4,
+			"maximum" : 637,
+			"minimum" : 212,
+			"p50" : 349,
+			"p90" : 637,
+			"p95" : 637,
+			"p99" : 637,
+			"p999" : 637,
+			"p9999" : 637,
+			"sum" : 1793
+		},
+		"getQuery_07_msec" : {
+			"average" : 287,
+			"count" : 1,
+			"maximum" : 286,
+			"minimum" : 286,
+			"p50" : 286,
+			"p90" : 286,
+			"p95" : 286,
+			"p99" : 286,
+			"p999" : 286,
+			"p9999" : 286,
+			"sum" : 287
+		},
+		"getQuery_08_msec" : {
+			"average" : 138,
+			"count" : 3,
+			"maximum" : 173,
+			"minimum" : 105,
+			"p50" : 128,
+			"p90" : 173,
+			"p95" : 173,
+			"p99" : 173,
+			"p999" : 173,
+			"p9999" : 173,
+			"sum" : 416
+		},
+		"getQuery_09_msec" : {
+			"average" : 310,
+			"count" : 12,
+			"maximum" : 3158,
+			"minimum" : 26,
+			"p50" : 35,
+			"p90" : 116,
+			"p95" : 3158,
+			"p99" : 3158,
+			"p999" : 3158,
+			"p9999" : 3158,
+			"sum" : 3728
+		},
+		"getQuery_10_msec" : {
+			"average" : 1762,
+			"count" : 5,
+			"maximum" : 5210,
+			"minimum" : 427,
+			"p50" : 1051,
+			"p90" : 5210,
+			"p95" : 5210,
+			"p99" : 5210,
+			"p999" : 5210,
+			"p9999" : 5210,
+			"sum" : 8814
+		},
+		"getQuery_11_msec" : {
+			"average" : 1640,
+			"count" : 4,
+			"maximum" : 4714,
+			"minimum" : 316,
+			"p50" : 704,
+			"p90" : 4714,
+			"p95" : 4714,
+			"p99" : 4714,
+			"p999" : 4714,
+			"p9999" : 4714,
+			"sum" : 6561
+		},
+		"getQuery_12_msec" : {
+			"average" : 1019,
+			"count" : 4,
+			"maximum" : 2339,
+			"minimum" : 286,
+			"p50" : 472,
+			"p90" : 2339,
+			"p95" : 2339,
+			"p99" : 2339,
+			"p999" : 2339,
+			"p9999" : 2339,
+			"sum" : 4077
+		},
+		"getQuery_13_msec" : {
+			"average" : 89,
+			"count" : 1,
+			"maximum" : 86,
+			"minimum" : 86,
+			"p50" : 86,
+			"p90" : 86,
+			"p95" : 86,
+			"p99" : 86,
+			"p999" : 86,
+			"p9999" : 86,
+			"sum" : 89
+		},
+		"getQuery_14_msec" : {
+			"average" : 257,
+			"count" : 12,
+			"maximum" : 2858,
+			"minimum" : 10,
+			"p50" : 26,
+			"p90" : 95,
+			"p95" : 2858,
+			"p99" : 2858,
+			"p999" : 2858,
+			"p9999" : 2858,
+			"sum" : 3095
+		}
+      };
+      var ostrichMetricsArray = []; 
+      var names = Object.getOwnPropertyNames(ostrichMetrics);
+      for (var i = 0; i < names.length; i++) {
+		var name = names[i];
+		var data = ostrichMetrics[name];
+		data.name = name;
+		ostrichMetricsArray.push(data);
+      }
+      
+      function bindData(){
+		var columns = null;
+		if(window.innerWidth < 550){
+			columns = [
+				{name:'name', title:'service call'},
+				{name:'average'},
+				{name:'count'}
+			];
+		}else if(window.innerWidth < 1000){
+			columns = [
+				{name:'name', title:'service call'},
+				{name:'average'},
+				{name:'count'},
+				{name:'maximum'},
+				{name:'minimum'}
+			];
+		}else{
+			columns = [
+				{name:'name', title:'service call'},
+				{name:'average'},
+				{name:'count'},
+				{name:'maximum', cellTemplate: 'testTemplate', footerTemplate: 'hiTemplate' },
+				{name:'minimum', footerTemplate: 'hiTemplate' },
+				{name:'p50'},
+				{name:'p90'},
+				{name:'p95'},
+				{name:'p99'},
+				{name:'p999'},
+				{name:'p9999'},
+				{name:'sum', footerTemplate: 'sumTemplate' },
+				{name:'comp', func: function(row){ return row.average * row.count; }, footerTemplate: 'sumTemplate'}
+			];
+		}
+		document.getElementById('ssTableTemplate').model = {
+		  data: ostrichMetricsArray,
+		  columns: columns,		  
+		};
+      }
+     
+      document.addEventListener('DOMContentLoaded', bindData);
+      //TODO: use window.matchMedia
+      window.addEventListener('resize', bindData);
+    </script>
+  </body>
+</html>

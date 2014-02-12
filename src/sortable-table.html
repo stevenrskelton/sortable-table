@@ -1,0 +1,165 @@
+<!--
+ https://github.com/stevenrskelton/sortable-table
+-->
+<polymer-element name="sortable-table" attributes="data columns sortColumn sortDescending">
+	<template>
+		<table class="ssDatatable">
+			<tr>
+			  <template repeat="{{column in columns}}">
+				<th on-click="{{changeSort}}" style="{{sortColumn==column.name ? (sortDescending ? 'text-decoration:overline' : 'text-decoration:underline') : ''}}">{{!(column.title) ? column.name : column.title}}</th>
+			  </template>
+			</tr>
+			<template repeat="{{dataRow in data | sortByKey(sortColumn, sortDescending, columns)}}">
+			  <tr>
+				<template repeat="{{column in columns}}">
+				<template bind="{{row in dataRow | drawCell(column)}}">
+				  <template ref="{{column.cellTemplate}}" bind="{{row}}">
+					  <td>{{value}}</td>
+				  </template>
+				</template>
+				</template>
+			  </tr>
+			</template>
+			<template if="{{showFooter}}">
+			  <tr>
+				<template repeat="{{column in columns}}">
+				  <template bind="{{values in data | selectProperty(column)}}">
+				<template ref="{{column.footerTemplate}}" bind>
+					<td class="ssDatatableHeader" style="border:0;"></td>
+				</template>
+				  </template>
+				</template>
+			  </tr>
+			</template>
+		</table>
+    </template>
+
+    <script>
+      PolymerExpressions.prototype.sortByKey = function(array, key, desc, columns) {    
+		return array.sort(function(a, b) {
+          var x, y;
+          //determine if computed field      
+          var func = null;
+          for(var i=0;i<columns.length;i++){
+			if(columns[i].name===key){
+				func = columns[i].func;
+				break;
+			}
+          }
+          if(func){
+			x = func(a);
+			y = func(b);
+          }else{
+			x = a[key];
+			y = b[key];
+          }
+
+          if (typeof x == "string"){
+			x = x.toLowerCase(); 
+			y = y.toLowerCase();
+          }
+          if(desc){
+			return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+          }else{
+			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+          }
+		});
+      };
+      PolymerExpressions.prototype.drawCell = function(row, column) {
+		var value;
+		if(column.func){
+		  value = column.func(row);
+		}else{
+		  value = row[column.name];
+		}
+		return { row: row, value: value };
+      };
+      PolymerExpressions.prototype.selectProperty = function(objects, column) {
+		var arr = [];
+		for(var i=0;i<objects.length;i++){
+		  var row = objects[i];
+		  var value;
+		  if(column.func){
+			value = column.func(row);
+		  }else{
+			value = row[column.name];
+		  }
+		  arr.push(value);
+		}
+		return arr;
+      };  
+      PolymerExpressions.prototype.sum = function(arr) {
+		return arr.reduce(function(a, b) { return a + b; }, 0);
+      };      
+      Polymer('sortable-table', {
+		  data: [],
+		  columns: [],
+		  sortColumn: null,
+		  sortDescending: false,
+		  changeSort: function(e,p,o){
+			var clickedSortColumn = o.templateInstance_.model.column.name;
+			if(clickedSortColumn == this.sortColumn){
+			  //column already sorted, reverse sort
+			  this.sortDescending = !this.sortDescending;
+			}else{
+			  this.sortColumn = clickedSortColumn;
+			}
+		  },
+		  importedTemplates: [],
+		  showFooter: false,
+		  columnsChanged: function(){
+			var self = this;
+			function addTemplateIfNotInDocument(templateId){
+			  if(templateId && !self.shadowRoot.getElementById(templateId)){
+				var t = self.ownerDocument.getElementById(templateId);
+				if(t!=null){
+				  self.shadowRoot.appendChild(t);
+				  self.importedTemplates.push(t);
+				}else{
+				  //TODO: figure out where this are found, they can't be found in the
+				  // self.ownerDocument.  So store them in an importedTemplates array :(
+				  for(var i=0;i<self.importedTemplates.length;i++){
+					self.shadowRoot.appendChild(self.importedTemplates[i]);
+				  }
+				}
+			  }
+			}
+			  
+			for(var i=0;i<this.columns.length;i++){
+			  addTemplateIfNotInDocument(this.columns[i].cellTemplate);
+			  addTemplateIfNotInDocument(this.columns[i].footerTemplate);
+			  if(this.columns[i].footerTemplate) this.showFooter=true;
+			}
+		  }
+      });
+    </script>
+    <style>
+      table.ssDatatable {
+		width: 100%;
+		border-collapse: collapse;
+      }
+      table.ssDatatable tr:nth-of-type(even) {
+		background-color: rgba(255,255,224,0.25);
+      }
+      table.ssDatatable .ssDatatableHeader,
+      table.ssDatatable th {
+		background: #555;
+		color: white;
+		font-weight: bold;
+		text-align: center;
+      }
+      table.ssDatatable td,
+      table.ssDatatable th {
+		padding: 6px;
+		border: 1px solid #ccc;
+		text-align: right;
+      }
+      table.ssDatatable th {
+		text-align: center;
+		cursor: pointer;
+      }
+      table.ssDatatable td:first-of-type {
+		text-align: left;
+      }
+    </style>
+</polymer-element>
