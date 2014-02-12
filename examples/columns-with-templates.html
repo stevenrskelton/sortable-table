@@ -9,7 +9,7 @@
   <body unresolved>
     <template id="testTemplate">
       <td style="border:1px solid {{row.count % 2 == 0 ? 'blue' : 'red'}};color:{{row.count % 2 == 0 ? 'blue' : 'red'}}">
-		ssss{{value}}err{{rrow.minimum}}
+		ssss{{value}}err{{row.minimum}}
       </td>
     </template>
     <template id="hiTemplate">
@@ -249,7 +249,7 @@
 				{name:'p999'},
 				{name:'p9999'},
 				{name:'sum', footerTemplate: 'sumTemplate' },
-				{name:'comp', func: function(row){ return row.average * row.count; }, footerTemplate: 'sumTemplate'}
+				{name:'comp', formula: function(row){ return row.average * row.count; }, footerTemplate: 'sumTemplate'}
 			];
 		}
 		document.getElementById('ssTableTemplate').model = {

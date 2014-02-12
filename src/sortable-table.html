@@ -39,16 +39,16 @@
 		return array.sort(function(a, b) {
           var x, y;
           //determine if computed field      
-          var func = null;
+          var formula = null;
           for(var i=0;i<columns.length;i++){
 			if(columns[i].name===key){
-				func = columns[i].func;
+				formula = columns[i].formula;
 				break;
 			}
           }
-          if(func){
-			x = func(a);
-			y = func(b);
+          if(formula){
+			x = formula(a);
+			y = formula(b);
           }else{
 			x = a[key];
 			y = b[key];
@@ -67,8 +67,8 @@
       };
       PolymerExpressions.prototype.drawCell = function(row, column) {
 		var value;
-		if(column.func){
-		  value = column.func(row);
+		if(column.formula){
+		  value = column.formula(row);
 		}else{
 		  value = row[column.name];
 		}
@@ -79,8 +79,8 @@
 		for(var i=0;i<objects.length;i++){
 		  var row = objects[i];
 		  var value;
-		  if(column.func){
-			value = column.func(row);
+		  if(column.formula){
+			value = column.formula(row);
 		  }else{
 			value = row[column.name];
 		  }
