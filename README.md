@@ -9,9 +9,11 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 
 [Additional Documentation on Templates](http://stevenskelton.ca/advanced-uses-polymer-templates/)
 
-> ## Live Demos
-> [Demo 1](http://blog.stevenskelton.ca/sortable-table/examples/columns-with-templates.html)
-> [Demo 2](http://blog.stevenskelton.ca/sortable-table/examples/columns-with-templates-that-are-templates.html)
+## Live Demos
+ 
+> [Demo 1](http://files.stevenskelton.ca/sortable-table/examples/columns-with-templates.html)
+
+> [Demo 2](http://files.stevenskelton.ca/sortable-table/examples/columns-with-templates-that-are-templates.html)
 
 ## Usage
 
@@ -82,4 +84,10 @@ __Note:__  `cellTemplate` and `footerTemplate` are limited to a subset of Javasc
 - Test cell templates are accessible from all contexts
 - __Internet Explorer is completely broken__
 
-[MIT License](http://opensource.org/licenses/MIT)
+## History
+
+For detailed changelog, check [Releases](https://github.com/stevenrskelton/sortable-table/releases).
+
+## License
+
+[MIT License](http://opensource.org/licenses/MIT) © Steven Skelton
