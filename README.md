@@ -9,7 +9,7 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 
 [Additional Documentation on Templates](http://stevenskelton.ca/advanced-uses-polymer-templates/)
 
-> ## [Live Demos]
+> ## Live Demos
 > [Demo 1](http://blog.stevenskelton.ca/sortable-table/examples/columns-with-templates.html)
 > [Demo 2](http://blog.stevenskelton.ca/sortable-table/examples/columns-with-templates-that-are-templates.html)
 
@@ -77,7 +77,7 @@ __Note:__  `cellTemplate` and `footerTemplate` are limited to a subset of Javasc
 - Cleanup CSS
 - Allow custom styling
 - Row / cell selection
-- Allow null columns to be auto-discovered
+- Allow missing columns attribute to auto-discover columns from data
 - Test for correct sort on mixed alpha+numeric data
 - Test cell templates are accessible from all contexts
 - __Internet Explorer is completely broken__
