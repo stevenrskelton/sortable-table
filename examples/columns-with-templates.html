@@ -2,8 +2,8 @@
 <html>
   <head>
     <title>Sortable Table using Polymer Web Components</title>
-    <script src="platform-0.1.3.js"></script>
-    <script src="polymer-0.1.3.js"></script>
+    <script src="platform-0.1.4.js"></script>
+    <script src="polymer-0.1.4.js"></script>
     <link rel="import" href="../src/sortable-table.html">
   </head>
   <body unresolved>
@@ -22,8 +22,8 @@
 		{{values | sum}}
       </td>
     </template>     
-    <template id="ssTableTemplate" bind>
-      <sortable-table id="ssTable" data="{{data}}" columns="{{columns}}" sortColumn="p50" sortDescending="false"></sortable-table>
+    <template id="tableTemplate" bind>
+      <sortable-table data="{{data}}" columns="{{columns}}" sortColumn="p50" sortDescending="false"></sortable-table>
     </template> 
     <script>
       var ostrichMetrics = { 
@@ -252,13 +252,13 @@
 				{name:'comp', formula: function(row){ return row.average * row.count; }, footerTemplate: 'sumTemplate'}
 			];
 		}
-		document.getElementById('ssTableTemplate').model = {
+		document.getElementById('tableTemplate').model = {
 		  data: ostrichMetricsArray,
 		  columns: columns,		  
 		};
       }
      
-      document.addEventListener('DOMContentLoaded', bindData);
+      window.addEventListener('polymer-ready', bindData);
       //TODO: use window.matchMedia
       window.addEventListener('resize', bindData);
     </script>

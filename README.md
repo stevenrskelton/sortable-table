@@ -1,13 +1,17 @@
 &lt;sortable-table&gt;
 ================
 
-Polymer Web Component that generates a sortable &lt;table> from JSON
+Polymer Web Component that generates a sortable &lt;table> from JSON.
 
-> [Additional Documentation](http://stevenskelton.ca/)
+Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 
-> Maintained by [Steven Skelton](https://github.com/stevenrskelton).
+[Additional Documentation on Table Sorting](http://stevenskelton.ca/sortable-table-with-polymer-web-components/)
 
-**[Live Demo](http://stevenskelton.ca/)**
+[Additional Documentation on Templates](http://stevenskelton.ca/advanced-uses-polymer-templates/)
+
+> ## [Live Demos]
+> [Demo 1](http://blog.stevenskelton.ca/sortable-table/examples/columns-with-templates.html)
+> [Demo 2](http://blog.stevenskelton.ca/sortable-table/examples/columns-with-templates-that-are-templates.html)
 
 ## Usage
 
@@ -66,11 +70,6 @@ Example of a `footerTemplate` that computes the sum of a column:
 __Note:__  Any filter used (eg: `sum` in above example) must be a member of `PolymerExpressions.prototype`
 
 __Note:__  `cellTemplate` and `footerTemplate` are limited to a subset of Javascript within `{{ }}` expressions.  See the [Polymer documentation](http://www.polymer-project.org/docs/polymer/expressions.html).
-
-## History
-
-* February 12, 2014
-	* Initial version
 
 ## Todo
 

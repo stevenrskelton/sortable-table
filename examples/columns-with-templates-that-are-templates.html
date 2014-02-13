@@ -2,8 +2,8 @@
 <html>
   <head>
     <title>Sortable Table using Polymer Web Components</title>
-    <script src="platform-0.1.3.js"></script>
-    <script src="polymer-0.1.3.js"></script>
+    <script src="platform-0.1.4.js"></script>
+    <script src="polymer-0.1.4.js"></script>
     <link rel="import" href="../src/sortable-table.html">
   </head>
   <body unresolved>
@@ -56,16 +56,16 @@
 		{name:'total', title:'Total', formula: function(row){ return row.alice + row.bill + row.casey; }}
 	];
 
-      document.addEventListener('DOMContentLoaded', function(){
-		var model = {
-		  data: fruits,
-		  columns: columns,
-		  sortColumn: 'average',
-		  sortDescending: false
-		};
-		document.getElementById('example').model = model;
-		document.getElementById('currentSort').model =  model;
-	  });
+	window.addEventListener('polymer-ready', function(){
+	  var model = {
+	    data: fruits,
+	    columns: columns,
+	    sortColumn: 'average',
+	    sortDescending: false
+	  };
+	  document.getElementById('example').model = model;
+	  document.getElementById('currentSort').model =  model;
+	});
     </script>
 
   </body>
