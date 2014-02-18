@@ -65,7 +65,17 @@ Attribute  			| Options                   | Default             	| Description
 `footerTemplate`   	| *string*                 	| `null`              	| Renderer for entire `<td></td>` cell. Access to array of all `{{values}}` of cells in the column
 
 
-Example of a `footerTemplate` that computes the sum of a column:
+Example of a `cellTemplate` that displays an image beside the column value:
+
+```html
+<template id="myCellTemplate">
+  <td>
+	<img src="{{row.img}}"/>{{value}}
+  </td>
+</template>
+```
+
+Example of a `footerTemplate` that computes the sum of a column using a filter named `sum`:
 
 ```html
 <template id="sumTemplate">
