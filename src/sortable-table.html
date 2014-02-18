@@ -6,8 +6,8 @@
 		<table class="ssDatatable">
 			<tr>
 			  <template repeat="{{column in columns}}">
-				<th on-click="{{changeSort}}" style="{{sortColumn==column.name && sortDescending ? 'text-decoration:overline' : ''}}
-				{{sortColumn==column.name && !sortDescending ? 'text-decoration:underline' : ''}}">{{!(column.title) ? column.name : column.title}}</th>
+				<th on-click="{{changeSort}}" class="{{column.headerClass}}" style="{{sortColumn==column.name && sortDescending ? 'text-decoration:overline;' : ''}}
+				{{sortColumn==column.name && !sortDescending ? 'text-decoration:underline;' : ''}}{{column.headerStyle}}">{{!(column.title) ? column.name : column.title}}</th>
 			  </template>
 			</tr>
 			<template repeat="{{row in data | sortByKey(sortColumn, sortDescending, columns)}}">

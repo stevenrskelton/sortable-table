@@ -63,6 +63,8 @@ Attribute  			| Options                   | Default             	| Description
 `formula`   		| *function*                | `null`               	| Single parameter `row`, return will override any value for property in `data`
 `cellTemplate`   	| *string*                 	| `null`              	| Renderer for entire `<td></td>` cell. Access to cell `{{value}}` and original `{{row}}` object from `data`
 `footerTemplate`   	| *string*                 	| `null`              	| Renderer for entire `<td></td>` cell. Access to array of all `{{values}}` of cells in the column
+`headerClass`      	| *string*                 	| `null`           		| Additional CSS classes for `<th>` column header (space separated)
+`headerStyle`      	| *string*                 	| `null`	           	| Additional CSS style for `<th>` column header
 
 
 Example of a `cellTemplate` that displays an image beside the column value:
