@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<title>Sortable Table using Polymer Web Components</title>
+	<script src="platform-0.2.0.js"></script>
+	<script src="polymer-0.2.0.js"></script>
+	<link rel="import" href="../src/sortable-table.html">
+  </head>
+  <body unresolved>
+
+	<template id="example" bind>
+	  <sortable-table data="{{data}}" columns="{{columns}}" sortColumn="id"></sortable-table>
+	</template>
+
+	<script>
+
+	  var data = [
+		{id: 0, fruit: 'apple', alice: 4, bill: 10, casey: 2 },
+		{id: 1, fruit: 'banana', alice: 0, bill: 4, casey: 0 },
+		{id: 2, fruit: 'grape', alice: 2, bill: 3, casey: 5 },
+		{id: 3, fruit: 'pear', alice: 4, bill: 2, casey: 8 },
+		{id: 4, fruit: 'strawberry', alice: 0, bill: 14, casey: 0 }
+	  ];
+	  var dataMaxId = 5;
+
+	  var columns = [
+		  {name: 'id', title: 'ID' },
+		  {name:'fruit', title:'Fruit' },
+		  {name:'alice', title:'Alice' },
+		  {name:'bill', title:'Bill' },
+		  {name:'casey', title:'Casey' }
+	  ];
+
+	  var fruit = ['apple','banana','grape','pear','strawberry'];
+
+	  function updateData(){
+		data = data.slice(1);
+		data.push({
+		  id: dataMaxId++,
+		  fruit: fruit[Math.floor(Math.random()*5)],
+		  alice: Math.floor(Math.random()*16),
+		  bill: Math.floor(Math.random()*16),
+		  casey: Math.floor(Math.random()*16)
+		});
+
+		document.getElementById('example').model.data = data.slice();
+
+		setTimeout(updateData, 2500);
+	  }
+
+	  window.addEventListener('polymer-ready', function(){
+		document.getElementById('example').model = {
+		  data: data,
+		  columns: columns
+		};
+		updateData();
+	  });
+	</script>
+
+  </body>
+</html>

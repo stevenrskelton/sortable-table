@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Sortable Table using Polymer Web Components</title>
-    <script src="platform-0.1.4.js"></script>
-    <script src="polymer-0.1.4.js"></script>
-    <link rel="import" href="../src/sortable-table.html">
+	<title>Sortable Table using Polymer Web Components</title>
+	<script src="platform-0.2.0.js"></script>
+	<script src="polymer-0.2.0.js"></script>
+	<link rel="import" href="../src/sortable-table.html">
   </head>
   <body unresolved>
 	<template id="fruitsTemplate">
-      <td>
+	  <td>
 		<template if="{{value=='apple'}}">
 			<img alt="apple" style="vertical-align:middle" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAC4jAAAuIwF4pT92AAAEGklEQVRYw+2XW2xUVRSGv73Pbc7MtNhpy5BeQLBFQ6mFEggSLhKFECLIK+HBB8QL+mCiT2o0mJgYCA/GIAnRFxMCEmnUmCjVaGIMIH2RomgEisAAghQovc2cy14+UBCw7UwxgZiwHs8+e6///Gut/99HiQh3MzR3Oe4B+P8C6OvrVsCk3zq+WwF4t3uOfbsb0+lKb9tra/b3X76cfmj24hqgcKdLkG94+JEOpTF3ogQayAC1wFSgEmBy09xt2nINcE1MxgGNQ+/5/7UEqqezc0bvwV+e6u3oWNZ/5NhEExbcuOeyZWeqBstnzzpYsWjBdj9d1gc0n9iy9aXur75elj9/ttx2/dirr7+YXjj/+5olj232H5iyb8QkIyihndu9+90TG955Pi4ESovGOBZE4c2bgQOTYjP/z3RUKAy6156LKNxxZXh1WXq6ctL01qvvjX9y5ctAVBKAKz/sf6Pz2Rc2xFGIpW1EKSSKrma8JYyK0aK5tmjCAPf+SSQqs2RXr+LCp18w8NMhmfHZx+v8yZM/LAVA9sDjy7vyJ3NJHAelNBIGoxdSBJQCEey6GnQYkZo7k+ZNmwD48YlVJNzEXy1tOxuBnlGb8EL7N02DJ3NJZdlY2iqeHLCSKTAKpRSO5xN0d1O3dt319embN9Jz6NfqS3v3NRWdgoEjx2qtZBIRwQRBSSMSDfSjfA8TwWBXF1II6G5vv6FOBiMx/T8fnlgUgLi2JfkA23UpxagVCiuRgDBC+y4KjXYczmz9gDiOATj8+ptopTFBWFV0DP1xmfMmDokHI2zfxxQKN4z5cPxbEBvERGCARAJVCMHEfFtVjzu+Akt5CIKyrb6iDJQtnJOzPA+tFSY/iE4mRqs+EseYG8cznwfHQiLwxlejsDESowA7W322KAB/Qu3RiubpZ2Sos83A4L9pVwptu4iYYdkxQYCdcFDyz9zaflKqli49XooUD1Q9t/YjpdTIuux6gKCUjNAXEEcheC5oC0Qob5mec1LJkyV5Qaa56X2vKtM3/Ok2cRDcTPtI8hAUsBwHLIe69U9vB/IlAXAymVzNmtW7GOpihojWtovEIUjpBhiHIX5tdsBvaNg6FjeU+vXPvHLf/HlHMQaFwk76SBShtCo5uSh91UaXLfncq64+NRYzutrQfxxf0LnuxS8LZ86nlDEYE43B6C0s28ZvnHK6tW3nLODcmAEASBzN61i6si2fO529rvnD+cBNp1pYnotO2EHrJztXevV1e277QqIse+/Mth0tUze+vSXd2NDjpJIoDSKCk/Il8+iiE5ZjI8aAyJASWqSnPZhr2bVj8WjJS2LgligHKq4c6qyMui8m062t59zy8lO9vx+bdnFP+xwJw5Rdlr7kTZhwunrF8r1Ab9EPvPdrdg/A3QbwN3RVn5GHaM5pAAAAAElFTkSuQmCC" />
 		</template>
@@ -25,12 +25,12 @@
 			<img alt="strawberry" style="vertical-align:middle" src="data:image/png;base64,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" />
 		</template>
 		{{value}}
-      </td>
-    </template>
+	  </td>
+	</template>
 
-    <template id="example" bind>
-      <sortable-table data="{{data}}" columns="{{columns}}" sortColumn="{{sortColumn}}" sortDescending="{{sortDescending}}"></sortable-table>
-    </template>
+	<template id="example" bind>
+	  <sortable-table data="{{data}}" columns="{{columns}}" sortColumn="{{sortColumn}}" sortDescending="{{sortDescending}}"></sortable-table>
+	</template>
 
 	<template id="currentSort" bind>
 		<p>
@@ -38,8 +38,8 @@
 		</p>
 	</template>
 
-    <script>
-      var fruits = [
+	<script>
+	  var fruits = [
 		{fruit: 'apple', alice: 4, bill: 10, casey: 2 },
 		{fruit: 'banana', alice: 0, bill: 4, casey: 0 },
 		{fruit: 'grape', alice: 2, bill: 3, casey: 5 },
@@ -58,15 +58,15 @@
 
 	window.addEventListener('polymer-ready', function(){
 	  var model = {
-	    data: fruits,
-	    columns: columns,
-	    sortColumn: 'average',
-	    sortDescending: false
+		data: fruits,
+		columns: columns,
+		sortColumn: 'average',
+		sortDescending: false
 	  };
 	  document.getElementById('example').model = model;
 	  document.getElementById('currentSort').model =  model;
 	});
-    </script>
+	</script>
 
   </body>
 </html>

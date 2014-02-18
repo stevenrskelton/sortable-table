@@ -1,32 +1,32 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Sortable Table using Polymer Web Components</title>
-    <script src="platform-0.1.4.js"></script>
-    <script src="polymer-0.1.4.js"></script>
-    <link rel="import" href="../src/sortable-table.html">
+	<title>Sortable Table using Polymer Web Components</title>
+	<script src="platform-0.2.0.js"></script>
+	<script src="polymer-0.2.0.js"></script>
+	<link rel="import" href="../src/sortable-table.html">
   </head>
   <body unresolved>
-    <template id="summaryTemplate">
-      <td style="border:1px solid {{value <= 1000 ? 'blue' : 'red'}};color:{{value <= 1000  ? 'blue' : 'red'}}">
+	<template id="summaryTemplate">
+	  <td style="border:1px solid {{value <= 1000 ? 'blue' : 'red'}};color:{{value <= 1000  ? 'blue' : 'red'}}">
 		max: {{value}}, min: {{row.minimum}}
-      </td>
-    </template>
-    <template id="hiTemplate">
-      <td class="ssDatatableHeader">
+	  </td>
+	</template>
+	<template id="hiTemplate">
+	  <td class="ssDatatableHeader">
 		hi!
-      </td>
-    </template>
-    <template id="sumTemplate">
-      <td class="ssDatatableHeader" style="text-align:right">
+	  </td>
+	</template>
+	<template id="sumTemplate">
+	  <td class="ssDatatableHeader" style="text-align:right">
 		{{values | sum}}
-      </td>
-    </template>     
-    <template id="tableTemplate" bind>
-      <sortable-table data="{{data}}" columns="{{columns}}" sortColumn="p50" sortDescending="false"></sortable-table>
-    </template> 
-    <script>
-      var ostrichMetrics = { 
+	  </td>
+	</template>
+	<template id="tableTemplate" bind>
+	  <sortable-table data="{{data}}" columns="{{columns}}" sortColumn="p50" sortDescending="false"></sortable-table>
+	</template>
+	<script>
+	  var ostrichMetrics = {
 		"getQuery_01_msec" : {
 			"average" : 388,
 			"count" : 4,
@@ -209,17 +209,17 @@
 			"p9999" : 2858,
 			"sum" : 3095
 		}
-      };
-      var ostrichMetricsArray = []; 
-      var names = Object.getOwnPropertyNames(ostrichMetrics);
-      for (var i = 0; i < names.length; i++) {
+	  };
+	  var ostrichMetricsArray = [];
+	  var names = Object.getOwnPropertyNames(ostrichMetrics);
+	  for (var i = 0; i < names.length; i++) {
 		var name = names[i];
 		var data = ostrichMetrics[name];
 		data.name = name;
 		ostrichMetricsArray.push(data);
-      }
-      
-      function bindData(){
+	  }
+
+	  function bindData(){
 		var columns = null;
 		if(window.innerWidth < 550){
 			columns = [
@@ -252,15 +252,19 @@
 				{name:'comp', formula: function(row){ return row.average * row.count; }, footerTemplate: 'sumTemplate'}
 			];
 		}
+		return columns;
+	  }
+
+	  window.addEventListener('polymer-ready', function(){
 		document.getElementById('tableTemplate').model = {
 		  data: ostrichMetricsArray,
-		  columns: columns,		  
+		  columns: bindData()
 		};
-      }
-     
-      window.addEventListener('polymer-ready', bindData);
-      //TODO: use window.matchMedia
-      window.addEventListener('resize', bindData);
-    </script>
+	  });
+	  //TODO: use window.matchMedia
+	  window.addEventListener('resize', function(){
+		document.getElementById('tableTemplate').model.columns = bindData();
+	  });
+	</script>
   </body>
 </html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<title>Sortable Table using Polymer Web Components</title>
+	<script src="platform-0.2.0.js"></script>
+	<script src="polymer-0.2.0.js"></script>
+	<link rel="import" href="../src/sortable-table.html">
+  </head>
+  <body unresolved>
+
+	<template id="example" bind>
+	  <sortable-table data="{{data}}" sortColumn="alice"></sortable-table>
+	</template>
+
+	<br/>
+
+	<template id="example2" bind>
+	  <sortable-table data="{{data}}" sortColumn="alice"></sortable-table>
+	</template>
+
+	<script>
+	  var fruits = [
+		{fruit: 'apple', alice: 4, bill: 10, casey: 2 },
+		{fruit: 'banana', alice: 0, bill: 4, casey: 0 },
+		{fruit: 'grape', alice: 2, bill: 3, casey: 5 },
+		{fruit: 'pear', alice: 4, bill: 2, casey: 8 },
+		{fruit: 'strawberry', alice: 0, bill: 14, casey: 0 }
+	  ];
+
+	  var spottedFruits = [
+		{fruit: 'apple', alice: 4, bill: 10, casey: 2 },
+		{fruit: 'banana', alice: 0, bill: 4, daisy: 0 },
+		{fruit: 'grape', alice: 2 },
+		{fruit: 'pear', alice: 4, elly: 2 },
+		{fruit: 'strawberry', bill: 14 }
+	  ];
+
+	  window.addEventListener('polymer-ready', function(){
+		var model = {
+		  data: fruits
+		};
+		document.getElementById('example').model = model;
+
+		var model2 = {
+		  data: spottedFruits
+		};
+		document.getElementById('example2').model = model2;
+	  });
+	</script>
+
+  </body>
+</html>

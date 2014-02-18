@@ -13,11 +13,11 @@
 			<template repeat="{{row in data | sortByKey(sortColumn, sortDescending, columns)}}">
 			  <tr>
 				<template repeat="{{column in columns}}">
-				<template bind="{{templateData in row | computeTemplateData(column)}}">
-				  <template ref="{{column.cellTemplate}}" bind="{{templateData}}">
-					  <td>{{value}}</td>
+				  <template bind="{{templateData in row | computeTemplateData(column)}}">
+					<template ref="{{column.cellTemplate}}" bind="{{templateData}}">
+						<td>{{value}}</td>
+					</template>
 				  </template>
-				</template>
 				</template>
 			  </tr>
 			</template>
@@ -25,48 +25,57 @@
 			  <tr>
 				<template repeat="{{column in columns}}">
 				  <template bind="{{values in data | selectProperty(column)}}">
-				<template ref="{{column.footerTemplate}}" bind>
-					<td class="ssDatatableHeader" style="border:0;"></td>
-				</template>
+					<template ref="{{column.footerTemplate}}" bind>
+						<td class="ssDatatableHeader" style="border:0;"></td>
+					</template>
 				  </template>
 				</template>
 			  </tr>
 			</template>
 		</table>
-    </template>
+	</template>
 
-    <script>
-      PolymerExpressions.prototype.sortByKey = function(array, key, desc, columns) {    
+	<script>
+	  PolymerExpressions.prototype.sortByKey = function(array, key, desc, columns) {
 		return array.sort(function(a, b) {
-          var x, y;
-          //determine if computed field      
-          var formula = null;
-          for(var i=0;i<columns.length;i++){
+		  var x, y;
+		  //determine if computed field
+		  var formula = null;
+		  for(var i=0;i<columns.length;i++){
 			if(columns[i].name===key){
 				formula = columns[i].formula;
 				break;
 			}
-          }
-          if(formula){
+		  }
+		  if(formula){
 			x = formula(a);
 			y = formula(b);
-          }else{
+		  }else{
 			x = a[key];
 			y = b[key];
-          }
+		  }
 
-          if (typeof x == "string"){
-			x = x.toLowerCase(); 
-			y = y.toLowerCase();
-          }
-          if(desc){
-			return ((x < y) ? 1 : ((x > y) ? -1 : 0));
-          }else{
-			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-          }
+		  if(typeof x == 'undefined' || typeof y == 'undefined'){
+			//sort undefined after
+			if(typeof x == 'undefined'){
+			  return !desc;
+			}else{
+			  return desc;
+			}
+		  }else{
+			if (typeof x == "string" && typeof y == "string"){
+			  x = x.toLowerCase();
+			  y = y.toLowerCase();
+			}
+			if(desc){
+			  return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+			}else{
+			  return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+			}
+		  }
 		});
-      };
-      PolymerExpressions.prototype.computeTemplateData = function(row, column) {
+	  };
+	  PolymerExpressions.prototype.computeTemplateData = function(row, column) {
 		var value;
 		if(column.formula){
 		  value = column.formula(row);
@@ -74,8 +83,8 @@
 		  value = row[column.name];
 		}
 		return { row: row, value: value };
-      };
-      PolymerExpressions.prototype.selectProperty = function(objects, column) {
+	  };
+	  PolymerExpressions.prototype.selectProperty = function(objects, column) {
 		var arr = [];
 		for(var i=0;i<objects.length;i++){
 		  var row = objects[i];
@@ -88,20 +97,20 @@
 		  arr.push(value);
 		}
 		return arr;
-      };  
-      PolymerExpressions.prototype.sum = function(arr) {
+	  };  
+	  PolymerExpressions.prototype.sum = function(arr) {
 		return arr.reduce(function(a, b) { return a + b; }, 0);
-      };
-      PolymerExpressions.prototype.average = function(arr) {
+	  };
+	  PolymerExpressions.prototype.average = function(arr) {
 		if(arr.length==0){
 		  return 0;
 		}else{
 		  return arr.reduce(function(a, b) { return a + b; }, 0) / arr.length;
 		}
-      };
-      Polymer('sortable-table', {
+	  };
+	  Polymer('sortable-table', {
 		  data: [],
-		  columns: [],
+		  columns: null,
 		  sortColumn: null,
 		  sortDescending: false,
 		  changeSort: function(e,p,o){
@@ -138,36 +147,48 @@
 			  addTemplateIfNotInDocument(this.columns[i].footerTemplate);
 			  if(this.columns[i].footerTemplate) this.showFooter=true;
 			}
+		  },
+		  dataChanged: function(){
+			if(this.columns==null && this.data!=null && this.data.length > 0){
+			  var c = [];
+			  var o = this.data[0];
+			  for (var key in o) {
+				if (o.hasOwnProperty(key)) {
+				  c.push({name: key});
+				}
+			  }
+			  this.columns = c;
+			}
 		  }
-      });
-    </script>
-    <style>
-      table.ssDatatable {
+	  });
+	</script>
+	<style>
+	  table.ssDatatable {
 		width: 100%;
 		border-collapse: collapse;
-      }
-      table.ssDatatable tr:nth-of-type(even) {
+	  }
+	  table.ssDatatable tr:nth-of-type(even) {
 		background-color: rgba(255,255,224,0.25);
-      }
-      table.ssDatatable .ssDatatableHeader,
-      table.ssDatatable th {
+	  }
+	  table.ssDatatable .ssDatatableHeader,
+	  table.ssDatatable th {
 		background: #555;
 		color: white;
 		font-weight: bold;
 		text-align: center;
-      }
-      table.ssDatatable td,
-      table.ssDatatable th {
+	  }
+	  table.ssDatatable td,
+	  table.ssDatatable th {
 		padding: 6px;
 		border: 1px solid #ccc;
 		text-align: right;
-      }
-      table.ssDatatable th {
+	  }
+	  table.ssDatatable th {
 		text-align: center;
 		cursor: pointer;
-      }
-      table.ssDatatable td:first-of-type {
+	  }
+	  table.ssDatatable td:first-of-type {
 		text-align: left;
-      }
-    </style>
+	  }
+	</style>
 </polymer-element>
