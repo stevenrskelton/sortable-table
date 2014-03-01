@@ -17,6 +17,8 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 
 > [Complex Templates](http://files.stevenskelton.ca/sortable-table/examples/columns-with-templates-that-are-templates.html)
 
+> [Larger Datasets](http://files.stevenskelton.ca/sortable-table/examples/large-dataset.html)
+
 > [Refreshing Data](http://files.stevenskelton.ca/sortable-table/examples/refreshing-data.html)
 
 > [Selectable Row](http://files.stevenskelton.ca/sortable-table/examples/selectable-row.html)
@@ -47,12 +49,12 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 Attribute				| Options		| Default									| Description
 ---						| ---			| ---										| ---
 `data`	 				| *array*		| `[]`										| Data rows
-`columns`				| *array*	   	| `null`									| Columns to display, with options. If null, columns will be read from the first data row
+`columns`				| *array*		| `null`									| Columns to display, with options. If null, columns will be read from the first data row
 `sortColumn`			| *string*		| `null`									| Current sorted column
 `sortDescending`		| *boolean*		| `false`									| Current sorted column sort direction
 `enableRowSelection`	| *boolean*		| `false`									| Enable user interactive row selection
 `selected`				| *object*		| `null`									| Element in `data` array
-`selectedRowStyle`		| *string*		| `background-color: rgba(0,96,200,0.2);`	| CSS style to apply to `selected` row
+`selectedRowStyle`		| *string*		| `background-color:` `rgba(0,96,200,0.2);`	| CSS style to apply to `selected` row
 
 ### Data
 
@@ -85,8 +87,8 @@ Example of a `headerTemplate` using images to indicate sorting:
 <template id="myHeaderTemplate">
   <th>
 	{{!(column.title) ? column.name : column.title}}
-	<img hidden?="{{!(sortColumn==column.name && sortDescending)}}" alt="up" src="..." />
-	<img hidden?="{{!(sortColumn==column.name && !sortDescending)}}" alt="down" src="..." />
+	<img hidden?="{{!(sortColumn==column.name && sortDescending)}}" alt="up" />
+	<img hidden?="{{!(sortColumn==column.name && !sortDescending)}}" alt="down" />
   </th>
 </template>
 ```
@@ -102,7 +104,8 @@ Example of a `footerTemplate` that computes the sum of a column using a filter n
 ```
 __Note:__  Any filter used (eg: `sum` in above example) must be a member of `PolymerExpressions.prototype`
 
-__Note:__  `cellTemplate`, `headerTemplate` and `footerTemplate` are limited to a subset of Javascript within `{{ }}` expressions.  See the [Polymer documentation](http://www.polymer-project.org/docs/polymer/expressions.html).
+__Note:__  `cellTemplate`, `headerTemplate` and `footerTemplate` are limited to a subset of Javascript within `{{ }}` expressions.  
+See the [Polymer documentation](http://www.polymer-project.org/docs/polymer/expressions.html) on Expression syntax.
 
 ## Todo
 
