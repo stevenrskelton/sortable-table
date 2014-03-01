@@ -52,7 +52,7 @@ Attribute				| Options		| Default									| Description
 `sortDescending`		| *boolean*		| `false`									| Current sorted column sort direction
 `enableRowSelection`	| *boolean*		| `false`									| Enable user interactive row selection
 `selected`				| *object*		| `null`									| Element in `data` array
-`selectedRowStyle`		| *string*		| `background-color:rgba(0,96,200,0.2);`	| CSS style to apply to `selected` row
+`selectedRowStyle`		| *string*		| `background-color: rgba(0,96,200,0.2);`	| CSS style to apply to `selected` row
 
 ### Data
 
