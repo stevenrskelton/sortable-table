@@ -1,7 +1,7 @@
 <!--
  https://github.com/stevenrskelton/sortable-table
 -->
-<polymer-element name="sortable-table" attributes="data columns sortColumn sortDescending">
+<polymer-element name="sortable-table" attributes="data columns sortColumn sortDescending enableRowSelection selected selectedRowStyle">
 	<template>
 		<table class="ssDatatable">
 			<tr on-click="{{changeSort}}">
@@ -13,7 +13,7 @@
 			  </template>
 			</tr>
 			<template repeat="{{row in data | sortByKey(sortColumn, sortDescending, columns)}}">
-			  <tr>
+			  <tr on-click="{{rowSelect}}" style="{{row == selected && selectedRowStyle ? selectedRowStyle : ''}}">
 				<template repeat="{{column in columns}}">
 				  <template bind="{{templateData in row | computeTemplateData(column)}}">
 					<template ref="{{column.cellTemplate}}" bind="{{templateData}}">
@@ -99,7 +99,14 @@
 		  arr.push(value);
 		}
 		return arr;
-	  };  
+	  };
+	  PolymerExpressions.prototype.contains = function(arr, obj) {
+		if(arr){
+		  return arr.indexOf(obj) > -1;
+		}else{
+		  return false;
+		}
+	  };
 	  PolymerExpressions.prototype.sum = function(arr) {
 		return arr.reduce(function(a, b) { return a + b; }, 0);
 	  };
@@ -111,58 +118,65 @@
 		}
 	  };
 	  Polymer('sortable-table', {
-		  data: [],
-		  columns: null,
-		  sortColumn: null,
-		  sortDescending: false,
-		  changeSort: function(e,p,o){
-			var clickedSortColumn = e.target.templateInstance_.model.column.name;
-			if(clickedSortColumn == this.sortColumn){
-			  //column already sorted, reverse sort
-			  this.sortDescending = !this.sortDescending;
-			}else{
-			  this.sortColumn = clickedSortColumn;
-			}
-		  },
-		  importedTemplates: [],
-		  showFooter: false,
-		  columnsChanged: function(){
-			var self = this;
-			function addTemplateIfNotInDocument(templateId){
-			  if(templateId && !self.shadowRoot.getElementById(templateId)){
-				var t = self.ownerDocument.getElementById(templateId);
-				if(t){
-				  self.shadowRoot.appendChild(t);
-				  self.importedTemplates.push(t);
-				}else{
-				  //TODO: in some cases on refresh, template isn't in self.ownerDocument.
-				  //So store them in an importedTemplates array :(
-				  for(var i=0;i<self.importedTemplates.length;i++){
-					self.shadowRoot.appendChild(self.importedTemplates[i]);
-				  }
+		data: [],
+		columns: null,
+		sortColumn: null,
+		sortDescending: false,
+		changeSort: function(e,p,o){
+		  var clickedSortColumn = e.target.templateInstance_.model.column.name;
+		  if(clickedSortColumn == this.sortColumn){
+			//column already sorted, reverse sort
+			this.sortDescending = !this.sortDescending;
+		  }else{
+			this.sortColumn = clickedSortColumn;
+		  }
+		},
+		selectedRowStyle: 'background-color:rgba(0,96,200,0.2);',
+		enableRowSelection: false,
+		rowSelect: function(e,p){
+		  if(this.enableRowSelection){
+			var row = e.target.templateInstance_.model.row;
+			this.selected = row;
+		  }
+		},
+		importedTemplates: [],
+		showFooter: false,
+		columnsChanged: function(){
+		  var self = this;
+		  function addTemplateIfNotInDocument(templateId){
+			if(templateId && !self.shadowRoot.getElementById(templateId)){
+			  var t = self.ownerDocument.getElementById(templateId);
+			  if(t){
+				self.shadowRoot.appendChild(t);
+				self.importedTemplates.push(t);
+			  }else{
+				//TODO: in some cases on refresh, template isn't in self.ownerDocument.
+				//So store them in an importedTemplates array :(
+				for(var i=0;i<self.importedTemplates.length;i++){
+				  self.shadowRoot.appendChild(self.importedTemplates[i]);
 				}
 			  }
-			}
-			  
-			for(var i=0;i<this.columns.length;i++){
-			  addTemplateIfNotInDocument(this.columns[i].cellTemplate);
-			  addTemplateIfNotInDocument(this.columns[i].headerTemplate);
-			  addTemplateIfNotInDocument(this.columns[i].footerTemplate);
-			  if(this.columns[i].footerTemplate) this.showFooter=true;
-			}
-		  },
-		  dataChanged: function(){
-			if(this.columns==null && this.data!=null && this.data.length > 0){
-			  var c = [];
-			  var o = this.data[0];
-			  for (var key in o) {
-				if (o.hasOwnProperty(key)) {
-				  c.push({name: key});
-				}
-			  }
-			  this.columns = c;
 			}
 		  }
+		  for(var i=0;i<this.columns.length;i++){
+			addTemplateIfNotInDocument(this.columns[i].cellTemplate);
+			addTemplateIfNotInDocument(this.columns[i].headerTemplate);
+			addTemplateIfNotInDocument(this.columns[i].footerTemplate);
+			if(this.columns[i].footerTemplate) this.showFooter=true;
+		  }
+		},
+		dataChanged: function(){
+		  if(this.columns==null && this.data!=null && this.data.length > 0){
+			var c = [];
+			var o = this.data[0];
+			for (var key in o) {
+			  if (o.hasOwnProperty(key)) {
+				c.push({name: key});
+			  }
+			}
+			this.columns = c;
+		  }
+		}
 	  });
 	</script>
 	<style>
