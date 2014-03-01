@@ -4,10 +4,12 @@
 <polymer-element name="sortable-table" attributes="data columns sortColumn sortDescending">
 	<template>
 		<table class="ssDatatable">
-			<tr>
+			<tr on-click="{{changeSort}}">
 			  <template repeat="{{column in columns}}">
-				<th on-click="{{changeSort}}" class="{{column.headerClass}}" style="{{sortColumn==column.name && sortDescending ? 'text-decoration:overline;' : ''}}
-				{{sortColumn==column.name && !sortDescending ? 'text-decoration:underline;' : ''}}{{column.headerStyle}}">{{!(column.title) ? column.name : column.title}}</th>
+				<template ref="{{column.headerTemplate}}" bind>
+				  <th style="{{sortColumn==column.name && sortDescending ? 'text-decoration:overline;' : ''}}
+				  {{sortColumn==column.name && !sortDescending ? 'text-decoration:underline;' : ''}}">{{!(column.title) ? column.name : column.title}}</th>
+				</template>
 			  </template>
 			</tr>
 			<template repeat="{{row in data | sortByKey(sortColumn, sortDescending, columns)}}">
@@ -114,7 +116,7 @@
 		  sortColumn: null,
 		  sortDescending: false,
 		  changeSort: function(e,p,o){
-			var clickedSortColumn = o.templateInstance_.model.column.name;
+			var clickedSortColumn = e.target.templateInstance_.model.column.name;
 			if(clickedSortColumn == this.sortColumn){
 			  //column already sorted, reverse sort
 			  this.sortDescending = !this.sortDescending;
@@ -129,12 +131,12 @@
 			function addTemplateIfNotInDocument(templateId){
 			  if(templateId && !self.shadowRoot.getElementById(templateId)){
 				var t = self.ownerDocument.getElementById(templateId);
-				if(t!=null){
+				if(t){
 				  self.shadowRoot.appendChild(t);
 				  self.importedTemplates.push(t);
 				}else{
-				  //TODO: figure out where this are found, they can't be found in the
-				  // self.ownerDocument.  So store them in an importedTemplates array :(
+				  //TODO: in some cases on refresh, template isn't in self.ownerDocument.
+				  //So store them in an importedTemplates array :(
 				  for(var i=0;i<self.importedTemplates.length;i++){
 					self.shadowRoot.appendChild(self.importedTemplates[i]);
 				  }
@@ -144,6 +146,7 @@
 			  
 			for(var i=0;i<this.columns.length;i++){
 			  addTemplateIfNotInDocument(this.columns[i].cellTemplate);
+			  addTemplateIfNotInDocument(this.columns[i].headerTemplate);
 			  addTemplateIfNotInDocument(this.columns[i].footerTemplate);
 			  if(this.columns[i].footerTemplate) this.showFooter=true;
 			}
