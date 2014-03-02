@@ -26,8 +26,8 @@
 			<template if="{{showFooter}}">
 			  <tr>
 				<template repeat="{{column in columns}}">
-				  <template bind="{{values in data | selectProperty(column)}}">
-					<template ref="{{column.footerTemplate}}" bind>
+				  <template bind="{{templateData in data | selectProperty(column)}}">
+					<template ref="{{column.footerTemplate}}" bind="{{templateData}}">
 						<td class="ssDatatableHeader" style="border:0;"></td>
 					</template>
 				  </template>
@@ -84,10 +84,11 @@
 		}else{
 		  value = row[column.name];
 		}
-		return { row: row, value: value };
+		return { row: row, value: value, column: column };
 	  };
 	  PolymerExpressions.prototype.selectProperty = function(objects, column) {
 		var arr = [];
+		var rowArr = [];
 		for(var i=0;i<objects.length;i++){
 		  var row = objects[i];
 		  var value;
@@ -96,9 +97,10 @@
 		  }else{
 			value = row[column.name];
 		  }
+		  rowArr.push(row[column.name]);
 		  arr.push(value);
 		}
-		return arr;
+		return { values: arr, rowValues: rowArr, column: column };
 	  };
 	  PolymerExpressions.prototype.contains = function(arr, obj) {
 		if(arr){
@@ -168,10 +170,14 @@
 		dataChanged: function(){
 		  if(this.columns==null && this.data!=null && this.data.length > 0){
 			var c = [];
-			var o = this.data[0];
-			for (var key in o) {
-			  if (o.hasOwnProperty(key)) {
-				c.push({name: key});
+			var unique = [];
+			for(var i=0;i<this.data.length;i++){
+			  var o = this.data[i];
+			  for (var key in o) {
+				if (o.hasOwnProperty(key) && unique.indexOf(key)==-1) {
+				  unique.push(key);
+				  c.push({name: key});
+				}
 			  }
 			}
 			this.columns = c;

@@ -11,6 +11,11 @@
   </head>
   <body unresolved>
 
+	<h2>Columns with templates</h2>
+	Using <code>headerTemplate</code> should not break sort. Using <code>cellTemplate</code> and <code>footerTemplate</code> should work when a cell <code>formula</code> is specified.
+
+	<p />
+
 	<template id="summaryTemplate">
 	  <td style="border:1px solid {{value <= 1000 ? 'blue' : 'red'}};color:{{value <= 1000  ? 'blue' : 'red'}}">
 		max: {{value}}, min: {{row.minimum}}
