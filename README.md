@@ -47,17 +47,17 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 	```html
 	<sortable-table></sortable-table>
 	```
-	
+
 ## Options
 
 Attribute				| Options		| Default									| Description
 ---						| ---			| ---										| ---
 `data`	 				| *array*		| `[]`										| Data rows
-`columns`				| *array*		| `null`									| Columns to display, with options. If null, columns will be read from the first data row
-`sortColumn`			| *string*		| `null`									| Current sorted column
+`columns`				| *array*		| `null`									| Columns to display, with options. If null, columns will be computed from `data`
+`sortColumn`			| *string*		| `null`									| Current sorted `column.name`
 `sortDescending`		| *boolean*		| `false`									| Current sorted column sort direction
 `enableRowSelection`	| *boolean*		| `false`									| Enable user interactive row selection
-`selected`				| *object*		| `null`									| Element in `data` array
+`selected`				| *object*		| `null`									| Element in `data`
 `selectedRowStyle`		| *string*		| `background-color:` `rgba(0,96,200,0.2);`	| CSS style to apply to `selected` row
 
 ### Data
@@ -73,28 +73,28 @@ Attribute  			| Options		| Default		| Description
 `formula`			| *function*	| `null`		| Single parameter `row`, return will override any value for property in `data`, as well as be used for sorting
 `cellTemplate`   	| *string*		| `null`		| Renderer for entire `<td></td>` cell. Access to `{{column}}`, cell `{{value}}` and original `{{row}}` object from `data`
 `headerTemplate`	| *string*		| `null`		| Renderer for entire `<th></th>` cell. Access to `{{column}}`
-`footerTemplate`	| *string*		| `null`		| Renderer for entire `<td></td>` cell. Access to `{{column}}`, array of all `{{values}}` of cells in the column, and array of all original `{{rowValues}}` object from `data` (if they are defined)
+`footerTemplate`	| *string*		| `null`		| Renderer for entire `<td></td>` cell. Access to `{{column}}`, array of all `{{values}}` of cells in the column, and array of all original `{{rowValues}}` object from `data` _(if they are defined)_
 
 Example of a `cellTemplate` that displays an image beside the column value:
 
 ```html
 <template id="myCellTemplate">
-  <td>
-	<img src="{{row.img}}"/>{{value}}
-  </td>
+	<td>
+		<img src="{{row.img}}" alt="{{row.title}}"/>{{value}}
+	</td>
 </template>
 ```
-__Note:__  Normally `row[column.name]==value`, but `value` can be manually set by specifying a `formula`. This is useful if `value` won't sort correctly but you still want to display the original value.
+__Note:__  Normally `row[column.name] == value`, but `value` can be manually set by specifying a `formula`. This is useful if `value` won't sort correctly but you need access to the original value.
 
 Example of a `headerTemplate` using images to indicate sorting:
 
 ```html
 <template id="myHeaderTemplate">
-  <th>
-	{{!(column.title) ? column.name : column.title}}
-	<img hidden?="{{!(sortColumn==column.name && sortDescending)}}" alt="up" />
-	<img hidden?="{{!(sortColumn==column.name && !sortDescending)}}" alt="down" />
-  </th>
+	<th>
+		{{!(column.title) ? column.name : column.title}}
+		<img hidden?="{{!(sortColumn==column.name && sortDescending)}}" alt="up" />
+		<img hidden?="{{!(sortColumn==column.name && !sortDescending)}}" alt="down" />
+	</th>
 </template>
 ```
 
@@ -102,9 +102,9 @@ Example of a `footerTemplate` that computes the sum of a column using a filter n
 
 ```html
 <template id="sumTemplate">
-  <td class="ssDatatableHeader" style="text-align:right">
-	{{values | sum}}
-  </td>
+	<td class="ssDatatableHeader" style="text-align:right">
+		{{values | sum}}
+	</td>
 </template>
 ```
 __Note:__  Any filter used (eg: `sum` in above example) must be a member of `PolymerExpressions.prototype`
@@ -114,12 +114,16 @@ __Note:__  `cellTemplate`, `headerTemplate` and `footerTemplate` are limited to 
 ## Todo
 
 - Benchmark performance
-- Cleanup CSS, use proper Shadow DOM host style
+- use proper Shadow DOM host style, support theming
+- Cleanup CSS
 - Test for correct sort on mixed alpha+numeric data
 - Test cell templates are accessible in all use cases
+- max sizing / scrolling
+- paging
+- cell selection
+- maybe: multi-select
 - maybe: column grouping
 - maybe: reload data if individual row fields change
-- maybe: multi-select
 - __Internet Explorer is completely broken__
 
 ## History

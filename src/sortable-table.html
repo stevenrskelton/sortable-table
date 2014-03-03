@@ -2,233 +2,233 @@
  https://github.com/stevenrskelton/sortable-table
 -->
 <polymer-element name="sortable-table" attributes="data columns sortColumn sortDescending enableRowSelection selected selectedRowStyle">
-	<template>
-		<table class="ssDatatable">
-			<tr on-click="{{changeSort}}">
-			  <template repeat="{{column in columns}}">
+<template>
+	<table class="ssDatatable">
+		<tr on-click="{{changeSort}}">
+			<template repeat="{{column in columns}}">
 				<template ref="{{column.headerTemplate}}" bind>
-				  <th style="{{sortColumn==column.name && sortDescending ? 'text-decoration:overline;' : ''}}
-				  {{sortColumn==column.name && !sortDescending ? 'text-decoration:underline;' : ''}}">{{!(column.title) ? column.name : column.title}}</th>
+					<th style="{{sortColumn==column.name && sortDescending ? 'text-decoration:overline;' : ''}}
+					{{sortColumn==column.name && !sortDescending ? 'text-decoration:underline;' : ''}}">{{!(column.title) ? column.name : column.title}}</th>
 				</template>
-			  </template>
+			</template>
+		</tr>
+		<template repeat="{{row in data | sortByKey(sortColumn, sortDescending, columns)}}">
+			<tr on-click="{{rowSelect}}" style="{{row == selected && selectedRowStyle ? selectedRowStyle : ''}}">
+				<template repeat="{{column in columns}}">
+					<template bind="{{templateData in row | computeTemplateData(column)}}">
+						<template ref="{{column.cellTemplate}}" bind="{{templateData}}">
+							<td>{{value}}</td>
+						</template>
+					</template>
+				</template>
 			</tr>
-			<template repeat="{{row in data | sortByKey(sortColumn, sortDescending, columns)}}">
-			  <tr on-click="{{rowSelect}}" style="{{row == selected && selectedRowStyle ? selectedRowStyle : ''}}">
+		</template>
+		<template if="{{showFooter}}">
+			<tr>
 				<template repeat="{{column in columns}}">
-				  <template bind="{{templateData in row | computeTemplateData(column)}}">
-					<template ref="{{column.cellTemplate}}" bind="{{templateData}}">
-						<td>{{value}}</td>
+					<template bind="{{templateData in data | selectProperty(column)}}">
+						<template ref="{{column.footerTemplate}}" bind="{{templateData}}">
+							<td class="ssDatatableHeader" style="border:0;"></td>
+						</template>
 					</template>
-				  </template>
 				</template>
-			  </tr>
-			</template>
-			<template if="{{showFooter}}">
-			  <tr>
-				<template repeat="{{column in columns}}">
-				  <template bind="{{templateData in data | selectProperty(column)}}">
-					<template ref="{{column.footerTemplate}}" bind="{{templateData}}">
-						<td class="ssDatatableHeader" style="border:0;"></td>
-					</template>
-				  </template>
-				</template>
-			  </tr>
-			</template>
-		</table>
-	</template>
+			</tr>
+		</template>
+	</table>
+</template>
 
-	<script>
-	  PolymerExpressions.prototype.sortByKey = function(array, key, desc, columns) {
+<script>
+	PolymerExpressions.prototype.sortByKey = function(array, key, desc, columns) {
 		return array.sort(function(a, b) {
-		  var x, y;
-		  //determine if computed field
-		  var formula = null;
-		  for(var i=0;i<columns.length;i++){
-			if(columns[i].name===key){
-				formula = columns[i].formula;
-				break;
+			var x, y;
+			//determine if computed field
+			var formula = null;
+			for(var i=0;i<columns.length;i++){
+				if(columns[i].name===key){
+					formula = columns[i].formula;
+					break;
+				}
 			}
-		  }
-		  if(formula){
-			x = formula(a);
-			y = formula(b);
-		  }else{
-			x = a[key];
-			y = b[key];
-		  }
+			if(formula){
+				x = formula(a);
+				y = formula(b);
+			}else{
+				x = a[key];
+				y = b[key];
+			}
 
-		  if(typeof x == 'undefined' || typeof y == 'undefined'){
-			//sort undefined after
-			if(typeof x == 'undefined'){
-			  return !desc;
+			if(typeof x == 'undefined' || typeof y == 'undefined'){
+				//sort undefined after
+				if(typeof x == 'undefined'){
+				return !desc;
+				}else{
+				return desc;
+				}
 			}else{
-			  return desc;
+				if (typeof x == "string" && typeof y == "string"){
+				x = x.toLowerCase();
+				y = y.toLowerCase();
+				}
+				if(desc){
+				return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+				}else{
+				return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+				}
 			}
-		  }else{
-			if (typeof x == "string" && typeof y == "string"){
-			  x = x.toLowerCase();
-			  y = y.toLowerCase();
-			}
-			if(desc){
-			  return ((x < y) ? 1 : ((x > y) ? -1 : 0));
-			}else{
-			  return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-			}
-		  }
 		});
-	  };
-	  PolymerExpressions.prototype.computeTemplateData = function(row, column) {
+	};
+	PolymerExpressions.prototype.computeTemplateData = function(row, column) {
 		var value;
 		if(column.formula){
-		  value = column.formula(row);
+			value = column.formula(row);
 		}else{
-		  value = row[column.name];
+			value = row[column.name];
 		}
 		return { row: row, value: value, column: column };
-	  };
-	  PolymerExpressions.prototype.selectProperty = function(objects, column) {
+	};
+	PolymerExpressions.prototype.selectProperty = function(objects, column) {
 		var arr = [];
 		var rowArr = [];
 		for(var i=0;i<objects.length;i++){
-		  var row = objects[i];
-		  var value;
-		  if(column.formula){
-			value = column.formula(row);
-		  }else{
-			value = row[column.name];
-		  }
-		  rowArr.push(row[column.name]);
-		  arr.push(value);
+			var row = objects[i];
+			var value;
+			if(column.formula){
+				value = column.formula(row);
+			}else{
+				value = row[column.name];
+			}
+			rowArr.push(row[column.name]);
+			arr.push(value);
 		}
 		return { values: arr, rowValues: rowArr, column: column };
-	  };
-	  PolymerExpressions.prototype.contains = function(arr, obj) {
+	};
+	PolymerExpressions.prototype.contains = function(arr, obj) {
 		if(arr){
-		  return arr.indexOf(obj) > -1;
+			return arr.indexOf(obj) > -1;
 		}else{
-		  return false;
+			return false;
 		}
-	  };
-	  PolymerExpressions.prototype.sum = function(arr) {
+	};
+	PolymerExpressions.prototype.sum = function(arr) {
 		return arr.reduce(function(a, b) { return a + b; }, 0);
-	  };
-	  PolymerExpressions.prototype.average = function(arr) {
+	};
+	PolymerExpressions.prototype.average = function(arr) {
 		if(arr.length==0){
-		  return 0;
+			return 0;
 		}else{
-		  return arr.reduce(function(a, b) { return a + b; }, 0) / arr.length;
+			return arr.reduce(function(a, b) { return a + b; }, 0) / arr.length;
 		}
-	  };
-	  Polymer('sortable-table', {
+	};
+	Polymer('sortable-table', {
 		data: [],
 		columns: null,
 		sortColumn: null,
 		sortDescending: false,
 		changeSort: function(e,p,o){
-		  var clickedSortColumn = e.target.templateInstance_.model.column.name;
-		  if(clickedSortColumn == this.sortColumn){
-			//column already sorted, reverse sort
-			this.sortDescending = !this.sortDescending;
-		  }else{
-			this.sortColumn = clickedSortColumn;
-		  }
+			var clickedSortColumn = e.target.templateInstance_.model.column.name;
+			if(clickedSortColumn == this.sortColumn){
+				//column already sorted, reverse sort
+				this.sortDescending = !this.sortDescending;
+			}else{
+				this.sortColumn = clickedSortColumn;
+			}
 		},
 		selectedRowStyle: 'background-color:rgba(0,96,200,0.2);',
 		enableRowSelection: false,
 		rowSelect: function(e,p){
-		  if(this.enableRowSelection){
-			var row = e.target.templateInstance_.model.row;
-			this.selected = row;
-		  }
+			if(this.enableRowSelection){
+				var row = e.target.templateInstance_.model.row;
+				this.selected = row;
+			}
 		},
 		importedTemplates: [],
 		columnWatches: [],
 		showFooter: false,
 		columnsChanged: function(){
-		  var self = this;
-		  /* copy template from parent document into shadow dom */
-		  function addTemplateIfNotInDocument(templateId){
-			if(templateId && !self.shadowRoot.getElementById(templateId)){
-			  var t = self.ownerDocument.getElementById(templateId);
-			  if(t){
-				self.shadowRoot.appendChild(t);
-				self.importedTemplates.push(t);
-			  }else{
-				//TODO: in some cases on refresh, template isn't in self.ownerDocument.
-				//So store them in an importedTemplates array :(
-				for(var i=0;i<self.importedTemplates.length;i++){
-				  self.shadowRoot.appendChild(self.importedTemplates[i]);
+			var self = this;
+			/* copy template from parent document into shadow dom */
+			function addTemplateIfNotInDocument(templateId){
+				if(templateId && !self.shadowRoot.getElementById(templateId)){
+					var t = self.ownerDocument.getElementById(templateId);
+					if(t){
+						self.shadowRoot.appendChild(t);
+						self.importedTemplates.push(t);
+					}else{
+						//TODO: in some cases on refresh, template isn't in self.ownerDocument.
+						//So store them in an importedTemplates array :(
+						for(var i=0;i<self.importedTemplates.length;i++){
+							self.shadowRoot.appendChild(self.importedTemplates[i]);
+						}
+					}
 				}
-			  }
 			}
-		  }
-		  /* watch templateIds since if added/modified we need to copy those templates into the shadow dom */
-		  function addTemplateWatches(column, field){
-			for(var i=0;i<self.columnWatches.length;i++){
-			  if(self.columnWatches[i].object_==column && self.columnWatches[i].path_[0]==field) return;
+			/* watch templateIds since if added/modified we need to copy those templates into the shadow dom */
+			function addTemplateWatches(column, field){
+				for(var i=0;i<self.columnWatches.length;i++){
+					if(self.columnWatches[i].object_==column && self.columnWatches[i].path_[0]==field) return;
+				}
+				var observer = new PathObserver(c, field);
+				self.columnWatches.push(observer);
+				observer.open(function(added, removed, changed, getOldValueFn) {
+					self.columnsChanged();
+				});
 			}
-			var observer = new PathObserver(c, field);
-			self.columnWatches.push(observer);
-			observer.open(function(added, removed, changed, getOldValueFn) {
-			  self.columnsChanged();
-			});
-		  }
-		  for(var i=0;i<this.columns.length;i++){
-			var c = this.columns[i];
-			addTemplateIfNotInDocument(c.cellTemplate);
-			addTemplateIfNotInDocument(c.headerTemplate);
-			addTemplateIfNotInDocument(c.footerTemplate);
-			if(c.footerTemplate) this.showFooter=true;
-			addTemplateWatches(c, 'cellTemplate');
-			addTemplateWatches(c, 'headerTemplate');
-			addTemplateWatches(c, 'footerTemplate');
-		  }
+			for(var i=0;i<this.columns.length;i++){
+				var c = this.columns[i];
+				addTemplateIfNotInDocument(c.cellTemplate);
+				addTemplateIfNotInDocument(c.headerTemplate);
+				addTemplateIfNotInDocument(c.footerTemplate);
+				if(c.footerTemplate) this.showFooter=true;
+				addTemplateWatches(c, 'cellTemplate');
+				addTemplateWatches(c, 'headerTemplate');
+				addTemplateWatches(c, 'footerTemplate');
+			}
 		},
 		dataChanged: function(){
-		  if(!this.columns && this.data && this.data.length > 0){
-			var c = [];
-			var unique = [];
-			for(var i=0;i<this.data.length;i++){
-			  var o = this.data[i];
-			  for (var key in o) {
-				if (o.hasOwnProperty(key) && unique.indexOf(key)==-1) {
-				  unique.push(key);
-				  c.push({name: key});
+			if(!this.columns && this.data && this.data.length > 0){
+				var c = [];
+				var unique = [];
+				for(var i=0;i<this.data.length;i++){
+					var o = this.data[i];
+					for (var key in o) {
+						if (o.hasOwnProperty(key) && unique.indexOf(key)==-1) {
+							unique.push(key);
+							c.push({name: key});
+						}
+					}
 				}
-			  }
+				this.columns = c;
 			}
-			this.columns = c;
-		  }
 		}
-	  });
-	</script>
-	<style>
-	  table.ssDatatable {
+	});
+</script>
+<style>
+	table.ssDatatable {
 		width: 100%;
 		border-collapse: collapse;
-	  }
-	  table.ssDatatable tr:nth-of-type(even) {
+	}
+	table.ssDatatable tr:nth-of-type(even) {
 		background-color: rgba(255,255,224,0.25);
-	  }
-	  table.ssDatatable .ssDatatableHeader,
-	  table.ssDatatable th {
+	}
+	table.ssDatatable .ssDatatableHeader,
+	table.ssDatatable th {
 		background: #555;
 		color: white;
 		font-weight: bold;
 		text-align: center;
-	  }
-	  table.ssDatatable td,
-	  table.ssDatatable th {
+	}
+	table.ssDatatable td,
+	table.ssDatatable th {
 		padding: 6px;
 		border: 1px solid #ccc;
 		text-align: right;
-	  }
-	  table.ssDatatable th {
+	}
+	table.ssDatatable th {
 		text-align: center;
 		cursor: pointer;
-	  }
-	  table.ssDatatable td:first-of-type {
+	}
+	table.ssDatatable td:first-of-type {
 		text-align: left;
-	  }
-	</style>
+	}
+</style>
 </polymer-element>
