@@ -17,6 +17,8 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 
 > [Complex Templates](http://files.stevenskelton.ca/sortable-table/examples/columns-with-templates-that-are-templates.html)
 
+> [Dynamically Changing Columns and Templates](http://files.stevenskelton.ca/sortable-table/examples/dynamic-columns.html)
+
 > [Larger Datasets](http://files.stevenskelton.ca/sortable-table/examples/large-dataset.html)
 
 > [Nesting Tables in Cells](http://files.stevenskelton.ca/sortable-table/examples/nested-tables.html)
@@ -111,11 +113,13 @@ __Note:__  `cellTemplate`, `headerTemplate` and `footerTemplate` are limited to 
 
 ## Todo
 
-- Performance issues on column change?
-- Cleanup CSS, use proper Shadow DOM style
-- Allow custom styling
+- Benchmark performance
+- Cleanup CSS, use proper Shadow DOM host style
 - Test for correct sort on mixed alpha+numeric data
 - Test cell templates are accessible in all use cases
+- maybe: column grouping
+- maybe: reload data if individual row fields change
+- maybe: multi-select
 - __Internet Explorer is completely broken__
 
 ## History
