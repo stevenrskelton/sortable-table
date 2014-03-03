@@ -142,9 +142,11 @@
 		  }
 		},
 		importedTemplates: [],
+		columnWatches: [],
 		showFooter: false,
 		columnsChanged: function(){
 		  var self = this;
+		  /* copy template from parent document into shadow dom */
 		  function addTemplateIfNotInDocument(templateId){
 			if(templateId && !self.shadowRoot.getElementById(templateId)){
 			  var t = self.ownerDocument.getElementById(templateId);
@@ -160,15 +162,30 @@
 			  }
 			}
 		  }
+		  /* watch templateIds since if added/modified we need to copy those templates into the shadow dom */
+		  function addTemplateWatches(column, field){
+			for(var i=0;i<self.columnWatches.length;i++){
+			  if(self.columnWatches[i].object_==column && self.columnWatches[i].path_[0]==field) return;
+			}
+			var observer = new PathObserver(c, field);
+			self.columnWatches.push(observer);
+			observer.open(function(added, removed, changed, getOldValueFn) {
+			  self.columnsChanged();
+			});
+		  }
 		  for(var i=0;i<this.columns.length;i++){
-			addTemplateIfNotInDocument(this.columns[i].cellTemplate);
-			addTemplateIfNotInDocument(this.columns[i].headerTemplate);
-			addTemplateIfNotInDocument(this.columns[i].footerTemplate);
-			if(this.columns[i].footerTemplate) this.showFooter=true;
+			var c = this.columns[i];
+			addTemplateIfNotInDocument(c.cellTemplate);
+			addTemplateIfNotInDocument(c.headerTemplate);
+			addTemplateIfNotInDocument(c.footerTemplate);
+			if(c.footerTemplate) this.showFooter=true;
+			addTemplateWatches(c, 'cellTemplate');
+			addTemplateWatches(c, 'headerTemplate');
+			addTemplateWatches(c, 'footerTemplate');
 		  }
 		},
 		dataChanged: function(){
-		  if(this.columns==null && this.data!=null && this.data.length > 0){
+		  if(!this.columns && this.data && this.data.length > 0){
 			var c = [];
 			var unique = [];
 			for(var i=0;i<this.data.length;i++){

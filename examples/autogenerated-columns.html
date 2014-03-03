@@ -11,9 +11,8 @@
   </head>
   <body unresolved>
 
-	<h2>Auto-Generated Columns</h2>
+	<h2>Auto-Generated <code>columns</code></h2>
 	<code>columns</code> is omitted, and web component figures it out as best as it can.  
-	It should handle missing columns, and columns out of order.
 
 	<p />
 
@@ -23,25 +22,30 @@
 
 	<p />
 
+	<h2>Auto-Generated <code>columns</code> should accept missing fields</h2>
+	If some column fields are missing for some rows, or the columns are out order it should still work.
+
+	<p />
+
 	<template id="example2" bind>
 	  <sortable-table data="{{data}}" sortColumn="alice"></sortable-table>
 	</template>
 
 	<script>
 	  var fruits = [
-		{fruit: 'apple', alice: 4, bill: 10, casey: 2 },
-		{fruit: 'banana', alice: 0, bill: 4, casey: 0 },
-		{fruit: 'grape', alice: 2, bill: 3, casey: 5 },
-		{fruit: 'pear', alice: 4, bill: 2, casey: 8 },
-		{fruit: 'strawberry', alice: 0, bill: 14, casey: 0 }
+		{ fruit: 'apple', alice: 4, bill: 10, casey: 2 },
+		{ fruit: 'banana', alice: 0, bill: 4, casey: 0 },
+		{ fruit: 'grape', alice: 2, bill: 3, casey: 5 },
+		{ fruit: 'pear', alice: 4, bill: 2, casey: 8 },
+		{ fruit: 'strawberry', alice: 0, bill: 14, casey: 0 }
 	  ];
 
 	  var spottedFruits = [
-		{fruit: 'apple', alice: 4, casey: 2 },
-		{fruit: 'banana', alice: 0, bill: 4, daisy: 0 },
-		{fruit: 'grape', alice: 2 },
-		{fruit: 'pear', alice: 4, elly: 2 },
-		{fruit: 'strawberry', daisy: 2, bill: 14 }
+		{ fruit: 'apple', bill: 4, casey: 2, alice: 4 },
+		{ alice: 0, bill: 4, fruit: 'banana', daisy: 0 },
+		{ fruit: 'grape', alice: 2 },
+		{ elly: 2, alice: 4, fruit: 'pear' },
+		{ fruit: 'strawberry', daisy: 2, bill: 14 }
 	  ];
 
 	  window.addEventListener('polymer-ready', function(){
