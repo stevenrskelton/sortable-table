@@ -60,19 +60,19 @@
 			if(typeof x == 'undefined' || typeof y == 'undefined'){
 				//sort undefined after
 				if(typeof x == 'undefined'){
-				return !desc;
+					return !desc;
 				}else{
-				return desc;
+					return desc;
 				}
 			}else{
 				if (typeof x == "string" && typeof y == "string"){
-				x = x.toLowerCase();
-				y = y.toLowerCase();
+					x = x.toLowerCase();
+					y = y.toLowerCase();
 				}
 				if(desc){
-				return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+					return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 				}else{
-				return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+					return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 				}
 			}
 		});
@@ -178,10 +178,10 @@
 				addTemplateIfNotInDocument(c.cellTemplate);
 				addTemplateIfNotInDocument(c.headerTemplate);
 				addTemplateIfNotInDocument(c.footerTemplate);
-				if(c.footerTemplate) this.showFooter=true;
-				addTemplateWatches(c, 'cellTemplate');
-				addTemplateWatches(c, 'headerTemplate');
-				addTemplateWatches(c, 'footerTemplate');
+				if(c.footerTemplate) this.showFooter = true;
+				addTemplateWatches(c,'cellTemplate');
+				addTemplateWatches(c,'headerTemplate');
+				addTemplateWatches(c,'footerTemplate');
 			}
 		},
 		dataChanged: function(){
@@ -189,13 +189,12 @@
 				var c = [];
 				var unique = [];
 				for(var i=0;i<this.data.length;i++){
-					var o = this.data[i];
-					for (var key in o) {
-						if (o.hasOwnProperty(key) && unique.indexOf(key)==-1) {
-							unique.push(key);
-							c.push({name: key});
+					Object.keys(this.data[i]).forEach(function(property) {
+						if (unique.indexOf(property)==-1) {
+							unique.push(property);
+							c.push({name: property});
 						}
-					}
+					});
 				}
 				this.columns = c;
 			}
