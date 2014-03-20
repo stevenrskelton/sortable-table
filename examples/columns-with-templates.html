@@ -5,9 +5,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<script src="platform-0.2.0.js"></script>
-	<script src="polymer-0.2.0.js"></script>
+	<script src="platform.js"></script>
+	<script src="polymer.js"></script>
 	<link rel="import" href="../src/sortable-table.html">
+	<style>
+		sortable-table { width: 100% }
+	</style>
   </head>
   <body unresolved>
 
@@ -39,7 +42,7 @@
 	  </td>
 	</template>
 	<template id="tableTemplate" bind>
-	  <sortable-table data="{{data}}" columns="{{columns}}" sortColumn="p50" sortDescending="false"></sortable-table>
+	  <sortable-table class="t" data="{{data}}" columns="{{columns}}" sortColumn="p50" sortDescending="false" headerTemplate="blueHeaderTemplate"></sortable-table>
 	</template>
 	<script>
 	  var ostrichMetrics = {
@@ -253,7 +256,7 @@
 			];
 		}else{
 			columns = [
-				{name:'name', title:'service call', headerTemplate:'blueHeaderTemplate'},
+				{name:'name', title:'service call'},
 				{name:'average'},
 				{name:'count'},
 				{name:'maximum', cellTemplate: 'summaryTemplate', footerTemplate: 'hiTemplate' },

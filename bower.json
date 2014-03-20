@@ -1,6 +1,6 @@
 {
   "name": "sortable-table",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "homepage": "https://github.com/stevenrskelton/sortable-table",
   "description": "Polymer Web Component that generates a sortable <table> from JSON",
   "main": "src/sortable-table.html",
@@ -16,11 +16,12 @@
     "tests"
   ],
   "keywords": [
+    "web-component",
     "web-components",
     "polymer",
     "table"
   ],
   "dependencies": {
-    "polymer": "0.2.0"
+    "polymer": "~0.2.1"
   }
 }

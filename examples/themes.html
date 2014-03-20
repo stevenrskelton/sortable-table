@@ -8,14 +8,11 @@
 	<script src="platform.js"></script>
 	<script src="polymer.js"></script>
 	<link rel="import" href="../src/sortable-table.html">
-	<style>
-		sortable-table { width: 100% }
-	</style>
   </head>
   <body unresolved>
 
-	<h2>Columns with templates that include other templates</h2>
-	Any valid template should be useable as a <code>cellTemplate</code>, <code>headerTemplate</code> or <code>footerTemplate</code>.
+	<h2>Themes</h2>
+	<em>work in progress</em>, for now use global <code>cellTemplate</code> and <code>headerTemplate</code> attributes.
 
 	<p />
 
@@ -40,14 +37,25 @@
 	  </td>
 	</template>
 
-	<template id="example" bind>
-	  <sortable-table data="{{data}}" columns="{{columns}}" sortColumn="{{sortColumn}}" sortDescending="{{sortDescending}}"></sortable-table>
+	<template id="blueHeaderTemplate">
+	  <th style="background-color:navy;font-size:larger;">{{!(column.title) ? column.name : column.title}}
+		<img style="position:absolute;margin:3px 0 0 5px;" hidden?="{{!(sortColumn==column.name && sortDescending)}}" alt="up" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAADXElEQVQ4y22Ty09cVQCHf+ecO5fLDAwF5gHtDAwMttAWcAq0Pjcm2Bhj44ZqjDHRmO5cuDAxMTFx4X9ADOrCxMa9GxN1UdtYbIEmgNrg1GFm6MwwDMMwrzv3nvs6x53Bx2/3S758u4/gX1t/cNc3FI33QlNGLctWFcqoqqkH7Xr5yGx6ndSleXGSJydPMZ+dsnoCUxVXid8rNEYbHGMq8dqJga7d+SF/Vuu09wOsay1y+oz+H0E6n3nRVvtHvvqjfG1T117xfAMQxIUUAHMdRLym+fp0+KPztH7UDXl7bPxc4W/B5sPtBRKOzi6vH97IuP4FED8UzrF4NoCdA44s94EqChTels9G5fL1UWXDrde+nX1yrk13dn7r8w9EJm/+vPdq2ehZ8Ite+Mw6roSBd2YG8e7FfgR5HbnDA9zPNsnKavW9n/J8StGCKQCglLEL6ZoZKjb9LzPHBtMNDFOOty6GEJQEc7FuxEgblXQVtiVQswi+Xs0tWpSOVVt6gOode/jXnDfrSB8024LaKuK1uRji4V4o0gCEg4+XruC5CCAaDRBuo6qLxG7d6CnkiwnKHc9v6W1/j+SQuoWr03E8PRICPAkBCiZ9CHgCn779DIaJBaJzeC4NtUwZKOX2pCKFgOa6jDVVeD6Km3fy+PK73/HGCwncWDyPwpGO91duo8y7YTgOBLdhwZFUOC6YwxQpXPOUijRzhSxUjslm8RBdQqJyPAwCCdt1sFOsoWD1QTo2KKPokq1Sr7TM+OmQR6Ww9lJJbRdmvZPOliFsAak70GwOIiQECKjhgOoCjLvw6W1MnqKZPmJ0YrEzLu3V+krtRstOXYos01YVxHDh2C4EoWAKg58pIKYNz6pDGG2MKBV88Obz36gMrcFwLMtWPv/M2NzeDgV7BJcGq2QzrXlPuGgc69jYKuOHu2k8fFyDMCViTLe/+GTpw+LOg+ZEIrEWjQ7VCQAYhhW8c+v7q6YlglslJXrr/sFSrtSY5txhXYoPAb+2mzoX3rr+UvxHs5Y1JyefSC9cfmr9Hy1U9ovde6W9a/d+WVVdqdKp6cusf2AQju3hcfYRyWa2nZmZaTlzYfbR+ERy7X9rBIDjw+pMYb+Y/DOT6e7oHcYUhkhk0BkfS5aSE2c3CCH8JP8Xg821f89i9ooAAAAASUVORK5CYII=" />
+		<img style="position:absolute;margin:3px 0 0 5px;" hidden?="{{!(sortColumn==column.name && !sortDescending)}}" alt="down" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAADYklEQVQ4y2WTTWibZQDH/8/zfiRpk3XJsth3W5ttTRo314+FWSrbRb1oqSBMByKIp0EZKHjwspsXTyIKHvQmCIIHP1CZ4hR0tOuaqmtit2VNWtvmo22apO+bvH0/n+fxJtX9b3/48bv9CP63crEQCIQiIVkNJ1umGQzKCo2EgtW2vr0bAHWT6Yx/kCcHz8pa+QmpN5zZk9TYrXWzv2HREVCmn47wjQntcDls7ulUspcGj2eqjwgeloqT/NDR9GfLxlOLbX+mG+iFzAOwFQfUczHguN2XxuPXx5TdFkx7dvjsyNq/gj+XFs/Tx5JjHy1sXV5j0WnP52JygJKpwSj2BccH8zW48hHIvInzfeyTV0/1zsYC4rvjx0625NVi4Vg32HPu26Xd8bqlTkPikJhFNCWIC1oPTMahCoF79Sp0k2DRNa6GIO1cPtF9zubGDWoxf4BFEnhQM98kPhOyzxFyBCIegQwB2/OxmCuiWt+H0XHR2VdxI787ZboBda1U6ZM5gtqtXHnY9VQoQhAqDLhMhmEa8AD4gsBzAeLbgOSCSEB9q5t1IynaqBQ12WXCbux0JFVEodgOBrQoYG0hDhUKPEQIwYtpGTpRMfu3g7puoy3ZaLEeRDw/TH3uCYX6FI4J1+dYuFvAtRcu4MozWVCPoY8yfDwzhdefHoLdbkDyGAIOQw93AMOmVPHsaEbra8LSUV7fxp2Sibc+/BFdzweEAKEydnzg6rtfo21KYI6FEO/qstcUjModCpebZ5PaFnEdq1bdg2nZ+Op2Bd/89BBEVeAQgZff/hyVNkAsB0pXx5im3twqLvOhzKBNYwlt+a/cz2L6Yua6u90UsiuBMxlvvP8Dbt/X8d4XOczfb0DyZFDLFnFrG1cupn9JJvr5qVSiQBjzA3cW5qbWKzvhm0vWxJe/1mc6NCQRShGlDJ5EsO/4YFxBv9rAp++8dk2v5zvnxs/khlOPPyAAYHQ7sdzvc9nmnqetVln6+9n6pY2afsnxVEWVOCj189kzJ/KvPH96jpub3fTQ4Hr2ycnf/tPCRrUi1zZrz+bvFhIto0NGsxNyJJ4glAlsrpbYRvkeH04NitHx0VJcO/rHod6Y80iNAGAa5smV1dLIxvrK4eZuB4oiIRY/4qdTw61UOjVPCNEP8v8ATS63iWo+zsgAAAAASUVORK5CYII=" />
+	  </th>
 	</template>
 
-	<template id="currentSort" bind>
-		<p>
-			<strong>Current Sort Column:</strong> {{sortColumn}} [desc:{{sortDescending}}]
-		</p>
+	<template id="headmapTemplate">
+	  <td style="background-color:rgba(255,{{+value*50}},{{+value*50}},0.5);width:100px;">
+		{{value}}
+	  </td>
+	</template>
+
+	<template id="width150cellTemplate">
+		<td style="width:150px;">{{value}}</td>
+	</template>
+
+	<template id="example" bind>
+		<sortable-table data="{{data}}" columns="{{columns}}" sortColumn="{{sortColumn}}" sortDescending="{{sortDescending}}" headerTemplate="blueHeaderTemplate" cellTemplate="headmapTemplate"></sortable-table>
 	</template>
 
 	<script>
@@ -64,8 +72,8 @@
 		{name:'alice', title:'Alice' },
 		{name:'bill', title:'Bill' },
 		{name:'casey', title:'Casey' },
-		{name:'average', title:'Average', formula: function(row){ return Math.round((row.alice + row.bill + row.casey)/3*10)/10; }},
-		{name:'total', title:'Total', formula: function(row){ return row.alice + row.bill + row.casey; }}
+		{name:'average', title:'Average', formula: function(row){ return Math.round((row.alice + row.bill + row.casey)/3*10)/10; }, cellTemplate: 'width150cellTemplate'},
+		{name:'total', title:'Total', formula: function(row){ return row.alice + row.bill + row.casey; }, cellTemplate: 'width150cellTemplate'}
 	];
 
 	window.addEventListener('polymer-ready', function(){
@@ -76,7 +84,6 @@
 		sortDescending: false
 	  };
 	  document.getElementById('example').model = model;
-	  document.getElementById('currentSort').model =  model;
 	});
 	</script>
 

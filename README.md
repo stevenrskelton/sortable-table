@@ -27,13 +27,15 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 
 > [Selectable Row](http://files.stevenskelton.ca/sortable-table/examples/selectable-row.html)
 
+> [Themes](http://files.stevenskelton.ca/sortable-table/examples/themes.html)
+
 ## Usage
 
 1. Import Web Components' polyfill:
 
 	```html
-	<script src="//cdnjs.cloudflare.com/ajax/libs/polymer/0.2.0/platform.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/polymer/0.2.0/polymer.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/polymer/0.2.1/platform.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/polymer/0.2.1/polymer.js"></script>
 	```
 
 2. Import Custom Element:
@@ -59,6 +61,9 @@ Attribute				| Options		| Default									| Description
 `enableRowSelection`	| *boolean*		| `false`									| Enable user interactive row selection
 `selected`				| *object*		| `null`									| Element in `data`
 `selectedRowStyle`		| *string*		| `background-color:` `rgba(0,96,200,0.2);`	| CSS style to apply to `selected` row
+`cellTemplate`   		| *string*		| `null`									| Renderer for entire `<td></td>` cell. Access to `{{column}}`, cell `{{value}}` and original `{{row}}` object from `data`.  Will be overwritten if specified in `columns`.
+`headerTemplate`		| *string*		| `null`									| Renderer for entire `<th></th>` cell. Access to `{{column}}`.  Will be overwritten if specified in `columns`.
+
 
 ### Data
 
@@ -102,7 +107,7 @@ Example of a `footerTemplate` that computes the sum of a column using a filter n
 
 ```html
 <template id="sumTemplate">
-	<td class="ssDatatableHeader" style="text-align:right">
+	<td class="sortable-table-header" style="text-align:right">
 		{{values | sum}}
 	</td>
 </template>
@@ -115,7 +120,6 @@ __Note:__  `cellTemplate`, `headerTemplate` and `footerTemplate` are limited to 
 
 - Benchmark performance
 - use proper Shadow DOM host style, support theming
-- Cleanup CSS
 - Test for correct sort on mixed alpha+numeric data
 - Test cell templates are accessible in all use cases
 - max sizing / scrolling

@@ -5,9 +5,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<script src="platform-0.2.0.js"></script>
-	<script src="polymer-0.2.0.js"></script>
+	<script src="platform.js"></script>
+	<script src="polymer.js"></script>
 	<link rel="import" href="../src/sortable-table.html">
+	<style>
+		sortable-table { width: 800px; }
+	</style>
   </head>
   <body unresolved>
 
@@ -17,7 +20,7 @@
 	<p />
 
 	<template id="fruitsTemplateIcon">
-	  <td style="padding:0;">
+	  <td style="padding:0;width:48px;text-align:center;">
 		<template if="{{value=='apple'}}">
 			<img alt="apple" style="vertical-align:middle" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAC4jAAAuIwF4pT92AAAEGklEQVRYw+2XW2xUVRSGv73Pbc7MtNhpy5BeQLBFQ6mFEggSLhKFECLIK+HBB8QL+mCiT2o0mJgYCA/GIAnRFxMCEmnUmCjVaGIMIH2RomgEisAAghQovc2cy14+UBCw7UwxgZiwHs8+e6///Gut/99HiQh3MzR3Oe4B+P8C6OvrVsCk3zq+WwF4t3uOfbsb0+lKb9tra/b3X76cfmj24hqgcKdLkG94+JEOpTF3ogQayAC1wFSgEmBy09xt2nINcE1MxgGNQ+/5/7UEqqezc0bvwV+e6u3oWNZ/5NhEExbcuOeyZWeqBstnzzpYsWjBdj9d1gc0n9iy9aXur75elj9/ttx2/dirr7+YXjj/+5olj232H5iyb8QkIyihndu9+90TG955Pi4ESovGOBZE4c2bgQOTYjP/z3RUKAy6156LKNxxZXh1WXq6ctL01qvvjX9y5ctAVBKAKz/sf6Pz2Rc2xFGIpW1EKSSKrma8JYyK0aK5tmjCAPf+SSQqs2RXr+LCp18w8NMhmfHZx+v8yZM/LAVA9sDjy7vyJ3NJHAelNBIGoxdSBJQCEey6GnQYkZo7k+ZNmwD48YlVJNzEXy1tOxuBnlGb8EL7N02DJ3NJZdlY2iqeHLCSKTAKpRSO5xN0d1O3dt319embN9Jz6NfqS3v3NRWdgoEjx2qtZBIRwQRBSSMSDfSjfA8TwWBXF1II6G5vv6FOBiMx/T8fnlgUgLi2JfkA23UpxagVCiuRgDBC+y4KjXYczmz9gDiOATj8+ptopTFBWFV0DP1xmfMmDokHI2zfxxQKN4z5cPxbEBvERGCARAJVCMHEfFtVjzu+Akt5CIKyrb6iDJQtnJOzPA+tFSY/iE4mRqs+EseYG8cznwfHQiLwxlejsDESowA7W322KAB/Qu3RiubpZ2Sos83A4L9pVwptu4iYYdkxQYCdcFDyz9zaflKqli49XooUD1Q9t/YjpdTIuux6gKCUjNAXEEcheC5oC0Qob5mec1LJkyV5Qaa56X2vKtM3/Ok2cRDcTPtI8hAUsBwHLIe69U9vB/IlAXAymVzNmtW7GOpihojWtovEIUjpBhiHIX5tdsBvaNg6FjeU+vXPvHLf/HlHMQaFwk76SBShtCo5uSh91UaXLfncq64+NRYzutrQfxxf0LnuxS8LZ86nlDEYE43B6C0s28ZvnHK6tW3nLODcmAEASBzN61i6si2fO529rvnD+cBNp1pYnotO2EHrJztXevV1e277QqIse+/Mth0tUze+vSXd2NDjpJIoDSKCk/Il8+iiE5ZjI8aAyJASWqSnPZhr2bVj8WjJS2LgligHKq4c6qyMui8m062t59zy8lO9vx+bdnFP+xwJw5Rdlr7kTZhwunrF8r1Ab9EPvPdrdg/A3QbwN3RVn5GHaM5pAAAAAElFTkSuQmCC" />
 		</template>

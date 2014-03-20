@@ -1,12 +1,12 @@
 <!--
  https://github.com/stevenrskelton/sortable-table
 -->
-<polymer-element name="sortable-table" attributes="data columns sortColumn sortDescending enableRowSelection selected selectedRowStyle">
+<polymer-element name="sortable-table" attributes="data columns sortColumn sortDescending enableRowSelection selected selectedRowStyle headerTemplate cellTemplate">
 <template>
-	<table class="ssDatatable">
+	<table>
 		<tr on-click="{{changeSort}}">
 			<template repeat="{{column in columns}}">
-				<template ref="{{column.headerTemplate}}" bind>
+				<template ref="{{column.headerTemplate || headerTemplate}}" bind>
 					<th style="{{sortColumn==column.name && sortDescending ? 'text-decoration:overline;' : ''}}
 					{{sortColumn==column.name && !sortDescending ? 'text-decoration:underline;' : ''}}">{{!(column.title) ? column.name : column.title}}</th>
 				</template>
@@ -16,7 +16,7 @@
 			<tr on-click="{{rowSelect}}" style="{{row == selected && selectedRowStyle ? selectedRowStyle : ''}}">
 				<template repeat="{{column in columns}}">
 					<template bind="{{templateData in row | computeTemplateData(column)}}">
-						<template ref="{{column.cellTemplate}}" bind="{{templateData}}">
+						<template ref="{{column.cellTemplate || cellTemplate}}" bind="{{templateData}}">
 							<td>{{value}}</td>
 						</template>
 					</template>
@@ -28,7 +28,7 @@
 				<template repeat="{{column in columns}}">
 					<template bind="{{templateData in data | selectProperty(column)}}">
 						<template ref="{{column.footerTemplate}}" bind="{{templateData}}">
-							<td class="ssDatatableHeader" style="border:0;"></td>
+							<td class="sortable-table-header" style="border:0;"></td>
 						</template>
 					</template>
 				</template>
@@ -146,22 +146,6 @@
 		showFooter: false,
 		columnsChanged: function(){
 			var self = this;
-			/* copy template from parent document into shadow dom */
-			function addTemplateIfNotInDocument(templateId){
-				if(templateId && !self.shadowRoot.getElementById(templateId)){
-					var t = self.ownerDocument.getElementById(templateId);
-					if(t){
-						self.shadowRoot.appendChild(t);
-						self.importedTemplates.push(t);
-					}else{
-						//TODO: in some cases on refresh, template isn't in self.ownerDocument.
-						//So store them in an importedTemplates array :(
-						for(var i=0;i<self.importedTemplates.length;i++){
-							self.shadowRoot.appendChild(self.importedTemplates[i]);
-						}
-					}
-				}
-			}
 			/* watch templateIds since if added/modified we need to copy those templates into the shadow dom */
 			function addTemplateWatches(column, field){
 				for(var i=0;i<self.columnWatches.length;i++){
@@ -175,9 +159,9 @@
 			}
 			for(var i=0;i<this.columns.length;i++){
 				var c = this.columns[i];
-				addTemplateIfNotInDocument(c.cellTemplate);
-				addTemplateIfNotInDocument(c.headerTemplate);
-				addTemplateIfNotInDocument(c.footerTemplate);
+				this.addTemplateIfNotInDocument(c.cellTemplate);
+				this.addTemplateIfNotInDocument(c.headerTemplate);
+				this.addTemplateIfNotInDocument(c.footerTemplate);
 				if(c.footerTemplate) this.showFooter = true;
 				addTemplateWatches(c,'cellTemplate');
 				addTemplateWatches(c,'headerTemplate');
@@ -198,35 +182,56 @@
 				}
 				this.columns = c;
 			}
+		},
+		enableRowSelectionChanged: function(a,val){
+			this.shadowRoot.querySelector('table').style.cursor= (val ? 'pointer' : 'auto');
+		},
+		cellTemplateChanged: function(a, t){ this.addTemplateIfNotInDocument(t); },
+		headerTemplateChanged: function(a, t){ this.addTemplateIfNotInDocument(t); },
+		addTemplateIfNotInDocument: function(templateId){
+			/* copy template from parent document into shadow dom */
+			if(templateId && !this.shadowRoot.getElementById(templateId)){
+				var t = this.ownerDocument.getElementById(templateId);
+				if(t){
+					this.shadowRoot.appendChild(t);
+					this.importedTemplates.push(t);
+				}else{
+					//TODO: in some cases on refresh, template isn't in ownerDocument.
+					//So store them in an importedTemplates array :(
+					for(var i=0;i<this.importedTemplates.length;i++){
+						this.shadowRoot.appendChild(this.importedTemplates[i]);
+					}
+				}
+			}
 		}
 	});
 </script>
 <style>
-	table.ssDatatable {
-		width: 100%;
+	sortable-table table {
+		width: inherit;
 		border-collapse: collapse;
 	}
-	table.ssDatatable tr:nth-of-type(even) {
+	sortable-table table tr:nth-of-type(even) {
 		background-color: rgba(255,255,224,0.25);
 	}
-	table.ssDatatable .ssDatatableHeader,
-	table.ssDatatable th {
+	sortable-table table .sortable-table-header,
+	sortable-table table th {
 		background: #555;
 		color: white;
 		font-weight: bold;
 		text-align: center;
 	}
-	table.ssDatatable td,
-	table.ssDatatable th {
+	sortable-table table td,
+	sortable-table table th {
 		padding: 6px;
 		border: 1px solid #ccc;
 		text-align: right;
 	}
-	table.ssDatatable th {
+	sortable-table table th {
 		text-align: center;
 		cursor: pointer;
 	}
-	table.ssDatatable td:first-of-type {
+	sortable-table table td:first-of-type {
 		text-align: left;
 	}
 </style>
