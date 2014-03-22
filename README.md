@@ -60,8 +60,8 @@ Attribute				| Options		| Default									| Description
 `sortDescending`		| *boolean*		| `false`									| Current sorted column sort direction
 `rowSelection`			| *boolean*		| `false`									| Enable user interactive row selection
 `rowMultiSelection`		| *boolean*		| `false`									| Enable user interactive multiple row selection. Implies `rowSelection`
-`selected`				| *object*		| `null`									| Element of `data` when `rowSelection`
-`selected`				| *array*		| `[]`										| Elements of `data` when `rowMultiSelection`
+`selected`				| *object*		| `null`									| Element of `data` when single selection enabled
+`selected`				| *array*		| `[]`										| Elements of `data` when multi selection enabled
 `selectedRowStyle`		| *string*		| `background-color:` `rgba(0,96,200,0.2);`	| CSS style to apply to `selected` row
 `cellTemplate`   		| *string*		| `null`									| Renderer for entire `<td></td>` cell. Access to `{{column}}`, cell `{{value}}` and original `{{row}}` object from `data`.  Will be overwritten if specified in `columns`.
 `headerTemplate`		| *string*		| `null`									| Renderer for entire `<th></th>` cell. Access to `{{column}}`.  Will be overwritten if specified in `columns`.
