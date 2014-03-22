@@ -58,10 +58,11 @@ Attribute				| Options		| Default									| Description
 `columns`				| *array*		| `null`									| Columns to display, with options. If null, columns will be computed from `data`
 `sortColumn`			| *string*		| `null`									| Current sorted `column.name`
 `sortDescending`		| *boolean*		| `false`									| Current sorted column sort direction
+`checkbox`				| *boolean*		| `false`									| Renders a checkbox column as first column, allowing selection of elements.
 `rowSelection`			| *boolean*		| `false`									| Enable user interactive row selection
-`rowMultiSelection`		| *boolean*		| `false`									| Enable user interactive multiple row selection. Implies `rowSelection` and multi selection.
-`selected`				| *object*		| `null`									| Element of `data` (single selection)
-`selected`				| *array*		| `[]`										| Elements of `data` (multi selection)
+`multiSelect`			| *boolean*		| `false`									| Multiple rows can be selected
+`selected`				| *object*		| `null`									| Element of `data` (`!multiSelect`)
+`selected`				| *array*		| `[]`										| Elements of `data` (`multiSelect`)
 `selectedRowStyle`		| *string*		| `background-color:` `rgba(0,96,200,0.2);`	| CSS style to apply to `selected` row
 `cellTemplate`   		| *string*		| `null`									| Renderer for entire `<td></td>` cell. Access to `{{column}}`, cell `{{value}}` and original `{{row}}` object from `data`.  Will be overwritten if specified in `columns`.
 `headerTemplate`		| *string*		| `null`									| Renderer for entire `<th></th>` cell. Access to `{{column}}`.  Will be overwritten if specified in `columns`.
@@ -127,7 +128,7 @@ __Note:__  `cellTemplate`, `headerTemplate` and `footerTemplate` are limited to 
 - max sizing / scrolling
 - paging
 - cell selection
-- maybe: checkboxes for selected rows
+- maybe: figure out how to sort by selected
 - maybe: column grouping
 - maybe: reload data if individual row fields change
 - __Internet Explorer is completely broken__

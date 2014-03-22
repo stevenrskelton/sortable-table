@@ -1,10 +1,13 @@
 <!--
  https://github.com/stevenrskelton/sortable-table
 -->
-<polymer-element name="sortable-table" attributes="data columns sortColumn sortDescending rowSelection rowMultiSelection selected selectedRowStyle headerTemplate cellTemplate">
+<polymer-element name="sortable-table" attributes="data columns sortColumn sortDescending rowSelection multiSelect selected selectedRowStyle headerTemplate cellTemplate checkbox">
 <template>
 	<table>
 		<tr on-click="{{changeSort}}">
+			<template if="{{checkbox}}">
+				<th style="width:1em"><input type="checkbox" on-change="{{checkall}}" hidden?="{{!multiSelect}}" checked?="{{data.length==selected.length}}"></th>
+			</template>
 			<template repeat="{{column in columns}}">
 				<template ref="{{column.headerTemplate || headerTemplate}}" bind>
 					<th style="{{sortColumn==column.name && sortDescending ? 'text-decoration:overline;' : ''}}
@@ -14,6 +17,9 @@
 		</tr>
 		<template repeat="{{row in data | sortByKey(sortColumn, sortDescending, columns, selected, (selected || []).length)}}">
 			<tr on-click="{{rowSelect}}" style="{{row.selected && selectedRowStyle ? selectedRowStyle : ''}}">
+				<template if="{{checkbox}}">
+					<td><input type="checkbox" on-change="{{checkedbox}}" checked?="{{row.selected}}"></td>
+				</template>
 				<template repeat="{{column in columns}}">
 					<template bind="{{templateData in row.data | computeTemplateData(column)}}">
 						<template ref="{{column.cellTemplate || cellTemplate}}" bind="{{templateData}}">
@@ -25,6 +31,9 @@
 		</template>
 		<template if="{{showFooter}}">
 			<tr>
+				<template if="{{checkbox}}">
+					<td></td>
+				</template>
 				<template repeat="{{column in columns}}">
 					<template bind="{{templateData in data | selectProperty(column)}}">
 						<template ref="{{column.footerTemplate}}" bind="{{templateData}}">
@@ -136,31 +145,36 @@
 		sortColumn: null,
 		sortDescending: false,
 		selected: null,
-		changeSort: function(e,p,o){
-			var clickedSortColumn = e.target.templateInstance_.model.column.name;
-			if(clickedSortColumn == this.sortColumn){
-				//column already sorted, reverse sort
-				this.sortDescending = !this.sortDescending;
-			}else{
-				this.sortColumn = clickedSortColumn;
+		changeSort: function(e,p){
+			if(e.target.templateInstance.model.column){
+				var clickedSortColumn = e.target.templateInstance.model.column.name;
+				if(clickedSortColumn == this.sortColumn){
+					//column already sorted, reverse sort
+					this.sortDescending = !this.sortDescending;
+				}else{
+					this.sortColumn = clickedSortColumn;
+				}
 			}
 		},
 		selectedRowStyle: 'background-color:rgba(0,96,200,0.2);',
 		rowSelection: false,
-		rowMultiSelection: false,
+		multiSelect: false,
 		rowSelect: function(e,p){
-			if(this.rowSelection){
-				var row = e.target.templateInstance_.model.row;
-				if(isArray(this.selected)){
-					var index = this.selected.indexOf(row);
-					if(index>-1){
-						this.selected.splice(index, 1);
-					}else{
-						this.selected.push(row);
-					}
+			if(this.rowSelection && e.target.templateInstance && e.target.nodeName!='INPUT'){
+				var row = e.target.templateInstance.model.row;
+				this.toggleRowFromSelected(row);
+			}
+		},
+		toggleRowFromSelected: function(row){
+			if(isArray(this.selected)){
+				var index = this.selected.indexOf(row);
+				if(index>-1){
+					this.selected.splice(index, 1);
 				}else{
-					this.selected = row;
+					this.selected.push(row);
 				}
+			}else{
+				this.selected = row;
 			}
 		},
 		importedTemplates: [],
@@ -207,23 +221,26 @@
 		},
 		rowSelectionChanged: function(a,val){
 			this.shadowRoot.querySelector('table').style.cursor=(val ? 'pointer' : 'auto');
-			if(!val && this.rowMultiSelection) this.rowMultiSelection = false;
-			if(val && !this.rowMultiSelection && isArray(this.selected)) this.rowMultiSelection = true;
 		},
-		rowMultiSelectionChanged: function(a,val){
+		multiSelectChanged: function(a,val){
 			if(val){
-				if(!this.rowSelection) this.rowSelection = true;
 				if(!isArray(this.selected)){
 					if(this.selected) this.selected = [this.selected];
 					else this.selected = [];
 				}
-			}else if(this.rowSelection && isArray(this.selected)){
+			}else if(isArray(this.selected)){
 				if(this.selected.length > 0) this.selected = this.selected[0];
 				else this.selected = null;
 			}
 		},
 		selectedChanged: function(a,val){
-			if(val!=undefined && this.rowMultiSelection && !isArray(val)) this.rowMultiSelection = false;
+			if(val!=undefined){
+				if(isArray(val)){
+					if(!this.multiSelect) this.multiSelect = true;
+				}else{
+					if(this.multiSelect) this.multiSelect = false;
+				}
+			}
 		},
 		cellTemplateChanged: function(a, t){ this.addTemplateIfNotInDocument(t); },
 		headerTemplateChanged: function(a, t){ this.addTemplateIfNotInDocument(t); },
@@ -241,6 +258,18 @@
 						this.shadowRoot.appendChild(this.importedTemplates[i]);
 					}
 				}
+			}
+		},
+		checkedbox: function(e,p){
+			var row = e.target.templateInstance.model.row;
+			this.toggleRowFromSelected(row.data);
+			e.preventDefault();
+		},
+		checkall: function(e,p){
+			if(e.target.checked){
+				this.selected = this.data;
+			}else{
+				this.selected = [];
 			}
 		}
 	});

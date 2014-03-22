@@ -17,16 +17,18 @@
 	<h2>Interactive Row Selection</h2>
 	Rows should be selectable through HTML attributes as well as by user interaction.<br>
 	Row selection styles should be able to be dynamically set.<br>
-	Toggling <code>rowSelection</code> and <code>rowMultiSelection</code> should have predicatable behaviour on <code>selected</code>.<br>
+	Toggling <code>rowSelection</code> and <code>multiSelect</code> should have predicatable behaviour on <code>selected</code>.<br>
+	Select All checkbox should only be visible for <code>multiSelect</code>.<br>
 
 	<p />
 
 	<template id="example" bind>
-		<sortable-table data="{{data}}" selected="{{selected}}" rowSelection="{{rowSelection}}" rowMultiSelection="{{rowMultiSelection}}" selectedRowStyle="{{selectedRowStyle}}"></sortable-table>
+		<sortable-table data="{{data}}" selected="{{selected}}" rowSelection="{{rowSelection}}" multiSelect="{{multiSelect}}" checkbox="{{checkbox}}" selectedRowStyle="{{selectedRowStyle}}"></sortable-table>
 		<p>
 		<strong>Enabled Interactions:</strong><br>
 		<input type="checkbox" checked="{{rowSelection}}">rowSelection<br>
-		<input type="checkbox" checked="{{rowMultiSelection}}">rowMultiSelection<br>
+		<input type="checkbox" checked="{{multiSelect}}">multiSelect<br>
+		<input type="checkbox" checked="{{checkbox}}">checkbox<br>
 	</template>
 
 	<p/>
@@ -57,7 +59,7 @@
 
 	<p/>
 
-	Fruit: <input type="text" id="selectedFruit" onfocus="this.select();"><input type="button" value="select by id or name" onclick="selectFruit();">
+	Fruit: <input type="text" id="selectedFruit" onfocus="this.select();" value="pear"><input type="button" value="select by id or name" onclick="selectFruit();">
 
 	<input type="button" onclick="changeSelectionStyle(this)" style="background-color:rgba(200,96,0,0.2);font-weight:bold;" value="Selected Style">
 	<input type="button" onclick="changeSelectionStyle(this)" style="background-color:rgba(0,96,200,0.2);font-weight:bold;" value="Selected Style">
@@ -85,7 +87,8 @@
 		selected: data[1],
 		selectedRowStyle: 'background-color:rgba(200,96,0,0.2);font-weight:bold;',
 		rowSelection: true,
-		rowMultiSelection: false
+		multiSelect: false,
+		checkbox: true
 	  };
 
 	  window.addEventListener('polymer-ready', function(){
