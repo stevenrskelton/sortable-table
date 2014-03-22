@@ -59,7 +59,11 @@ Attribute				| Options		| Default									| Description
 `sortColumn`			| *string*		| `null`									| Current sorted `column.name`
 `sortDescending`		| *boolean*		| `false`									| Current sorted column sort direction
 `rowSelection`			| *boolean*		| `false`									| Enable user interactive row selection
+<<<<<<< HEAD
 `rowMultiSelection`		| *boolean*		| `false`									| Enable user interactive multiple row selection. Implies `rowSelection`
+=======
+`rowMultiSelection`		| *boolean*		| `false`									| Enable user interactive multiple row selection. Implies `rowSelection`
+>>>>>>> 9ad11e3be44ddbfab381980a4a2c306d1ab99b3c
 `selected`				| *object*		| `null`									| Element of `data` when `rowSelection`
 `selected`				| *array*		| `[]`										| Elements of `data` when `rowMultiSelection`
 `selectedRowStyle`		| *string*		| `background-color:` `rgba(0,96,200,0.2);`	| CSS style to apply to `selected` row
