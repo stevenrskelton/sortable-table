@@ -1,11 +1,11 @@
 <!--
  https://github.com/stevenrskelton/sortable-table
 -->
-<polymer-element name="sortable-table" attributes="data columns sortColumn sortDescending rowSelection multiSelect selected selectedRowStyle headerTemplate cellTemplate checkbox">
+<polymer-element name="sortable-table" attributes="data columns sortColumn sortDescending rowSelection multiSelect selected selectedRowStyle headerTemplate cellTemplate checkbox pageSize page">
 <template>
 	<table>
 		<tr on-click="{{changeSort}}">
-			<template if="{{checkbox}}">
+			<template if="{{checkbox!=undefined}}">
 				<th style="width:1em"><input type="checkbox" on-change="{{checkall}}" hidden?="{{!multiSelect}}" checked?="{{data.length==selected.length}}"></th>
 			</template>
 			<template repeat="{{column in columns}}">
@@ -15,9 +15,9 @@
 				</template>
 			</template>
 		</tr>
-		<template repeat="{{row in data | sortByKey(sortColumn, sortDescending, columns, selected, (selected || []).length)}}">
+		<template repeat="{{row in data | sortByKey(sortColumn, sortDescending, columns, selected, (selected || []).length + data.length, pageSize, page)}}">
 			<tr on-click="{{rowSelect}}" style="{{row.selected && selectedRowStyle ? selectedRowStyle : ''}}">
-				<template if="{{checkbox}}">
+				<template if="{{checkbox!=undefined}}">
 					<td><input type="checkbox" on-change="{{checkedbox}}" checked?="{{row.selected}}"></td>
 				</template>
 				<template repeat="{{column in columns}}">
@@ -31,7 +31,7 @@
 		</template>
 		<template if="{{showFooter}}">
 			<tr>
-				<template if="{{checkbox}}">
+				<template if="{{checkbox!=undefined}}">
 					<td></td>
 				</template>
 				<template repeat="{{column in columns}}">
@@ -50,7 +50,7 @@
 	function isArray(a){
 		return Object.prototype.toString.call(a)==='[object Array]';
 	}
-	PolymerExpressions.prototype.sortByKey = function(array, key, desc, columns, selected) {
+	PolymerExpressions.prototype.sortByKey = function(array, key, desc, columns, selected, l, pageSize, page) {
 		//ignore 6th parameter, it's for observe.js watch only
 		var sortedArray = array.sort(function(a, b) {
 			var x, y;
@@ -91,7 +91,13 @@
 		});
 		var r = [];
 		var isMultiSelect = isArray(selected);
-		for(var i=0;i<sortedArray.length;i++){
+
+		if(page < 1) page = 1;
+
+		var start = (pageSize > -1) ? Math.min(pageSize * (page - 1), sortedArray.length) : 0;
+		var end = (pageSize > -1) ? Math.min(start + pageSize*1, sortedArray.length) : sortedArray.length;
+
+		for(var i=start;i<end;i++){
 			var isSelected = isMultiSelect ? selected.indexOf(sortedArray[i]) > -1 : selected == sortedArray[i];
 			r.push({selected: isSelected, data: sortedArray[i]});
 		}
@@ -145,6 +151,8 @@
 		sortColumn: null,
 		sortDescending: false,
 		selected: null,
+		pageSize: -1,
+		page: 1,
 		changeSort: function(e,p){
 			if(e.target.templateInstance.model.column){
 				var clickedSortColumn = e.target.templateInstance.model.column.name;
@@ -267,7 +275,9 @@
 		},
 		checkall: function(e,p){
 			if(e.target.checked){
-				this.selected = this.data;
+				for(var i=0;i<this.data.length;i++){
+					if(this.selected.indexOf(this.data[i])==-1) this.selected.push(this.data[i]);
+				}
 			}else{
 				this.selected = [];
 			}
