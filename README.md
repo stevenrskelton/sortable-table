@@ -23,7 +23,7 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 
 > [Nesting Tables in Cells](http://files.stevenskelton.ca/sortable-table/examples/nested-tables.html)
 
-> [Paging, Top N Rows](http://files.stevenskelton.ca/sortable-table/examples/paging.html)
+> [Paging, Top-N Rows](http://files.stevenskelton.ca/sortable-table/examples/paging.html)
 
 > [Refreshing Data](http://files.stevenskelton.ca/sortable-table/examples/refreshing-data.html)
 
@@ -125,9 +125,12 @@ __Note:__  `cellTemplate`, `headerTemplate` and `footerTemplate` are limited to 
 
 ## Todo
 
-- Benchmark performance, remove duplicate update calls, minimize observed bindings.
+- Benchmark performance: trace and remove duplicate calls, minimize observed bindings.
 - better CSS theming
 - Test cell templates are accessible in all use cases
+- integration with IndexedDB
+- cell editors
+- maybe: declarative columns using innerHTML nodes
 - maybe: max and fixed table sizing / scrolling
 - maybe: cell selection
 - maybe: figure out how to sort by selected
