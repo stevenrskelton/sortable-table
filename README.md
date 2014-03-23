@@ -23,6 +23,8 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 
 > [Nesting Tables in Cells](http://files.stevenskelton.ca/sortable-table/examples/nested-tables.html)
 
+> [Paging, Top N Rows](http://files.stevenskelton.ca/sortable-table/examples/paging.html)
+
 > [Refreshing Data](http://files.stevenskelton.ca/sortable-table/examples/refreshing-data.html)
 
 > [Selected Rows, Multi-Select](http://files.stevenskelton.ca/sortable-table/examples/selected-rows.html)
@@ -66,6 +68,8 @@ Attribute				| Options		| Default									| Description
 `selectedRowStyle`		| *string*		| `background-color:` `rgba(0,96,200,0.2);`	| CSS style to apply to `selected` row
 `cellTemplate`   		| *string*		| `null`									| Renderer for entire `<td></td>` cell. Access to `{{column}}`, cell `{{value}}` and original `{{row}}` object from `data`.  Will be overwritten if specified in `columns`.
 `headerTemplate`		| *string*		| `null`									| Renderer for entire `<th></th>` cell. Access to `{{column}}`.  Will be overwritten if specified in `columns`.
+`pageSize`				| *int*			| `-1`										| Maximum number of records to display, `-1` is all records.
+`page`					| *int*			| `1`										| Number of pages to skip, `pageSize * (page-1)` records skipped.
 
 
 ### Data
@@ -121,13 +125,11 @@ __Note:__  `cellTemplate`, `headerTemplate` and `footerTemplate` are limited to 
 
 ## Todo
 
-- Benchmark performance
-- use proper Shadow DOM host style, support theming
-- Test for correct sort on mixed alpha+numeric data
+- Benchmark performance, remove duplicate update calls, minimize observed bindings.
+- better CSS theming
 - Test cell templates are accessible in all use cases
-- max sizing / scrolling
-- paging
-- cell selection
+- maybe: max and fixed table sizing / scrolling
+- maybe: cell selection
 - maybe: figure out how to sort by selected
 - maybe: column grouping
 - maybe: reload data if individual row fields change
