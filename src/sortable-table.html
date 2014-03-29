@@ -5,7 +5,7 @@
 <template>
 	<table>
 		<tr on-click="{{changeSort}}">
-			<template if="{{checkbox!=undefined}}">
+			<template if="{{checkbox}}">
 				<th style="width:1em"><input type="checkbox" on-change="{{checkall}}" hidden?="{{!multiSelect}}" checked?="{{data.length==selected.length}}"></th>
 			</template>
 			<template repeat="{{column in columns}}">
@@ -17,7 +17,7 @@
 		</tr>
 		<template repeat="{{row in data | sortByKey(sortColumn, sortDescending, columns, selected, (selected || []).length + data.length, pageSize, page)}}">
 			<tr on-click="{{rowSelect}}" style="{{row.selected && selectedRowStyle ? selectedRowStyle : ''}}">
-				<template if="{{checkbox!=undefined}}">
+				<template if="{{checkbox}}">
 					<td><input type="checkbox" on-change="{{checkedbox}}" checked?="{{row.selected}}"></td>
 				</template>
 				<template repeat="{{column in columns}}">
@@ -31,7 +31,7 @@
 		</template>
 		<template if="{{showFooter}}">
 			<tr>
-				<template if="{{checkbox!=undefined}}">
+				<template if="{{checkbox}}">
 					<td></td>
 				</template>
 				<template repeat="{{column in columns}}">
@@ -182,7 +182,8 @@
 					this.selected.push(row);
 				}
 			}else{
-				this.selected = row;
+				if(this.selected == row) this.selected = null;
+				else this.selected = row;
 			}
 		},
 		importedTemplates: [],
@@ -268,6 +269,7 @@
 				}
 			}
 		},
+		checkbox: false,
 		checkedbox: function(e,p){
 			var row = e.target.templateInstance.model.row;
 			this.toggleRowFromSelected(row.data);

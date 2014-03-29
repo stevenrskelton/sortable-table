@@ -19,7 +19,8 @@
     "web-component",
     "web-components",
     "polymer",
-    "table"
+    "table",
+    "grid"
   ],
   "dependencies": {
     "polymer": "~0.2.1"
