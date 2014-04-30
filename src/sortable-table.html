@@ -3,7 +3,36 @@
 -->
 <polymer-element name="sortable-table" attributes="data columns sortColumn sortDescending rowSelection multiSelect selected selectedRowStyle headerTemplate cellTemplate checkbox pageSize page">
 <template>
-	<table>
+	<style>
+		.sortable-table {
+			width: inherit;
+			border-collapse: collapse;
+		}
+		.sortable-table tr:nth-of-type(even) {
+			background-color: rgba(255,255,224,0.25);
+		}
+		.sortable-table .sortable-table-header,
+		.sortable-table th {
+			background: #555;
+			color: white;
+			font-weight: bold;
+			text-align: center;
+		}
+		.sortable-table td,
+		.sortable-table th {
+			padding: 6px;
+			border: 1px solid #ccc;
+			text-align: right;
+		}
+		.sortable-table th {
+			text-align: center;
+			cursor: pointer;
+		}
+		.sortable-table td:first-of-type {
+			text-align: left;
+		}
+	</style>
+	<table class="sortable-table">
 		<tr on-click="{{changeSort}}">
 			<template if="{{checkbox}}">
 				<th style="width:1em"><input type="checkbox" on-change="{{checkall}}" hidden?="{{!multiSelect}}" checked?="{{data.length==selected.length}}"></th>
@@ -286,33 +315,4 @@
 		}
 	});
 </script>
-<style>
-	sortable-table table {
-		width: inherit;
-		border-collapse: collapse;
-	}
-	sortable-table table tr:nth-of-type(even) {
-		background-color: rgba(255,255,224,0.25);
-	}
-	sortable-table table .sortable-table-header,
-	sortable-table table th {
-		background: #555;
-		color: white;
-		font-weight: bold;
-		text-align: center;
-	}
-	sortable-table table td,
-	sortable-table table th {
-		padding: 6px;
-		border: 1px solid #ccc;
-		text-align: right;
-	}
-	sortable-table table th {
-		text-align: center;
-		cursor: pointer;
-	}
-	sortable-table table td:first-of-type {
-		text-align: left;
-	}
-</style>
 </polymer-element>

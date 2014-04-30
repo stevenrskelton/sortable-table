@@ -36,8 +36,8 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 1. Import Web Components' polyfill:
 
 	```html
-	<script src="//cdnjs.cloudflare.com/ajax/libs/polymer/0.2.1/platform.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/polymer/0.2.1/polymer.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/polymer/0.2.3/platform.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/polymer/0.2.3/polymer.js"></script>
 	```
 
 2. Import Custom Element:
@@ -125,6 +125,7 @@ __Note:__  `cellTemplate`, `headerTemplate` and `footerTemplate` are limited to 
 
 ## Todo
 
+- __Fix native shadow DOM issues in Chromium__
 - Benchmark performance: trace and remove duplicate calls, minimize observed bindings.
 - better CSS theming
 - Test cell templates are accessible in all use cases
