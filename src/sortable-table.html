@@ -44,7 +44,7 @@
 				</template>
 			</template>
 		</tr>
-		<template repeat="{{row in data | sortByKey(sortColumn, sortDescending, columns, selected, (selected || []).length + data.length, pageSize, page)}}">
+		<template repeat="{{row in data | sortByKey(sortColumn, sortDescending, columns, selected, pageSize, page, (selected || []).length + data.length, dumb)}}">
 			<tr on-click="{{rowSelect}}" style="{{row.selected && selectedRowStyle ? selectedRowStyle : ''}}">
 				<template if="{{checkbox}}">
 					<td><input type="checkbox" on-change="{{checkedbox}}" checked?="{{row.selected}}"></td>
@@ -79,8 +79,8 @@
 	function isArray(a){
 		return Object.prototype.toString.call(a)==='[object Array]';
 	}
-	PolymerExpressions.prototype.sortByKey = function(array, key, desc, columns, selected, l, pageSize, page) {
-		//ignore 6th parameter, it's for observe.js watch only
+	PolymerExpressions.prototype.sortByKey = function(array, key, desc, columns, selected, pageSize, page, l) {
+		//ignore 8th-> parameters, they are for observe.js watch only
 		var sortedArray = array.sort(function(a, b) {
 			var x, y;
 			//determine if computed field
@@ -176,10 +176,11 @@
 	};
 	Polymer('sortable-table', {
 		data: [],
-		columns: null,
+		columns: [],
 		sortColumn: null,
 		sortDescending: false,
 		selected: null,
+		headerTemplate: null,
 		pageSize: -1,
 		page: 1,
 		changeSort: function(e,p){
@@ -220,7 +221,7 @@
 		showFooter: false,
 		columnsChanged: function(){
 			var self = this;
-			/* watch templateIds since if added/modified we need to copy those templates into the shadow dom */
+			//watch templateIds since if added/modified we need to copy those templates into the shadow dom
 			function addTemplateWatches(column, field){
 				for(var i=0;i<self.columnWatches.length;i++){
 					if(self.columnWatches[i].object_==column && self.columnWatches[i].path_[0]==field) return;
@@ -241,9 +242,10 @@
 				addTemplateWatches(c,'headerTemplate');
 				addTemplateWatches(c,'footerTemplate');
 			}
+			this.dumb = true;
 		},
 		dataChanged: function(){
-			if(!this.columns && this.data && this.data.length > 0){
+			if(this.columns.length==0 && this.data && this.data.length > 0){
 				var c = [];
 				var unique = [];
 				for(var i=0;i<this.data.length;i++){
@@ -258,7 +260,8 @@
 			}
 		},
 		rowSelectionChanged: function(a,val){
-			this.shadowRoot.querySelector('table').style.cursor=(val ? 'pointer' : 'auto');
+			var table = this.shadowRoot.querySelector('table')
+			if(table) table.style.cursor=(val ? 'pointer' : 'auto');
 		},
 		multiSelectChanged: function(a,val){
 			if(val){
@@ -280,8 +283,12 @@
 				}
 			}
 		},
-		cellTemplateChanged: function(a, t){ this.addTemplateIfNotInDocument(t); },
-		headerTemplateChanged: function(a, t){ this.addTemplateIfNotInDocument(t); },
+		cellTemplateChanged: function(a, t){
+			this.addTemplateIfNotInDocument(t);
+		},
+		headerTemplateChanged: function(a, t){
+			this.addTemplateIfNotInDocument(t);
+		},
 		addTemplateIfNotInDocument: function(templateId){
 			/* copy template from parent document into shadow dom */
 			if(templateId && !this.shadowRoot.getElementById(templateId)){
@@ -313,6 +320,7 @@
 				this.selected = [];
 			}
 		}
+		,dumb: false //TODO: clean this up, it was put in to trigger a reprocess on initial load when templates are imported into the shadow dom.
 	});
 </script>
 </polymer-element>

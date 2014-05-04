@@ -57,7 +57,7 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 Attribute				| Options		| Default									| Description
 ---						| ---			| ---										| ---
 `data`	 				| *array*		| `[]`										| Data rows
-`columns`				| *array*		| `null`									| Columns to display, with options. If null, columns will be computed from `data`
+`columns`				| *array*		| `[]`										| Columns to display, with options. If [], columns will be computed from `data`
 `sortColumn`			| *string*		| `null`									| Current sorted `column.name`
 `sortDescending`		| *boolean*		| `false`									| Current sorted column sort direction
 `checkbox`				| *boolean*		| `false`									| Renders a checkbox column as first column, allowing selection of elements.
@@ -125,7 +125,8 @@ __Note:__  `cellTemplate`, `headerTemplate` and `footerTemplate` are limited to 
 
 ## Todo
 
-- __Fix native shadow DOM issues in Chromium__
+- __Fix missing header templates in Chromium__
+- __Fix slow performance in Firefox with header templates__
 - Benchmark performance: trace and remove duplicate calls, minimize observed bindings.
 - better CSS theming
 - Test cell templates are accessible in all use cases
