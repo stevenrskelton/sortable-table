@@ -64,14 +64,14 @@
 	<!-- nested table as a cell -->
 	<template id="nestedTable">
 	  <td style="padding:0;">
-		<sortable-table data="{{row[column.name]}}" columns="{{column.columns}}" sortColumn="{{column.sortColumn}}" sortDescending="{{column.sortDescending}}"></sortable-table>
+		<sortable-table style="width:100%" data="{{row[column.name]}}" columns="{{column.columns}}" sortColumn="{{column.sortColumn}}" sortDescending="{{column.sortDescending}}"></sortable-table>
 	  </td>
 	</template>
 
 	<!-- nested table as a footer -->
 	<template id="nestedFooterTable">
 	  <td style="padding:0;">
-		<sortable-table data="{{rowValues | cube}}" columns="{{column.columns}}" sortColumn="{{column.sortColumn}}" sortDescending="{{column.sortDescending}}"></sortable-table>
+		<sortable-table style="width:100%" data="{{rowValues | cube}}" columns="{{column.columns}}" sortColumn="{{column.sortColumn}}" sortDescending="{{column.sortDescending}}"></sortable-table>
 	  </td>
 	</template>
 
