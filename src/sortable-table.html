@@ -1,7 +1,7 @@
 <!--
  https://github.com/stevenrskelton/sortable-table
 -->
-<polymer-element name="sortable-table" attributes="data columns sortColumn sortDescending rowSelection multiSelect selected selectedRowStyle headerTemplate cellTemplate checkbox pageSize page">
+<polymer-element name="sortable-table" attributes="data columns sortColumn sortDescending rowSelection multiSelect selected selectedRowStyle headerTemplate cellTemplate footerTemplate checkbox pageSize page">
 <template>
 	<style>
 		.sortable-table {
@@ -12,6 +12,7 @@
 			background-color: rgba(255,255,224,0.25);
 		}
 		.sortable-table .sortable-table-header,
+		.sortable-table .sortable-table-paging,
 		.sortable-table th {
 			background: #555;
 			color: white;
@@ -32,6 +33,13 @@
 			text-align: left;
 		}
 	</style>
+	<template id="pagingFooter">
+		<div style="text-align:center">
+			<div style="float:left;cursor:pointer;color:{{page==1 ? '#666':'#fff'}}" on-click="{{previousPage}}">Prev</div>
+			<div style="float:right;cursor:pointer;color:{{page * pageSize > data.length ? '#666':'#fff'}}" on-click="{{nextPage}}">Next</div>
+			Page {{page}} of {{(data.length - (data.length % pageSize) + pageSize) / pageSize}}
+		</div>
+	</template>
 	<table class="sortable-table">
 		<tr on-click="{{changeSort}}">
 			<template if="{{checkbox}}">
@@ -70,6 +78,11 @@
 						</template>
 					</template>
 				</template>
+			</tr>
+		</template>
+		<template if="{{footerTemplate}}">
+			<tr>
+				<td colspan="{{columns.length}}" class="sortable-table-paging"><template ref="{{footerTemplate}}" bind></template></td>
 			</tr>
 		</template>
 	</table>
@@ -181,6 +194,7 @@
 		sortDescending: false,
 		selected: null,
 		headerTemplate: null,
+		footerTemplate: null,
 		pageSize: -1,
 		page: 1,
 		changeSort: function(e,p){
@@ -242,7 +256,7 @@
 				addTemplateWatches(c,'headerTemplate');
 				addTemplateWatches(c,'footerTemplate');
 			}
-			this.dumb = true;
+			this.dumb++;
 		},
 		dataChanged: function(){
 			if(this.columns.length==0 && this.data && this.data.length > 0){
@@ -288,6 +302,11 @@
 		},
 		headerTemplateChanged: function(a, t){
 			this.addTemplateIfNotInDocument(t);
+			this.dumb++;
+		},
+		footerTemplateChanged: function(a, t){
+			this.addTemplateIfNotInDocument(t);
+			this.dumb++;
 		},
 		addTemplateIfNotInDocument: function(templateId){
 			/* copy template from parent document into shadow dom */
@@ -319,8 +338,10 @@
 			}else{
 				this.selected = [];
 			}
-		}
-		,dumb: false //TODO: clean this up, it was put in to trigger a reprocess on initial load when templates are imported into the shadow dom.
+		},
+		previousPage: function(){ if(this.page > 1) this.page--; },
+		nextPage: function(){ if(this.data.length > this.page * this.pageSize) this.page++; }
+		,dumb: 0 //TODO: clean this up, it was put in to trigger a reprocess on initial load when templates are imported into the shadow dom.
 	});
 </script>
 </polymer-element>
