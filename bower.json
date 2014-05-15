@@ -23,6 +23,6 @@
     "grid"
   ],
   "dependencies": {
-    "polymer": "~0.2.1"
+    "polymer": "Polymer/polymer#~0.2.4"
   }
 }
