@@ -131,7 +131,8 @@ __Note:__  `cellTemplate`, `headerTemplate` and `footerTemplate` are limited to 
 - better CSS theming
 - Test cell templates are accessible in all use cases
 - integration with IndexedDB
-- cell editors
+- ensure stable sort (orders can change within duplicates on sorted column)
+- maybe: cell editors
 - maybe: declarative columns using innerHTML nodes
 - maybe: max and fixed table sizing / scrolling
 - maybe: cell selection

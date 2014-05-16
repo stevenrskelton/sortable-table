@@ -41,18 +41,20 @@
 		</div>
 	</template>
 	<table class="sortable-table">
-		<tr on-click="{{changeSort}}">
-			<template if="{{checkbox}}">
-				<th style="width:1em"><input type="checkbox" on-change="{{checkall}}" hidden?="{{!multiSelect}}" checked?="{{data.length==selected.length}}"></th>
-			</template>
-			<template repeat="{{column in columns}}">
-				<template ref="{{column.headerTemplate || headerTemplate}}" bind>
-					<th style="{{sortColumn==column.name && sortDescending ? 'text-decoration:overline;' : ''}}
-					{{sortColumn==column.name && !sortDescending ? 'text-decoration:underline;' : ''}}">{{!(column.title) ? column.name : column.title}}</th>
+		<thead>
+			<tr on-click="{{changeSort}}">
+				<template if="{{checkbox}}">
+					<th style="width:1em"><input type="checkbox" on-change="{{checkall}}" hidden?="{{!multiSelect}}" checked?="{{data.length==selected.length}}"></th>
 				</template>
-			</template>
-		</tr>
-		<template repeat="{{row in data | sortByKey(sortColumn, sortDescending, columns, selected, pageSize, page, (selected || []).length + data.length, dumb)}}">
+				<template repeat="{{column in columns}}">
+					<template ref="{{column.headerTemplate || headerTemplate}}" bind>
+						<th style="{{sortColumn==column.name && sortDescending ? 'text-decoration:overline;' : ''}}
+						{{sortColumn==column.name && !sortDescending ? 'text-decoration:underline;' : ''}}">{{!(column.title) ? column.name : column.title}}</th>
+					</template>
+				</template>
+			</tr>
+		</thead>
+		<tbody template repeat="{{row in data | sortByKey(sortColumn, sortDescending, columns, selected, pageSize, page, (selected || []).length + data.length, dumb)}}">
 			<tr on-click="{{rowSelect}}" style="{{row.selected && selectedRowStyle ? selectedRowStyle : ''}}">
 				<template if="{{checkbox}}">
 					<td><input type="checkbox" on-change="{{checkedbox}}" checked?="{{row.selected}}"></td>
@@ -65,26 +67,28 @@
 					</template>
 				</template>
 			</tr>
-		</template>
-		<template if="{{showFooter}}">
-			<tr>
-				<template if="{{checkbox}}">
-					<td></td>
-				</template>
-				<template repeat="{{column in columns}}">
-					<template bind="{{templateData in data | selectProperty(column)}}">
-						<template ref="{{column.footerTemplate}}" bind="{{templateData}}">
-							<td class="sortable-table-header" style="border:0;"></td>
+		</tbody>
+		<tfoot>
+			<template if="{{showFooter}}">
+				<tr>
+					<template if="{{checkbox}}">
+						<td></td>
+					</template>
+					<template repeat="{{column in columns}}">
+						<template bind="{{templateData in data | selectProperty(column)}}">
+							<template ref="{{column.footerTemplate}}" bind="{{templateData}}">
+								<td class="sortable-table-header" style="border:0;"></td>
+							</template>
 						</template>
 					</template>
-				</template>
-			</tr>
-		</template>
-		<template if="{{footerTemplate}}">
-			<tr>
-				<td colspan="{{columns.length}}" class="sortable-table-paging"><template ref="{{footerTemplate}}" bind></template></td>
-			</tr>
-		</template>
+				</tr>
+			</template>
+			<template if="{{footerTemplate}}">
+				<tr>
+					<td colspan="{{columns.length}}" class="sortable-table-paging"><template ref="{{footerTemplate}}" bind></template></td>
+				</tr>
+			</template>
+		</tfoot>
 	</table>
 </template>
 
