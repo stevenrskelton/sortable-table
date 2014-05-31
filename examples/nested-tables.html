@@ -5,9 +5,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<script src="platform.js"></script>
-	<script src="polymer.js"></script>
-	<link rel="import" href="../src/sortable-table.html">
+	<script src="../../platform/platform.js"></script>
+	<link rel="import" href="../sortable-table.html">
 	<style>
 		sortable-table { width: 100% }
 	</style>
@@ -90,37 +89,6 @@
 	</template>
 
 	<script>
-	  /* Group by day, for totals */
-	  PolymerExpressions.prototype.cube = function(arr) {
-		var c = []
-		for(var i=0;i<arr.length;i++){
-		  //d should be an array of unique days
-		  var d = arr[i];
-		  for(var j=0;j<d.length;j++){
-			//find day record in c
-			var s = null;
-			for(var k=0;k<c.length;k++){
-			  if(c[k].day==d[j].day){
-				s = c[k];
-				break;
-			  }
-			}
-			if(!s){
-			  s = { day: d[j].day };
-			  c.push(s);
-			}
-			//loop through properties and add them to s
-			//makes assumption that properties are the same, none missing
-			var o = d[j];
-			for (var key in o) {
-			  if (o.hasOwnProperty(key) && key!='day') {
-				s[key] = (s[key] || 0) + o[key];
-			  }
-			}
-		  }
-		}
-		return c;
-	  };
 
 	  var fruits = [
 		{
@@ -184,6 +152,37 @@
 	  ];
 
 	  window.addEventListener('polymer-ready', function(){
+		/* Group by day, for totals */
+		PolymerExpressions.prototype.cube = function(arr) {
+			var c = []
+			for(var i=0;i<arr.length;i++){
+			//d should be an array of unique days
+			var d = arr[i];
+			for(var j=0;j<d.length;j++){
+				//find day record in c
+				var s = null;
+				for(var k=0;k<c.length;k++){
+				if(c[k].day==d[j].day){
+					s = c[k];
+					break;
+				}
+				}
+				if(!s){
+				s = { day: d[j].day };
+				c.push(s);
+				}
+				//loop through properties and add them to s
+				//makes assumption that properties are the same, none missing
+				var o = d[j];
+				for (var key in o) {
+				if (o.hasOwnProperty(key) && key!='day') {
+					s[key] = (s[key] || 0) + o[key];
+				}
+				}
+			}
+			}
+			return c;
+		};
 		var model = {
 		  data: fruits,
 		  columns: columns
