@@ -198,6 +198,13 @@
 			return arr.reduce(function(a, b) { return a + b; }, 0) / arr.length;
 		}
 	};
+	PolymerExpressions.prototype.toKeyValueArray = function(obj) {
+		var arr = [];
+		Object.getOwnPropertyNames(obj).forEach(function(val, idx, array) {
+			arr.push({ key: val, value: obj[val] });
+		});
+		return arr;
+	};
 	Polymer('sortable-table', {
 		data: [],
 		columns: [],
