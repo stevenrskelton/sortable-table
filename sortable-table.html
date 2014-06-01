@@ -65,10 +65,8 @@
 					</template>
 					<template ref="{{rowTemplate}}" bind>
 						<template repeat="{{column in columns}}">
-							<template bind="{{templateData in row.data | computeTemplateData(column)}}">
-								<template ref="{{column.cellTemplate || cellTemplate}}" bind="{{templateData}}">
-									<td>{{value}}</td>
-								</template>
+							<template ref="{{column.cellTemplate || cellTemplate}}" bind="{{row.fields[column.name]}}">
+								<td>{{value}}</td>
 							</template>
 						</template>
 					</template>
@@ -148,22 +146,24 @@
 		if(page < 1) page = 1;
 
 		var start = (pageSize > -1) ? Math.min(pageSize * (page - 1), sortedArray.length) : 0;
-		var end = (pageSize > -1) ? Math.min(start + pageSize*1, sortedArray.length) : sortedArray.length;
+		var end = (pageSize > -1) ? Math.min(start + pageSize * 1, sortedArray.length) : sortedArray.length;
 
 		for(var i=start;i<end;i++){
 			var isSelected = isMultiSelect ? selected.indexOf(sortedArray[i]) > -1 : selected == sortedArray[i];
-			r.push({selected: isSelected, data: sortedArray[i]});
+			var fields = {};
+			columns.forEach(function(column, index, array) {
+				var row = sortedArray[i];
+				var value;
+				if(column.formula){
+					value = column.formula(row);
+				}else{
+					value = row[column.name];
+				}
+				fields[column.name] = { row: row, value: value, column: column };
+			});
+			r.push({selected: isSelected, fields: fields});
 		}
 		return r;
-	};
-	PolymerExpressions.prototype.computeTemplateData = function(row, column) {
-		var value;
-		if(column.formula){
-			value = column.formula(row);
-		}else{
-			value = row[column.name];
-		}
-		return { row: row, value: value, column: column };
 	};
 	PolymerExpressions.prototype.selectProperty = function(objects, column) {
 		var arr = [];
@@ -342,7 +342,8 @@
 		checkbox: false,
 		checkedbox: function(e,p){
 			var row = e.target.templateInstance.model.row;
-			this.toggleRowFromSelected(row.data);
+			row = row.fields[Object.getOwnPropertyNames(row.fields)[0]].row
+			this.toggleRowFromSelected(row);
 			e.preventDefault();
 		},
 		checkall: function(e,p){

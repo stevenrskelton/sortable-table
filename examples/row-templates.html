@@ -14,21 +14,27 @@
 <body unresolved>
 
 	<h2>Row Templates</h2>
-	Using <code>rowTemplate</code> to populate rows, should work when a cell <code>formula</code> is specified.
+	Using <code>rowTemplate</code> to populate rows, should work when a cell <code>formula</code> is specified, and all normal row selection functionality should continue to operate (clicks and checkboxes).<br>
+	<em style="color:red">Selection clicks do not work.</em>
 
 	<p />
 
 	<template id="simpleRowTemplate">
-		<td><b>{{row.data.fruit}}</b></td>
-		<td>{{row.data.alice}}</td>
-		<td>{{row.data.bill}}</td>
-		<td>{{row.data.casey}}</td>
+		<td style="text-align:center"><b>{{row.fields.fruit.value}}</b></td>
+		<td>{{row.fields.alice.value}}</b></td>
+		<td>{{row.fields.bill.value}}</td>
+		<td>{{row.fields.casey.value}}</td>
+		<td>~<em>{{row.fields.average.value}}</em></td>
+		<td><em>{{row.fields.total.value}}</em>!</td>
 	</template>
 
 	<template id="example" bind>
-		<sortable-table data="{{data}}" rowTemplate="simpleRowTemplate"></sortable-table>
-		<hr>
-		<sortable-table data="{{data}}"></sortable-table>
+		<sortable-table data="{{data}}" columns="{{columns}}" rowTemplate="simpleRowTemplate" rowSelection="{{rowSelection}}" multiSelect="{{multiSelect}}" checkbox="{{checkbox}}"></sortable-table>
+		<p>
+		<strong>Enabled Interactions:</strong><br>
+		<input type="checkbox" checked="{{rowSelection}}">rowSelection<br>
+		<input type="checkbox" checked="{{multiSelect}}">multiSelect<br>
+		<input type="checkbox" checked="{{checkbox}}">checkbox<br>
 	</template>
 	<script>
 	var fruits = [
@@ -51,7 +57,10 @@
 	window.addEventListener('polymer-ready', function(){
 		var model = {
 			data: fruits,
-			columns: columns
+			columns: columns,
+			rowSelection: true,
+			multiSelect: false,
+			checkbox: true
 		};
 		document.getElementById('example').model = model;
 	});
