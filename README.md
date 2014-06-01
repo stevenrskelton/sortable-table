@@ -15,6 +15,8 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 
 > [Cell, Header, and Footer Templates](http://files.stevenskelton.ca/sortable-table/examples/columns-with-templates.html)
 
+> [Row Templates](http://files.stevenskelton.ca/sortable-table/examples/row-templates.html)
+
 > [Complex Templates](http://files.stevenskelton.ca/sortable-table/examples/columns-with-templates-that-are-templates.html)
 
 > [Dynamically Changing Columns and Templates](http://files.stevenskelton.ca/sortable-table/examples/dynamic-columns.html)
