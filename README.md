@@ -37,7 +37,7 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 
 	```json
 	"dependencies": {
-		"sortable-table": "sortable-table#~0.5.0"
+		"sortable-table": "sortable-table#~0.5.1"
 	}
 	```
 
