@@ -74,6 +74,7 @@ Attribute				| Options		| Default									| Description
 `selected`				| *array*		| `[]`										| Elements of `data` (`multiSelect`)
 `selectedRowStyle`		| *string*		| `background-color:` `rgba(0,96,200,0.2);`	| CSS style to apply to `selected` row
 `cellTemplate`   		| *string*		| `null`									| Renderer for entire `<td></td>` cell. Access to `{{column}}`, cell `{{value}}` and original `{{row}}` object from `data`.  Will be overwritten if specified in `columns`.
+`rowTemplate`			| *string*		| `null`									| Renderer for entire `<tr></tr>` row. Access to ...
 `headerTemplate`		| *string*		| `null`									| Renderer for entire `<th></th>` cell. Access to `{{column}}`.  Will be overwritten if specified in `columns`.
 `pageSize`				| *int*			| `-1`										| Maximum number of records to display, `-1` is all records.
 `page`					| *int*			| `1`										| Number of pages to skip, `pageSize * (page-1)` records skipped.
@@ -94,17 +95,6 @@ Attribute  			| Options		| Default		| Description
 `headerTemplate`	| *string*		| `null`		| Renderer for entire `<th></th>` cell. Access to `{{column}}`
 `footerTemplate`	| *string*		| `null`		| Renderer for entire `<td></td>` cell. Access to `{{column}}`, array of all `{{values}}` of cells in the column, and array of all original `{{rowValues}}` object from `data` _(if they are defined)_
 
-Example of a `cellTemplate` that displays an image beside the column value:
-
-```html
-<template id="myCellTemplate">
-	<td>
-		<img src="{{row.img}}" alt="{{row.title}}"/>{{value}}
-	</td>
-</template>
-```
-__Note:__  Normally `row[column.name] == value`, but `value` can be manually set by specifying a `formula`. This is useful if `value` won't sort correctly but you need access to the original value.
-
 Example of a `headerTemplate` using images to indicate sorting:
 
 ```html
@@ -116,6 +106,27 @@ Example of a `headerTemplate` using images to indicate sorting:
 	</th>
 </template>
 ```
+
+Example of a `rowTemplate` that prints out column values:
+
+```html
+<template id="myRowTemplate">
+	<td>
+		{{row.}}
+	</td>
+</template>
+```
+
+Example of a `cellTemplate` that displays an image beside the column value:
+
+```html
+<template id="myCellTemplate">
+	<td>
+		<img src="{{row.img}}" alt="{{row.title}}"/>{{value}}
+	</td>
+</template>
+```
+__Note:__  Normally `row[column.name] == value`, but `value` can be manually set by specifying a `formula`. This is useful if `value` won't sort correctly but you need access to the original value.
 
 Example of a `footerTemplate` that computes the sum of a column using a filter named `sum`:
 

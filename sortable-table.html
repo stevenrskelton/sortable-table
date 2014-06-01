@@ -4,7 +4,7 @@
 
 <link rel="import" href="../polymer/polymer.html">
 
-<polymer-element name="sortable-table" attributes="data columns sortColumn sortDescending rowSelection multiSelect selected selectedRowStyle headerTemplate cellTemplate footerTemplate checkbox pageSize page">
+<polymer-element name="sortable-table" attributes="data columns sortColumn sortDescending rowSelection multiSelect selected selectedRowStyle headerTemplate cellTemplate rowTemplate footerTemplate checkbox pageSize page">
 <template>
 	<style>
 		.sortable-table {
@@ -57,19 +57,23 @@
 				</template>
 			</tr>
 		</thead>
-		<tbody template repeat="{{row in data | sortByKey(sortColumn, sortDescending, columns, selected, pageSize, page, (selected || []).length + data.length, dumb)}}">
-			<tr on-click="{{rowSelect}}" style="{{row.selected && selectedRowStyle ? selectedRowStyle : ''}}">
-				<template if="{{checkbox}}">
-					<td><input type="checkbox" on-change="{{checkedbox}}" checked?="{{row.selected}}"></td>
-				</template>
-				<template repeat="{{column in columns}}">
-					<template bind="{{templateData in row.data | computeTemplateData(column)}}">
-						<template ref="{{column.cellTemplate || cellTemplate}}" bind="{{templateData}}">
-							<td>{{value}}</td>
+		<tbody>
+			<template repeat="{{row in data | sortByKey(sortColumn, sortDescending, columns, selected, pageSize, page, (selected || []).length + data.length, dumb)}}">
+				<tr on-click="{{rowSelect}}" style="{{row.selected && selectedRowStyle ? selectedRowStyle : ''}}">
+					<template if="{{checkbox}}">
+						<td><input type="checkbox" on-change="{{checkedbox}}" checked?="{{row.selected}}"></td>
+					</template>
+					<template ref="{{rowTemplate}}" bind>
+						<template repeat="{{column in columns}}">
+							<template bind="{{templateData in row.data | computeTemplateData(column)}}">
+								<template ref="{{column.cellTemplate || cellTemplate}}" bind="{{templateData}}">
+									<td>{{value}}</td>
+								</template>
+							</template>
 						</template>
 					</template>
-				</template>
-			</tr>
+				</tr>
+			</template>
 		</tbody>
 		<tfoot>
 			<template if="{{showFooter}}">
@@ -202,6 +206,7 @@
 		selected: null,
 		headerTemplate: null,
 		footerTemplate: null,
+		rowTemplate: null,
 		pageSize: -1,
 		page: 1,
 		changeSort: function(e,p){
@@ -305,6 +310,9 @@
 			}
 		},
 		cellTemplateChanged: function(a, t){
+			this.addTemplateIfNotInDocument(t);
+		},
+		rowTemplateChanged: function(a, t){
 			this.addTemplateIfNotInDocument(t);
 		},
 		headerTemplateChanged: function(a, t){
