@@ -3,7 +3,7 @@
   "version": "0.6.0",
   "homepage": "https://github.com/stevenrskelton/sortable-table",
   "description": "Polymer Web Component that generates a sortable <table> from JSON",
-  "main": "src/sortable-table.html",
+  "main": "sortable-table.html",
   "authors": [
     "Steven Skelton"
   ],
