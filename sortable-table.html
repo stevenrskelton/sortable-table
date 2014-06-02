@@ -232,7 +232,9 @@
 		multiSelect: false,
 		rowSelect: function(e,p){
 			if(this.rowSelection && e.target.templateInstance && e.target.nodeName!='INPUT'){
-				var row = e.target.templateInstance.model.row;
+				var model = e.target.templateInstance.model;
+				var row = model.row;
+				if(model.record) row = model.record.row;
 				this.toggleRowFromSelected(row);
 			}
 		},
