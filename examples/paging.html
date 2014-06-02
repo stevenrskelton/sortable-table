@@ -22,7 +22,11 @@
 	<p>
 
 	<template id="example" bind>
-		<sortable-table data="{{data}}" page="{{page}}" pageSize="{{pageSize}}" checkbox multiselect columns="{{columns}}" selected="{{selected}}" sortColumn="fruit"></sortable-table>
+		<sortable-table data="{{data}}" page="{{page}}" pageSize="{{pageSize}}" checkbox multiselect columns="{{columns}}" selected="{{selected}}" sortColumn="fruit">
+			<template id="alignLeft">
+				<td style="text-align:left">{{value}}</td>
+			</template>
+		</sortable-table>
 	</template>
 
 	<p>
@@ -35,10 +39,6 @@
 			<tr><td><strong>Selected</strong></td><td>{{selected.length}}</td></tr>
 		</table>
 		<sortable-table data="{{selected}}"></sortable-table>
-	</template>
-
-	<template id="alignLeft">
-		<td style="text-align:left">{{value}}</td>
 	</template>
 
 	<script>

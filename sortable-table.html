@@ -251,7 +251,6 @@
 				else this.selected = row;
 			}
 		},
-		importedTemplates: [],
 		columnWatches: [],
 		showFooter: false,
 		columnsChanged: function(){
@@ -332,19 +331,21 @@
 			this.addTemplateIfNotInDocument(t);
 			this.dumb++;
 		},
+		importedTemplates: [],
 		addTemplateIfNotInDocument: function(templateId){
-			/* copy template from parent document into shadow dom */
+			/* copy template from content into shadow dom */
 			if(templateId && !this.shadowRoot.getElementById(templateId)){
-				var t = this.ownerDocument.getElementById(templateId);
+				var t = this.querySelector('#'+templateId);
 				if(t){
-					this.shadowRoot.appendChild(t);
 					this.importedTemplates.push(t);
+					this.shadowRoot.appendChild(t);
 				}else{
 					//TODO: in some cases on refresh, template isn't in ownerDocument.
 					//So store them in an importedTemplates array :(
-					for(var i=0;i<this.importedTemplates.length;i++){
-						this.shadowRoot.appendChild(this.importedTemplates[i]);
-					}
+					var shadowRoot = this.shadowRoot;
+					this.importedTemplates.forEach(function(it){
+						shadowRoot.appendChild(it);
+					});
 				}
 			}
 		},

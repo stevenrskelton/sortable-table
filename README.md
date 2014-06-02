@@ -39,7 +39,7 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 
 	```json
 	"dependencies": {
-		"sortable-table": "sortable-table#~0.6.0"
+		"sortable-table": "sortable-table#~0.6.1"
 	}
 	```
 
@@ -58,7 +58,9 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 4. Start using it!
 
 	```html
-	<sortable-table></sortable-table>
+	<sortable-table>
+		<!-- add templates here -->
+	</sortable-table>
 	```
 
 ## Options
