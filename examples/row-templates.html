@@ -15,13 +15,16 @@
 
 	<h2>Row Templates</h2>
 	Using <code>rowTemplate</code> to populate rows, should work when a cell <code>formula</code> is specified, and all normal row selection functionality should continue to operate (clicks and checkboxes).<br>
-	<em style="color:red">Selection clicks do not work.</em>
+	Row templates allow live 2-way data-binding between cells, using individual <code>cellTemplate</code>s can't usually do this.<br>
+	Notice the <em>Formula Total</em> doesn't refresh instantly, but the <em>Template Total</em> does.
+	<p>
+	<em style="color:red">Row selection mouse clicks do not currently work.</em>
 
 	<p>
 
 	<template id="simpleRowTemplate">
 		<td style="text-align:left;font-weight:bold">
-			<template bind="{{row.fields.fruit}}">
+			<template bind="{{record.fields.fruit}}">
 				<template if="{{value=='apple'}}">
 					<img alt="apple" style="vertical-align:middle" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAC4jAAAuIwF4pT92AAAEGklEQVRYw+2XW2xUVRSGv73Pbc7MtNhpy5BeQLBFQ6mFEggSLhKFECLIK+HBB8QL+mCiT2o0mJgYCA/GIAnRFxMCEmnUmCjVaGIMIH2RomgEisAAghQovc2cy14+UBCw7UwxgZiwHs8+e6///Gut/99HiQh3MzR3Oe4B+P8C6OvrVsCk3zq+WwF4t3uOfbsb0+lKb9tra/b3X76cfmj24hqgcKdLkG94+JEOpTF3ogQayAC1wFSgEmBy09xt2nINcE1MxgGNQ+/5/7UEqqezc0bvwV+e6u3oWNZ/5NhEExbcuOeyZWeqBstnzzpYsWjBdj9d1gc0n9iy9aXur75elj9/ttx2/dirr7+YXjj/+5olj232H5iyb8QkIyihndu9+90TG955Pi4ESovGOBZE4c2bgQOTYjP/z3RUKAy6156LKNxxZXh1WXq6ctL01qvvjX9y5ctAVBKAKz/sf6Pz2Rc2xFGIpW1EKSSKrma8JYyK0aK5tmjCAPf+SSQqs2RXr+LCp18w8NMhmfHZx+v8yZM/LAVA9sDjy7vyJ3NJHAelNBIGoxdSBJQCEey6GnQYkZo7k+ZNmwD48YlVJNzEXy1tOxuBnlGb8EL7N02DJ3NJZdlY2iqeHLCSKTAKpRSO5xN0d1O3dt319embN9Jz6NfqS3v3NRWdgoEjx2qtZBIRwQRBSSMSDfSjfA8TwWBXF1II6G5vv6FOBiMx/T8fnlgUgLi2JfkA23UpxagVCiuRgDBC+y4KjXYczmz9gDiOATj8+ptopTFBWFV0DP1xmfMmDokHI2zfxxQKN4z5cPxbEBvERGCARAJVCMHEfFtVjzu+Akt5CIKyrb6iDJQtnJOzPA+tFSY/iE4mRqs+EseYG8cznwfHQiLwxlejsDESowA7W322KAB/Qu3RiubpZ2Sos83A4L9pVwptu4iYYdkxQYCdcFDyz9zaflKqli49XooUD1Q9t/YjpdTIuux6gKCUjNAXEEcheC5oC0Qob5mec1LJkyV5Qaa56X2vKtM3/Ok2cRDcTPtI8hAUsBwHLIe69U9vB/IlAXAymVzNmtW7GOpihojWtovEIUjpBhiHIX5tdsBvaNg6FjeU+vXPvHLf/HlHMQaFwk76SBShtCo5uSh91UaXLfncq64+NRYzutrQfxxf0LnuxS8LZ86nlDEYE43B6C0s28ZvnHK6tW3nLODcmAEASBzN61i6si2fO529rvnD+cBNp1pYnotO2EHrJztXevV1e277QqIse+/Mth0tUze+vSXd2NDjpJIoDSKCk/Il8+iiE5ZjI8aAyJASWqSnPZhr2bVj8WjJS2LgligHKq4c6qyMui8m062t59zy8lO9vx+bdnFP+xwJw5Rdlr7kTZhwunrF8r1Ab9EPvPdrdg/A3QbwN3RVn5GHaM5pAAAAAElFTkSuQmCC" />
 				</template>
@@ -40,21 +43,22 @@
 				{{value}}
 			</template>
 		</td>
-		<td>{{row.fields.alice.value}}</td>
-		<td>{{row.fields.bill.value}}</td>
-		<td>{{row.fields.casey.value}}</td>
-		<td>~<em>{{row.fields.average.value}}</em></td>
-		<td><b>{{row.fields.total.value}}</b></td>
+		<td style="width:10%;"><input type="number" value="{{record.row.alice}}" style="width:100%;text-align:right;font-size:larger;"></td>
+		<td style="width:10%;"><input type="number" value="{{record.row.bill}}" style="width:100%;text-align:right;font-size:larger;"></td>
+		<td style="width:10%;"><input type="number" value="{{record.row.casey}}" style="width:100%;text-align:right;font-size:larger;"></td>
+		<td><b>{{+record.row.alice + +record.row.bill + +record.row.casey}}</b></td>
+		<td><b>{{record.fields.total.value}}</b></td>
 	</template>
 
 	<template id="example" bind>
 		<sortable-table data="{{data}}" columns="{{columns}}" rowTemplate="simpleRowTemplate" rowSelection="{{rowSelection}}" multiSelect="{{multiSelect}}" checkbox="{{checkbox}}"></sortable-table>
 		<p>
 		<strong>Enabled Interactions:</strong><br>
-		<input type="checkbox" checked="{{rowSelection}}">rowSelection<br>
+		<input type="checkbox" checked="{{rowSelection}}"><em style="color:red">rowSelection</em><br>
 		<input type="checkbox" checked="{{multiSelect}}">multiSelect<br>
 		<input type="checkbox" checked="{{checkbox}}">checkbox<br>
 	</template>
+
 	<script>
 	var fruits = [
 		{fruit: 'apple', alice: 4, bill: 10, casey: 2 },
@@ -69,8 +73,8 @@
 		{name:'alice', title:'Alice' },
 		{name:'bill', title:'Bill' },
 		{name:'casey', title:'Casey' },
-		{name:'average', title:'Average', formula: function(row){ return Math.round((row.alice + row.bill + row.casey)/3*10)/10; }},
-		{name:'total', title:'Total', formula: function(row){ return row.alice + row.bill + row.casey; }}
+		{name:'live', title:'Template Total', formula: function(row){ return row.alice*1 + row.bill*1 + row.casey*1; }},
+		{name:'total', title:'Formula Total', formula: function(row){ return row.alice*1 + row.bill*1 + row.casey*1; }}
 	];
 
 	window.addEventListener('polymer-ready', function(){

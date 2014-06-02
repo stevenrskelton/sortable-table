@@ -58,14 +58,14 @@
 			</tr>
 		</thead>
 		<tbody>
-			<template repeat="{{row in data | sortByKey(sortColumn, sortDescending, columns, selected, pageSize, page, (selected || []).length + data.length, dumb)}}">
-				<tr on-click="{{rowSelect}}" style="{{row.selected && selectedRowStyle ? selectedRowStyle : ''}}">
+			<template repeat="{{record in data | sortByKey(sortColumn, sortDescending, columns, selected, pageSize, page, (selected || []).length + data.length, dumb)}}">
+				<tr on-click="{{rowSelect}}" style="{{record.selected && selectedRowStyle ? selectedRowStyle : ''}}">
 					<template if="{{checkbox}}">
-						<td><input type="checkbox" on-change="{{checkedbox}}" checked?="{{row.selected}}"></td>
+						<td><input type="checkbox" on-change="{{checkedbox}}" checked?="{{record.selected}}"></td>
 					</template>
 					<template ref="{{rowTemplate}}" bind>
 						<template repeat="{{column in columns}}">
-							<template ref="{{column.cellTemplate || cellTemplate}}" bind="{{row.fields[column.name]}}">
+							<template ref="{{column.cellTemplate || cellTemplate}}" bind="{{record.fields[column.name]}}">
 								<td>{{value}}</td>
 							</template>
 						</template>
@@ -151,17 +151,17 @@
 		for(var i=start;i<end;i++){
 			var isSelected = isMultiSelect ? selected.indexOf(sortedArray[i]) > -1 : selected == sortedArray[i];
 			var fields = {};
+			var row = sortedArray[i];
 			columns.forEach(function(column, index, array) {
-				var row = sortedArray[i];
 				var value;
 				if(column.formula){
 					value = column.formula(row);
 				}else{
 					value = row[column.name];
 				}
-				fields[column.name] = { row: row, value: value, column: column };
+				fields[column.name] = { value: value, row: row, column: column };
 			});
-			r.push({selected: isSelected, fields: fields});
+			r.push({selected: isSelected, fields: fields, row: row });
 		}
 		return r;
 	};
@@ -348,8 +348,7 @@
 		},
 		checkbox: false,
 		checkedbox: function(e,p){
-			var row = e.target.templateInstance.model.row;
-			row = row.fields[Object.getOwnPropertyNames(row.fields)[0]].row
+			var row = e.target.templateInstance.model.record.row;
 			this.toggleRowFromSelected(row);
 			e.preventDefault();
 		},
