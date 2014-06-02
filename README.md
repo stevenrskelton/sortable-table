@@ -167,18 +167,15 @@ __Note:__  `cellTemplate`, `headerTemplate` and `footerTemplate` are limited to 
 
 ## Todo
 
-- __Fix missing header templates in Chromium__
-- __Fix slow performance in Firefox with header templates__
-- Benchmark performance: trace and remove duplicate calls, minimize observed bindings.
+- __fix missing header templates in Chromium__
+- __fix slow performance in Firefox with header templates__
+- benchmark performance: trace and remove duplicate calls, minimize observed bindings.
 - better CSS theming
-- Test cell templates are accessible in all use cases
 - integration with IndexedDB
 - ensure stable sort (orders can change within duplicates on sorted column)
-- maybe: cell editors
-- maybe: declarative columns using innerHTML nodes
 - maybe: max and fixed table sizing / scrolling
 - maybe: cell selection
-- maybe: figure out how to sort by selected
+- maybe: figure out how to sort by selected (click on header of checkbox column?)
 - maybe: column grouping
 - maybe: reload data if individual row fields change
 - __Internet Explorer is completely broken__

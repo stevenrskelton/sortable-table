@@ -189,13 +189,13 @@
 		}
 	};
 	PolymerExpressions.prototype.sum = function(arr) {
-		return arr.reduce(function(a, b) { return a + b; }, 0);
+		return arr.reduce(function(a, b) { return a*1 + b*1; }, 0);
 	};
 	PolymerExpressions.prototype.average = function(arr) {
 		if(arr.length==0){
 			return 0;
 		}else{
-			return arr.reduce(function(a, b) { return a + b; }, 0) / arr.length;
+			return arr.reduce(function(a, b) { return a*1 + b*1; }, 0) / arr.length;
 		}
 	};
 	PolymerExpressions.prototype.toKeyValueArray = function(obj) {
