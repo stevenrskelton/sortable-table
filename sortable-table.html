@@ -62,7 +62,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<template repeat="{{record in data | sortByKey(sortColumn, sortDescending, columns, selected, pageSize, page, editRow, (selected || []).length + data.length, dumb)}}">
+			<template repeat="{{record in data | sortByKey(sortColumn, sortDescending, columns, selected, pageSize, page, editRow, (selected || []).length + data.length, forceRefresh)}}">
 				<tr on-click="{{rowSelect}}" style="{{record.selected && selectedRowStyle ? selectedRowStyle : ''}}" on-dblclick="{{rowEdit}}">
 					<template if="{{checkbox}}">
 						<td><input type="checkbox" on-change="{{checkedbox}}" checked?="{{record.selected}}"></td>
@@ -94,7 +94,7 @@
 					</template>
 				</tr>
 			</template>
-			<template if="{{footerTemplate}}">
+			<template if="{{footerTemplate && forceRefresh}}">
 				<tr>
 					<td colspan="{{columns.length}}" class="sortable-table-paging"><template ref="{{footerTemplate}}" bind></template></td>
 				</tr>
@@ -297,7 +297,7 @@
 				addTemplateWatches(c,'headerTemplate');
 				addTemplateWatches(c,'footerTemplate');
 			}
-			this.dumb++;
+			this.forceRefresh++;
 		},
 		dataChanged: function(){
 			if(this.columns.length==0 && this.data && this.data.length > 0){
@@ -346,11 +346,11 @@
 		},
 		headerTemplateChanged: function(a, t){
 			this.addTemplateIfNotInDocument(t);
-			this.dumb++;
+			this.forceRefresh++;
 		},
 		footerTemplateChanged: function(a, t){
 			this.addTemplateIfNotInDocument(t);
-			this.dumb++;
+			this.forceRefresh++;
 		},
 		rowEditorTemplateChanged: function(a, t){
 			this.addTemplateIfNotInDocument(t);
@@ -389,8 +389,8 @@
 			}
 		},
 		previousPage: function(){ if(this.page > 1) this.page--; },
-		nextPage: function(){ if(this.data.length > this.page * this.pageSize) this.page++; }
-		,dumb: 0 //TODO: clean this up, it was put in to trigger a reprocess on initial load when templates are imported into the shadow dom.
+		nextPage: function(){ if(this.data.length > this.page * this.pageSize) this.page++; },
+		forceRefresh: 0 //TODO: clean this up, it was put in to trigger a reprocess on initial load when templates are imported into the shadow dom.
 	});
 </script>
 </polymer-element>

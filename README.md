@@ -75,13 +75,12 @@ Attribute				| Options		| Default									| Description
 `selected`				| *object*		| `null`									| Element of `data` (`!multiSelect`)
 `selected`				| *array*		| `[]`										| Elements of `data` (`multiSelect`)
 `selectedRowStyle`		| *string*		| `background-color:` `rgba(0,96,200,0.2);`	| CSS style to apply to `selected` row
-`cellTemplate`   		| *string*		| `null`									| Renderer for entire `<td></td>` cell. Access to `{{column}}`, cell `{{value}}` and original `{{row}}` object from `data`.  Will be overwritten if specified in `columns`.
-`headerTemplate`		| *string*		| `null`									| Renderer for entire `<th></th>` cell. Access to `{{column}}`.  Will be overwritten if specified in `columns`.
-`rowTemplate`			| *string*		| `null`									| Renderer for contents of `<tr></tr>` row. Access to row's data fields are through `{{row.fields.****.value}}`, where `***` are the column names.
-`rowEditorTemplate`		| *string*		| `null`									| Renderer for contents of `<tr></tr>` row when in edit mode (_double clicked_). Access to row's data fields are through `{{row.fields.****.value}}`, where `***` are the column names.
 `pageSize`				| *int*			| `-1`										| Maximum number of records to display, `-1` is all records.
 `page`					| *int*			| `1`										| Number of pages to skip, `pageSize * (page-1)` records skipped.
-
+`rowTemplate`			| *string*		| `null`									| See [Table -> rowTemplate](#table-->-rowTemplate)
+`rowEditorTemplate`		| *string*		| `null`									| See [Table -> rowEditorTemplate](#table-->-rowEditorTemplate)
+`cellTemplate`   		| *string*		| `null`									| See [Table -> cellTemplate](#table-->-cellTemplate)
+`headerTemplate`		| *string*		| `null`									| See [Table -> headerTemplate](#table-->-headerTemplate)
 
 ### Data
 
@@ -89,14 +88,14 @@ Input format for `data` rows is an array of objects, where data for each column 
 
 ### Columns
 
-Attribute  			| Options		| Default		| Description
----					| ---			| ---			| ---
-`name`	  			| *string*		| _required_	| Name of row property
-`title`	  			| *string*	   	| `name`		| Text to display in column header
-`formula`			| *function*	| `null`		| Single parameter `row`, return will override any value for property in `data`, as well as be used for sorting
-`cellTemplate`   	| *string*		| `null`		| Renderer for entire `<td></td>` cell. Access to `{{column}}`, cell `{{value}}` and original `{{row}}` object from `data`
-`headerTemplate`	| *string*		| `null`		| Renderer for entire `<th></th>` cell. Access to `{{column}}`
-`footerTemplate`	| *string*		| `null`		| Renderer for entire `<td></td>` cell. Access to `{{column}}`, array of all `{{values}}` of cells in the column, and array of all original `{{rowValues}}` object from `data` _(if they are defined)_
+Attribute  				| Options		| Default									| Description
+---						| ---			| ---										| ---
+`name`	  				| *string*		| _required_								| Name of row property
+`title`	  				| *string*	   	| `name`									| Text to display in column header
+`formula`				| *function*	| `null`									| Single parameter `row`, return will override any value for property in `data`, as well as be used for sorting
+`cellTemplate`   		| *string*		| `null`									| See [Column -> cellTemplate](#column-->-cellTemplate)
+`headerTemplate`		| *string*		| `null`									| See [Column -> headerTemplate](#column-->-headerTemplate)
+`footerTemplate`		| *string*		| `null`									| See [Column -> footerTemplate](#column-->-footerTemplate)
 
 ### Templates
 
@@ -106,18 +105,20 @@ Any filter used (eg: `sum` in a following example) must be a member of `PolymerE
 
 As always, only a very limited subset of Javascript is allowed within `{{ }}` expressions. See the [Polymer documentation](http://www.polymer-project.org/docs/polymer/expressions.html) on Expression syntax.
 
+#### Templates
+====================
 
-Example of a `headerTemplate` using images to indicate sorting:
+##### Table -> rowTemplate
 
-```html
-<template id="myHeaderTemplate">
-	<th>
-		{{!(column.title) ? column.name : column.title}}
-		<img hidden?="{{!(sortColumn==column.name && sortDescending)}}" alt="up" />
-		<img hidden?="{{!(sortColumn==column.name && !sortDescending)}}" alt="down" />
-	</th>
-</template>
-```
+Renderer for contents of `<tr></tr>` row. Access to row's data fields are through `{{row.fields.****.value}}`, where `***` are the column names.
+
+Variable			|	Description
+---					|	---
+{{record}}			|	JSON object
+{{record.selected}}	|	Boolean indicating this row is contained in `selected`
+{{record.edit}}		|	Boolean indicating this row is in edit mode
+{{record.fields}}	|	JSON object with keys for each `column.name`.  Values are JSON objects containing computed `value` for the cell, the `row` and `column`
+{{record.row}}		|	Row in `data`
 
 Example of a `rowTemplate` that prints out column values directly from the raw `row` of the `data` array.
 This is useful for rows that need to recalculate when values change:
@@ -151,6 +152,22 @@ Example of a `rowTemplate` that uses a template (and a filter `toKeyValueArray` 
 </template>
 ```
 
+##### Table -> rowEditorTemplate
+
+Row template to use for a row in its user editing state.  Only 1 row can be in the editing state at a time.
+Renderer for contents of `<tr></tr>` row when in edit mode (_double clicked_).
+Similiar to [Table -> rowTemplate](#table-->-rowTemplate)
+
+##### Table -> cellTemplate
+
+Renderer for entire `<td></td>` cell. Will be overwritten if `columns` specifies a `cellTemplate`.
+
+Variable			|	Description
+---					|	---
+{{column}}			|	Current column from `columns`
+{{value}}			|	Computed value for cell
+{{row}}				|	Current row from `data`
+
 Example of a `cellTemplate` that displays an image beside the column value:
 
 ```html
@@ -161,6 +178,78 @@ Example of a `cellTemplate` that displays an image beside the column value:
 </template>
 ```
 __Note:__  Normally `row[column.name] == value`, but `value` can be manually set by specifying a `formula`. This is useful if `value` won't sort correctly but you need access to the original value.
+
+##### Table -> headerTemplate
+
+Renderer for entire `<th></th>` cell. Access to `{{column}}`.  Will be overwritten if specified in `columns`.
+
+Example of a `headerTemplate` using images to indicate sorting:
+
+```html
+<template id="myHeaderTemplate">
+	<th>
+		{{!(column.title) ? column.name : column.title}}
+		<img hidden?="{{!(sortColumn==column.name && sortDescending)}}" alt="up" />
+		<img hidden?="{{!(sortColumn==column.name && !sortDescending)}}" alt="down" />
+	</th>
+</template>
+```
+
+##### Table -> footerTemplate
+
+Renderer for an additional row that spans all columns at the bottom of the table.  This is useful for paging buttons.
+There is a built in template called `pagingFooter` that can be used, or a different one can be specified.
+This is independent to [column footers](column-->-footerTemplate) as they serve different purposes and can be used concurrently.
+
+Variable			|	Description
+---					|	---
+{{page}}			|	Current `page` of data
+{{pageSize}}		|	Number of records per page
+{{previousPage}}	|	Function to move to the previous page (only if one exists)
+{{previousPage}}	|	Function to move to the next page (only if one exists)
+{{data}}			|	`data`
+
+Example of a `footerTemplate` that allows the user to traverse between pages.
+
+```html
+<template id="pagingFooter">
+	<div style="text-align:center">
+		<div style="float:left;cursor:pointer;color:{{page==1 ? '#666':'#fff'}}" on-click="{{previousPage}}">Prev</div>
+		<div style="float:right;cursor:pointer;color:{{page * pageSize > data.length ? '#666':'#fff'}}" on-click="{{nextPage}}">Next</div>
+		Page {{page}} of {{(data.length - (data.length % pageSize) + pageSize) / pageSize}}
+	</div>
+</template>
+```
+
+
+#### Column Templates
+=====================
+
+##### Column -> cellTemplate
+
+Renderer for entire `<td></td>` cell.
+Overrides table's global cell template for a specific column.
+See [Table -> cellTemplate](#table-->-cellTemplate)
+
+
+##### Column -> headerTemplate
+
+Renderer for entire `<th></th>` cell. Access to `{{column}}`.
+Overrides table's global header template for a specific column.
+See [Table -> cellTemplate](#table-->-cellTemplate)
+
+##### Column -> footerTemplate
+
+Renderer for entire `<td></td>` cell. If no columns specify a `footerTemplate` the additional footer row will be omitted.
+If some but not all columns specify a template, the columns without a template specified will render an empty cell.
+
+Variable			|	Description
+---					|	---
+{{column}}			|	Current column from `columns`
+{{values}}			|	Array of all computed values for cells in the current column
+{{rowValues}}		|	Array of all values from `data` for cells in the current column.  Since a column may use a function to compute its value, there may not be any bound values: so this array may be empty.
+
+Two convinience polymer filters are included, `sum` and `average` which compute the numerical sum and average.  Custom filters can also be used, see [Polymer Filters](#polymer-filters).
 
 Example of a `footerTemplate` that computes the sum of a column using a filter named `sum`:
 
@@ -215,6 +304,7 @@ PolymerExpressions.prototype.myFilter = myFilter
 - maybe: reload data if individual row fields change
 
 ## Bugs
+
 - __Internet Explorer is completely broken__
 - header templates in don't work with Native Support browsers
 - header templates suffer slow performance with polyfil
@@ -224,5 +314,4 @@ PolymerExpressions.prototype.myFilter = myFilter
 For detailed changelog, check [Releases](https://github.com/stevenrskelton/sortable-table/releases).
 
 ## License
-
 [MIT License](http://opensource.org/licenses/MIT) © Steven Skelton
