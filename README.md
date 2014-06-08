@@ -101,24 +101,26 @@ Attribute  				| Options		| Default									| Description
 
 All templates must be nested inside the `<sortable-table>` tag to be accessible to the polymer element.
 
-Any filter used (eg: `sum` in a following example) must be a member of `PolymerExpressions.prototype`.  See the [Polymer Filters](#polymer-filters) section for more details.
+Any filter used (eg: `sum` in a following example) must be a member of `PolymerExpressions.prototype`.
+See the [Polymer Filters](#polymer-filters) section for more details.
 
-As always, only a very limited subset of Javascript is allowed within `{{ }}` expressions. See the [Polymer documentation](http://www.polymer-project.org/docs/polymer/expressions.html) on Expression syntax.
+As always, only a very limited subset of Javascript is allowed within `{{ }}` expressions.
+See the [Polymer documentation](http://www.polymer-project.org/docs/polymer/expressions.html) on Expression syntax.
 
 #### Table Scoped Templates
 
-These are passed as attributes to the `sortable-table` element, and act across all rows and columns in the table - unless overwritten by a corresponding [Column Scoped Template](#column-scoped-template).
+These are passed as attributes to the `sortable-table` element, and act across all rows and columns in the table - unless overwritten by a corresponding [Column Scoped Template](#column-scoped-templates).
 
 ##### Table § rowTemplate
 
-Renderer for contents of `<tr></tr>` row. Access to row's data fields are through `{{row.fields.****.value}}`, where `***` are the column names.
+Renderer for contents of `<tr></tr>` row.
 
 Template Variable		|	Description
 ---						|	---
 `{{record}}`			|	JSON object
 `{{record.selected}}`	|	Boolean indicating this row is contained in `selected`
 `{{record.edit}}`		|	Boolean indicating this row is in edit mode
-`{{record.fields}}`		|	JSON object with keys for each `column.name`.  Values are JSON objects containing computed `value` for the cell, the `row` and `column`
+`{{record.fields}}`		|	JSON map with keys for each `column.name`.  Values are JSON objects containing computed `value` for the cell, the `row` and `column`
 `{{record.row}}`		|	Row in `data`
 
 Example of a `rowTemplate` that prints out column values directly from the raw `row` of the `data` array.
@@ -133,7 +135,7 @@ This is useful for rows that need to recalculate when values change:
 ```
 
 Example of a `rowTemplate` that prints out column values based on internally calculated field values.
-The `field` names are the names of the table columns, and useful if there are `column` formulas being applied:
+The `field` names (ie: alice, bill, casey) are the names of the table columns, this is useful where `column` formulas are applied:
 
 ```html
 <template id="myRowTemplate_2">
@@ -157,7 +159,7 @@ Example of a `rowTemplate` that uses a template (and a filter `toKeyValueArray` 
 
 Row template to use for a row in its user editing state.  Only 1 row can be in the editing state at a time.
 Renderer for contents of `<tr></tr>` row when in edit mode (_double clicked_).
-Similiar to [Table § rowTemplate](#table--rowtemplate)
+Similiar to [Table § rowTemplate](#table--rowtemplate).
 
 ##### Table § cellTemplate
 
@@ -244,14 +246,14 @@ These are defined within the `columns` attribute at a per-column scope.
 
 Renderer for entire `<td></td>` cell.
 Overrides table's global cell template for a specific column.
-See [Table § cellTemplate](#table--celltemplate)
+See [Table § cellTemplate](#table--celltemplate).
 
 
 ##### Column § headerTemplate
 
 Renderer for entire `<th></th>` cell. Access to `{{column}}`.
 Overrides table's global header template for a specific column.
-See [Table § cellTemplate](#table--celltemplate)
+See [Table § cellTemplate](#table--celltemplate).
 
 ##### Column § footerTemplate
 
