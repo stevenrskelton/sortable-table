@@ -77,10 +77,10 @@ Attribute				| Options		| Default									| Description
 `selectedRowStyle`		| *string*		| `background-color:` `rgba(0,96,200,0.2);`	| CSS style to apply to `selected` row
 `pageSize`				| *int*			| `-1`										| Maximum number of records to display, `-1` is all records.
 `page`					| *int*			| `1`										| Number of pages to skip, `pageSize * (page-1)` records skipped.
-`rowTemplate`			| *string*		| `null`									| See [Table § rowTemplate](#table--rowTemplate)
-`rowEditorTemplate`		| *string*		| `null`									| See [Table § rowEditorTemplate](#table--rowEditorTemplate)
-`cellTemplate`   		| *string*		| `null`									| See [Table § cellTemplate](#table--cellTemplate)
-`headerTemplate`		| *string*		| `null`									| See [Table § headerTemplate](#table--headerTemplate)
+`rowTemplate`			| *string*		| `null`									| See [Table § rowTemplate](#table--rowtemplate)
+`rowEditorTemplate`		| *string*		| `null`									| See [Table § rowEditorTemplate](#table--roweditortemplate)
+`cellTemplate`   		| *string*		| `null`									| See [Table § cellTemplate](#table--celltemplate)
+`headerTemplate`		| *string*		| `null`									| See [Table § headerTemplate](#table--headertemplate)
 
 ### Data
 
@@ -93,9 +93,9 @@ Attribute  				| Options		| Default									| Description
 `name`	  				| *string*		| _required_								| Name of row property
 `title`	  				| *string*	   	| `name`									| Text to display in column header
 `formula`				| *function*	| `null`									| Single parameter `row`, return will override any value for property in `data`, as well as be used for sorting
-`cellTemplate`   		| *string*		| `null`									| See [Column § cellTemplate](#column--cellTemplate)
-`headerTemplate`		| *string*		| `null`									| See [Column § headerTemplate](#column--headerTemplate)
-`footerTemplate`		| *string*		| `null`									| See [Column § footerTemplate](#column--footerTemplate)
+`cellTemplate`   		| *string*		| `null`									| See [Column § cellTemplate](#column--celltemplate)
+`headerTemplate`		| *string*		| `null`									| See [Column § headerTemplate](#column--headertemplate)
+`footerTemplate`		| *string*		| `null`									| See [Column § footerTemplate](#column--footertemplate)
 
 ### Templates
 
@@ -156,7 +156,7 @@ Example of a `rowTemplate` that uses a template (and a filter `toKeyValueArray` 
 
 Row template to use for a row in its user editing state.  Only 1 row can be in the editing state at a time.
 Renderer for contents of `<tr></tr>` row when in edit mode (_double clicked_).
-Similiar to [Table § rowTemplate](#table--rowTemplate)
+Similiar to [Table § rowTemplate](#table--rowtemplate)
 
 ##### Table § cellTemplate
 
@@ -199,7 +199,7 @@ Example of a `headerTemplate` using images to indicate sorting:
 
 Renderer for an additional row which spans all columns at the bottom of the table.  This is useful for paging buttons.
 There is a built in template called `pagingFooter` that can be used, or a different one can be specified.
-This is independent to [Column § footerTemplate](column--footerTemplate) as they serve different purposes and can be used concurrently.
+This is independent to [Column § footerTemplate](#column--footertemplate) as they serve different purposes and can be used concurrently.
 
 Variable				|	Description
 ---						|	---
@@ -214,29 +214,35 @@ Example of a `footerTemplate` that allows the user to traverse between pages.
 ```html
 <template id="pagingFooter">
 	<div style="text-align:center">
-		<div style="float:left;cursor:pointer;color:{{page==1 ? '#666':'#fff'}}" on-click="{{previousPage}}">Prev</div>
-		<div style="float:right;cursor:pointer;color:{{page * pageSize > data.length ? '#666':'#fff'}}" on-click="{{nextPage}}">Next</div>
-		Page {{page}} of {{(data.length - (data.length % pageSize) + pageSize) / pageSize}}
+		<div on-click="{{previousPage}}"
+			style="float:left;cursor:pointer;color:{{page==1 ? '#666':'#fff'}}">
+			Prev
+		</div>
+		<div on-click="{{nextPage}}" 
+			style="float:right;cursor:pointer;color:{{page * pageSize > data.length ? '#666':'#fff'}}">
+			Next
+		</div>
+		Page {{page}} of {{
+			(data.length - (data.length % pageSize) + pageSize) / pageSize
+		}}
 	</div>
 </template>
 ```
 
-
 #### Column Templates
-=====================
 
 ##### Column § cellTemplate
 
 Renderer for entire `<td></td>` cell.
 Overrides table's global cell template for a specific column.
-See [Table § cellTemplate](#table--cellTemplate)
+See [Table § cellTemplate](#table--celltemplate)
 
 
 ##### Column § headerTemplate
 
 Renderer for entire `<th></th>` cell. Access to `{{column}}`.
 Overrides table's global header template for a specific column.
-See [Table § cellTemplate](#table--cellTemplate)
+See [Table § cellTemplate](#table--celltemplate)
 
 ##### Column § footerTemplate
 
