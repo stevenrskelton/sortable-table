@@ -77,10 +77,10 @@ Attribute				| Options		| Default									| Description
 `selectedRowStyle`		| *string*		| `background-color:` `rgba(0,96,200,0.2);`	| CSS style to apply to `selected` row
 `pageSize`				| *int*			| `-1`										| Maximum number of records to display, `-1` is all records.
 `page`					| *int*			| `1`										| Number of pages to skip, `pageSize * (page-1)` records skipped.
-`rowTemplate`			| *string*		| `null`									| See [Table § rowTemplate](#table--rowtemplate)
-`rowEditorTemplate`		| *string*		| `null`									| See [Table § rowEditorTemplate](#table--roweditortemplate)
-`cellTemplate`   		| *string*		| `null`									| See [Table § cellTemplate](#table--celltemplate)
-`headerTemplate`		| *string*		| `null`									| See [Table § headerTemplate](#table--headertemplate)
+`rowTemplate`			| *string*		| `null`									| _See_ [Table § rowTemplate](#table--rowtemplate)
+`rowEditorTemplate`		| *string*		| `null`									| _See_ [Table § rowEditorTemplate](#table--roweditortemplate)
+`cellTemplate`   		| *string*		| `null`									| _See_ [Table § cellTemplate](#table--celltemplate)
+`headerTemplate`		| *string*		| `null`									| _See_ [Table § headerTemplate](#table--headertemplate)
 
 ### Data
 
@@ -93,9 +93,9 @@ Attribute  				| Options		| Default									| Description
 `name`	  				| *string*		| _required_								| Name of row property
 `title`	  				| *string*	   	| `name`									| Text to display in column header
 `formula`				| *function*	| `null`									| Single parameter `row`, return will override any value for property in `data`, as well as be used for sorting
-`cellTemplate`   		| *string*		| `null`									| See [Column § cellTemplate](#column--celltemplate)
-`headerTemplate`		| *string*		| `null`									| See [Column § headerTemplate](#column--headertemplate)
-`footerTemplate`		| *string*		| `null`									| See [Column § footerTemplate](#column--footertemplate)
+`cellTemplate`   		| *string*		| `null`									| _See_ [Column § cellTemplate](#column--celltemplate)
+`headerTemplate`		| *string*		| `null`									| _See_ [Column § headerTemplate](#column--headertemplate)
+`footerTemplate`		| *string*		| `null`									| _See_ [Column § footerTemplate](#column--footertemplate)
 
 ### Templates
 
@@ -106,13 +106,12 @@ Any filter used (eg: `sum` in a following example) must be a member of `PolymerE
 As always, only a very limited subset of Javascript is allowed within `{{ }}` expressions. See the [Polymer documentation](http://www.polymer-project.org/docs/polymer/expressions.html) on Expression syntax.
 
 #### Templates
-====================
 
 ##### Table § rowTemplate
 
 Renderer for contents of `<tr></tr>` row. Access to row's data fields are through `{{row.fields.****.value}}`, where `***` are the column names.
 
-Variable				|	Description
+Template Variable		|	Description
 ---						|	---
 `{{record}}`			|	JSON object
 `{{record.selected}}`	|	Boolean indicating this row is contained in `selected`
@@ -162,7 +161,7 @@ Similiar to [Table § rowTemplate](#table--rowtemplate)
 
 Renderer for entire `<td></td>` cell. Will be overwritten if `columns` specifies a `cellTemplate`.
 
-Variable				|	Description
+Template Variable		|	Description
 ---						|	---
 `{{column}}`			|	Current column from `columns`
 `{{value}}`				|	Computed value for cell
@@ -201,7 +200,7 @@ Renderer for an additional row which spans all columns at the bottom of the tabl
 There is a built in template called `pagingFooter` that can be used, or a different one can be specified.
 This is independent to [Column § footerTemplate](#column--footertemplate) as they serve different purposes and can be used concurrently.
 
-Variable				|	Description
+Template Variable		|	Description
 ---						|	---
 `{{page}}`				|	Current `page` of data
 `{{pageSize}}`			|	Number of records per page
@@ -214,12 +213,18 @@ Example of a `footerTemplate` that allows the user to traverse between pages.
 ```html
 <template id="pagingFooter">
 	<div style="text-align:center">
-		<div on-click="{{previousPage}}"
-			style="float:left;cursor:pointer;color:{{page==1 ? '#666':'#fff'}}">
+		<div on-click="{{previousPage}}" style="
+			float:left;
+			cursor:pointer;
+			color:{{page==1 ? '#666':'#fff'}}
+		">
 			Prev
 		</div>
-		<div on-click="{{nextPage}}" 
-			style="float:right;cursor:pointer;color:{{page * pageSize > data.length ? '#666':'#fff'}}">
+		<div on-click="{{nextPage}}" style="
+				float:right;
+				cursor:pointer;
+				color:{{page * pageSize > data.length ? '#666':'#fff'}}
+		">
 			Next
 		</div>
 		Page {{page}} of {{
@@ -249,7 +254,7 @@ See [Table § cellTemplate](#table--celltemplate)
 Renderer for entire `<td></td>` cell. If no columns specify a `footerTemplate` the additional footer row will be omitted.
 If some but not all columns specify a template, the columns without a template specified will render an empty cell.
 
-Variable				|	Description
+Template Variable		|	Description
 ---						|	---
 `{{column}}`			|	Current column from `columns`
 `{{values}}`			|	Array of all computed values for cells in the current column
