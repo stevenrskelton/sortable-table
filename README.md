@@ -29,6 +29,8 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 
 > [Refreshing Data](http://files.stevenskelton.ca/sortable-table/examples/refreshing-data.html)
 
+> [Row Editor](http://files.stevenskelton.ca/sortable-table/examples/row-editor.html)
+
 > [Selected Rows, Multi-Select](http://files.stevenskelton.ca/sortable-table/examples/selected-rows.html)
 
 > [Themes](http://files.stevenskelton.ca/sortable-table/examples/themes.html)
@@ -96,6 +98,15 @@ Attribute  			| Options		| Default		| Description
 `headerTemplate`	| *string*		| `null`		| Renderer for entire `<th></th>` cell. Access to `{{column}}`
 `footerTemplate`	| *string*		| `null`		| Renderer for entire `<td></td>` cell. Access to `{{column}}`, array of all `{{values}}` of cells in the column, and array of all original `{{rowValues}}` object from `data` _(if they are defined)_
 
+### Templates
+
+All templates must be nested inside the `<sortable-table>` tag to be accessible to the polymer element.
+
+Any filter used (eg: `sum` in a following example) must be a member of `PolymerExpressions.prototype`.  See the [Polymer Filters](#polymerfilters) section for more details.
+
+As always, only a very limited subset of Javascript is allowed within `{{ }}` expressions. See the [Polymer documentation](http://www.polymer-project.org/docs/polymer/expressions.html) on Expression syntax.
+
+
 Example of a `headerTemplate` using images to indicate sorting:
 
 ```html
@@ -160,11 +171,8 @@ Example of a `footerTemplate` that computes the sum of a column using a filter n
 	</td>
 </template>
 ```
-__Note:__  Any filter used (eg: `sum` in above example) must be a member of `PolymerExpressions.prototype`
 
-__Note:__  `cellTemplate`, `headerTemplate` and `footerTemplate` are limited to a subset of Javascript within `{{ }}` expressions. See the [Polymer documentation](http://www.polymer-project.org/docs/polymer/expressions.html) on Expression syntax.
-
-## Polymer Filters
+## Polymer Filters [polymerfilters]
 
 Referencing the [polymer documentation](http://www.polymer-project.org/docs/polymer/expressions.html#filters), filters can be used in expressions to transform data:
 ```
