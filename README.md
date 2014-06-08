@@ -102,7 +102,7 @@ Attribute  			| Options		| Default		| Description
 
 All templates must be nested inside the `<sortable-table>` tag to be accessible to the polymer element.
 
-Any filter used (eg: `sum` in a following example) must be a member of `PolymerExpressions.prototype`.  See the [Polymer Filters](#polymerfilters) section for more details.
+Any filter used (eg: `sum` in a following example) must be a member of `PolymerExpressions.prototype`.  See the [Polymer Filters](#polymer-filters) section for more details.
 
 As always, only a very limited subset of Javascript is allowed within `{{ }}` expressions. See the [Polymer documentation](http://www.polymer-project.org/docs/polymer/expressions.html) on Expression syntax.
 
@@ -172,7 +172,7 @@ Example of a `footerTemplate` that computes the sum of a column using a filter n
 </template>
 ```
 
-## Polymer Filters [polymerfilters]
+## Polymer Filters
 
 Referencing the [polymer documentation](http://www.polymer-project.org/docs/polymer/expressions.html#filters), filters can be used in expressions to transform data:
 ```
