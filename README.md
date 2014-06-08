@@ -105,7 +105,9 @@ Any filter used (eg: `sum` in a following example) must be a member of `PolymerE
 
 As always, only a very limited subset of Javascript is allowed within `{{ }}` expressions. See the [Polymer documentation](http://www.polymer-project.org/docs/polymer/expressions.html) on Expression syntax.
 
-#### Templates
+#### Table Scoped Templates
+
+These are passed as attributes to the `sortable-table` element, and act across all rows and columns in the table - unless overwritten by a corresponding [Column Scoped Template](#column-scoped-template).
 
 ##### Table § rowTemplate
 
@@ -234,7 +236,9 @@ Example of a `footerTemplate` that allows the user to traverse between pages.
 </template>
 ```
 
-#### Column Templates
+#### Column Scoped Templates
+
+These are defined within the `columns` attribute at a per-column scope.
 
 ##### Column § cellTemplate
 
