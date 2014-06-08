@@ -7,6 +7,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<script src="../../platform/platform.js"></script>
 	<link rel="import" href="../sortable-table.html">
+	<link rel="import" href="fruit-icon.html">
 	<style>
 		sortable-table { width: 800px }
 	</style>
@@ -19,7 +20,13 @@
 	<p>
 
 	<template id="example" bind>
-		<sortable-table data="{{data}}" columns="{{columns}}" sortColumn="id"></sortable-table>
+		<sortable-table data="{{data}}" columns="{{columns}}" sortColumn="id">
+			<template id="fruitsTemplate">
+				<td style="width:75px;text-align:center;">
+					<fruit-icon fruit="{{value}}"></fruit-icon>
+				</td>
+			</template>
+		</sortable-table>
 	</template>
 
 	<h2>Change single fields within <code>row</code> data should update</h2>
@@ -28,7 +35,13 @@
 	<p>
 
 	<template id="example2" bind>
-		<sortable-table data="{{data}}" columns="{{columns}}" sortColumn="id"></sortable-table>
+		<sortable-table data="{{data}}" columns="{{columns}}" sortColumn="id">
+			<template id="fruitsTemplate">
+				<td style="width:75px;text-align:center;">
+					<fruit-icon fruit="{{value}}"></fruit-icon>
+				</td>
+			</template>
+		</sortable-table>
 	</template>
 
 	<script>
@@ -41,17 +54,11 @@
 	];
 	var dataMaxId = 5;
 
-	var hotData = [
-		{id: 0, fruit: 'apple', alice: 4, bill: 10, casey: 2 },
-		{id: 1, fruit: 'banana', alice: 0, bill: 4, casey: 0 },
-		{id: 2, fruit: 'grape', alice: 2, bill: 3, casey: 5 },
-		{id: 3, fruit: 'pear', alice: 4, bill: 2, casey: 8 },
-		{id: 4, fruit: 'strawberry', alice: 0, bill: 14, casey: 0 }
-	];
+	var hotData = data.slice(0);
 
 	var columns = [
 		{name: 'id', title: 'ID' },
-		{name:'fruit', title:'Fruit' },
+		{name:'fruit', title:'Fruit', cellTemplate: 'fruitsTemplate' },
 		{name:'alice', title:'Alice' },
 		{name:'bill', title:'Bill' },
 		{name:'casey', title:'Casey' }
@@ -71,7 +78,7 @@
 
 		document.getElementById('example').model.data = data.slice();
 
-		setTimeout(updateData, 2500);
+		setTimeout(updateData, 500);
 	}
 
 	function updateHotData(){
@@ -81,9 +88,8 @@
 		var c = columns[2 + Math.floor(Math.random()*3)].name;
 		//pick a random value
 		hotData[r][c] = Math.floor(Math.random()*16);
-		hotData[r] = hotData[r];
 		console.log(r + ':' + c + '-' + hotData[r].id + ':' + hotData[r].fruit + ':' + hotData[r].alice + ':' + hotData[r].bill + ':' + hotData[r].casey);
-		setTimeout(updateHotData, 1000);
+		setTimeout(updateHotData, 500);
 	}
 
 	window.addEventListener('polymer-ready', function(){

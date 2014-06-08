@@ -37,20 +37,20 @@
 	  <table>
 		<template bind="{{selected}}" if="{{selected.fruit}}">
 			<tr>
-				<td>id: {{id}}</td>
-				<td>fruit: {{fruit}}</td>
-				<td>alice: {{alice}}</td>
-				<td>bill: {{bill}}</td>
-				<td>casey: {{casey}}</td>
+				<td>{ id: {{id}}, </td>
+				<td>fruit: {{fruit}}, </td>
+				<td>alice: {{alice}}, </td>
+				<td>bill: {{bill}}, </td>
+				<td>casey: {{casey}} }</td>
 			</tr>
 		</template>
 		<template repeat="{{selected}}">
 			<tr>
-				<td>id: {{id}}</td>
-				<td>fruit: {{fruit}}</td>
-				<td>alice: {{alice}}</td>
-				<td>bill: {{bill}}</td>
-				<td>casey: {{casey}}</td>
+				<td>{ id: {{id}}, </td>
+				<td>fruit: {{fruit}}, </td>
+				<td>alice: {{alice}}, </td>
+				<td>bill: {{bill}}, </td>
+				<td>casey: {{casey}} }</td>
 			</tr>
 		</template>
 	  </table>

@@ -35,13 +35,9 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 
 ## Usage
 
-1. Add to your _bower.json_, then run ```bower update```
+1. Add the library using the Javascript package manager [Bower](http://bower.io/):
 
-	```json
-	"dependencies": {
-		"sortable-table": "sortable-table#~0.6.1"
-	}
-	```
+	```bower install --save sortable-table```
 
 2. Import Web Components' polyfill:
 
@@ -80,6 +76,7 @@ Attribute				| Options		| Default									| Description
 `cellTemplate`   		| *string*		| `null`									| Renderer for entire `<td></td>` cell. Access to `{{column}}`, cell `{{value}}` and original `{{row}}` object from `data`.  Will be overwritten if specified in `columns`.
 `headerTemplate`		| *string*		| `null`									| Renderer for entire `<th></th>` cell. Access to `{{column}}`.  Will be overwritten if specified in `columns`.
 `rowTemplate`			| *string*		| `null`									| Renderer for contents of `<tr></tr>` row. Access to row's data fields are through `{{row.fields.****.value}}`, where `***` are the column names.
+`rowEditorTemplate`		| *string*		| `null`									| Renderer for contents of `<tr></tr>` row when in edit mode (_double clicked_). Access to row's data fields are through `{{row.fields.****.value}}`, where `***` are the column names.
 `pageSize`				| *int*			| `-1`										| Maximum number of records to display, `-1` is all records.
 `page`					| *int*			| `1`										| Number of pages to skip, `pageSize * (page-1)` records skipped.
 
@@ -167,11 +164,39 @@ __Note:__  Any filter used (eg: `sum` in above example) must be a member of `Pol
 
 __Note:__  `cellTemplate`, `headerTemplate` and `footerTemplate` are limited to a subset of Javascript within `{{ }}` expressions. See the [Polymer documentation](http://www.polymer-project.org/docs/polymer/expressions.html) on Expression syntax.
 
+## Polymer Filters
+
+Referencing the [polymer documentation](http://www.polymer-project.org/docs/polymer/expressions.html#filters), filters can be used in expressions to transform data:
+```
+{{ expression | filterName([optional parameters]}}
+```
+To use a filter in one of your _sortable-table_ templates, it must be registered into the _PolymerExpressions_ scope, which is accessible after polymer has loaded:
+```javascript
+window.addEventListener('polymer-ready', function(){
+	PolymerExpressions.prototype.myFilter = function(){ ... }
+});
+```
+
+If a filter is being used in a `rowTemplate` or `rowEditorTemplate` and references more than one field, it might be useful to pass the `row` as an argument:
+```{{ record.row | myFilter }}```
+however, this won't automatically observe the individual fields of the `row`.  To tell polymer to watch individual fields, they must all be sent as optional parameters:
+```{{ record.row | myFilter(record.row.myField1, record.row.myField2) }}```
+
+The added benefit is that the function can be reused in `rowTemplate`s and as a `column.formula`:
+```javascript
+function myFilter(row){
+	return [your logic here];
+}
+...
+PolymerExpressions.prototype.myFilter = myFilter
+...
+//in the columns array
+{ name:'field1', formula: myFilter }
+```
+
 ## Todo
 
-- __fix missing header templates in Chromium__
-- __fix slow performance in Firefox with header templates__
-- benchmark performance: trace and remove duplicate calls, minimize observed bindings.
+- better support for internal row field change observers
 - better CSS theming
 - integration with IndexedDB
 - ensure stable sort (orders can change within duplicates on sorted column)
@@ -180,7 +205,11 @@ __Note:__  `cellTemplate`, `headerTemplate` and `footerTemplate` are limited to 
 - maybe: figure out how to sort by selected (click on header of checkbox column?)
 - maybe: column grouping
 - maybe: reload data if individual row fields change
+
+## Bugs
 - __Internet Explorer is completely broken__
+- header templates in don't work with Native Support browsers
+- header templates suffer slow performance with polyfil
 
 ## History
 

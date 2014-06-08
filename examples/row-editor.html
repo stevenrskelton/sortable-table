@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sortable Table using Polymer Web Components</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<script src="../../platform/platform.js"></script>
+	<link rel="import" href="../sortable-table.html">
+	<link rel="import" href="fruit-icon.html">
+	<style>
+		sortable-table { width: 100% }
+	</style>
+</head>
+<body unresolved>
+
+	<h2>Row Editor</h2>
+	Double clicking on a row should transform the row into the <code>rowEditorTemplate</code>, double clicking again should close.<br>
+	Formulas should work, templates should work, and original data should be modified and reflected in the table.
+
+	<p>
+
+	<template id="example" bind>
+		<sortable-table data="{{data}}" columns="{{columns}}" rowTemplate="rowTemplate" rowEditorTemplate="editorTemplate">
+			<template id="rowTemplate">
+				<td style="width:250px">
+					<fruit-icon fruit="{{record.row.fruit}}"></fruit-icon>{{record.row.fruit}}
+				</td>
+				<td style="width:20%">{{record.row.alice}}</td>
+				<td style="width:20%">{{record.row.bill}}</td>
+				<td style="width:20%">{{record.row.casey}}</td>
+				<td>{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
+				<td>{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
+			</template>
+			<template id="editorTemplate">
+				<td style="width:250px">
+					<fruit-icon fruit="{{record.row.fruit}}"></fruit-icon>
+					<select value="{{record.row.fruit}}" style="width:150px; height:27px; font-size: large; margin:0px;">
+						<option></option>
+						<option value="apple">apple</option>
+						<option value="banana">banana</option>
+						<option value="grape">grape</option>
+						<option value="pear">pear</option>
+						<option value="strawberry">strawberry</option>
+					</select>
+				</td>
+				<td><input type="number" value="{{record.row.alice}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;"></td>
+				<td><input type="number" value="{{record.row.bill}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;"></td>
+				<td><input type="number" value="{{record.row.casey}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;"></td>
+				<td>{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
+				<td>{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
+			</template>
+		</sortable-table>
+	</template>
+
+	<script>
+	var fruits = [
+		{ fruit: 'apple', alice: 4, bill: 10, casey: 2 },
+		{ fruit: 'banana', alice: 0, bill: 4, casey: 0 },
+		{ fruit: 'grape', alice: 2, bill: 3, casey: 5 },
+		{ fruit: 'pear', alice: 4, bill: 2, casey: 8 },
+		{ fruit: 'strawberry', alice: 0, bill: 14, casey: 0 }
+	];
+
+	var columns = [
+		{ name:'fruit', title:'Fruit' },
+		{ name:'alice', title:'Alice' },
+		{ name:'bill', title:'Bill' },
+		{ name:'casey', title:'Casey' },
+		{ name:'average', title:'Average', formula: average },
+		{ name:'total', title:'Total', formula: total }
+	];
+
+	function average(row){
+		return Math.round((row.alice*1 + row.bill*1 + row.casey*1)/3*10)/10;
+	}
+	function total(){
+		var row = arguments[0];
+		return row.alice + row.bill + row.casey;
+	}
+	window.addEventListener('polymer-ready', function(){
+		var model = {
+			data: fruits,
+			columns: columns
+		};
+		PolymerExpressions.prototype.average = average;
+		PolymerExpressions.prototype.total = total;
+		document.getElementById('example').model = model;
+	});
+	</script>
+</body>
+</html>
