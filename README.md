@@ -108,7 +108,7 @@ As always, only a very limited subset of Javascript is allowed within `{{ }}` ex
 #### Templates
 ====================
 
-##### Table -> rowTemplate
+##### Table § rowTemplate
 
 Renderer for contents of `<tr></tr>` row. Access to row's data fields are through `{{row.fields.****.value}}`, where `***` are the column names.
 
@@ -152,13 +152,13 @@ Example of a `rowTemplate` that uses a template (and a filter `toKeyValueArray` 
 </template>
 ```
 
-##### Table -> rowEditorTemplate
+##### Table § rowEditorTemplate
 
 Row template to use for a row in its user editing state.  Only 1 row can be in the editing state at a time.
 Renderer for contents of `<tr></tr>` row when in edit mode (_double clicked_).
 Similiar to [Table § rowTemplate](#table--rowTemplate)
 
-##### Table -> cellTemplate
+##### Table § cellTemplate
 
 Renderer for entire `<td></td>` cell. Will be overwritten if `columns` specifies a `cellTemplate`.
 
@@ -179,7 +179,7 @@ Example of a `cellTemplate` that displays an image beside the column value:
 ```
 __Note:__  Normally `row[column.name] == value`, but `value` can be manually set by specifying a `formula`. This is useful if `value` won't sort correctly but you need access to the original value.
 
-##### Table -> headerTemplate
+##### Table § headerTemplate
 
 Renderer for entire `<th></th>` cell. Access to `{{column}}`.  Will be overwritten if specified in `columns`.
 
@@ -195,7 +195,7 @@ Example of a `headerTemplate` using images to indicate sorting:
 </template>
 ```
 
-##### Table -> footerTemplate
+##### Table § footerTemplate
 
 Renderer for an additional row which spans all columns at the bottom of the table.  This is useful for paging buttons.
 There is a built in template called `pagingFooter` that can be used, or a different one can be specified.
@@ -225,20 +225,20 @@ Example of a `footerTemplate` that allows the user to traverse between pages.
 #### Column Templates
 =====================
 
-##### Column -> cellTemplate
+##### Column § cellTemplate
 
 Renderer for entire `<td></td>` cell.
 Overrides table's global cell template for a specific column.
 See [Table § cellTemplate](#table--cellTemplate)
 
 
-##### Column -> headerTemplate
+##### Column § headerTemplate
 
 Renderer for entire `<th></th>` cell. Access to `{{column}}`.
 Overrides table's global header template for a specific column.
 See [Table § cellTemplate](#table--cellTemplate)
 
-##### Column -> footerTemplate
+##### Column § footerTemplate
 
 Renderer for entire `<td></td>` cell. If no columns specify a `footerTemplate` the additional footer row will be omitted.
 If some but not all columns specify a template, the columns without a template specified will render an empty cell.
