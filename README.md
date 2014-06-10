@@ -57,7 +57,7 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 
 4. Start using it!
 
-	Start Simple:
+	Start simple:
 
 	```html
 	<sortable-table columns='["fruit","alice","bill","casey"]'>
@@ -71,7 +71,7 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 	</sortable-table>
 	```
 
-	Or Advanced with Custom Templates and 2-Way data binding:
+	Or advanced with custom templates and 2-way data binding:
 
 	```html
 	<sortable-table data="{{data}}" columns="{{columns}}">
@@ -84,14 +84,14 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 Attribute				| Options		| Default									| Description
 ---						| ---			| ---										| ---
 `data`	 				| *array*		| `[]`										| Data rows
-`columns`				| *array*		| `[]`										| Columns to display, with options. If [], columns will be computed from `data`
+`columns`				| *array*		| `[]`										| Columns to display, with options. If `[]`, columns will be computed from `data`.  __See_ [Columns](#columns)
 `sortColumn`			| *string*		| `null`									| Current sorted `column.name`
 `sortDescending`		| *boolean*		| `false`									| Current sorted column sort direction
 `checkbox`				| *boolean*		| `false`									| Renders a checkbox column as first column, allowing selection of elements.
 `rowSelection`			| *boolean*		| `false`									| Enable user interactive row selection
 `multiSelect`			| *boolean*		| `false`									| Multiple rows can be selected
-`selected`				| *object*		| `null`									| Element of `data` (`!multiSelect`)
-`selected`				| *array*		| `[]`										| Elements of `data` (`multiSelect`)
+`selected`				| *object*		| `null`									| Element of `data` (if `!multiSelect`)
+`selected`				| *array*		| `[]`										| Elements of `data` (if `multiSelect`)
 `selectedRowStyle`		| *string*		| `background-color:` `rgba(0,96,200,0.2);`	| CSS style to apply to `selected` row
 `pageSize`				| *int*			| `-1`										| Maximum number of records to display, `-1` is all records.
 `page`					| *int*			| `1`										| Number of pages to skip, `pageSize * (page-1)` records skipped.
