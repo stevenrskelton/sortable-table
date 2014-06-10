@@ -84,7 +84,7 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 Attribute				| Options		| Default									| Description
 ---						| ---			| ---										| ---
 `data`	 				| *array*		| `[]`										| Data rows
-`columns`				| *array*		| `[]`										| Columns to display, with options. If `[]`, columns will be computed from `data`.  __See_ [Columns](#columns)
+`columns`				| *array*		| `[]`										| Columns to display, with options. If `[]`, columns will be computed from `data`.  _See_ [Columns](#columns)
 `sortColumn`			| *string*		| `null`									| Current sorted `column.name`
 `sortDescending`		| *boolean*		| `false`									| Current sorted column sort direction
 `checkbox`				| *boolean*		| `false`									| Renders a checkbox column as first column, allowing selection of elements.
