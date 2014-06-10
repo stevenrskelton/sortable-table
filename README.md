@@ -87,7 +87,7 @@ Attribute				| Options		| Default									| Description
 `columns`				| *array*		| `[]`										| Columns to display, with options. If `[]`, columns will be computed from `data`.  _See_ [Columns](#columns)
 `sortColumn`			| *string*		| `null`									| Current sorted `column.name`
 `sortDescending`		| *boolean*		| `false`									| Current sorted column sort direction
-`checkbox`				| *boolean*		| `false`									| Renders a checkbox column as first column, allowing selection of elements.
+`checkbox`				| *boolean*		| `false`									| Renders a checkbox column as first column, facilitating row selection.
 `rowSelection`			| *boolean*		| `false`									| Enable user interactive row selection
 `multiSelect`			| *boolean*		| `false`									| Multiple rows can be selected
 `selected`				| *object*		| `null`									| Element of `data` (if `!multiSelect`)
@@ -331,7 +331,6 @@ PolymerExpressions.prototype.myFilter = myFilter
 - better support for internal row field change observers
 - better CSS theming
 - integration with IndexedDB
-- ensure stable sort (orders can change within duplicates on sorted column)
 - maybe: max and fixed table sizing / scrolling
 - maybe: cell selection
 - maybe: figure out how to sort by selected (click on header of checkbox column?)
