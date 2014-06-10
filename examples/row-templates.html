@@ -8,6 +8,7 @@
 	<script src="../../platform/platform.js"></script>
 	<link rel="import" href="../sortable-table.html">
 	<link rel="import" href="fruit-icon.html">
+	<link rel="import" href="index-links.html">
 	<style>
 		sortable-table { width: 100% }
 	</style>
@@ -15,6 +16,7 @@
 <body unresolved>
 
 	<h2>Row Templates</h2>
+
 	Using <code>rowTemplate</code> to populate rows, should work when a cell <code>formula</code> is specified, and all normal row selection functionality should continue to operate (clicks and checkboxes).<br>
 	Row templates allow live 2-way data-binding between cells, using individual <code>cellTemplate</code>s can't usually do this.<br>
 	Notice the <em>Formula Total</em> doesn't refresh instantly, but the <em>Template Total</em> does.
@@ -72,5 +74,7 @@
 		document.getElementById('example').model = model;
 	});
 	</script>
+
+	<index-links page="row-templates.html"></index-links>
 </body>
 </html>

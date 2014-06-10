@@ -40,11 +40,11 @@
 			text-align: left;
 		}
 	</style>
-	<template id="pagingFooter">
+	<template id="defaultPaging">
 		<div style="text-align:center">
 			<div style="float:left;cursor:pointer;color:{{page==1 ? '#666':'#fff'}}" on-click="{{previousPage}}">Prev</div>
 			<div style="float:right;cursor:pointer;color:{{page * pageSize > data.length ? '#666':'#fff'}}" on-click="{{nextPage}}">Next</div>
-			Page {{page}} of {{(data.length - (data.length % pageSize) + pageSize) / pageSize}}
+			Page {{page}} of {{(data.length - (data.length % pageSize) + pageSize*1) / pageSize}}
 		</div>
 	</template>
 	<table class="sortable-table">
@@ -96,7 +96,7 @@
 			</template>
 			<template if="{{footerTemplate && forceRefresh}}">
 				<tr>
-					<td colspan="{{columns.length}}" class="sortable-table-paging"><template ref="{{footerTemplate}}" bind></template></td>
+					<td colspan="{{columns.length + (checkbox ? 1 : 0)}}" class="sortable-table-paging"><template ref="{{footerTemplate}}" bind></template></td>
 				</tr>
 			</template>
 		</tfoot>

@@ -7,6 +7,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<script src="../../platform/platform.js"></script>
 	<link rel="import" href="../sortable-table.html">
+	<link rel="import" href="index-links.html">
 	<style>
 		sortable-table { width: 600px }
 		input, td:nth-of-type(2) { text-align: right }
@@ -22,7 +23,7 @@
 	<p>
 
 	<template id="example" bind>
-		<sortable-table data="{{data}}" page="{{page}}" pageSize="{{pageSize}}" checkbox multiselect columns="{{columns}}" selected="{{selected}}" sortColumn="fruit">
+		<sortable-table data="{{data}}" page="{{page}}" pageSize="{{pageSize}}" checkbox multiselect columns="{{columns}}" selected="{{selected}}" sortColumn="fruit" footerTemplate="defaultPaging">
 			<template id="alignLeft">
 				<td style="text-align:left">{{value}}</td>
 			</template>
@@ -79,5 +80,6 @@
 	});
 	</script>
 
+	<index-links page="paging.html"></index-links>
 </body>
 </html>

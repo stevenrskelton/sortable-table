@@ -219,7 +219,7 @@ Example of a `headerTemplate` using images to indicate sorting:
 ##### Table § footerTemplate
 
 Renderer for an additional row which spans all columns at the bottom of the table.  This is useful for paging buttons.
-There is a built in template called `pagingFooter` that can be used, or a different one can be specified.
+There is a built in template called `defaultPaging` that can be used, or a different one can be specified.
 This is independent to [Column § footerTemplate](#column--footertemplate) as they serve different purposes and can be used concurrently.
 
 Template Variable		|	Description
@@ -233,7 +233,7 @@ Template Variable		|	Description
 Example of a `footerTemplate` that allows the user to traverse between pages.
 
 ```html
-<template id="pagingFooter">
+<template id="defaultPaging">
 	<div style="text-align:center">
 		<div on-click="{{previousPage}}" style="
 			float:left;
@@ -250,7 +250,7 @@ Example of a `footerTemplate` that allows the user to traverse between pages.
 			Next
 		</div>
 		Page {{page}} of {{
-			(data.length - (data.length % pageSize) + pageSize) / pageSize
+			(data.length - (data.length % pageSize) + pageSize*1) / pageSize
 		}}
 	</div>
 </template>
