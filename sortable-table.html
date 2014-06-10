@@ -213,8 +213,6 @@
 		return arr;
 	};
 	Polymer('sortable-table', {
-		data: [],
-		columns: [],
 		sortColumn: null,
 		sortDescending: false,
 		selected: null,
@@ -276,6 +274,12 @@
 		showFooter: false,
 		columnsChanged: function(){
 			var self = this;
+			//explode columns if simple text array
+			if(self.columns.length > 0 && typeof self.columns[0] == 'string'){
+				self.columns = self.columns.map(function(column, index, array) {
+					return { name: index, title: column };
+				});
+			}
 			//watch templateIds since if added/modified we need to copy those templates into the shadow dom
 			function addTemplateWatches(column, field){
 				for(var i=0;i<self.columnWatches.length;i++){
@@ -299,7 +303,8 @@
 			}
 			this.forceRefresh++;
 		},
-		dataChanged: function(){
+		dataChanged: function(){ this.rebuildColumns(); },
+		rebuildColumns: function(){
 			if(this.columns.length==0 && this.data && this.data.length > 0){
 				var c = [];
 				var unique = [];
@@ -390,6 +395,21 @@
 		},
 		previousPage: function(){ if(this.page > 1) this.page--; },
 		nextPage: function(){ if(this.data.length > this.page * this.pageSize) this.page++; },
+		created: function(){
+			this.columns = [];
+			var array = [];
+			var self = this;
+			var text = self.textContent.trim();
+			if(text.length>0){
+				try{
+					var data = JSON.parse(text);
+					if(data){
+						self.data = data;
+						self.rebuildColumns();
+					}
+				} catch(e){ self.data = []; }
+			}else self.data = [];
+		},
 		forceRefresh: 0 //TODO: clean this up, it was put in to trigger a reprocess on initial load when templates are imported into the shadow dom.
 	});
 </script>

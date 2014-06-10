@@ -15,7 +15,8 @@
 <body unresolved>
 
 	<h2>Row Editor</h2>
-	Double clicking on a row should transform the row into the <code>rowEditorTemplate</code>, double clicking again should close.<br>
+
+	<b><em>Double clicking</em></b> on a row should transform the row into the <code>rowEditorTemplate</code>, double clicking again should close.<br>
 	Formulas should work, templates should work, and original data should be modified and reflected in the table.
 
 	<p>
@@ -33,7 +34,7 @@
 				<td>{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
 			</template>
 			<template id="editorTemplate">
-				<td style="width:250px">
+				<td style="width:250px;box-shadow: 0 0 4px 1px #EDC9AF inset;">
 					<fruit-icon fruit="{{record.row.fruit}}"></fruit-icon>
 					<select value="{{record.row.fruit}}" style="width:150px; height:27px; font-size: large; margin:0px;">
 						<option></option>
@@ -44,11 +45,11 @@
 						<option value="strawberry">strawberry</option>
 					</select>
 				</td>
-				<td><input type="number" value="{{record.row.alice}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;"></td>
-				<td><input type="number" value="{{record.row.bill}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;"></td>
-				<td><input type="number" value="{{record.row.casey}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;"></td>
-				<td>{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
-				<td>{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
+				<td style="box-shadow: 0 0 4px 1px #EDC9AF inset;"><input type="number" value="{{record.row.alice}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;"></td>
+				<td style="box-shadow: 0 0 4px 1px #EDC9AF inset;"><input type="number" value="{{record.row.bill}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;"></td>
+				<td style="box-shadow: 0 0 4px 1px #EDC9AF inset;"><input type="number" value="{{record.row.casey}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;"></td>
+				<td style="box-shadow: 0 0 8px 1px #FFEEDD inset;">{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
+				<td style="box-shadow: 0 0 8px 1px #FFEEDD inset;">{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
 			</template>
 		</sortable-table>
 	</template>

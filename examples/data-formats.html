@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sortable Table using Polymer Web Components</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<script src="../../platform/platform.js"></script>
+	<link rel="import" href="../sortable-table.html">
+	<style>
+		sortable-table { width: 500px; margin-left: 65px; display: block; }
+	</style>
+</head>
+<body unresolved>
+
+	<h2>Data Formats</h2>
+
+	Table data can be loaded using the <code>data</code> attribute, or by in-lining valid <a href="http://json.org/" target="_blank">JSON</a> between the <code>sortable-table</code> tags.
+
+	<p>
+
+	<h3>In-Lined Content</h3>
+
+	<pre>
+	&lt;sortable-table&gt;
+	[
+		{ "fruit":"apple",	"alice": 4,	"bill": 10,	"casey": 2 },
+		{ "fruit":"banana",	"alice": 0,	"bill": 4,	"casey": 0 },
+		{ "fruit":"grape",	"alice": 2,	"bill": 3,	"casey": 5 },
+		{ "fruit":"pear",	"alice": 4,	"bill": 2,	"casey": 8 },
+		{ "fruit":"strawberry",	"alice": 0,	"bill": 14,	"casey": 0 }
+	]
+	&lt;/sortable-table&gt;
+	</pre>
+
+	<p>
+
+	<sortable-table>
+	[
+		{ "fruit":"apple",		"alice": 4,	"bill": 10,	"casey": 2 },
+		{ "fruit":"banana",		"alice": 0,	"bill": 4,	"casey": 0 },
+		{ "fruit":"grape",		"alice": 2,	"bill": 3,	"casey": 5 },
+		{ "fruit":"pear",		"alice": 4,	"bill": 2,	"casey": 8 },
+		{ "fruit":"strawberry",	"alice": 0,	"bill": 14,	"casey": 0 }
+	]
+	</sortable-table>
+
+	<p>
+
+	<h3>Simple Attributes</h3>
+
+	While binding full <a href="http://json.org/" target="_blank">JSON</a> objects to attributes may be necessary for advanced operation, the custom element is smart enought to figure things out if given simple arrays.<br>
+	If the <code>data</code> is specifies as Arrays and not Objects, be sure to specify <code>columns</code> as well otherwise column headers will be the integers 0 to N.
+
+
+	<pre>
+	&lt;sortable-table columns='["fruit","alice","bill","casey"]'&gt;
+	[
+		[ "apple", 4, 10, 2 ],
+		[ "banana", 0, 4, 0 ],
+		[ "grape", 2, 3, 5 ],
+		[ "pear", 4, 2, 8 ],
+		[ "strawberry", 0, 14, 0 ]
+	]
+	&lt;/sortable-table&gt;
+	</pre>
+
+	<sortable-table columns='["fruit","alice","bill","casey"]'>
+	[
+		[ "apple", 4, 10, 2 ],
+		[ "banana", 0, 4, 0 ],
+		[ "grape", 2, 3, 5 ],
+		[ "pear", 4, 2, 8 ],
+		[ "strawberry", 0, 14, 0 ]
+	]
+	</sortable-table>
+
+	<p>
+</body>
+</html>
