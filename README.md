@@ -320,6 +320,7 @@ PolymerExpressions.prototype.myFilter = myFilter
 - better support for internal row field change observers
 - better CSS theming
 - integration with IndexedDB
+- improve drag-and-drop column reorder, set enabled by default when possible
 - maybe: max and fixed table sizing / scrolling
 - maybe: cell selection
 - maybe: figure out how to sort by selected (click on header of checkbox column?)
