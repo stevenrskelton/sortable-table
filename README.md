@@ -329,8 +329,8 @@ PolymerExpressions.prototype.myFilter = myFilter
 ## Bugs
 
 - __Internet Explorer is completely broken until it supports templates__
-- header templates in don't work with Native Support browsers
-- header templates suffer slow performance with polyfil
+- header templates not working correctly in Native Support browsers (Chromium)
+- header templates suffer slow performance with polyfil (Firefox)
 
 ## History
 
