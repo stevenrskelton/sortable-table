@@ -53,7 +53,6 @@
 	While binding full <a href="http://json.org/" target="_blank">JSON</a> objects to attributes may be necessary for advanced operation, the custom element is smart enought to figure things out if given simple arrays.<br>
 	If the <code>data</code> is specifies as Arrays and not Objects, be sure to specify <code>columns</code> as well otherwise column headers will be the integers 0 to N.
 
-
 	<pre>
 	&lt;sortable-table columns='["fruit","alice","bill","casey"]'&gt;
 	[
@@ -76,6 +75,36 @@
 	]
 	</sortable-table>
 
+	<h3>Javascript</h3>
+
+	While more advanced Javascript binding is possible, loading data into the component can be as simple as assignment of a JSON array.
+
+	<pre>
+	&lt;script&gt;
+		window.addEventListener('polymer-ready', function(){
+			document.getElementById('mytable').data = [
+			  { "fruit":"apple",		"alice": 4,	"bill": 10,	"casey": 2 },
+			  { "fruit":"banana",		"alice": 0,	"bill": 4,	"casey": 0 },
+			  { "fruit":"grape",		"alice": 2,	"bill": 3,	"casey": 5 },
+			  { "fruit":"pear",		"alice": 4,	"bill": 2,	"casey": 8 },
+			  { "fruit":"strawberry",	"alice": 0,	"bill": 14,	"casey": 0 }
+			];
+		});
+	&lt;/script&gt;
+	&lt;sortable-table id="mytable"&gt;&lt;/sortable-table&gt;
+	</pre>
+	<script>
+	window.addEventListener('polymer-ready', function(){
+	document.getElementById('mytable').data = 	[
+		{ "fruit":"apple",		"alice": 4,	"bill": 10,	"casey": 2 },
+		{ "fruit":"banana",		"alice": 0,	"bill": 4,	"casey": 0 },
+		{ "fruit":"grape",		"alice": 2,	"bill": 3,	"casey": 5 },
+		{ "fruit":"pear",		"alice": 4,	"bill": 2,	"casey": 8 },
+		{ "fruit":"strawberry",	"alice": 0,	"bill": 14,	"casey": 0 }
+	];});
+	</script>
+	<sortable-table id="mytable"></sortable-table>
+		
 	<index-links page="data-formats.html"></index-links>
 </body>
 </html>

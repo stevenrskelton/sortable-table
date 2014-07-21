@@ -8,6 +8,7 @@
 	<script src="../../platform/platform.js"></script>
 	<link rel="import" href="../sortable-table.html">
 	<link rel="import" href="fruit-icon.html">
+	<link rel="import" href="json-stringify.html">
 	<link rel="import" href="index-links.html">
 	<style>
 		sortable-table { width: 800px; }
@@ -16,13 +17,14 @@
 <body unresolved>
 
 	<h2>Dynamic columns</h2>
-	Adding, removing, and reordering <code>columns</code> should not break sort.
-	Changing a `cellTemplate`,`headerTemplate`, or `footerTemplate` after load should work correctly.
+	Adding, removing, and reordering <code>columns</code> should not break sort.<br>
+	Changing a `cellTemplate`, and column scoped `headerTemplate`, or `footerTemplate` after load should work correctly.<br>
+	<code>columnReorder</code> should work correctly.
 
 	<p>
 
 	<template id="example" bind>
-		<sortable-table data="{{data}}" columns="{{columns}}">
+		<sortable-table data="{{data}}" columns="{{columns}}" columnReorder>
 			<template id="fruitsTemplateIcon">
 				<td style="padding:0;width:48px;text-align:center;">
 					<fruit-icon fruit="{{value}}"></fruit>
@@ -35,16 +37,18 @@
 				</td>
 			</template>
 		</sortable-table>
+		<h4><code>columns</code> JSON</h4>
+		<json-stringify data="{{columns}}"></json-stringify>
 	</template>
 
 	<p>
 
-	<input type="button" onclick="toggleTemplate(this)" value="Use Text Template">
-	
-	<input type="button" onclick="toggleVisibility(this)" value="Hide Columns">
-	
-	<input type="button" onclick="toggleReorder(this)" value="Reorder Columns">
-	
+	<input type="button" onclick="toggleTemplate(this)" value="Use Text Fruit Template">
+
+	<input type="button" onclick="toggleVisibility(this)" value="Hide Middle 3 Columns">
+
+	<input type="button" onclick="toggleReorder(this)" value="Reorder Last 2 Columns">
+
 	<script>
 	var fruits = [
 		{fruit: 'apple', alice: 4, bill: 10, casey: 2, average: 5.3, total: 16 },
@@ -64,25 +68,27 @@
 	];
 
 	function toggleTemplate(b){
+		var fruitColumn = columns.filter(function(element){ return element.name == 'fruit'; })[0];
 		//change template used for fruit
-		if(columns[0].cellTemplate == 'fruitsTemplateIcon'){
-			columns[0].cellTemplate = 'fruitsTemplateText';
-			b.value = 'Use Icon Template';
+		if(fruitColumn.cellTemplate == 'fruitsTemplateIcon'){
+			fruitColumn.cellTemplate = 'fruitsTemplateText';
+			b.value = 'Use Icon Fruit Template';
 		}else{
-			columns[0].cellTemplate = 'fruitsTemplateIcon';
-			b.value = 'Use Text Template';
+			fruitColumn.cellTemplate = 'fruitsTemplateIcon';
+			b.value = 'Use Text Fruit Template';
 		}
 	}
 
+	var removedColumns = null;
 	function toggleVisibility(b){
 		//show/hide 3 person columns
 		if(columns.length==6){
 			//remove
-			columns.splice(1,3);
+			removedColumns = columns.splice(1,3);
 			b.value = 'Show Columns';
 		}else{
 			//insert
-			columns.splice(1,0,{name:'alice'},{name:'bill'},{name:'casey'});
+			columns.splice(1,0,removedColumns[0],removedColumns[1],removedColumns[2]);
 			b.value = 'Hide Columns';
 		}
 	}

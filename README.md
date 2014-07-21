@@ -76,6 +76,7 @@ Attribute				| Options		| Default									| Description
 `sortColumn`			| *string*		| `null`									| Current sorted `column.name`
 `sortDescending`		| *boolean*		| `false`									| Current sorted column sort direction
 `checkbox`				| *boolean*		| `false`									| Renders a checkbox column as first column, facilitating row selection.
+`columnReorder`			| *boolean*		| `false`									| Allows columns to be drag-and-dropped into different locations.  This should not be used with a table-scoped `rowTemplate`,`rowEditorTemplate`, or `headerTemplate`.
 `rowSelection`			| *boolean*		| `false`									| Enable user interactive row selection
 `multiSelect`			| *boolean*		| `false`									| Multiple rows can be selected
 `selected`				| *object*		| `null`									| Element of `data` (if `!multiSelect`)

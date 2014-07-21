@@ -15,23 +15,23 @@
   <body unresolved>
 
 	<h2>Auto-Generated <code>columns</code></h2>
-	<code>columns</code> is omitted, and web component figures it out as best as it can.  
+	If <code>columns</code> is omitted, and web component figures it out as best it can.
 
-	<p />
+	<p>
 
 	<template id="example" bind>
-	  <sortable-table data="{{data}}" sortColumn="alice"></sortable-table>
+	  <sortable-table data="{{data}}" sortColumn="alice" columnReorder></sortable-table>
 	</template>
 
-	<p />
+	<p>
 
 	<h2>Auto-Generated <code>columns</code> should accept missing fields</h2>
-	If some column fields are missing for some rows, or the columns are out order it should still work.
+	If some column fields are missing for rows, or the columns are out order it should still work.
 
-	<p />
+	<p>
 
 	<template id="example2" bind>
-	  <sortable-table data="{{data}}" sortColumn="alice"></sortable-table>
+	  <sortable-table data="{{data}}" sortColumn="alice" columnReorder></sortable-table>
 	</template>
 
 	<script>
@@ -47,7 +47,7 @@
 		{ fruit: 'apple', bill: 4, casey: 2, alice: 4 },
 		{ alice: 0, bill: 4, fruit: 'banana', daisy: 0 },
 		{ fruit: 'grape', alice: 2 },
-		{ elly: 2, alice: 4, fruit: 'pear' },
+		{ ellie: 2, alice: 4, fruit: 'pear' },
 		{ fruit: 'strawberry', daisy: 2, bill: 14 }
 	  ];
 

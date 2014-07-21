@@ -7,7 +7,7 @@
 <polymer-element name="sortable-table" attributes="
 	data columns sortColumn sortDescending rowSelection multiSelect selected selectedRowStyle
 	headerTemplate cellTemplate rowTemplate footerTemplate checkbox pageSize page
-	rowEditorTemplate
+	rowEditorTemplate columnReorder
 ">
 <template>
 	<style>
@@ -21,7 +21,7 @@
 		.sortable-table .sortable-table-header,
 		.sortable-table .sortable-table-paging,
 		.sortable-table th {
-			background: #555;
+			background: rgb(85,85,85);
 			color: white;
 			font-weight: bold;
 			text-align: center;
@@ -39,6 +39,15 @@
 		.sortable-table td:first-of-type {
 			text-align: left;
 		}
+		th.over {
+			border-right-color: red;
+			background: rgb(25,0,0); /* Older browsers */
+			background: -moz-linear-gradient(left, rgba(85,85,85,1) 0%, rgba(255,0,0,1) 100%); /* FF3.6+ */
+			background: -webkit-linear-gradient(left, rgba(85,85,85,1) 0%, rgba(255,0,0,1) 100%); /* Chrome10+,Safari5.1+ */
+			background: -o-linear-gradient(left,  rgba(85,85,85,1) 0%, rgba(255,0,0,1) 100%); /* Opera 11.10+ */
+			background: -ms-linear-gradient(left,  rgba(85,85,85,1) 0%, rgba(255,0,0,1) 100%); /* IE10+ */
+			background: linear-gradient(left,  rgba(85,85,85,1) 0%, rgba(255,0,0,1) 100%); /* W3C */
+		}
 	</style>
 	<template id="defaultPaging">
 		<div style="text-align:center">
@@ -55,8 +64,10 @@
 				</template>
 				<template repeat="{{column in columns}}">
 					<template ref="{{column.headerTemplate || headerTemplate}}" bind>
-						<th style="{{sortColumn==column.name && sortDescending ? 'text-decoration:overline;' : ''}}
-						{{sortColumn==column.name && !sortDescending ? 'text-decoration:underline;' : ''}}">{{!(column.title) ? column.name : column.title}}</th>
+						<th draggable="{{columnReorder}}" style="{{sortColumn==column.name && sortDescending ? 'text-decoration:overline;' : ''}}
+						{{sortColumn==column.name && !sortDescending ? 'text-decoration:underline;' : ''}}"
+						on-dragstart="{{handleTHDragStart}}" on-dragenter="{{handleTHDragEnter}}" on-dragover="{{handleTHDragOver}}" on-dragleave="{{handleTHDragLeave}}" on-drop="{{handleTHDrop}}" on-dragend="{{handleTHDragEnd}}"
+						>{{!(column.title) ? column.name : column.title}}</th>
 					</template>
 				</template>
 			</tr>
@@ -215,6 +226,7 @@
 	Polymer('sortable-table', {
 		sortColumn: null,
 		sortDescending: false,
+		columnReorder: false,
 		selected: null,
 		editRow: null,
 		headerTemplate: null,
@@ -409,6 +421,56 @@
 					}
 				} catch(e){ self.data = []; }
 			}else self.data = [];
+		},
+		dragColumn: null,
+		handleTHDragStart: function(e) {
+			this.dragColumn = {
+				th: e.target,
+				column: e.target.templateInstance.model.column,
+				opacity: e.target.style.opacity,
+				entered: null
+			},
+			e.target.style.opacity = '0.4';
+			e.dataTransfer.effectAllowed = 'move';
+			e.dataTransfer.setData('application/sortable-table-column-name', this.columns.indexOf(e.target.templateInstance.model.column));
+		},
+		handleTHDragOver: function(e) {
+			if (e.preventDefault) e.preventDefault(); // Necessary. Allows us to drop.
+			e.dataTransfer.dropEffect = 'move';
+			return false;
+		},
+		handleTHDragEnter: function(e) {
+			var th = e.target;
+			this.dragColumn.entered = null;
+			while(th.tagName!='TH' && th.parentElement){
+				th = th.parentElement;
+				if(th.tagName=='TH') this.dragColumn.entered = th;
+			}
+			th.classList.add('over');
+		},
+		handleTHDragLeave: function(e) {
+			var th = e.target;
+			if(this.dragColumn.entered == th) this.dragColumn.entered == null;
+			else if(th.classList && th.classList.contains('over')) th.classList.remove('over');
+		},
+		handleTHDrop: function(e) {
+			if (e.stopPropagation) e.stopPropagation(); // stops the browser from redirecting.
+			var newIndex = this.columns.indexOf(e.target.templateInstance.model.column);
+			var oldIndex = +e.dataTransfer.getData('application/sortable-table-column-name');
+			if(newIndex+1 < oldIndex){
+				var b = this.columns.splice(oldIndex,1);
+				this.columns.splice(newIndex+1,0,b[0]);
+			}else if(newIndex > oldIndex){
+				var b = this.columns.splice(oldIndex,1);
+				this.columns.splice(newIndex,0,b[0]);
+			}
+			return false;
+		},
+		handleTHDragEnd: function(e) {
+			if(this.dragColumn){ this.dragColumn.th.style.opacity = this.dragColumn.opacity; }
+			[].forEach.call(this.shadowRoot.querySelectorAll('th'), function(element) {
+				element.classList.remove('over');
+			});
 		},
 		forceRefresh: 0 //TODO: clean this up, it was put in to trigger a reprocess on initial load when templates are imported into the shadow dom.
 	});
