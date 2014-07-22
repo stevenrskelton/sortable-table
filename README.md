@@ -94,7 +94,7 @@ Attribute				| Options		| Default									| Description
 `sortColumn`			| *string*		| `null`									| Current sorted `column.name`
 `sortDescending`		| *boolean*		| `false`									| Current sorted column sort direction
 `checkbox`				| *boolean*		| `false`									| Renders a checkbox column as first column, facilitating row selection.
-`disableColumnMove`		| *boolean*		| `false`									| Disables columns from being drag-and-dropped into different positions.  Drag-and-drop will be automatically disabled if entire row templates (`rowTemplate` or `rowEditorTemplate`) are used. Styling using _:nth-of-type_ will likely break.
+`disableColumnMove`		| *boolean*		| `false`									| Disables columns from being drag-and-dropped into different positions.  Drag-and-drop will be automatically disabled if entire row templates (`rowTemplate` or `rowEditorTemplate`) are used. CSS styling using _:nth-of-type_ will likely break unless this is set to true.
 `rowSelection`			| *boolean*		| `false`									| Enable user interactive row selection
 `multiSelect`			| *boolean*		| `false`									| Multiple rows can be selected
 `selected`				| *object*		| `null`									| Element of `data` (if `!multiSelect`)
