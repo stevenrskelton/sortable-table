@@ -67,7 +67,7 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 
 	Or use Javascript attributes:
 
-		```html
+	```html
 	<sortable-table columns='["fruit","alice","bill","casey"]' data='[
 			[ "apple", 4, 10, 2 ],
 			[ "banana", 0, 4, 0 ],
