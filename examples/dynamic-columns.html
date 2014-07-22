@@ -19,12 +19,12 @@
 	<h2>Dynamic columns</h2>
 	Adding, removing, and reordering <code>columns</code> should not break sort.<br>
 	Changing a `cellTemplate`, and column scoped `headerTemplate`, or `footerTemplate` after load should work correctly.<br>
-	<code>columnReorder</code> should work correctly.
+	Column reordering via drag-and-drop should work correctly.
 
 	<p>
 
 	<template id="example" bind>
-		<sortable-table data="{{data}}" columns="{{columns}}" columnReorder>
+		<sortable-table data="{{data}}" columns="{{columns}}">
 			<template id="fruitsTemplateIcon">
 				<td style="padding:0;width:48px;text-align:center;">
 					<fruit-icon fruit="{{value}}"></fruit>

@@ -7,7 +7,7 @@
 <polymer-element name="sortable-table" attributes="
 	data columns sortColumn sortDescending rowSelection multiSelect selected selectedRowStyle
 	headerTemplate cellTemplate rowTemplate footerTemplate checkbox pageSize page
-	rowEditorTemplate columnReorder
+	rowEditorTemplate disableColumnMove
 ">
 <template>
 	<style>
@@ -39,21 +39,30 @@
 		.sortable-table td:first-of-type {
 			text-align: left;
 		}
-		th.over {
+		th.over-right {
 			border-right-color: red;
 			background: rgb(25,0,0); /* Older browsers */
-			background: -moz-linear-gradient(left, rgba(85,85,85,1) 0%, rgba(255,0,0,1) 100%); /* FF3.6+ */
-			background: -webkit-linear-gradient(left, rgba(85,85,85,1) 0%, rgba(255,0,0,1) 100%); /* Chrome10+,Safari5.1+ */
-			background: -o-linear-gradient(left,  rgba(85,85,85,1) 0%, rgba(255,0,0,1) 100%); /* Opera 11.10+ */
-			background: -ms-linear-gradient(left,  rgba(85,85,85,1) 0%, rgba(255,0,0,1) 100%); /* IE10+ */
-			background: linear-gradient(left,  rgba(85,85,85,1) 0%, rgba(255,0,0,1) 100%); /* W3C */
+			background: -moz-linear-gradient(left, rgba(85,85,85,1) 50%, rgba(255,0,0,1) 100%); /* FF3.6+ */
+			background: -webkit-linear-gradient(left, rgba(85,85,85,1) 50%, rgba(255,0,0,1) 100%); /* Chrome10+,Safari5.1+ */
+			background: -o-linear-gradient(left, rgba(85,85,85,1) 50%, rgba(255,0,0,1) 100%); /* Opera 11.10+ */
+			background: -ms-linear-gradient(left, rgba(85,85,85,1) 50%, rgba(255,0,0,1) 100%); /* IE10+ */
+			background: linear-gradient(left, rgba(85,85,85,1) 50%, rgba(255,0,0,1) 100%); /* W3C */
+		}
+		th.over-left {
+			border-left-color: red;
+			background: rgb(25,0,0); /* Older browsers */
+			background: -moz-linear-gradient(left, rgba(255,0,0,1) 0%, rgba(85,85,85,1) 50%); /* FF3.6+ */
+			background: -webkit-linear-gradient(left, rgba(255,0,0,1) 0%, rgba(85,85,85,1) 50%); /* Chrome10+,Safari5.1+ */
+			background: -o-linear-gradient(left, rgba(255,0,0,1) 0%, rgba(85,85,85,1) 50%); /* Opera 11.10+ */
+			background: -ms-linear-gradient(left, rgba(255,0,0,1) 0%, rgba(85,85,85,1) 50%); /* IE10+ */
+			background: linear-gradient(left, rgba(255,0,0,1) 0%, rgba(85,85,85,1) 50%); /* W3C */
 		}
 	</style>
 	<template id="defaultPaging">
 		<div style="text-align:center">
 			<div style="float:left;cursor:pointer;color:{{page==1 ? '#666':'#fff'}}" on-click="{{previousPage}}">Prev</div>
 			<div style="float:right;cursor:pointer;color:{{page * pageSize > data.length ? '#666':'#fff'}}" on-click="{{nextPage}}">Next</div>
-			Page {{page}} of {{(data.length - (data.length % pageSize) + pageSize*1) / pageSize}}
+			Page {{page}} of {{(data.length - (data.length % pageSize) + +pageSize) / pageSize}}
 		</div>
 	</template>
 	<table class="sortable-table">
@@ -64,9 +73,15 @@
 				</template>
 				<template repeat="{{column in columns}}">
 					<template ref="{{column.headerTemplate || headerTemplate}}" bind>
-						<th draggable="{{columnReorder}}" style="{{sortColumn==column.name && sortDescending ? 'text-decoration:overline;' : ''}}
-						{{sortColumn==column.name && !sortDescending ? 'text-decoration:underline;' : ''}}"
-						on-dragstart="{{handleTHDragStart}}" on-dragenter="{{handleTHDragEnter}}" on-dragover="{{handleTHDragOver}}" on-dragleave="{{handleTHDragLeave}}" on-drop="{{handleTHDrop}}" on-dragend="{{handleTHDragEnd}}"
+						<th
+							draggable="{{!disableColumnMove && !(rowTemplate || rowEditorTemplate)}}"
+							style="{{sortColumn==column.name && sortDescending ? 'text-decoration:overline;' : ''}} {{sortColumn==column.name && !sortDescending ? 'text-decoration:underline;' : ''}}"
+							on-dragstart="{{handleTHDragStart}}"
+							on-dragenter="{{handleTHDragEnter}}"
+							on-dragover="{{handleTHDragOver}}"
+							on-dragleave="{{handleTHDragLeave}}"
+							on-drop="{{handleTHDrop}}"
+							on-dragend="{{handleTHDragEnd}}"
 						>{{!(column.title) ? column.name : column.title}}</th>
 					</template>
 				</template>
@@ -146,7 +161,7 @@
 					return desc;
 				}
 			}else{
-				if (typeof x == "string" && typeof y == "string"){
+				if (typeof x == "string" && typeof y == "string" && !(x == +x && y == +y)){
 					x = x.toLowerCase();
 					y = y.toLowerCase();
 				}
@@ -163,7 +178,7 @@
 		if(page < 1) page = 1;
 
 		var start = (pageSize > -1) ? Math.min(pageSize * (page - 1), sortedArray.length) : 0;
-		var end = (pageSize > -1) ? Math.min(start + pageSize * 1, sortedArray.length) : sortedArray.length;
+		var end = (pageSize > -1) ? Math.min(start + +pageSize, sortedArray.length) : sortedArray.length;
 
 		for(var i=start;i<end;i++){
 			var row = sortedArray[i];
@@ -207,13 +222,13 @@
 		}
 	};
 	PolymerExpressions.prototype.sum = function(arr) {
-		return arr.reduce(function(a, b) { return a*1 + b*1; }, 0);
+		return arr.reduce(function(a, b) { return +a + +b; }, 0);
 	};
 	PolymerExpressions.prototype.average = function(arr) {
 		if(arr.length==0){
 			return 0;
 		}else{
-			return arr.reduce(function(a, b) { return a*1 + b*1; }, 0) / arr.length;
+			return arr.reduce(function(a, b) { return +a + +b; }, 0) / arr.length;
 		}
 	};
 	PolymerExpressions.prototype.toKeyValueArray = function(obj) {
@@ -226,7 +241,7 @@
 	Polymer('sortable-table', {
 		sortColumn: null,
 		sortDescending: false,
-		columnReorder: false,
+		disableColumnMove: false,
 		selected: null,
 		editRow: null,
 		headerTemplate: null,
@@ -424,15 +439,18 @@
 		},
 		dragColumn: null,
 		handleTHDragStart: function(e) {
-			this.dragColumn = {
-				th: e.target,
-				column: e.target.templateInstance.model.column,
-				opacity: e.target.style.opacity,
-				entered: null
-			},
-			e.target.style.opacity = '0.4';
-			e.dataTransfer.effectAllowed = 'move';
-			e.dataTransfer.setData('application/sortable-table-column-name', this.columns.indexOf(e.target.templateInstance.model.column));
+			if(!this.disableColumnMove && !(this.rowTemplate || this.rowEditorTemplate)){
+				this.dragColumn = {
+					th: e.target,
+					column: e.target.templateInstance.model.column,
+					opacity: e.target.style.opacity,
+					entered: null,
+					index: this.columns.indexOf(e.target.templateInstance.model.column)
+				},
+				e.target.style.opacity = '0.4';
+				e.dataTransfer.effectAllowed = 'move';
+				e.dataTransfer.setData('application/sortable-table-column-name', this.dragColumn.index);
+			}
 		},
 		handleTHDragOver: function(e) {
 			if (e.preventDefault) e.preventDefault(); // Necessary. Allows us to drop.
@@ -440,37 +458,52 @@
 			return false;
 		},
 		handleTHDragEnter: function(e) {
-			var th = e.target;
-			this.dragColumn.entered = null;
-			while(th.tagName!='TH' && th.parentElement){
-				th = th.parentElement;
-				if(th.tagName=='TH') this.dragColumn.entered = th;
+			if(this.dragColumn){
+				var th = e.target;
+				this.dragColumn.entered = null;
+				while(th.tagName!='TH' && th.parentElement){
+					th = th.parentElement;
+					if(th.tagName=='TH') this.dragColumn.entered = th;
+				}
+				var index = this.columns.indexOf(th.templateInstance.model.column);
+				if(index < this.dragColumn.index) th.classList.add('over-left');
+				else if(index > this.dragColumn.index) th.classList.add('over-right');
 			}
-			th.classList.add('over');
 		},
 		handleTHDragLeave: function(e) {
-			var th = e.target;
-			if(this.dragColumn.entered == th) this.dragColumn.entered == null;
-			else if(th.classList && th.classList.contains('over')) th.classList.remove('over');
+			if(this.dragColumn){
+				var th = e.target;
+				if(this.dragColumn.entered == th) this.dragColumn.entered == null;
+				else if(th.classList){
+					if(th.classList.contains('over-left')) th.classList.remove('over-left');
+					if(th.classList.contains('over-right')) th.classList.remove('over-right');
+				}
+			}
 		},
 		handleTHDrop: function(e) {
 			if (e.stopPropagation) e.stopPropagation(); // stops the browser from redirecting.
-			var newIndex = this.columns.indexOf(e.target.templateInstance.model.column);
-			var oldIndex = +e.dataTransfer.getData('application/sortable-table-column-name');
-			if(newIndex+1 < oldIndex){
-				var b = this.columns.splice(oldIndex,1);
-				this.columns.splice(newIndex+1,0,b[0]);
-			}else if(newIndex > oldIndex){
-				var b = this.columns.splice(oldIndex,1);
-				this.columns.splice(newIndex,0,b[0]);
+			if(this.dragColumn && this.dragColumn.th.parentNode == e.target.parentNode){
+				var newIndex = this.columns.indexOf(e.target.templateInstance.model.column);
+				var oldIndex = +e.dataTransfer.getData('application/sortable-table-column-name');
+				if(newIndex < oldIndex){
+					var b = this.columns.splice(oldIndex,1);
+					this.columns.splice(newIndex,0,b[0]);
+				}else if(newIndex > oldIndex){
+					var b = this.columns.splice(oldIndex,1);
+					this.columns.splice(newIndex,0,b[0]);
+				}
 			}
 			return false;
 		},
 		handleTHDragEnd: function(e) {
-			if(this.dragColumn){ this.dragColumn.th.style.opacity = this.dragColumn.opacity; }
-			[].forEach.call(this.shadowRoot.querySelectorAll('th'), function(element) {
-				element.classList.remove('over');
-			});
+			if(this.dragColumn){
+				this.dragColumn.th.style.opacity = this.dragColumn.opacity;
+				[].forEach.call(this.shadowRoot.querySelectorAll('th'), function(element) {
+					element.classList.remove('over-left');
+					element.classList.remove('over-right');
+				});
+			}
+			this.dragColumn = null;
 		},
 		forceRefresh: 0 //TODO: clean this up, it was put in to trigger a reprocess on initial load when templates are imported into the shadow dom.
 	});

@@ -19,12 +19,13 @@
 	Use this demo to benchmark performance with larger datasets.
 	<p>
 
-	<span style="color:red">Firefox has a real issue with this much DOM manipulation, so larger datasets should avoid rendering a large table by using the built in paging. This page loads instantly in Chromium.</span>
+	<span style="color:red">Firefox has a real issue with this much DOM manipulation, so larger datasets should avoid rendering a large table, instead use the built in paging.<br>
+	This page loads and sorts instantly in Chromium.</span>
 
 	<p>
 
 	<template id="example" bind>
-		<sortable-table data="{{data}}" columns="{{columns}}">
+		<sortable-table data="{{data}}" columns="{{columns}}" disableColumnMove>
 			<template id="fruitsTemplate">
 				<td style="text-align:left">
 					<fruit-icon fruit="{{value}}"></fruit-icon>

@@ -76,7 +76,7 @@ Attribute				| Options		| Default									| Description
 `sortColumn`			| *string*		| `null`									| Current sorted `column.name`
 `sortDescending`		| *boolean*		| `false`									| Current sorted column sort direction
 `checkbox`				| *boolean*		| `false`									| Renders a checkbox column as first column, facilitating row selection.
-`columnReorder`			| *boolean*		| `false`									| Allows columns to be drag-and-dropped into different locations.  This should not be used with a table-scoped `rowTemplate`,`rowEditorTemplate`, or `headerTemplate`.
+`disableColumnMove`		| *boolean*		| `false`									| Disables columns from being drag-and-dropped into different positions.  Drag-and-drop will be automatically disabled if entire row templates (`rowTemplate` or `rowEditorTemplate`) are used.
 `rowSelection`			| *boolean*		| `false`									| Enable user interactive row selection
 `multiSelect`			| *boolean*		| `false`									| Multiple rows can be selected
 `selected`				| *object*		| `null`									| Element of `data` (if `!multiSelect`)
@@ -320,7 +320,6 @@ PolymerExpressions.prototype.myFilter = myFilter
 - better support for internal row field change observers
 - better CSS theming
 - integration with IndexedDB
-- improve drag-and-drop column reorder, set enabled by default when possible
 - maybe: max and fixed table sizing / scrolling
 - maybe: cell selection
 - maybe: figure out how to sort by selected (click on header of checkbox column?)
