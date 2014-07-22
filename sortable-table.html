@@ -36,9 +36,6 @@
 			text-align: center;
 			cursor: pointer;
 		}
-		.sortable-table td:first-of-type {
-			text-align: left;
-		}
 		th.over-right {
 			border-right-color: red;
 			background: rgb(25,0,0); /* Older browsers */
@@ -333,17 +330,39 @@
 		dataChanged: function(){ this.rebuildColumns(); },
 		rebuildColumns: function(){
 			if(this.columns.length==0 && this.data && this.data.length > 0){
+				//try and load from DOM
+				var columnNodes = this.querySelectorAll('sortable-column');
 				var c = [];
-				var unique = [];
-				for(var i=0;i<this.data.length;i++){
-					Object.keys(this.data[i]).forEach(function(property) {
-						if (unique.indexOf(property)==-1) {
-							unique.push(property);
-							c.push({name: property});
-						}
+				if(columnNodes.length>0){
+					[].forEach.call(columnNodes, function(n, index) {
+						var name = n.getAttribute('name');
+						if(!name || name == '') name = index;
+						var title = n.getAttribute('title');
+						if(!title || title == '') title = n.textContent.trim();
+						if(title == '') title = name;
+						var formula = n.getAttribute('formula');
+						if(!formula) formula = eval(formula);
+						c.push({
+							name: name, title: title, formula: formula,
+							cellTemplate: n.getAttribute('cellTemplate'),
+							headerTemplate: n.getAttribute('headerTemplate'),
+							footerTemplate: n.getAttribute('footerTemplate')
+						});
 					});
+					this.columns = c;
+					this.columnsChanged();
+				}else{
+					var unique = [];
+					for(var i=0;i<this.data.length;i++){
+						Object.keys(this.data[i]).forEach(function(property) {
+							if (unique.indexOf(property)==-1) {
+								unique.push(property);
+								c.push({name: property});
+							}
+						});
+					}
+					this.columns = c;
 				}
-				this.columns = c;
 			}
 		},
 		rowSelectionChanged: function(a,val){
@@ -390,7 +409,7 @@
 		importedTemplates: [],
 		addTemplateIfNotInDocument: function(templateId){
 			/* copy template from content into shadow dom */
-			if(templateId && !this.shadowRoot.getElementById(templateId)){
+			if(templateId && this.shadowRoot && !this.shadowRoot.getElementById(templateId)){
 				var t = this.querySelector('#'+templateId);
 				if(t){
 					this.importedTemplates.push(t);
@@ -423,19 +442,26 @@
 		previousPage: function(){ if(this.page > 1) this.page--; },
 		nextPage: function(){ if(this.data.length > this.page * this.pageSize) this.page++; },
 		created: function(){
-			this.columns = [];
+			if(!this.data) this.data = [];
+			if(!this.columns) this.columns = [];
+		},
+		ready: function(){
 			var array = [];
 			var self = this;
-			var text = self.textContent.trim();
-			if(text.length>0){
-				try{
-					var data = JSON.parse(text);
-					if(data){
-						self.data = data;
-						self.rebuildColumns();
+			[].forEach.call(this.childNodes, function(element) {
+				if(element.nodeName == "#text"){
+					var text = element.textContent.trim();
+					if(text.length>0){
+						try{
+							var data = JSON.parse(text);
+							if(data){
+								self.data = data;
+								self.rebuildColumns();
+							}
+						} catch(e){ self.data = []; }
 					}
-				} catch(e){ self.data = []; }
-			}else self.data = [];
+				}
+			});
 		},
 		dragColumn: null,
 		handleTHDragStart: function(e) {

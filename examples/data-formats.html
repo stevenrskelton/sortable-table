@@ -20,7 +20,7 @@
 
 	<p>
 
-	<h3>In-Lined Content</h3>
+	<h3>Inlined Content</h3>
 
 	<pre>
 	&lt;sortable-table&gt;
@@ -48,10 +48,65 @@
 
 	<p>
 
+	<h3>DOM</h3>
+
+	<pre>
+	&lt;sortable-table&gt;
+		&lt;sortable-column&gt;fruit&lt;/sortable-column&gt;
+		&lt;sortable-column&gt;alice&lt;/sortable-column&gt;
+		&lt;sortable-column&gt;bill&lt;/sortable-column&gt;
+		&lt;sortable-column&gt;casey&lt;/sortable-column&gt;
+		[
+			[ "apple", 4, 10, 2 ],
+			[ "banana", 0, 4, 0 ],
+			[ "grape", 2, 3, 5 ],
+			[ "pear", 4, 2, 8 ],
+			[ "strawberry", 0, 14, 0 ]
+		]
+	&lt;/sortable-table&gt;
+	</pre>
+
+	<sortable-table>
+		<sortable-column>fruit</sortable-column>
+		<sortable-column>alice</sortable-column>
+		<sortable-column>bill</sortable-column>
+		<sortable-column>casey</sortable-column>
+		[
+			[ "apple", 4, 10, 2 ],
+			[ "banana", 0, 4, 0 ],
+			[ "grape", 2, 3, 5 ],
+			[ "pear", 4, 2, 8 ],
+			[ "strawberry", 0, 14, 0 ]
+		]
+	</sortable-table>
+
+	<p>
+
 	<h3>Simple Attributes</h3>
 
 	While binding full <a href="http://json.org/" target="_blank">JSON</a> objects to attributes may be necessary for advanced operation, the custom element is smart enought to figure things out if given simple arrays.<br>
 	If the <code>data</code> is specifies as Arrays and not Objects, be sure to specify <code>columns</code> as well otherwise column headers will be the integers 0 to N.
+
+	<pre>
+	&lt;sortable-table columns='["fruit","alice","bill","casey"]' data='[
+		[ "apple", 4, 10, 2 ],
+		[ "banana", 0, 4, 0 ],
+		[ "grape", 2, 3, 5 ],
+		[ "pear", 4, 2, 8 ],
+		[ "strawberry", 0, 14, 0 ] ]'&gt;
+	&lt;/sortable-table&gt;
+	</pre>
+
+	<sortable-table columns='["fruit","alice","bill","casey"]' data='[
+		[ "apple", 4, 10, 2 ],
+		[ "banana", 0, 4, 0 ],
+		[ "grape", 2, 3, 5 ],
+		[ "pear", 4, 2, 8 ],
+		[ "strawberry", 0, 14, 0 ]
+	]'>
+	</sortable-table>
+
+	<p>Or mix simple attributes with inlined content:</p>
 
 	<pre>
 	&lt;sortable-table columns='["fruit","alice","bill","casey"]'&gt;
@@ -104,7 +159,7 @@
 	];});
 	</script>
 	<sortable-table id="mytable"></sortable-table>
-		
+
 	<index-links page="data-formats.html"></index-links>
 </body>
 </html>

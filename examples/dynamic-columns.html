@@ -32,7 +32,7 @@
 			</template>
 
 			<template id="fruitsTemplateText">
-				<td style="font-size:20px;line-height:20px;">
+				<td style="font-size:20px;line-height:20px;text-align:left;">
 					<strong>{{value}}</strong>
 				</td>
 			</template>
@@ -70,12 +70,14 @@
 	function toggleTemplate(b){
 		var fruitColumn = columns.filter(function(element){ return element.name == 'fruit'; })[0];
 		//change template used for fruit
-		if(fruitColumn.cellTemplate == 'fruitsTemplateIcon'){
-			fruitColumn.cellTemplate = 'fruitsTemplateText';
-			b.value = 'Use Icon Fruit Template';
-		}else{
-			fruitColumn.cellTemplate = 'fruitsTemplateIcon';
-			b.value = 'Use Text Fruit Template';
+		if(fruitColumn){
+			if(fruitColumn.cellTemplate == 'fruitsTemplateIcon'){
+				fruitColumn.cellTemplate = 'fruitsTemplateText';
+				b.value = 'Use Icon Fruit Template';
+			}else{
+				fruitColumn.cellTemplate = 'fruitsTemplateIcon';
+				b.value = 'Use Text Fruit Template';
+			}
 		}
 	}
 
