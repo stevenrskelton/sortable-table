@@ -18,7 +18,7 @@
 
 	<h2>Dynamic columns</h2>
 	Adding, removing, and reordering <code>columns</code> should not break sort.<br>
-	Changing a `cellTemplate`, and column scoped `headerTemplate`, or `footerTemplate` after load should work correctly.<br>
+	Changing a <code>cellTemplate</code>, and column scoped <code>headerTemplate</code>, or <code>footerTemplate</code> after load should work correctly.<br>
 	Column reordering via drag-and-drop should work correctly.
 
 	<p>
@@ -87,11 +87,11 @@
 		if(columns.length==6){
 			//remove
 			removedColumns = columns.splice(1,3);
-			b.value = 'Show Columns';
+			b.value = 'Show 3 Hidden Columns';
 		}else{
 			//insert
 			columns.splice(1,0,removedColumns[0],removedColumns[1],removedColumns[2]);
-			b.value = 'Hide Columns';
+			b.value = 'Hide Middle 3 Columns';
 		}
 	}
 
