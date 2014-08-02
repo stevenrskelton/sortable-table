@@ -3,58 +3,61 @@
 -->
 
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="json-5.html">
 
 <polymer-element name="sortable-table" attributes="
 	data columns sortColumn sortDescending rowSelection multiSelect selected selectedRowStyle
 	headerTemplate cellTemplate rowTemplate footerTemplate checkbox pageSize page
-	rowEditorTemplate disableColumnMove
+	rowEditorTemplate disableColumnMove theme
 ">
 <template>
-	<style>
-		.sortable-table {
-			width: inherit;
-			border-collapse: collapse;
-		}
-		.sortable-table tr:nth-of-type(even) {
-			background-color: rgba(255,255,224,0.25);
-		}
-		.sortable-table .sortable-table-header,
-		.sortable-table .sortable-table-paging,
-		.sortable-table th {
-			background: rgb(85,85,85);
-			color: white;
-			font-weight: bold;
-			text-align: center;
-		}
-		.sortable-table td,
-		.sortable-table th {
-			padding: 6px;
-			border: 1px solid #ccc;
-			text-align: right;
-		}
-		.sortable-table th {
-			text-align: center;
-			cursor: pointer;
-		}
-		th.over-right {
-			border-right-color: red;
-			background: rgb(25,0,0); /* Older browsers */
-			background: -moz-linear-gradient(left, rgba(85,85,85,1) 50%, rgba(255,0,0,1) 100%); /* FF3.6+ */
-			background: -webkit-linear-gradient(left, rgba(85,85,85,1) 50%, rgba(255,0,0,1) 100%); /* Chrome10+,Safari5.1+ */
-			background: -o-linear-gradient(left, rgba(85,85,85,1) 50%, rgba(255,0,0,1) 100%); /* Opera 11.10+ */
-			background: -ms-linear-gradient(left, rgba(85,85,85,1) 50%, rgba(255,0,0,1) 100%); /* IE10+ */
-			background: linear-gradient(left, rgba(85,85,85,1) 50%, rgba(255,0,0,1) 100%); /* W3C */
-		}
-		th.over-left {
-			border-left-color: red;
-			background: rgb(25,0,0); /* Older browsers */
-			background: -moz-linear-gradient(left, rgba(255,0,0,1) 0%, rgba(85,85,85,1) 50%); /* FF3.6+ */
-			background: -webkit-linear-gradient(left, rgba(255,0,0,1) 0%, rgba(85,85,85,1) 50%); /* Chrome10+,Safari5.1+ */
-			background: -o-linear-gradient(left, rgba(255,0,0,1) 0%, rgba(85,85,85,1) 50%); /* Opera 11.10+ */
-			background: -ms-linear-gradient(left, rgba(255,0,0,1) 0%, rgba(85,85,85,1) 50%); /* IE10+ */
-			background: linear-gradient(left, rgba(255,0,0,1) 0%, rgba(85,85,85,1) 50%); /* W3C */
-		}
-	</style>
+	<template if="{{theme==''}}">
+		<style>
+			.sortable-table {
+				width: inherit;
+				border-collapse: collapse;
+			}
+			.sortable-table tr:nth-of-type(even) {
+				background-color: rgba(255,255,224,0.25);
+			}
+			.sortable-table .sortable-table-header,
+			.sortable-table .sortable-table-paging,
+			.sortable-table th {
+				background: rgb(85,85,85);
+				color: white;
+				font-weight: bold;
+				text-align: center;
+			}
+			.sortable-table td,
+			.sortable-table th {
+				padding: 6px;
+				border: 1px solid #ccc;
+				text-align: right;
+			}
+			.sortable-table th {
+				text-align: center;
+				cursor: pointer;
+			}
+			th.over-right {
+				border-right-color: red;
+				background: rgb(25,0,0); /* Older browsers */
+				background: -moz-linear-gradient(left, rgba(85,85,85,1) 50%, rgba(255,0,0,1) 100%); /* FF3.6+ */
+				background: -webkit-linear-gradient(left, rgba(85,85,85,1) 50%, rgba(255,0,0,1) 100%); /* Chrome10+,Safari5.1+ */
+				background: -o-linear-gradient(left, rgba(85,85,85,1) 50%, rgba(255,0,0,1) 100%); /* Opera 11.10+ */
+				background: -ms-linear-gradient(left, rgba(85,85,85,1) 50%, rgba(255,0,0,1) 100%); /* IE10+ */
+				background: linear-gradient(left, rgba(85,85,85,1) 50%, rgba(255,0,0,1) 100%); /* W3C */
+			}
+			th.over-left {
+				border-left-color: red;
+				background: rgb(25,0,0); /* Older browsers */
+				background: -moz-linear-gradient(left, rgba(255,0,0,1) 0%, rgba(85,85,85,1) 50%); /* FF3.6+ */
+				background: -webkit-linear-gradient(left, rgba(255,0,0,1) 0%, rgba(85,85,85,1) 50%); /* Chrome10+,Safari5.1+ */
+				background: -o-linear-gradient(left, rgba(255,0,0,1) 0%, rgba(85,85,85,1) 50%); /* Opera 11.10+ */
+				background: -ms-linear-gradient(left, rgba(255,0,0,1) 0%, rgba(85,85,85,1) 50%); /* IE10+ */
+				background: linear-gradient(left, rgba(255,0,0,1) 0%, rgba(85,85,85,1) 50%); /* W3C */
+			}
+		</style>
+	</template>
 	<template id="defaultPaging">
 		<div style="text-align:center">
 			<div style="float:left;cursor:pointer;color:{{page==1 ? '#666':'#fff'}}" on-click="{{previousPage}}">Prev</div>
@@ -127,6 +130,7 @@
 </template>
 
 <script>
+    "use strict";
 	function isArray(a){
 		return Object.prototype.toString.call(a)==='[object Array]';
 	}
@@ -247,6 +251,7 @@
 		rowEditorTemplate: null,
 		pageSize: -1,
 		page: 1,
+		theme: '',
 		changeSort: function(e,p){
 			if(e.target.templateInstance.model.column){
 				var clickedSortColumn = e.target.templateInstance.model.column.name;
@@ -341,7 +346,13 @@
 						if(!title || title == '') title = n.textContent.trim();
 						if(title == '') title = name;
 						var formula = n.getAttribute('formula');
-						if(!formula) formula = eval(formula);
+						if(formula){
+							var match = formula.match(/function[^\(]*\(([^\)]*)\)[^\{]*{([^\}]*)\}/);
+							if (match) {
+								var args = match[1].split(',').map(function(arg) { return arg.replace(/\s+/, ''); });
+								formula = new Function(args, match[2]);
+							}
+						}
 						c.push({
 							name: name, title: title, formula: formula,
 							cellTemplate: n.getAttribute('cellTemplate'),
@@ -452,13 +463,20 @@
 				if(element.nodeName == "#text"){
 					var text = element.textContent.trim();
 					if(text.length>0){
+						var data;
 						try{
-							var data = JSON.parse(text);
-							if(data){
-								self.data = data;
-								self.rebuildColumns();
+							data = JSON.parse(text);
+						} catch(e){
+							try {
+								data = JSON5.parse(text);
+							} catch(e){
+								alert('Could not parse data.\n\nArrays, JSON and JSON5 are supported.');
 							}
-						} catch(e){ self.data = []; }
+						}
+						if(data){
+							self.data = data;
+							self.rebuildColumns();
+						}else self.data = [];
 					}
 				}
 			});

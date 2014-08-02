@@ -27,6 +27,8 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 
 > [Paging, Top-N Rows](http://files.stevenskelton.ca/sortable-table/examples/paging.html)
 
+> [Themes](http://files.stevenskelton.ca/sortable-table/examples/themes.html)
+
 ## Usage
 
 1. Add the library using the Javascript package manager [Bower](http://bower.io/):
@@ -106,6 +108,7 @@ Attribute				| Options		| Default									| Description
 `rowEditorTemplate`		| *string*		| `null`									| _See_ [Table § rowEditorTemplate](#table--roweditortemplate)
 `cellTemplate`   		| *string*		| `null`									| _See_ [Table § cellTemplate](#table--celltemplate)
 `headerTemplate`		| *string*		| `null`									| _See_ [Table § headerTemplate](#table--headertemplate)
+`theme`					| *string*		| `null`									| _See_ [Themes](#themes)
 
 ### Data
 
@@ -302,6 +305,16 @@ Example of a `footerTemplate` that computes the sum of a column using a filter n
 	</td>
 </template>
 ```
+
+## Themes
+
+The component can be themed using CSS by following Polymer's [Shadom DOM piercing syntax](http://www.polymer-project.org/docs/polymer/styling.html#sdcss)
+A few full themes are built-in and can be enabled using the `theme` attribute.
+
+Theme					|	Description
+---						|	---
+						|	Default theme.
+extjs					|	Theme modeled after Senca's ExtJs Grid
 
 ## Polymer Filters
 

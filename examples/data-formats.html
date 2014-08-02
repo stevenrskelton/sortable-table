@@ -10,17 +10,20 @@
 	<link rel="import" href="index-links.html">
 	<style>
 		sortable-table { width: 500px; margin-left: 65px; display: block; }
+		h4 { margin-left: 1em; margin-bottom: 0 }
 	</style>
 </head>
 <body unresolved>
 
 	<h2>Data Formats</h2>
 
-	Table data can be loaded using the <code>data</code> attribute, or by in-lining valid <a href="http://json.org/" target="_blank">JSON</a> between the <code>sortable-table</code> tags.
+	Table data can be loaded using the <code>data</code> attribute, or by in-lining valid <a href="http://json.org/" target="_blank">JSON</a> or <a href="http://json5.org/" target="_blank">JSON5</a> between the <code>sortable-table</code> tags.
 
 	<p>
 
 	<h3>Inlined Content</h3>
+
+	<h4>JSON</h4>
 
 	<pre>
 	&lt;sortable-table&gt;
@@ -43,6 +46,32 @@
 		{ "fruit":"grape",		"alice": 2,	"bill": 3,	"casey": 5 },
 		{ "fruit":"pear",		"alice": 4,	"bill": 2,	"casey": 8 },
 		{ "fruit":"strawberry",	"alice": 0,	"bill": 14,	"casey": 0 }
+	]
+	</sortable-table>
+
+	<h4>JSON5</h4>
+
+	<pre>
+	&lt;sortable-table&gt;
+	[
+		{ fruit: 'apple',	alice: 4,	bill: 10,	casey: 2 },
+		{ fruit: 'banana',	alice: 0,	bill: 4,	casey: 0 },
+		{ fruit: 'grape',	alice: 2,	bill: 3,	casey: 5 },
+		{ fruit: 'pear',	alice: 4,	bill: 2,	casey: 8 },
+		{ fruit: 'strawberry',	alice: 0,	bill: 14,	casey: 0 }
+	]
+	&lt;/sortable-table&gt;
+	</pre>
+
+	<p>
+
+	<sortable-table>
+	[
+		{ fruit: 'apple',	alice: 4,	bill: 10,	casey: 2 },
+		{ fruit: 'banana',	alice: 0,	bill: 4,	casey: 0 },
+		{ fruit: 'grape',	alice: 2,	bill: 3,	casey: 5 },
+		{ fruit: 'pear',	alice: 4,	bill: 2,	casey: 8 },
+		{ fruit: 'strawberry',	alice: 0,	bill: 14,	casey: 0 }
 	]
 	</sortable-table>
 
