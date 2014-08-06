@@ -3,13 +3,18 @@
 
 Polymer Web Component that generates a sortable &lt;table&gt; from JSON.
 
+There are many capable Javascript grids, this one aims to leverag browser's native `template` support and be useable without writing a single line of code.
+
 Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 
 [Additional Documentation on Table Sorting](http://stevenskelton.ca/sortable-table-with-polymer-web-components/)
 
 [Additional Documentation on Templates](http://stevenskelton.ca/advanced-uses-polymer-templates/)
 
+
 ## Live Examples
+
+> [Themes](http://files.stevenskelton.ca/sortable-table/examples/themes.html)
 
 > [Data Formats](http://files.stevenskelton.ca/sortable-table/examples/data-formats.html)
 
@@ -27,7 +32,6 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 
 > [Paging, Top-N Rows](http://files.stevenskelton.ca/sortable-table/examples/paging.html)
 
-> [Themes](http://files.stevenskelton.ca/sortable-table/examples/themes.html)
 
 ## Usage
 
@@ -155,7 +159,7 @@ Example of a `rowTemplate` that prints out column values directly from the raw `
 This is useful for rows that need to recalculate when values change:
 
 ```html
-<template id="myRowTemplate_1">
+<template>
 	<td><input type="text" value="{{record.row.number}}"></td>
 	<td>{{record.row.price}}</td>
 	<td>{{record.row.number * record.row.price}}</td>
@@ -166,7 +170,7 @@ Example of a `rowTemplate` that prints out column values based on internally cal
 The `field` names (ie: alice, bill, casey) are the names of the table columns, this is useful where `column` formulas are applied:
 
 ```html
-<template id="myRowTemplate_2">
+<template>
 	<td>{{record.fields.alice.value}}</td>
 	<td>{{record.fields.bill.value}}</td>
 	<td>{{record.fields.casey.value}}</td>
@@ -176,7 +180,7 @@ The `field` names (ie: alice, bill, casey) are the names of the table columns, t
 Example of a `rowTemplate` that uses a template (and a filter `toKeyValueArray` that turns an object into an array):
 
 ```html
-<template id="myRowTemplate_3">
+<template>
 	<template repeat="{{kv in record.fields | toKeyValueArray}}" bind>
 		<td>{{kv.value.value}}</td>
 	</template>
@@ -202,7 +206,7 @@ Template Variable		|	Description
 Example of a `cellTemplate` that displays an image beside the column value:
 
 ```html
-<template id="myCellTemplate">
+<template>
 	<td>
 		<img src="{{row.img}}" alt="{{row.title}}"/>{{value}}
 	</td>
@@ -217,7 +221,7 @@ Renderer for entire `<th></th>` cell. Access to `{{column}}`.  Will be overwritt
 Example of a `headerTemplate` using images to indicate sorting:
 
 ```html
-<template id="myHeaderTemplate">
+<template>
 	<th>
 		{{!(column.title) ? column.name : column.title}}
 		<img hidden?="{{!(sortColumn==column.name && sortDescending)}}" alt="up" />
@@ -232,36 +236,35 @@ Renderer for an additional row which spans all columns at the bottom of the tabl
 There is a built in template called `defaultPaging` that can be used, or a different one can be specified.
 This is independent to [Column § footerTemplate](#column--footertemplate) as they serve different purposes and can be used concurrently.
 
-Template Variable		|	Description
----						|	---
-`{{page}}`				|	Current `page` of data
-`{{pageSize}}`			|	Number of records per page
-`{{previousPage}}`		|	Function to move to the previous page (only if one exists)
-`{{previousPage}}`		|	Function to move to the next page (only if one exists)
-`{{data}}`				|	`data`
+Template Variable			|	Description
+---							|	---
+`{{page}}`					|	Current page number of data
+`{{lastPage}}`				|	Number of pages
+`{{pageSize}}`				|	Number of records per page
+`{{moveToFirstPage}}`		|	Function to move to the first page
+`{{moveToPreviousPage}}`	|	Function to move to the previous page (only if one exists)
+`{{moveToNextPage}}`		|	Function to move to the next page (only if one exists)
+`{{moveToLastPage}}`		|	Function to move to the last page
+`{{data}}`					|	`data`
 
-Example of a `footerTemplate` that allows the user to traverse between pages.
+Example of a simple `footerTemplate` which allows the user to traverse pages.
 
 ```html
-<template id="defaultPaging">
-	<div style="text-align:center">
-		<div on-click="{{previousPage}}" style="
-			float:left;
-			cursor:pointer;
-			color:{{page==1 ? '#666':'#fff'}}
-		">
+<template>
+	<div horizontal layout center>
+		<button
+			disabled?="{{page<=1}}"
+			on-click="{{moveToPreviousPage}}"
+		>
 			Prev
-		</div>
-		<div on-click="{{nextPage}}" style="
-				float:right;
-				cursor:pointer;
-				color:{{page * pageSize > data.length ? '#666':'#fff'}}
-		">
+		</button>
+		<span flex>Page {{page}} of {{lastPage}}</span>
+		<button
+			disabled?="{{page>=lastPage}}"
+			on-click="{{moveToNextPage}}"
+		>
 			Next
-		</div>
-		Page {{page}} of {{
-			(data.length - (data.length % pageSize) + pageSize*1) / pageSize
-		}}
+		</button>
 	</div>
 </template>
 ```
@@ -316,6 +319,8 @@ Theme					|	Description
 						|	Default theme.
 extjs					|	Theme modeled after Senca's ExtJs Grid
 
+This `theme` attribute will likely not make it to the 1.0 Release, hopefully it will be unnecessary as the CSS classes solidify and themes can be applied by simply including a CSS file to override the default style.
+
 ## Polymer Filters
 
 Referencing the [polymer documentation](http://www.polymer-project.org/docs/polymer/expressions.html#filters), filters can be used in expressions to transform data:
@@ -348,9 +353,11 @@ PolymerExpressions.prototype.myFilter = myFilter
 
 ## Todo
 
+- themes (support same UI features other grids do)
 - better support for internal row field change observers
 - better CSS theming
 - integration with IndexedDB
+- user resizeable columns
 - maybe: max and fixed table sizing / scrolling
 - maybe: cell selection
 - maybe: figure out how to sort by selected (click on header of checkbox column?)
@@ -359,7 +366,7 @@ PolymerExpressions.prototype.myFilter = myFilter
 
 ## Bugs
 
-- __Internet Explorer is completely broken until it supports templates__
+- __Internet Explorer & Safari are completely broken until they support templates__
 - header templates not working correctly in Native Support browsers (Chromium)
 - header templates suffer slow performance with polyfil (Firefox)
 

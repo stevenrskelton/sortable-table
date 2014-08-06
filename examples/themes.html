@@ -45,7 +45,7 @@
 	</style>
 
 	<div class="x-panel x-grid x-panel-default-framed" style="width:600px">
-		<sortable-table footerTemplate="extPaging" cellTemplate="alignRight" theme="extjs" style="width:600px;display:inline;" rowSelection>
+		<sortable-table footerTemplate="extPaging" cellTemplate="alignRight" theme="extjs" rowSelection pageSize="5">
 			<sortable-column name="fruit" cellTemplate="fruitsTemplate">Fruit</sortable-column>
 			<sortable-column name="alice">Alice</sortable-column>
 			<sortable-column name="bill">Bill</sortable-column>
@@ -54,12 +54,12 @@
 			<sortable-column name="total" formula="function(row){ return row.alice + row.bill + row.casey; }">Total</sortable-column>
 
 			<template id="alignRight">
-				<td style="text-align:right;padding:5px;">
+				<td style="text-align:right;padding-right:5px;width:75px;vertical-align:middle">
 					{{value}}
 				</td>
 			</template>
 			<template id="fruitsTemplate">
-				<td style="text-align:left">
+				<td style="text-align:left;vertical-align:middle;width:250px;">
 					<fruit-icon fruit="{{value}}"></fruit-icon>
 					{{value}}
 				</td>
@@ -75,9 +75,9 @@
 
 					<span class="x-toolbar-separator-horizontal"></span>
 
-					<button disabled?="{{page * pageSize > data.length}}" on-click="{{moveToNextPage}}">&#9193;</button>
-					<button disabled?="{{page>=lastPage}}" on-click="{{moveToLastPage}}">&#9197;</button>
-					<span flex style="text-align:right;">Displaying {{page > lastPage ? (lastPage-1) * pageSize + 1 : ((page - 1) * pageSize) + 1}} - {{page >= lastPage ? data.length : page * pageSize - 1}} of {{data.length}}</span>
+					<button disabled?="{{page>=lastPage}}" on-click="{{moveToNextPage}}">&#9193;</button>
+					<button disabled?="{{page==lastPage}}" on-click="{{moveToLastPage}}">&#9197;</button>
+					<span flex style="text-align:right;">Displaying {{page > lastPage ? (lastPage-1) * pageSize + 1 : ((page - 1) * pageSize) + 1}} - {{page >= lastPage ? data.length : page * pageSize}} of {{data.length}}</span>
 				</div>
 			</template>
 
@@ -86,7 +86,12 @@
 				{fruit: 'banana', alice: 0, bill: 4, casey: 0 },
 				{fruit: 'grape', alice: 2, bill: 3, casey: 5 },
 				{fruit: 'pear', alice: 4, bill: 2, casey: 8 },
-				{fruit: 'strawberry', alice: 0, bill: 14, casey: 0 }
+				{fruit: 'strawberry', alice: 0, bill: 14, casey: 0 },
+				{fruit: 'apple', alice: 5, bill: 6, casey: 4 },
+				{fruit: 'banana', alice: 3, bill: 9, casey: 2 },
+				{fruit: 'grape', alice: 8, bill: 3, casey: 0 },
+				{fruit: 'pear', alice: 0, bill: 7, casey: 4 },
+				{fruit: 'strawberry', alice: 4, bill: 5, casey: 2 }
 			]
 		</sortable-table>
 	</div>
