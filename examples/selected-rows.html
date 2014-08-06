@@ -10,6 +10,7 @@
 	<link rel="import" href="index-links.html">
 	<style>
 		sortable-table { width: 800px; }
+		.noborder td { border: none; }
 	</style>
 </head>
 <body unresolved>
@@ -36,7 +37,7 @@
 
 	<strong>Selected</strong>
 	<template id="selectedRow" bind>
-		<table>
+		<table class="noborder">
 			<template bind="{{selected}}" if="{{selected.fruit}}">
 				<tr>
 					<td>{ id: {{id}}, </td>

@@ -23,7 +23,14 @@
 	<p>
 
 	<template id="example" bind>
-		<sortable-table data="{{data}}" columns="{{columns}}" rowTemplate="simpleRowTemplate" rowSelection="{{rowSelection}}" multiSelect="{{multiSelect}}" checkbox="{{checkbox}}">
+		<sortable-table rowTemplate="simpleRowTemplate" rowSelection="{{rowSelection}}" multiSelect="{{multiSelect}}" checkbox="{{checkbox}}">
+			<sortable-column name="fruit">Fruit</sortable-column>
+			<sortable-column name="alice">Alice</sortable-column>
+			<sortable-column name="bill">Bill</sortable-column>
+			<sortable-column name="casey">Casey</sortable-column>
+			<sortable-column name="live" formula="function(row){ return +row.alice + +row.bill + +row.casey; }">Template Total</sortable-column>
+			<sortable-column name="total" formula="function(row){ return +row.alice + +row.bill + +row.casey; }">Formula Total</sortable-column>
+
 			<template id="simpleRowTemplate">
 				<td style="text-align:left;font-weight:bold">
 					<template bind="{{record.fields.fruit}}">
@@ -34,9 +41,17 @@
 				<td style="width:10%;"><input type="number" value="{{record.row.alice}}" style="width:100%;text-align:right;font-size:larger;"></td>
 				<td style="width:10%;"><input type="number" value="{{record.row.bill}}" style="width:100%;text-align:right;font-size:larger;"></td>
 				<td style="width:10%;"><input type="number" value="{{record.row.casey}}" style="width:100%;text-align:right;font-size:larger;"></td>
-				<td><b>{{+record.row.alice + +record.row.bill + +record.row.casey}}</b></td>
-				<td><b>{{record.fields.total.value}}</b></td>
+				<td style="text-align:right"><b>{{+record.row.alice + +record.row.bill + +record.row.casey}}</b></td>
+				<td style="text-align:right"><b>{{record.fields.total.value}}</b></td>
 			</template>
+
+			[
+				{fruit: 'apple', alice: 4, bill: 10, casey: 2 },
+				{fruit: 'banana', alice: 0, bill: 4, casey: 0 },
+				{fruit: 'grape', alice: 2, bill: 3, casey: 5 },
+				{fruit: 'pear', alice: 4, bill: 2, casey: 8 },
+				{fruit: 'strawberry', alice: 0, bill: 14, casey: 0 }
+			]
 		</sortable-table>
 		<p>
 		<strong>Enabled Interactions:</strong><br>
@@ -46,27 +61,8 @@
 	</template>
 
 	<script>
-	var fruits = [
-		{fruit: 'apple', alice: 4, bill: 10, casey: 2 },
-		{fruit: 'banana', alice: 0, bill: 4, casey: 0 },
-		{fruit: 'grape', alice: 2, bill: 3, casey: 5 },
-		{fruit: 'pear', alice: 4, bill: 2, casey: 8 },
-		{fruit: 'strawberry', alice: 0, bill: 14, casey: 0 }
-	];
-
-	var columns = [
-		{name:'fruit', title:'Fruit' },
-		{name:'alice', title:'Alice' },
-		{name:'bill', title:'Bill' },
-		{name:'casey', title:'Casey' },
-		{name:'live', title:'Template Total', formula: function(row){ return row.alice*1 + row.bill*1 + row.casey*1; }},
-		{name:'total', title:'Formula Total', formula: function(row){ return row.alice*1 + row.bill*1 + row.casey*1; }}
-	];
-
 	window.addEventListener('polymer-ready', function(){
 		var model = {
-			data: fruits,
-			columns: columns,
 			rowSelection: true,
 			multiSelect: false,
 			checkbox: true

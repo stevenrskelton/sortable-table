@@ -11,30 +11,207 @@
 	rowEditorTemplate disableColumnMove theme
 ">
 <template>
+	<style>
+		.sortable-table {
+			width: inherit;
+			border-collapse: collapse;
+		}
+		.btn {
+			display: inline-block;
+			cursor:pointer;
+		}
+	</style>
+	<template if="{{theme=='extjs'}}">
+		<style>
+			/* th
+			x-unselectable x-column-header x-unselectable-default x-column-header-align-left x-box-item x-column-header-first
+
+			element {
+				width: 286px;
+				margin: 0px;
+				height: auto;
+				left: 0px;
+				top: 0px;
+			}*/
+			tbody tr:nth-of-type(even) td,
+			.x-grid-row-alt .x-grid-cell,.x-grid-row-alt .x-grid-rowwrap-div{
+				background-color:#fafafa
+			}
+			.x-panel-default-framed{
+				border-color:#99bbe8;
+				-moz-border-radius:4px;
+				-webkit-border-radius:4px;
+				-o-border-radius:4px;
+				-ms-border-radius:4px;
+				-khtml-border-radius:4px;
+				border-radius:4px;
+				padding:4px 4px 0px 4px;
+				border-width:1px;
+				border-style:solid;
+				background-color:#dfe8f6;
+			}
+			.x-border-box .x-reset, .x-border-box .x-reset * {
+				box-sizing: border-box;
+			}
+			.x-box-item {
+				position: absolute !important;
+				left: 0px;
+				top: 0px;
+			}
+			.x-unselectable {
+				-moz-user-select: none;
+			}
+			.x-column-header-align-left {
+				text-align: left;
+			}
+			th.sortable-table-header,
+			.x-column-header{
+				padding:0;
+				/*position:absolute;*/
+				overflow:hidden;
+				border-right:1px solid #c5c5c5;
+				border-left:0 none;
+				border-top:0 none;
+				border-bottom:0 none;
+				text-shadow:0 1px 0 rgba(255, 255, 255, 0.3);
+				font:normal 14px tahoma, arial, verdana, sans-serif;
+				background-image:none;
+				background-color:#c5c5c5;
+				background-image:-webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f9f9f9), color-stop(100%, #e3e4e6));
+				background-image:-moz-linear-gradient(top, #f9f9f9,#e3e4e6);
+				background-image:linear-gradient(top, #f9f9f9,#e3e4e6)
+			}
+			.x-border-box .x-reset, .x-border-box .x-reset * {
+				box-sizing: border-box;
+			}
+			tr,
+			.x-grid-row {
+				line-height: 13px;
+				vertical-align: top;
+				padding: 0px 1px;
+				-moz-user-select: none;
+			}
+			.x-grid-table {
+				border-collapse: separate;
+			}
+			table {
+				border-collapse: collapse;
+				border-spacing: 0px;
+			}
+			tbody,
+			.x-panel .x-grid-body{
+				background:white;
+				border-color:#99bbe8;
+				border-style:solid;
+				border-width:1px;
+				border-top-color:#c5c5c5
+			}
+			.x-panel-body-default-framed {
+				color: #000;
+			}
+			tr,
+			.x-grid-row{
+				line-height:13px;
+				vertical-align:top;
+				padding:0 1px;
+				-moz-user-select:none;
+				-khtml-user-select:none;
+				-webkit-user-select:ignore
+			}
+			tr td,
+			.x-grid-row .x-grid-cell{
+				color:null;
+				font:normal 14px tahoma, arial, verdana, sans-serif;
+				border-color:#ededed;
+				border-style:solid;
+				border-width:1px 0;
+				border-top-color:#fafafa
+			}
+			thead tr:first-of-type,
+			.x-grid-header-ct{
+				cursor:default;
+				zoom:1;
+				padding:0;
+				border:1px solid #99bbe8;
+				background-image:none;
+				background-color:#c5c5c5;
+				background-image:-webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f9f9f9), color-stop(100%, #e3e4e6));
+				background-image:-moz-linear-gradient(top, #f9f9f9,#e3e4e6);
+				background-image:linear-gradient(top, #f9f9f9,#e3e4e6)
+			}
+			.x-grid-rowwrap-div{
+				border-width:1px 0;
+				border-color:#ededed;
+				border-style:solid;
+				border-top-color:#fafafa;
+				overflow:hidden
+			}
+
+			.x-grid-row-over .x-grid-cell,.x-grid-row-over .x-grid-rowwrap-div{
+				border-color:#dddddd;
+				background-color:#efefef
+			}
+
+			.x-grid-row-focused .x-grid-cell,.x-grid-row-focused .x-grid-rowwrap-div{
+				border-color:#dddddd;
+				background-color:#efefef
+			}
+			.sortable-table-selected-row td,
+			.x-grid-row-selected .x-grid-cell,.x-grid-row-selected .x-grid-rowwrap-div{
+				border-style:dotted;
+				border-color:#a3bae9;
+				background-color:#dfe8f6 !important
+			}
+			th.sortable-table-header-selected,
+			.x-column-header-over,.x-column-header-sort-ASC,.x-column-header-sort-DESC{
+				border-left-color:#aaccf6;
+				border-right-color:#aaccf6;
+				background-image:none;
+				background-color:#aaccf6;
+				background-image:-webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ebf3fd), color-stop(39%, #ebf3fd), color-stop(40%, #d9e8fb), color-stop(100%, #d9e8fb));
+				background-image:-moz-linear-gradient(top, #ebf3fd,#ebf3fd 39%,#d9e8fb 40%,#d9e8fb);
+				background-image:linear-gradient(top, #ebf3fd,#ebf3fd 39%,#d9e8fb 40%,#d9e8fb)
+			}
+			th.over-right {
+				border-right-color: red;
+				background: rgb(25,0,0); /* Older browsers */
+				background: -moz-linear-gradient(left, rgba(85,85,85,1) 50%, rgba(255,0,0,1) 100%); /* FF3.6+ */
+				background: -webkit-linear-gradient(left, rgba(85,85,85,1) 50%, rgba(255,0,0,1) 100%); /* Chrome10+,Safari5.1+ */
+				background: -o-linear-gradient(left, rgba(85,85,85,1) 50%, rgba(255,0,0,1) 100%); /* Opera 11.10+ */
+				background: -ms-linear-gradient(left, rgba(85,85,85,1) 50%, rgba(255,0,0,1) 100%); /* IE10+ */
+				background: linear-gradient(left, rgba(85,85,85,1) 50%, rgba(255,0,0,1) 100%); /* W3C */
+			}
+			th.over-left {
+				border-left-color: red;
+				background: rgb(25,0,0); /* Older browsers */
+				background: -moz-linear-gradient(left, rgba(255,0,0,1) 0%, rgba(85,85,85,1) 50%); /* FF3.6+ */
+				background: -webkit-linear-gradient(left, rgba(255,0,0,1) 0%, rgba(85,85,85,1) 50%); /* Chrome10+,Safari5.1+ */
+				background: -o-linear-gradient(left, rgba(255,0,0,1) 0%, rgba(85,85,85,1) 50%); /* Opera 11.10+ */
+				background: -ms-linear-gradient(left, rgba(255,0,0,1) 0%, rgba(85,85,85,1) 50%); /* IE10+ */
+				background: linear-gradient(left, rgba(255,0,0,1) 0%, rgba(85,85,85,1) 50%); /* W3C */
+			}
+			</style>
+	</template>
 	<template if="{{theme==''}}">
 		<style>
-			.sortable-table {
-				width: inherit;
-				border-collapse: collapse;
-			}
-			.sortable-table tr:nth-of-type(even) {
+			tr:nth-of-type(even) {
 				background-color: rgba(255,255,224,0.25);
 			}
-			.sortable-table .sortable-table-header,
-			.sortable-table .sortable-table-paging,
-			.sortable-table th {
+			.sortable-table-header,
+			.sortable-table-paging td,
+			th {
 				background: rgb(85,85,85);
 				color: white;
 				font-weight: bold;
 				text-align: center;
 			}
-			.sortable-table td,
-			.sortable-table th {
+			td,
+			th {
 				padding: 6px;
 				border: 1px solid #ccc;
-				text-align: right;
+				/*text-align: right;*/
 			}
-			.sortable-table th {
+			th {
 				text-align: center;
 				cursor: pointer;
 			}
@@ -60,9 +237,9 @@
 	</template>
 	<template id="defaultPaging">
 		<div style="text-align:center">
-			<div style="float:left;cursor:pointer;color:{{page==1 ? '#666':'#fff'}}" on-click="{{previousPage}}">Prev</div>
-			<div style="float:right;cursor:pointer;color:{{page * pageSize > data.length ? '#666':'#fff'}}" on-click="{{nextPage}}">Next</div>
-			Page {{page}} of {{(data.length - (data.length % pageSize) + +pageSize) / pageSize}}
+			<div style="float:left;cursor:pointer;color:{{page==1 ? '#666':'#fff'}}" on-click="{{moveToPreviousPage}}">Prev</div>
+			<div style="float:right;cursor:pointer;color:{{page * pageSize > data.length ? '#666':'#fff'}}" on-click="{{moveToNextPage}}">Next</div>
+			Page {{page}} of {{lastPage}}
 		</div>
 	</template>
 	<table class="sortable-table">
@@ -75,6 +252,7 @@
 					<template ref="{{column.headerTemplate || headerTemplate}}" bind>
 						<th
 							draggable="{{!disableColumnMove && !(rowTemplate || rowEditorTemplate)}}"
+							class="sortable-table-header {{sortColumn==column.name ? 'sortable-table-header-selected' : ''}}"
 							style="{{sortColumn==column.name && sortDescending ? 'text-decoration:overline;' : ''}} {{sortColumn==column.name && !sortDescending ? 'text-decoration:underline;' : ''}}"
 							on-dragstart="{{handleTHDragStart}}"
 							on-dragenter="{{handleTHDragEnter}}"
@@ -89,7 +267,12 @@
 		</thead>
 		<tbody>
 			<template repeat="{{record in data | sortByKey(sortColumn, sortDescending, columns, selected, pageSize, page, editRow, (selected || []).length + data.length, forceRefresh)}}">
-				<tr on-click="{{rowSelect}}" style="{{record.selected && selectedRowStyle ? selectedRowStyle : ''}}" on-dblclick="{{rowEdit}}">
+				<tr
+					on-click="{{rowSelect}}"
+					on-dblclick="{{rowEdit}}"
+					style="{{record.selected && selectedRowStyle ? selectedRowStyle : ''}}"
+					class="{{record.selected ? 'sortable-table-selected-row' : '' }}"
+				>
 					<template if="{{checkbox}}">
 						<td><input type="checkbox" on-change="{{checkedbox}}" checked?="{{record.selected}}"></td>
 					</template>
@@ -121,8 +304,8 @@
 				</tr>
 			</template>
 			<template if="{{footerTemplate && forceRefresh}}">
-				<tr>
-					<td colspan="{{columns.length + (checkbox ? 1 : 0)}}" class="sortable-table-paging"><template ref="{{footerTemplate}}" bind></template></td>
+				<tr class="sortable-table-paging">
+					<td colspan="{{columns.length + (checkbox ? 1 : 0)}}"><template ref="{{footerTemplate}}" bind></template></td>
 				</tr>
 			</template>
 		</tfoot>
@@ -178,8 +361,8 @@
 
 		if(page < 1) page = 1;
 
-		var start = (pageSize > -1) ? Math.min(pageSize * (page - 1), sortedArray.length) : 0;
-		var end = (pageSize > -1) ? Math.min(start + +pageSize, sortedArray.length) : sortedArray.length;
+		var start = (pageSize < Number.MAX_VALUE) ? Math.min(pageSize * (page - 1), sortedArray.length) : 0;
+		var end = (pageSize < Number.MAX_VALUE) ? Math.min(start + +pageSize, sortedArray.length) : sortedArray.length;
 
 		for(var i=start;i<end;i++){
 			var row = sortedArray[i];
@@ -249,8 +432,9 @@
 		footerTemplate: null,
 		rowTemplate: null,
 		rowEditorTemplate: null,
-		pageSize: -1,
+		pageSize: Number.MAX_VALUE,
 		page: 1,
+		lastPage: 1,
 		theme: '',
 		changeSort: function(e,p){
 			if(e.target.templateInstance.model.column){
@@ -332,7 +516,7 @@
 			}
 			this.forceRefresh++;
 		},
-		dataChanged: function(){ this.rebuildColumns(); },
+		dataChanged: function(){ this.rebuildColumns(); this.pageSizeChanged(); },
 		rebuildColumns: function(){
 			if(this.columns.length==0 && this.data && this.data.length > 0){
 				//try and load from DOM
@@ -417,22 +601,12 @@
 		rowEditorTemplateChanged: function(a, t){
 			this.addTemplateIfNotInDocument(t);
 		},
-		importedTemplates: [],
 		addTemplateIfNotInDocument: function(templateId){
 			/* copy template from content into shadow dom */
 			if(templateId && this.shadowRoot && !this.shadowRoot.getElementById(templateId)){
 				var t = this.querySelector('#'+templateId);
-				if(t){
-					this.importedTemplates.push(t);
-					this.shadowRoot.appendChild(t);
-				}else{
-					//TODO: in some cases on refresh, template isn't in ownerDocument.
-					//So store them in an importedTemplates array :(
-					var shadowRoot = this.shadowRoot;
-					this.importedTemplates.forEach(function(it){
-						shadowRoot.appendChild(it);
-					});
-				}
+				if(t) this.shadowRoot.appendChild(t);
+				else alert('Could not find template `' + templateId + '`');
 			}
 		},
 		checkbox: false,
@@ -450,8 +624,13 @@
 				this.selected = [];
 			}
 		},
-		previousPage: function(){ if(this.page > 1) this.page--; },
-		nextPage: function(){ if(this.data.length > this.page * this.pageSize) this.page++; },
+		moveToPreviousPage: function(){ if(this.page > 1) this.page--; },
+		moveToNextPage: function(){ if(this.data.length > this.page * this.pageSize) this.page++; },
+		moveToFirstPage: function(){ this.page = 1; },
+		moveToLastPage: function(){ this.page = this.lastPage; },
+		pageSizeChanged: function(){
+			this.lastPage = Math.max(1,Math.ceil(this.data.length / this.pageSize));
+		},
 		created: function(){
 			if(!this.data) this.data = [];
 			if(!this.columns) this.columns = [];
@@ -480,6 +659,7 @@
 					}
 				}
 			});
+			this.onMutation(this, this.ready);
 		},
 		dragColumn: null,
 		handleTHDragStart: function(e) {
@@ -499,7 +679,22 @@
 		handleTHDragOver: function(e) {
 			if (e.preventDefault) e.preventDefault(); // Necessary. Allows us to drop.
 			e.dataTransfer.dropEffect = 'move';
+			this.handleTHDragEnter(e);
 			return false;
+		},
+		findDropSide: function(e,self){
+			var th = e.target;
+			var index = self.columns.indexOf(th.templateInstance.model.column);
+			if((index < self.dragColumn.index - 1) || (index > self.dragColumn.index + 1)){
+				if(th.getBoundingClientRect){
+					var center = th.clientWidth/2 + th.getBoundingClientRect().left;
+					return (center >= e.clientX) ? -1 : 1;
+				}else return 0;
+			}else if(index == self.dragColumn.index - 1){
+				return -1;
+			}else if(index == self.dragColumn.index + 1){
+				return 1;
+			}
 		},
 		handleTHDragEnter: function(e) {
 			if(this.dragColumn){
@@ -509,9 +704,14 @@
 					th = th.parentElement;
 					if(th.tagName=='TH') this.dragColumn.entered = th;
 				}
-				var index = this.columns.indexOf(th.templateInstance.model.column);
-				if(index < this.dragColumn.index) th.classList.add('over-left');
-				else if(index > this.dragColumn.index) th.classList.add('over-right');
+				var dragSide = this.findDropSide(e,this);
+				if(dragSide<0){
+					th.classList.remove('over-right');
+					th.classList.add('over-left');
+				}else if(dragSide>0){
+					th.classList.remove('over-left');
+					th.classList.add('over-right');
+				}
 			}
 		},
 		handleTHDragLeave: function(e) {
@@ -529,10 +729,10 @@
 			if(this.dragColumn && this.dragColumn.th.parentNode == e.target.parentNode){
 				var newIndex = this.columns.indexOf(e.target.templateInstance.model.column);
 				var oldIndex = +e.dataTransfer.getData('application/sortable-table-column-name');
-				if(newIndex < oldIndex){
-					var b = this.columns.splice(oldIndex,1);
-					this.columns.splice(newIndex,0,b[0]);
-				}else if(newIndex > oldIndex){
+				var dragSide = this.findDropSide(e,this);
+				if(newIndex < oldIndex && dragSide == 1) newIndex++;
+				else if(newIndex > oldIndex && dragSide == -1) newIndex--;
+				if(newIndex != oldIndex){
 					var b = this.columns.splice(oldIndex,1);
 					this.columns.splice(newIndex,0,b[0]);
 				}
