@@ -16,10 +16,6 @@
 			width: inherit;
 			border-collapse: collapse;
 		}
-		.btn {
-			display: inline-block;
-			cursor:pointer;
-		}
 	</style>
 	<template if="{{theme=='extjs'}}">
 		<style>
@@ -97,6 +93,7 @@
 			table {
 				border-collapse: collapse;
 				border-spacing: 0px;
+				font:normal 14px tahoma, arial, verdana, sans-serif;
 			}
 			tbody,
 			.x-panel .x-grid-body{
@@ -109,7 +106,7 @@
 			.x-panel-body-default-framed {
 				color: #000;
 			}
-			tr,
+			tbody tr,
 			.x-grid-row{
 				line-height:13px;
 				vertical-align:top;
@@ -118,10 +115,9 @@
 				-khtml-user-select:none;
 				-webkit-user-select:ignore
 			}
-			tr td,
+			tbody tr td,
 			.x-grid-row .x-grid-cell{
 				color:null;
-				font:normal 14px tahoma, arial, verdana, sans-serif;
 				border-color:#ededed;
 				border-style:solid;
 				border-width:1px 0;
@@ -172,6 +168,11 @@
 				background-image:-moz-linear-gradient(top, #ebf3fd,#ebf3fd 39%,#d9e8fb 40%,#d9e8fb);
 				background-image:linear-gradient(top, #ebf3fd,#ebf3fd 39%,#d9e8fb 40%,#d9e8fb)
 			}
+			.sortable-table-paging {
+				font:normal 12px tahoma, arial, verdana, sans-serif;
+				color: #4c4c4c;
+				cursor:auto;
+			}
 			th.over-right {
 				border-right-color: red;
 				background: rgb(25,0,0); /* Older browsers */
@@ -205,11 +206,9 @@
 				font-weight: bold;
 				text-align: center;
 			}
-			td,
-			th {
+			td, th {
 				padding: 6px;
 				border: 1px solid #ccc;
-				/*text-align: right;*/
 			}
 			th {
 				text-align: center;

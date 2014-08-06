@@ -319,6 +319,8 @@ Theme					|	Description
 						|	Default theme.
 extjs					|	Theme modeled after Senca's ExtJs Grid
 
+![ExtJS Theme](https://raw.githubusercontent.com/stevenrskelton/sortable-table/master/examples/extjs-theme.png "ExtJS Theme")
+
 This `theme` attribute will likely not make it to the 1.0 Release, hopefully it will be unnecessary as the CSS classes solidify and themes can be applied by simply including a CSS file to override the default style.
 
 ## Polymer Filters

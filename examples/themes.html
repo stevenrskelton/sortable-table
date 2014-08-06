@@ -25,7 +25,7 @@
 			-ms-border-radius:4px;
 			-khtml-border-radius:4px;
 			border-radius:4px;
-			padding:4px 4px 4px 4px;
+			padding:4px 4px 0px 4px;
 			border-width:1px;
 			border-style:solid;
 			background-color:#dfe8f6;
@@ -36,16 +36,25 @@
 		}
 		::shadow .x-toolbar-separator-horizontal {
 			margin: 0px 3px 0px 2px;
-			height: 14px;
+			height: 13px;
 			width: 0px;
 			border-left: 1px solid #98C8FF;
 			border-right: 1px solid #FFF;
 			display: inline-block;
 		}
+		::shadow button {
+			padding: 1px;
+			background-color: #dfe8f6;
+			border: 0;
+		}
+		::shadow button:not([disabled]):hover {
+			background-color: #99bbe8;
+			border-radius: 3px;
+		}
 	</style>
 
-	<div class="x-panel x-grid x-panel-default-framed" style="width:600px">
-		<sortable-table footerTemplate="extPaging" cellTemplate="alignRight" theme="extjs" rowSelection pageSize="5">
+	<div class="x-panel x-grid x-panel-default-framed" style="width:700px">
+		<sortable-table footerTemplate="extPaging" cellTemplate="alignRight" headerTemplate="extHeaderSort" theme="extjs" rowSelection pageSize="5">
 			<sortable-column name="fruit" cellTemplate="fruitsTemplate">Fruit</sortable-column>
 			<sortable-column name="alice">Alice</sortable-column>
 			<sortable-column name="bill">Bill</sortable-column>
@@ -54,7 +63,7 @@
 			<sortable-column name="total" formula="function(row){ return row.alice + row.bill + row.casey; }">Total</sortable-column>
 
 			<template id="alignRight">
-				<td style="text-align:right;padding-right:5px;width:75px;vertical-align:middle">
+				<td style="text-align:right;padding-right:5px;width:100px;vertical-align:middle">
 					{{value}}
 				</td>
 			</template>
@@ -71,7 +80,7 @@
 
 					<span class="x-toolbar-separator-horizontal"></span>
 
-					<span>Page <input type="number" style="width:30px;text-align:right" value="{{page}}"> of {{lastPage}}</span>
+					<span style="margin:0 8px">Page <input type="number" style="width:30px;text-align:right" min="1" max="{{lastPage}}" value="{{page}}"> of {{lastPage}}</span>
 
 					<span class="x-toolbar-separator-horizontal"></span>
 
@@ -80,7 +89,22 @@
 					<span flex style="text-align:right;">Displaying {{page > lastPage ? (lastPage-1) * pageSize + 1 : ((page - 1) * pageSize) + 1}} - {{page >= lastPage ? data.length : page * pageSize}} of {{data.length}}</span>
 				</div>
 			</template>
-
+			<template id="extHeaderSort">
+					<th
+						draggable="{{!disableColumnMove && !(rowTemplate || rowEditorTemplate)}}"
+						class="sortable-table-header {{sortColumn==column.name ? 'sortable-table-header-selected' : ''}}"
+						on-dragstart="{{handleTHDragStart}}"
+						on-dragenter="{{handleTHDragEnter}}"
+						on-dragover="{{handleTHDragOver}}"
+						on-dragleave="{{handleTHDragLeave}}"
+						on-drop="{{handleTHDrop}}"
+						on-dragend="{{handleTHDragEnd}}"
+					>
+						{{!(column.title) ? column.name : column.title}}
+					<span style="position:absolute;color:#6190CD" hidden?="{{!(sortColumn==column.name && sortDescending)}}">&#9660;</span>
+					<span style="position:absolute;color:#6190CD" hidden?="{{!(sortColumn==column.name && !sortDescending)}}">&#9650;</span>
+				</th>
+			</template>
 			[
 				{fruit: 'apple', alice: 4, bill: 10, casey: 2 },
 				{fruit: 'banana', alice: 0, bill: 4, casey: 0 },
