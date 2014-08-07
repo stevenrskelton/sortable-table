@@ -12,6 +12,16 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 [Additional Documentation on Templates](http://stevenskelton.ca/advanced-uses-polymer-templates/)
 
 
+## Standard Features
+
+- Clickable column headers to sort
+- Drag-and-Drop column reordering
+- Row editing with Undo functionality
+- Paging
+- HTML templates for real cell values
+- 2-way data binding with the outside world
+
+
 ## Live Examples
 
 > [Data Formats](http://files.stevenskelton.ca/sortable-table/examples/data-formats.html)
