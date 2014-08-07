@@ -5,7 +5,7 @@ Polymer Web Component that generates a sortable &lt;table&gt; from JSON.
 
 There are many capable Javascript grids, this one aims to leverag browser's native `template` support and be useable without writing a single line of code.
 
-Maintained by [Steven Skelton](https://github.com/stevenrskelton)
+_Maintained by [Steven Skelton](https://github.com/stevenrskelton)_
 
 [Additional Documentation on Table Sorting](http://stevenskelton.ca/sortable-table-with-polymer-web-components/)
 
