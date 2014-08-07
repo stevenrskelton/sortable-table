@@ -4,7 +4,7 @@
 Polymer Web Component that generates a sortable &lt;table&gt; from JSON.
 
 There are many capable Javascript grids, this one aims to have all the same features plus:
-- **leverage native browser support for `template to be fully customizable,** and
+- **leverage native browser support for `template` to be fully customizable,** and
 - **be declaratively configurable through DOM and require no Javascript to use**.
 
 ## Built-In Table Features
