@@ -5,19 +5,18 @@ Polymer Web Component that generates a sortable &lt;table&gt; from JSON.
 
 There are many capable Javascript grids, this one aims to:
 - leverage browser's native `template` support,
-- be declaratively configurable through DOM (require no Javascript to use,
-- be as simple to use as other built-in HTML5 elements,
+- be declaratively configurable through DOM (requiring no Javascript to use),
+- be as simple to use as other built-in HTML5 elements, and
 - have all the features of those other grids.
 
-## Standard Features
+## Standard Table Features
 
-- Clickable column headers to sort
-- Drag-and-Drop column reordering
-- Row editing with Undo functionality
-- Paging
-- HTML templates for real cell values
+- Click column headers to sort
+- Drag-and-Drop columns to reorder
+- Edit rows with Undo
+- Row paging
+- Customize with your own HTML templates (Cells, Column Headers and Footers)
 - 2-way data binding with the outside world
-
 
 ## Live Examples
 
@@ -38,7 +37,6 @@ There are many capable Javascript grids, this one aims to:
 > [Dynamically Changing Columns and Templates](http://files.stevenskelton.ca/sortable-table/examples/dynamic-columns.html)
 
 > [Paging, Top-N Rows](http://files.stevenskelton.ca/sortable-table/examples/paging.html)
-
 
 ## Usage
 
