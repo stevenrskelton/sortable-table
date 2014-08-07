@@ -90,7 +90,7 @@ There are many capable Javascript grids, this one aims to have all the same feat
 	Or take advanced control with custom templates and 2-way data binding:
 
 	```html
-	<sortable-table data="{{data}}" columns="{{columns}}">
+	<sortable-table columns="{{columns}}" data="{{data}}">
 		<!-- add templates here -->
 	</sortable-table>
 	```
