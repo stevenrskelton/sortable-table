@@ -454,12 +454,26 @@
 				var model = e.target.templateInstance.model;
 				var row = model.row;
 				if(model.record) row = model.record.row;
-				if(this.editRow == row){
-					this.editRow = null;
-				}else{
+				if(this.editRow != row){
+					this.originalEditRow = JSON.parse(JSON.stringify(row));
 					this.editRow = row;
 				}
 			}
+		},
+		closeEdit: function(e){
+			this.originalEditRow = null;
+			this.editRow = null;
+		},
+		undoEdit: function(e){
+			if(this.originalEditRow && this.editRow){
+				var self = this;
+				Object.getOwnPropertyNames(this.originalEditRow).forEach(function(val, idx, array) {
+					if(self.editRow[val] !== self.originalEditRow[val] && self.originalEditRow[val] != undefined) self.editRow[val] = self.originalEditRow[val];
+				});
+			}
+		},
+		cancelEdit: function(e){
+			this.undoEdit.call(this, e); this.closeEdit.call(this, e);
 		},
 		rowSelect: function(e,p){
 			if(this.rowSelection && e.target.templateInstance && e.target.nodeName!='INPUT'){

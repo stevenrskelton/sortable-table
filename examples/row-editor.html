@@ -28,11 +28,11 @@
 				<td style="width:250px;text-align:left;">
 					<fruit-icon fruit="{{record.row.fruit}}"></fruit-icon>{{record.row.fruit}}
 				</td>
-				<td style="width:20%">{{record.row.alice}}</td>
-				<td style="width:20%">{{record.row.bill}}</td>
-				<td style="width:20%">{{record.row.casey}}</td>
-				<td>{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
-				<td>{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
+				<td style="width:20%;text-align:right">{{record.row.alice}}</td>
+				<td style="width:20%;text-align:right">{{record.row.bill}}</td>
+				<td style="width:20%;text-align:right">{{record.row.casey}}</td>
+				<td style="text-align:right">{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
+				<td style="text-align:right">{{record.row | total(record.row.alice,record.row.bill,record.row.casey)}}</td>
 			</template>
 			<template id="editorTemplate">
 				<td style="width:250px;box-shadow: 0 0 4px 1px #EDC9AF inset;text-align:left;">
@@ -46,11 +46,23 @@
 						<option value="strawberry">strawberry</option>
 					</select>
 				</td>
-				<td style="box-shadow: 0 0 4px 1px #EDC9AF inset;"><input type="number" value="{{record.row.alice}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;"></td>
-				<td style="box-shadow: 0 0 4px 1px #EDC9AF inset;"><input type="number" value="{{record.row.bill}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;"></td>
-				<td style="box-shadow: 0 0 4px 1px #EDC9AF inset;"><input type="number" value="{{record.row.casey}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;"></td>
-				<td style="box-shadow: 0 0 8px 1px #FFEEDD inset;">{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
-				<td style="box-shadow: 0 0 8px 1px #FFEEDD inset;">{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
+				<td style="box-shadow: 0 0 4px 1px #EDC9AF inset;text-align:right;">
+					<input type="number" value="{{record.row.alice}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;">
+					<button on-click="{{closeEdit}}" title="Done" style="vertical-align:top">&#10004;</button>
+					<button on-click="{{cancelEdit}}" title="Undo" style="vertical-align:top">&#10008;</button>
+				</td>
+				<td style="box-shadow: 0 0 4px 1px #EDC9AF inset;text-align:right;">
+					<input type="number" value="{{record.row.bill}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;">
+					<button on-click="{{closeEdit}}" title="Done" style="vertical-align:top">&#10004;</button>
+					<button on-click="{{cancelEdit}}" title="Undo" style="vertical-align:top">&#10008;</button>
+				</td>
+				<td style="box-shadow: 0 0 4px 1px #EDC9AF inset;text-align:right;">
+					<input type="number" value="{{record.row.casey}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;">
+					<button on-click="{{closeEdit}}" title="Done" style="vertical-align:top">&#10004;</button>
+					<button on-click="{{cancelEdit}}" title="Undo" style="vertical-align:top">&#10008;</button>
+				</td>
+				<td style="box-shadow: 0 0 8px 1px #FFEEDD inset;text-align:right;">{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
+				<td style="box-shadow: 0 0 8px 1px #FFEEDD inset;text-align:right;">{{record.row | total(record.row.alice,record.row.bill,record.row.casey)}}</td>
 			</template>
 		</sortable-table>
 	</template>
@@ -74,10 +86,10 @@
 	];
 
 	function average(row){
-		return Math.round((row.alice*1 + row.bill*1 + row.casey*1)/3*10)/10;
+		return Math.round((+row.alice + +row.bill + +row.casey)/3*10)/10;
 	}
 	function total(row){
-		return row.alice + row.bill + row.casey;
+		return +row.alice + +row.bill + +row.casey;
 	}
 	window.addEventListener('polymer-ready', function(){
 		var model = {

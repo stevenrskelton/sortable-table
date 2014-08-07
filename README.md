@@ -24,7 +24,7 @@ Maintained by [Steven Skelton](https://github.com/stevenrskelton)
 
 > [Row Templates](http://files.stevenskelton.ca/sortable-table/examples/row-templates.html)
 
-> [Row Editor](http://files.stevenskelton.ca/sortable-table/examples/row-editor.html)
+> [Row Editor with Undo Functionality](http://files.stevenskelton.ca/sortable-table/examples/row-editor.html)
 
 > [Selected Rows, Multi-Select](http://files.stevenskelton.ca/sortable-table/examples/selected-rows.html)
 
@@ -192,6 +192,18 @@ Example of a `rowTemplate` that uses a template (and a filter `toKeyValueArray` 
 Row template to use for a row in its user editing state.  Only 1 row can be in the editing state at a time.
 Renderer for contents of `<tr></tr>` row when in edit mode (_double clicked_).
 Similiar to [Table § rowTemplate](#table--rowtemplate).
+
+In addtion to the template variables available to `rowTemplate`, there are:
+
+Template Variable		|	Description
+---						|	---
+`{{editRow}}`			|	Current `row` being edited
+`{{originalEditRow}}`	|	Copy of original `editRow` before edit began
+`{{undoEdit}}`			|	Function to restore original values of `editRow`
+`{{closeEdit}}`			|	Function to untoggle edit state
+`{{cancelEdit}}`		|	Function to restore original values of `editRow` and untoggle edit state
+
+It should be noted that all changes are immediate (via 2-way binding). The "undo" functionality attempts to update values back to their original state, any side effects that may have occured cannot be undone.
 
 ##### Table § cellTemplate
 
