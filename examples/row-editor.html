@@ -17,8 +17,9 @@
 
 	<h2>Row Editor</h2>
 
-	<b><em>Double clicking</em></b> on a row should transform the row into the <code>rowEditorTemplate</code>, double clicking again should close.<br>
-	Formulas should work, templates should work, and original data should be modified and reflected in the table.
+	<b><em>Double clicking</em></b> on a row should transform the row into the <code>rowEditorTemplate</code>.<br>
+	Within an edit, formulas should work, templates should work, and original data should be modified and reflected in the table.<br>
+	Undo should undo all columns, as well as footers.
 
 	<p>
 
@@ -42,7 +43,7 @@
 				<td style="text-align:right">{{record.row | total(record.row.alice,record.row.bill,record.row.casey)}}</td>
 			</template>
 			<template id="editor">
-				<td style="width:250px;box-shadow: 0 0 4px 1px #EDC9AF inset;text-align:left;">
+				<td style="width:250px;box-shadow: 0 0 4px 1px #FBBA37 inset;text-align:left;">
 					<fruit-icon fruit="{{record.row.fruit}}"></fruit-icon>
 					<select value="{{record.row.fruit}}" style="width:150px; height:27px; font-size: large; margin:0px;">
 						<option></option>
@@ -53,17 +54,17 @@
 						<option value="strawberry">strawberry</option>
 					</select>
 				</td>
-				<td style="box-shadow: 0 0 4px 1px #EDC9AF inset;text-align:right;">
+				<td style="box-shadow: 0 0 4px 1px #FBBA37 inset;text-align:right;">
 					<input type="number" value="{{record.row.alice}}" on-change="{{refreshFooter}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;">
 					<button on-click="{{closeEdit}}" title="Done" style="vertical-align:top">&#10004;</button>
 					<button on-click="{{cancelEdit}}" title="Undo" style="vertical-align:top">&#10008;</button>
 				</td>
-				<td style="box-shadow: 0 0 4px 1px #EDC9AF inset;text-align:right;">
+				<td style="box-shadow: 0 0 4px 1px #FBBA37 inset;text-align:right;">
 					<input type="number" value="{{record.row.bill}}" on-change="{{refreshFooter}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;">
 					<button on-click="{{closeEdit}}" title="Done" style="vertical-align:top">&#10004;</button>
 					<button on-click="{{cancelEdit}}" title="Undo" style="vertical-align:top">&#10008;</button>
 				</td>
-				<td style="box-shadow: 0 0 4px 1px #EDC9AF inset;text-align:right;">
+				<td style="box-shadow: 0 0 4px 1px #FBBA37 inset;text-align:right;">
 					<input type="number" value="{{record.row.casey}}" on-change="{{refreshFooter}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;">
 					<button on-click="{{closeEdit}}" title="Done" style="vertical-align:top">&#10004;</button>
 					<button on-click="{{cancelEdit}}" title="Undo" style="vertical-align:top">&#10008;</button>
