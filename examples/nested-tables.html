@@ -175,6 +175,9 @@
 	];
 
 	window.addEventListener('polymer-ready', function(){
+		PolymerExpressions.prototype.sum = function(arr) {
+			return Math.round(arr.reduce(function(a, b) { return +a + +b; }, 0));
+		}
 		/* Group by day, for totals */
 		PolymerExpressions.prototype.cube = function(arr) {
 			var c = []

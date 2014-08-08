@@ -38,7 +38,7 @@
 				</th>
 			</template>
 			<template id="hiTemplate">
-				<td style="background-color:FireBrick;font-size:larger;text-align:center;color:white;">
+				<td style="background-color:#EC691B;font-size:larger;text-align:center;color:white;">
 					hi!
 				</td>
 			</template>
@@ -280,6 +280,9 @@
 	}
 
 	window.addEventListener('polymer-ready', function(){
+		PolymerExpressions.prototype.sum = function(arr) {
+			return Math.round(arr.reduce(function(a, b) { return +a + +b; }, 0));
+		}
 		document.getElementById('tableTemplate').model = {
 			data: ostrichMetricsArray,
 			columns: bindData()

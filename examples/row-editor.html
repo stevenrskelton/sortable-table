@@ -22,9 +22,16 @@
 
 	<p>
 
-	<template id="example" bind>
-		<sortable-table data="{{data}}" columns="{{columns}}" rowTemplate="rowTemplate" rowEditorTemplate="editorTemplate">
-			<template id="rowTemplate">
+	<template is="auto-binding">
+		<sortable-table rowTemplate="row" rowEditorTemplate="editor">
+			<sortable-column name="fruit" footerTemplate="footerLabel">Fruit</sortable-column>
+			<sortable-column name="alice" footerTemplate="footer">Alice</sortable-column>
+			<sortable-column name="bill" footerTemplate="footer">Bill</sortable-column>
+			<sortable-column name="casey" footerTemplate="footer">Casey</sortable-column>
+			<sortable-column name="average" formula="average" footerTemplate="footer">Average</sortable-column>
+			<sortable-column name="total" formula="total" footerTemplate="footer">Total</sortable-column>
+
+			<template id="row">
 				<td style="width:250px;text-align:left;">
 					<fruit-icon fruit="{{record.row.fruit}}"></fruit-icon>{{record.row.fruit}}
 				</td>
@@ -34,7 +41,7 @@
 				<td style="text-align:right">{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
 				<td style="text-align:right">{{record.row | total(record.row.alice,record.row.bill,record.row.casey)}}</td>
 			</template>
-			<template id="editorTemplate">
+			<template id="editor">
 				<td style="width:250px;box-shadow: 0 0 4px 1px #EDC9AF inset;text-align:left;">
 					<fruit-icon fruit="{{record.row.fruit}}"></fruit-icon>
 					<select value="{{record.row.fruit}}" style="width:150px; height:27px; font-size: large; margin:0px;">
@@ -47,59 +54,52 @@
 					</select>
 				</td>
 				<td style="box-shadow: 0 0 4px 1px #EDC9AF inset;text-align:right;">
-					<input type="number" value="{{record.row.alice}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;">
+					<input type="number" value="{{record.row.alice}}" on-change="{{refreshFooter}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;">
 					<button on-click="{{closeEdit}}" title="Done" style="vertical-align:top">&#10004;</button>
 					<button on-click="{{cancelEdit}}" title="Undo" style="vertical-align:top">&#10008;</button>
 				</td>
 				<td style="box-shadow: 0 0 4px 1px #EDC9AF inset;text-align:right;">
-					<input type="number" value="{{record.row.bill}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;">
+					<input type="number" value="{{record.row.bill}}" on-change="{{refreshFooter}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;">
 					<button on-click="{{closeEdit}}" title="Done" style="vertical-align:top">&#10004;</button>
 					<button on-click="{{cancelEdit}}" title="Undo" style="vertical-align:top">&#10008;</button>
 				</td>
 				<td style="box-shadow: 0 0 4px 1px #EDC9AF inset;text-align:right;">
-					<input type="number" value="{{record.row.casey}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;">
+					<input type="number" value="{{record.row.casey}}" on-change="{{refreshFooter}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;">
 					<button on-click="{{closeEdit}}" title="Done" style="vertical-align:top">&#10004;</button>
 					<button on-click="{{cancelEdit}}" title="Undo" style="vertical-align:top">&#10008;</button>
 				</td>
 				<td style="box-shadow: 0 0 8px 1px #FFEEDD inset;text-align:right;">{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
 				<td style="box-shadow: 0 0 8px 1px #FFEEDD inset;text-align:right;">{{record.row | total(record.row.alice,record.row.bill,record.row.casey)}}</td>
 			</template>
+			<template id="footer">
+				<td class="sortable-table-footer" style="text-align:right">{{values | sum}}</td>
+			</template>
+			<template id="footerLabel">
+				<td class="sortable-table-footer" style="text-align:left">Total Fruit Per Person</td>
+			</template>
+
+			[
+				{ fruit: 'apple', alice: 4, bill: 10, casey: 2 },
+				{ fruit: 'banana', alice: 0, bill: 4, casey: 0 },
+				{ fruit: 'grape', alice: 2, bill: 3, casey: 5 },
+				{ fruit: 'pear', alice: 4, bill: 2, casey: 8 },
+				{ fruit: 'strawberry', alice: 0, bill: 14, casey: 0 }
+			]
 		</sortable-table>
 	</template>
 
 	<script>
-	var fruits = [
-		{ fruit: 'apple', alice: 4, bill: 10, casey: 2 },
-		{ fruit: 'banana', alice: 0, bill: 4, casey: 0 },
-		{ fruit: 'grape', alice: 2, bill: 3, casey: 5 },
-		{ fruit: 'pear', alice: 4, bill: 2, casey: 8 },
-		{ fruit: 'strawberry', alice: 0, bill: 14, casey: 0 }
-	];
-
-	var columns = [
-		{ name:'fruit', title:'Fruit' },
-		{ name:'alice', title:'Alice' },
-		{ name:'bill', title:'Bill' },
-		{ name:'casey', title:'Casey' },
-		{ name:'average', title:'Average', formula: average },
-		{ name:'total', title:'Total', formula: total }
-	];
-
-	function average(row){
-		return Math.round((+row.alice + +row.bill + +row.casey)/3*10)/10;
-	}
-	function total(row){
-		return +row.alice + +row.bill + +row.casey;
-	}
-	window.addEventListener('polymer-ready', function(){
-		var model = {
-			data: fruits,
-			columns: columns
-		};
-		PolymerExpressions.prototype.average = average;
-		PolymerExpressions.prototype.total = total;
-		document.getElementById('example').model = model;
-	});
+		window.addEventListener('polymer-ready', function(){
+			PolymerExpressions.prototype.average = function(row){
+				return Math.round((+row.alice + +row.bill + +row.casey)/3*10)/10;
+			}
+			PolymerExpressions.prototype.total = function(row){
+				return +row.alice + +row.bill + +row.casey;
+			}
+			PolymerExpressions.prototype.sum = function(arr) {
+				return Math.round(arr.reduce(function(a, b) { return +a + +b; }, 0));
+			}
+		})
 	</script>
 
 	<index-links page="row-editor.html"></index-links>

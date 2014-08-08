@@ -142,12 +142,10 @@
 				border-top-color:#fafafa;
 				overflow:hidden
 			}
-
 			.x-grid-row-over .x-grid-cell,.x-grid-row-over .x-grid-rowwrap-div{
 				border-color:#dddddd;
 				background-color:#efefef
 			}
-
 			.x-grid-row-focused .x-grid-cell,.x-grid-row-focused .x-grid-rowwrap-div{
 				border-color:#dddddd;
 				background-color:#efefef
@@ -174,22 +172,22 @@
 				cursor:auto;
 			}
 			th.over-right {
-				border-right-color: red;
-				background: rgb(25,0,0); /* Older browsers */
-				background: -moz-linear-gradient(left, #ebedec 50%, rgba(255,0,0,1) 100%); /* FF3.6+ */
-				background: -webkit-linear-gradient(left, #ebedec 50%, rgba(255,0,0,1) 100%); /* Chrome10+,Safari5.1+ */
-				background: -o-linear-gradient(left, #ebedec 50%, rgba(255,0,0,1) 100%); /* Opera 11.10+ */
-				background: -ms-linear-gradient(left, #ebedec 50%, rgba(255,0,0,1) 100%); /* IE10+ */
-				background: linear-gradient(left, #ebedec 50%, rgba(255,0,0,1) 100%); /* W3C */
+				border-right-color: #FBBA37;
+				background: #FBBA37; /* Older browsers */
+				background: -moz-linear-gradient(left, #ebedec 50%, #FBBA37 100%); /* FF3.6+ */
+				background: -webkit-linear-gradient(left, #ebedec 50%, #FBBA37 100%); /* Chrome10+,Safari5.1+ */
+				background: -o-linear-gradient(left, #ebedec 50%, #FBBA37 100%); /* Opera 11.10+ */
+				background: -ms-linear-gradient(left, #ebedec 50%, #FBBA37 100%); /* IE10+ */
+				background: linear-gradient(left, #ebedec 50%, #FBBA37 100%); /* W3C */
 			}
 			th.over-left {
-				border-left-color: red;
-				background: rgb(25,0,0); /* Older browsers */
-				background: -moz-linear-gradient(left, rgba(255,0,0,1) 0%, #ebedec 50%); /* FF3.6+ */
-				background: -webkit-linear-gradient(left, rgba(255,0,0,1) 0%, #ebedec 50%); /* Chrome10+,Safari5.1+ */
-				background: -o-linear-gradient(left, rgba(255,0,0,1) 0%, #ebedec 50%); /* Opera 11.10+ */
-				background: -ms-linear-gradient(left, rgba(255,0,0,1) 0%, #ebedec 50%); /* IE10+ */
-				background: linear-gradient(left, rgba(255,0,0,1) 0%, #ebedec 50%); /* W3C */
+				border-left-color: #FBBA37;
+				background: #FBBA37; /* Older browsers */
+				background: -moz-linear-gradient(left, #FBBA37 0%, #ebedec 50%); /* FF3.6+ */
+				background: -webkit-linear-gradient(left, #FBBA37 0%, #ebedec 50%); /* Chrome10+,Safari5.1+ */
+				background: -o-linear-gradient(left, #FBBA37 0%, #ebedec 50%); /* Opera 11.10+ */
+				background: -ms-linear-gradient(left, #FBBA37 0%, #ebedec 50%); /* IE10+ */
+				background: linear-gradient(left, #FBBA37 0%, #ebedec 50%); /* W3C */
 			}
 			</style>
 	</template>
@@ -199,12 +197,16 @@
 				background-color: rgba(255,255,224,0.25);
 			}
 			.sortable-table-header,
-			.sortable-table-paging td,
 			th {
-				background: rgb(85,85,85);
+				background: #0084B4;
 				color: white;
 				font-weight: bold;
 				text-align: center;
+			}
+			.sortable-table-paging td,
+			.sortable-table-footer {
+				background: #F5F8FA;
+				font-weight: bold;
 			}
 			td, th {
 				padding: 6px;
@@ -215,29 +217,29 @@
 				cursor: pointer;
 			}
 			th.over-right {
-				border-right-color: red;
-				background: rgb(25,0,0); /* Older browsers */
-				background: -moz-linear-gradient(left, rgba(85,85,85,1) 50%, rgba(255,0,0,1) 100%); /* FF3.6+ */
-				background: -webkit-linear-gradient(left, rgba(85,85,85,1) 50%, rgba(255,0,0,1) 100%); /* Chrome10+,Safari5.1+ */
-				background: -o-linear-gradient(left, rgba(85,85,85,1) 50%, rgba(255,0,0,1) 100%); /* Opera 11.10+ */
-				background: -ms-linear-gradient(left, rgba(85,85,85,1) 50%, rgba(255,0,0,1) 100%); /* IE10+ */
-				background: linear-gradient(left, rgba(85,85,85,1) 50%, rgba(255,0,0,1) 100%); /* W3C */
+				border-right-color: #FBBA37;
+				background: #FBBA37; /* Older browsers */
+				background: -moz-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* FF3.6+ */
+				background: -webkit-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* Chrome10+,Safari5.1+ */
+				background: -o-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* Opera 11.10+ */
+				background: -ms-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* IE10+ */
+				background: linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* W3C */
 			}
 			th.over-left {
-				border-left-color: red;
-				background: rgb(25,0,0); /* Older browsers */
-				background: -moz-linear-gradient(left, rgba(255,0,0,1) 0%, rgba(85,85,85,1) 50%); /* FF3.6+ */
-				background: -webkit-linear-gradient(left, rgba(255,0,0,1) 0%, rgba(85,85,85,1) 50%); /* Chrome10+,Safari5.1+ */
-				background: -o-linear-gradient(left, rgba(255,0,0,1) 0%, rgba(85,85,85,1) 50%); /* Opera 11.10+ */
-				background: -ms-linear-gradient(left, rgba(255,0,0,1) 0%, rgba(85,85,85,1) 50%); /* IE10+ */
-				background: linear-gradient(left, rgba(255,0,0,1) 0%, rgba(85,85,85,1) 50%); /* W3C */
+				border-left-color: #FBBA37;
+				background: #FBBA37; /* Older browsers */
+				background: -moz-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* FF3.6+ */
+				background: -webkit-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* Chrome10+,Safari5.1+ */
+				background: -o-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* Opera 11.10+ */
+				background: -ms-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* IE10+ */
+				background: linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* W3C */
 			}
 		</style>
 	</template>
 	<template id="defaultPaging">
 		<div style="text-align:center">
-			<div style="float:left;cursor:pointer;color:{{page==1 ? '#666':'#fff'}}" on-click="{{moveToPreviousPage}}">Prev</div>
-			<div style="float:right;cursor:pointer;color:{{page * pageSize > data.length ? '#666':'#fff'}}" on-click="{{moveToNextPage}}">Next</div>
+			<div style="float:left;cursor:pointer;color:{{page==1 ? '#AAA':'#000'}}" on-click="{{moveToPreviousPage}}">Prev</div>
+			<div style="float:right;cursor:pointer;color:{{page * pageSize > data.length ? '#AAA':'#000'}}" on-click="{{moveToNextPage}}">Next</div>
 			Page {{page}} of {{lastPage}}
 		</div>
 	</template>
@@ -288,21 +290,21 @@
 			</template>
 		</tbody>
 		<tfoot>
-			<template if="{{showFooter}}">
+			<template if="{{showFooter && forceFooterRefresh}}">
 				<tr>
 					<template if="{{checkbox}}">
 						<td></td>
 					</template>
 					<template repeat="{{column in columns}}">
-						<template bind="{{templateData in data | selectProperty(column)}}">
+						<template bind="{{templateData in data | selectProperty(column, forceFooterRefresh)}}">
 							<template ref="{{column.footerTemplate}}" bind="{{templateData}}">
-								<td class="sortable-table-header" style="border:0;"></td>
+								<td class="sortable-table-footer" style="border:0;"></td>
 							</template>
 						</template>
 					</template>
 				</tr>
 			</template>
-			<template if="{{footerTemplate && forceRefresh}}">
+			<template if="{{footerTemplate && forceRefresh && forceFooterRefresh}}">
 				<tr class="sortable-table-paging">
 					<td colspan="{{columns.length + (checkbox ? 1 : 0)}}"><template ref="{{footerTemplate}}" bind></template></td>
 				</tr>
@@ -312,115 +314,7 @@
 </template>
 
 <script>
-    "use strict";
-	function isArray(a){
-		return Object.prototype.toString.call(a)==='[object Array]';
-	}
-	PolymerExpressions.prototype.sortByKey = function(array, key, desc, columns, selected, pageSize, page, editRow, l) {
-		//ignore l, it is used to trigger observe.js watch only
-		var sortedArray = array.sort(function(a, b) {
-			var x, y;
-			//determine if computed field
-			var formula = null;
-			for(var i=0;i<columns.length;i++){
-				if(columns[i].name===key){
-					formula = columns[i].formula;
-					break;
-				}
-			}
-			if(formula){
-				x = formula(a);
-				y = formula(b);
-			}else{
-				x = a[key];
-				y = b[key];
-			}
-
-			if(typeof x == 'undefined' || typeof y == 'undefined'){
-				//sort undefined after
-				if(typeof x == 'undefined'){
-					return !desc;
-				}else{
-					return desc;
-				}
-			}else{
-				if (typeof x == "string" && typeof y == "string" && !(x == +x && y == +y)){
-					x = x.toLowerCase();
-					y = y.toLowerCase();
-				}
-				if(desc){
-					return ((x < y) ? 1 : ((x > y) ? -1 : 0));
-				}else{
-					return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-				}
-			}
-		});
-		var records = [];
-		var isMultiSelect = isArray(selected);
-
-		if(page < 1) page = 1;
-
-		var start = (pageSize < Number.MAX_VALUE) ? Math.min(pageSize * (page - 1), sortedArray.length) : 0;
-		var end = (pageSize < Number.MAX_VALUE) ? Math.min(start + +pageSize, sortedArray.length) : sortedArray.length;
-
-		for(var i=start;i<end;i++){
-			var row = sortedArray[i];
-			var isSelected = isMultiSelect ? selected.indexOf(row) > -1 : row == selected;
-			var isEditMode = editRow == row
-			var fields = {};
-			columns.forEach(function(column, index, array) {
-				var value;
-				if(column.formula){
-					value = column.formula(row);
-				}else{
-					value = row[column.name];
-				}
-				fields[column.name] = { value: value, row: row, column: column };
-			});
-			records.push({ selected: isSelected, edit: isEditMode, fields: fields, row: row });
-		}
-		return records;
-	};
-	PolymerExpressions.prototype.selectProperty = function(objects, column) {
-		var arr = [];
-		var rowArr = [];
-		for(var i=0;i<objects.length;i++){
-			var row = objects[i];
-			var value;
-			if(column.formula){
-				value = column.formula(row);
-			}else{
-				value = row[column.name];
-			}
-			rowArr.push(row[column.name]);
-			arr.push(value);
-		}
-		return { values: arr, rowValues: rowArr, column: column };
-	};
-	PolymerExpressions.prototype.contains = function(arr, obj) {
-		if(arr){
-			return arr.indexOf(obj) > -1;
-		}else{
-			return false;
-		}
-	};
-	PolymerExpressions.prototype.sum = function(arr) {
-		return arr.reduce(function(a, b) { return +a + +b; }, 0);
-	};
-	PolymerExpressions.prototype.average = function(arr) {
-		if(arr.length==0){
-			return 0;
-		}else{
-			return arr.reduce(function(a, b) { return +a + +b; }, 0) / arr.length;
-		}
-	};
-	PolymerExpressions.prototype.toKeyValueArray = function(obj) {
-		var arr = [];
-		Object.getOwnPropertyNames(obj).forEach(function(val, idx, array) {
-			arr.push({ key: val, value: obj[val] });
-		});
-		return arr;
-	};
+	"use strict";
 	Polymer('sortable-table', {
 		sortColumn: null,
 		sortDescending: false,
@@ -468,8 +362,10 @@
 			if(this.originalEditRow && this.editRow){
 				var self = this;
 				Object.getOwnPropertyNames(this.originalEditRow).forEach(function(val, idx, array) {
-					if(self.editRow[val] !== self.originalEditRow[val] && self.originalEditRow[val] != undefined) self.editRow[val] = self.originalEditRow[val];
+					if(self.editRow[val] !== self.originalEditRow[val] && self.originalEditRow[val] != undefined)
+						self.editRow[val] = self.originalEditRow[val];
 				});
+				this.refreshFooter();
 			}
 		},
 		cancelEdit: function(e){
@@ -484,7 +380,7 @@
 			}
 		},
 		toggleRowFromSelected: function(row){
-			if(isArray(this.selected)){
+			if(this.isArray(this.selected)){
 				var index = this.selected.indexOf(row);
 				if(index>-1){
 					this.selected.splice(index, 1);
@@ -535,6 +431,7 @@
 				//try and load from DOM
 				var columnNodes = this.querySelectorAll('sortable-column');
 				var c = [];
+				var self = this;
 				if(columnNodes.length>0){
 					[].forEach.call(columnNodes, function(n, index) {
 						var name = n.getAttribute('name');
@@ -548,7 +445,13 @@
 							if (match) {
 								var args = match[1].split(',').map(function(arg) { return arg.replace(/\s+/, ''); });
 								formula = new Function(args, match[2]);
-							}
+							}else if(self[formula]){
+								//not an inlined function, assume it's a member of this
+								formula = self[formula]
+							}else if(PolymerExpressions.prototype[formula]){
+								//not an inlined function, or member of this, check PolymerExpressions.prototype
+								formula = PolymerExpressions.prototype[formula];
+							}else alert('Could not load formula `'+ formula +'` for column `' + name + '`');
 						}
 						c.push({
 							name: name, title: title, formula: formula,
@@ -579,18 +482,18 @@
 		},
 		multiSelectChanged: function(a,val){
 			if(val){
-				if(!isArray(this.selected)){
+				if(!this.isArray(this.selected)){
 					if(this.selected) this.selected = [this.selected];
 					else this.selected = [];
 				}
-			}else if(isArray(this.selected)){
+			}else if(this.isArray(this.selected)){
 				if(this.selected.length > 0) this.selected = this.selected[0];
 				else this.selected = null;
 			}
 		},
 		selectedChanged: function(a,val){
 			if(val!=undefined){
-				if(isArray(val)){
+				if(this.isArray(val)){
 					if(!this.multiSelect) this.multiSelect = true;
 				}else{
 					if(this.multiSelect) this.multiSelect = false;
@@ -674,6 +577,9 @@
 			});
 			this.onMutation(this, this.ready);
 		},
+		/**
+		 *	Column Drag-and-Drop
+		 */
 		dragColumn: null,
 		handleTHDragStart: function(e) {
 			if(!this.disableColumnMove && !(this.rowTemplate || this.rowEditorTemplate)){
@@ -762,7 +668,99 @@
 			}
 			this.dragColumn = null;
 		},
-		forceRefresh: 0 //TODO: clean this up, it was put in to trigger a reprocess on initial load when templates are imported into the shadow dom.
+		/**
+		 *	Template Functions
+		 */
+		isArray: function(a){
+			return Object.prototype.toString.call(a)==='[object Array]';
+		},
+		sortByKey: function(array, key, desc, columns, selected, pageSize, page, editRow, l) {
+			//ignore l, it is used to trigger observe.js watch only
+			var sortedArray = array.sort(function(a, b) {
+				var x, y;
+				//determine if computed field
+				var formula = null;
+				for(var i=0;i<columns.length;i++){
+					if(columns[i].name===key){
+						formula = columns[i].formula;
+						break;
+					}
+				}
+				if(formula){
+					x = formula(a);
+					y = formula(b);
+				}else{
+					x = a[key];
+					y = b[key];
+				}
+
+				if(typeof x == 'undefined' || typeof y == 'undefined'){
+					//sort undefined after
+					if(typeof x == 'undefined'){
+						return !desc;
+					}else{
+						return desc;
+					}
+				}else{
+					if (typeof x == "string" && typeof y == "string" && !(x == +x && y == +y)){
+						x = x.toLowerCase();
+						y = y.toLowerCase();
+					}
+					if(desc){
+						return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+					}else{
+						return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+					}
+				}
+			});
+			var records = [];
+			var isMultiSelect = this.isArray(selected);
+
+			if(page < 1) page = 1;
+
+			var start = (pageSize < Number.MAX_VALUE) ? Math.min(pageSize * (page - 1), sortedArray.length) : 0;
+			var end = (pageSize < Number.MAX_VALUE) ? Math.min(start + +pageSize, sortedArray.length) : sortedArray.length;
+
+			for(var i=start;i<end;i++){
+				var row = sortedArray[i];
+				var isSelected = isMultiSelect ? selected.indexOf(row) > -1 : row == selected;
+				var isEditMode = editRow == row
+				var fields = {};
+				columns.forEach(function(column, index, array) {
+					var value;
+					if(column.formula){
+						value = column.formula(row);
+					}else{
+						value = row[column.name];
+					}
+					fields[column.name] = { value: value, row: row, column: column };
+				});
+				records.push({ selected: isSelected, edit: isEditMode, fields: fields, row: row });
+			}
+			return records;
+		},
+		selectProperty: function(objects, column) {
+			var arr = [];
+			var rowArr = [];
+			for(var i=0;i<objects.length;i++){
+				var row = objects[i];
+				var value;
+				if(column.formula){
+					value = column.formula(row);
+				}else{
+					value = row[column.name];
+				}
+				rowArr.push(row[column.name]);
+				arr.push(value);
+			}
+			return { values: arr, rowValues: rowArr, column: column };
+		},
+		/**
+		  *	TODO: clean this up, it was put in to trigger a reprocess on initial load when templates are imported into the shadow dom.
+		  */
+		forceRefresh: 0,
+		forceFooterRefresh: 1,
+		refreshFooter: function(){ this.forceFooterRefresh++; }
 	});
 </script>
 </polymer-element>
