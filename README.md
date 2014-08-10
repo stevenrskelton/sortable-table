@@ -16,6 +16,16 @@ There are many capable Javascript grids, this one aims to have all the same feat
 - Use of HTML5 `template` for customization (Cells, Column Headers and Footers)
 - 2-way data binding with the outside world
 
+### Themes
+
+#### Bootstrap
+
+![Bootstrap](https://raw.githubusercontent.com/stevenrskelton/sortable-table/master/examples/bootstrap-theme.png "Bootstrap")
+
+#### ExtJS
+
+![ExtJS](https://raw.githubusercontent.com/stevenrskelton/sortable-table/master/examples/extjs-theme.png "ExtJS")
+
 ## Live Examples
 
 > [Data Formats](http://files.stevenskelton.ca/sortable-table/examples/data-formats.html)

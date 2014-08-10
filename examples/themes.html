@@ -10,34 +10,39 @@
 	<link rel="import" href="fruit-icon.html">
 	<link rel="import" href="index-links.html">
 	<link rel="stylesheet" href="../css/extjs.css" shim-shadowdom>
+	<link rel="stylesheet" href="../css/bootstrap.css" shim-shadowdom>
+	<style shim-shadowdom>
+		sortable-table::shadow table > tbody > tr > td.column-alice,
+		sortable-table::shadow table > tbody > tr > td.column-bill,
+		sortable-table::shadow table > tbody > tr > td.column-casey,
+		sortable-table::shadow table > tbody > tr > td.column-average,
+		sortable-table::shadow table > tbody > tr > td.column-total {
+			text-align: right;
+			overflow: hidden;
+			vertical-align: middle;
+			width: 65px;
+		}
+	</style>
 </head>
 <body unresolved>
 
 	<h2>Themes</h2>
 
-	A theme inspired by Sencha's ExtJS Grid.
+	<h3>A theme inspired by Sencha's ExtJS Grid.</h3>
 
-	<style shim-shadowdom>
-		sortable-table::shadow td.column-alice,
-		sortable-table::shadow td.column-bill,
-		sortable-table::shadow td.column-casey,
-		sortable-table::shadow td.column-average,
-		sortable-table::shadow td.column-total {
-			text-align: right;
-			padding-right: 5px;
-			width: 100px;
-			vertical-align: middle;
-		}
-	</style>
+	CSS File: <a href="../css/extjs.css" target="_blank">extjs.css</a>
 
-	<div class="x-panel x-grid x-panel-default-framed" style="width:700px">
-	<!-- cellTemplate="alignRight" theme="extjs"-->
+	<p>
+
+	<div class="x-panel x-grid x-panel-default-framed" style="width:690px">
 		<sortable-table
 			class="extjs"
-			footerTemplate="extPaging"
-			headerTemplate="extHeaderSort"
+			footerTemplate="extjsPaging"
 			rowSelection
 			pageSize="5"
+			checkbox
+			multiSelect
+			noStyle
 		>
 			<sortable-column name="fruit" cellTemplate="fruitsTemplate">Fruit</sortable-column>
 			<sortable-column name="alice">Alice</sortable-column>
@@ -45,62 +50,74 @@
 			<sortable-column name="casey">Casey</sortable-column>
 			<sortable-column name="average" formula="function(row){ return Math.round((row.alice + row.bill + row.casey)/3*10)/10; }">Average</sortable-column>
 			<sortable-column name="total" formula="function(row){ return row.alice + row.bill + row.casey; }">Total</sortable-column>
-<!--
-			<template id="alignRight">
-				<td style="text-align:right;padding-right:5px;width:100px;vertical-align:middle">
-					{{value}}
-				</td>
-			</template>-->
+
 			<template id="fruitsTemplate">
-				<td style="text-align:left;vertical-align:middle;width:250px;">
+				<td style="text-align:left;vertical-align:middle;">
 					<fruit-icon fruit="{{value}}"></fruit-icon>
 					{{value}}
 				</td>
 			</template>
-			<template id="extPaging">
-				<div horizontal layout center>
-					<button disabled?="{{page==1}}" on-click="{{moveToFirstPage}}">&#9198;</button>
-					<button disabled?="{{page<=1}}" on-click="{{moveToPreviousPage}}">&#9194;</button>
 
-					<span class="x-toolbar-separator-horizontal"></span>
-
-					<span style="margin:0 8px">Page <input type="number" style="width:30px;text-align:right" min="1" max="{{lastPage}}" value="{{page}}"> of {{lastPage}}</span>
-
-					<span class="x-toolbar-separator-horizontal"></span>
-
-					<button disabled?="{{page>=lastPage}}" on-click="{{moveToNextPage}}">&#9193;</button>
-					<button disabled?="{{page==lastPage}}" on-click="{{moveToLastPage}}">&#9197;</button>
-					<span flex style="text-align:right;">Displaying {{page > lastPage ? (lastPage-1) * pageSize + 1 : ((page - 1) * pageSize) + 1}} - {{page >= lastPage ? data.length : page * pageSize}} of {{data.length}}</span>
-				</div>
-			</template>
-			<template id="extHeaderSort">
-				<th
-					class="{{sortColumn == column.name && sortDescending ? 'sorted-column-desc' : ''}}
-						{{sortColumn == column.name && !sortDescending ? 'sorted-column-asc' : ''}}"
-					draggable="{{!disableColumnMove && !(rowTemplate || rowEditorTemplate)}}"
-					on-dragstart="{{handleTHDragStart}}"
-					on-dragenter="{{handleTHDragEnter}}"
-					on-dragover="{{handleTHDragOver}}"
-					on-dragleave="{{handleTHDragLeave}}"
-					on-drop="{{handleTHDrop}}"
-					on-dragend="{{handleTHDragEnd}}"
-				>
-					{{!(column.title) ? column.name : column.title}}
-					<span style="position:absolute;color:#6190CD" hidden?="{{!(sortColumn==column.name && sortDescending)}}">&#9660;</span>
-					<span style="position:absolute;color:#6190CD" hidden?="{{!(sortColumn==column.name && !sortDescending)}}">&#9650;</span>
-				</th>
-			</template>
 			[
 				{fruit: 'apple', alice: 4, bill: 10, casey: 2 },
 				{fruit: 'banana', alice: 0, bill: 4, casey: 0 },
 				{fruit: 'grape', alice: 2, bill: 3, casey: 5 },
 				{fruit: 'pear', alice: 4, bill: 2, casey: 8 },
 				{fruit: 'strawberry', alice: 0, bill: 14, casey: 0 },
-				{fruit: 'apple', alice: 5, bill: 6, casey: 4 },
-				{fruit: 'banana', alice: 3, bill: 9, casey: 2 },
-				{fruit: 'grape', alice: 8, bill: 3, casey: 0 },
+				{fruit: 'strawberry', alice: 4, bill: 5, casey: 2 },
 				{fruit: 'pear', alice: 0, bill: 7, casey: 4 },
-				{fruit: 'strawberry', alice: 4, bill: 5, casey: 2 }
+				{fruit: 'banana', alice: 3, bill: 9, casey: 2 },
+				{fruit: 'apple', alice: 5, bill: 6, casey: 4 },
+				{fruit: 'grape', alice: 8, bill: 3, casey: 0 }
+			]
+		</sortable-table>
+	</div>
+
+	<br>
+
+	<hr style="width:75%;height:1px;border:none;color:#DDD;background-color:#DDD;" align="left">
+
+	<h3>A theme inspired by Bootstrap</h3>
+
+	CSS File: <a href="../css/bootstrap.css" target="_blank">bootstrap.css</a>
+
+	<p>
+
+	<div class="panel panel-default" style="width:696px">
+		<sortable-table
+			class="bootstrap"
+			footerTemplate="bootstrapPaging"
+			rowSelection
+			pageSize="5"
+			checkbox
+			multiSelect
+			noStyle
+		>
+			<sortable-column name="fruit" cellTemplate="fruitsTemplate">Fruit</sortable-column>
+			<sortable-column name="alice">Alice</sortable-column>
+			<sortable-column name="bill">Bill</sortable-column>
+			<sortable-column name="casey">Casey</sortable-column>
+			<sortable-column name="average" formula="function(row){ return Math.round((row.alice + row.bill + row.casey)/3*10)/10; }">Average</sortable-column>
+			<sortable-column name="total" formula="function(row){ return row.alice + row.bill + row.casey; }">Total</sortable-column>
+
+			<template id="fruitsTemplate">
+				<td style="text-align:left;vertical-align:middle;width:250px;">
+					<fruit-icon fruit="{{value}}"></fruit-icon>
+					{{value}}
+				</td>
+			</template>
+
+			[
+				{fruit: 'apple', alice: 4, bill: 10, casey: 2 },
+				{fruit: 'banana', alice: 0, bill: 4, casey: 0 },
+				{fruit: 'grape', alice: 2, bill: 3, casey: 5 },
+				{fruit: 'pear', alice: 4, bill: 2, casey: 8 },
+				{fruit: 'strawberry', alice: 0, bill: 14, casey: 0 },
+				{fruit: 'strawberry', alice: 4, bill: 5, casey: 2 },
+				{fruit: 'pear', alice: 0, bill: 7, casey: 4 },
+				{fruit: 'banana', alice: 3, bill: 9, casey: 2 },
+				{fruit: 'apple', alice: 5, bill: 6, casey: 4 },
+				{fruit: 'grape', alice: 8, bill: 3, casey: 0 }
 			]
 		</sortable-table>
 	</div>

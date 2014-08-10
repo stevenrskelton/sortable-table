@@ -7,7 +7,7 @@
 	-ms-border-radius:4px;
 	-khtml-border-radius:4px;
 	border-radius:4px;
-	padding:4px 4px 0px 4px;
+	padding:4px;
 	border-width:1px;
 	border-style:solid;
 	background-color:#dfe8f6;
@@ -36,9 +36,9 @@
 /*x-grid-header-ct-docked-top x-grid-header-ct-default-docked-top x-box-layout-ct*/
 /*x-box-inner*/
 	/*border-width:0*/
-	
 }
 .extjs::shadow thead tr th {
+	cursor: auto;
 	color: #000;
 	/*x-unselectable*/
 	-moz-user-select:none;
@@ -65,7 +65,8 @@
 	/*x-column-header-inner*/
 	white-space:nowrap;
 	line-height:22px;
-	padding:0px 6px
+	padding:0px 6px;
+	text-decoration: none;
 }
 .extjs::shadow thead tr th:hover,
 .extjs::shadow thead th.sorted-column-asc,
@@ -81,6 +82,7 @@
 	background-image:linear-gradient(top, #ebf3fd,#ebf3fd 39%,#d9e8fb 40%,#d9e8fb);
 }
 .extjs::shadow tbody {
+	cursor: auto !important;
 	border-top-width: 1px;
 	border-bottom-width: 1px;
 /*x-panel-body*/
@@ -123,6 +125,15 @@
 	-webkit-user-select:ignore;
 	border: 1px solid #dddddd;
 }
+.extjs::shadow tbody tr td:last-of-type {
+	border-right:1px solid #99bbe8;
+}
+.extjs::shadow tbody tr td:first-of-type {
+	border-left:1px solid #99bbe8;
+}
+.extjs::shadow tbody tr:last-of-type td {
+	border-bottom:1px solid #99bbe8;
+}
 .extjs::shadow tbody tr:nth-of-type(even) {
 	/*x-grid-row-alt*/
 	background-color:#fafafa;
@@ -158,6 +169,7 @@
 	height: 22px;
 	width: 22px;
 	margin: 0 2px;
+	line-height: 11px;
 }
 .extjs::shadow button:not([disabled]):hover {
 	border-color:#81a4d0;
@@ -181,7 +193,6 @@
 	/*x-toolbar*/
 	font-size:11px;
 	border:1px solid;
-	padding:2px 0 2px 2px;
 	/*x-toolbar-default*/
 	border-color:#99bbe8;
 	background-image:none;
@@ -207,6 +218,11 @@
 	/*x-toolbar-text-default x-box-item x-toolbar-item*/
 	margin:0 6px 0 0;
 }
+.extjs::shadow tfoot td {
+	background-color: #D8E4F2;
+	border:1px solid #99bbe8;
+	padding: 2px;
+}
 .extjs::shadow thead th.column-move-right {
 	border-right-color: #FBBA37;
 	background: #FBBA37; /* Older browsers */
@@ -224,4 +240,14 @@
 	background: -o-linear-gradient(left, #FBBA37 0%, #ebedec 50%); /* Opera 11.10+ */
 	background: -ms-linear-gradient(left, #FBBA37 0%, #ebedec 50%); /* IE10+ */
 	background: linear-gradient(left, #FBBA37 0%, #ebedec 50%); /* W3C */
+}
+.extjs::shadow .sortable-table thead th.sorted-column-asc::after {
+	content: '▲';
+	position: absolute;
+	color:#6190CD;
+}
+.extjs::shadow .sortable-table thead th.sorted-column-desc::after {
+	content: '▼';
+	position: absolute;
+	color:#6190CD;
 }

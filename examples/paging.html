@@ -8,10 +8,20 @@
 	<script src="../../platform/platform.js"></script>
 	<link rel="import" href="../sortable-table.html">
 	<link rel="import" href="index-links.html">
-	<link rel="stylesheet" href="../css/default.css" shim-shadowdom>
-	<style>
-		sortable-table { width: 600px }
+
+	<style shim-shadowdom>
 		input, td:nth-of-type(2) { text-align: right }
+		sortable-table { width: 500px; margin-left: 65px; }
+		sortable-table::shadow td.column-alice,
+		sortable-table::shadow td.column-bill,
+		sortable-table::shadow td.column-casey,
+		sortable-table::shadow td.column-average,
+		sortable-table::shadow td.column-total {
+			text-align: right;
+			padding-right: 5px;
+			width: 100px;
+			vertical-align: middle;
+		}
 	</style>
 </head>
 <body unresolved>
@@ -24,52 +34,48 @@
 	<p>
 
 	<template id="example" bind>
-		<sortable-table data="{{data}}" page="{{page}}" pageSize="{{pageSize}}" checkbox multiselect columns="{{columns}}" selected="{{selected}}" sortColumn="fruit" footerTemplate="defaultPaging">
-			<template id="alignLeft">
-				<td style="text-align:left">{{value}}</td>
-			</template>
+		<sortable-table page="{{page}}" pageSize="{{pageSize}}" checkbox multiselect columns="{{columns}}" selected="{{selected}}" sortColumn="fruit" footerTemplate="defaultPaging">
+		[
+			{fruit: 'apple', alice: 4, bill: 10, casey: 2 },
+			{fruit: 'banana', alice: 0, bill: 4, casey: 0 },
+			{fruit: 'grape', alice: 2, bill: 3, casey: 5 },
+			{fruit: 'pear', alice: 4, bill: 2, casey: 8 },
+			{fruit: 'strawberry', alice: 0, bill: 14, casey: 0 },
+			{fruit: 'lemon', alice: 5, bill: 7, casey: 2 },
+			{fruit: 'mango', alice: 3, bill: 1, casey: 7 },
+			{fruit: 'peach', alice: 1, bill: 4, casey: 4 },
+			{fruit: 'watermelon', alice: 3, bill: 8, casey: 8 },
+			{fruit: 'cantaloupe', alice: 2, bill: 9, casey: 12 },
+			{fruit: 'cherry', alice: 3, bill: 5, casey: 3 },
+			{fruit: 'plum', alice: 8, bill: 9, casey: 0 },
+			{fruit: 'kiwi', alice: 4, bill: 4, casey: 2 },
+			{fruit: 'orange', alice: 1, bill: 3, casey: 7 },
+			{fruit: 'raspberry', alice: 4, bill: 4, casey: 5 }
+		]
 		</sortable-table>
 	</template>
 
 	<p>
 
 	<template id="info" bind>
-		<table>
+		<table style="margin-left: 65px;">
 			<tr><td><strong>Page</strong></td><td><input type="number" value="{{page}}"></td></tr>
 			<tr><td><strong>PageSize</strong></td><td><input type="number" value="{{pageSize}}"></td></tr>
 			<tr><td><strong>Total Count</strong></td><td>{{data.length}}</td></tr>
 			<tr><td><strong>Selected</strong></td><td>{{selected.length}}</td></tr>
 		</table>
+		<br>
 		<sortable-table data="{{selected}}"></sortable-table>
 	</template>
 
 	<script>
-	var fruits = [
-		{fruit: 'apple', alice: 4, bill: 10, casey: 2 },
-		{fruit: 'banana', alice: 0, bill: 4, casey: 0 },
-		{fruit: 'grape', alice: 2, bill: 3, casey: 5 },
-		{fruit: 'pear', alice: 4, bill: 2, casey: 8 },
-		{fruit: 'strawberry', alice: 0, bill: 14, casey: 0 },
-		{fruit: 'lemon', alice: 5, bill: 7, casey: 2 },
-		{fruit: 'mango', alice: 3, bill: 1, casey: 7 },
-		{fruit: 'peach', alice: 1, bill: 4, casey: 4 },
-		{fruit: 'watermelon', alice: 3, bill: 8, casey: 8 },
-		{fruit: 'cantaloupe', alice: 2, bill: 9, casey: 12 },
-		{fruit: 'cherry', alice: 3, bill: 5, casey: 3 },
-		{fruit: 'plum', alice: 8, bill: 9, casey: 0 },
-		{fruit: 'kiwi', alice: 4, bill: 4, casey: 2 },
-		{fruit: 'orange', alice: 1, bill: 3, casey: 7 },
-		{fruit: 'raspberry', alice: 4, bill: 4, casey: 5 }
-	];
-
 	window.addEventListener('polymer-ready', function(){
 		var model = {
-			data: fruits,
 			sortColumn: 'fruit',
 			page: 1,
 			pageSize: 7,
 			columns: [
-				{name: 'fruit', cellTemplate: 'alignLeft'},
+				{name: 'fruit'},
 				{name: 'alice'},
 				{name: 'bill'},
 				{name: 'casey'}

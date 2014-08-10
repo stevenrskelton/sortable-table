@@ -8,7 +8,7 @@
 	<script src="../../platform/platform.js"></script>
 	<link rel="import" href="../sortable-table.html">
 	<link rel="import" href="index-links.html">
-	<link rel="stylesheet" href="../css/default.css" shim-shadowdom>
+
 	<style>
 		sortable-table { width: 800px; }
 		.noborder td { border: none; }
@@ -26,7 +26,7 @@
 	<p>
 
 	<template id="example" bind>
-		<sortable-table data="{{data}}" selected="{{selected}}" rowSelection="{{rowSelection}}" multiSelect="{{multiSelect}}" checkbox="{{checkbox}}" selectedRowStyle="{{selectedRowStyle}}"></sortable-table>
+		<sortable-table data="{{data}}" selected="{{selected}}" rowSelection="{{rowSelection}}" multiSelect="{{multiSelect}}" checkbox="{{checkbox}}"></sortable-table>
 		<p>
 		<strong>Enabled Interactions:</strong><br>
 		<input type="checkbox" checked="{{rowSelection}}">rowSelection<br>
@@ -64,15 +64,12 @@
 
 	Fruit: <input type="text" id="selectedFruit" onfocus="this.select();" value="pear"><input type="button" value="select by id or name" onclick="selectFruit();">
 
-	<input type="button" onclick="changeSelectionStyle(this)" style="background-color:rgba(200,96,0,0.2);font-weight:bold;" value="Selected Style">
-	<input type="button" onclick="changeSelectionStyle(this)" style="background-color:rgba(0,96,200,0.2);font-weight:bold;" value="Selected Style">
-
 	<p>
 
-	<h2>Non-Interactive</h2>
+	<h2>Non-Interactive Selection</h2>
 
 	<template id="example2" bind>
-		<sortable-table data="{{data}}" selected="{{selected}}" selectedRowStyle="font-style:italic;font-size:larger;font-weight:bold"></sortable-table>
+		<sortable-table data="{{data}}" selected="{{selected}}"></sortable-table>
 	</template>
 
 	<script>
@@ -88,7 +85,6 @@
 	var model = {
 		data: data,
 		selected: data[1],
-		selectedRowStyle: 'background-color:rgba(200,96,0,0.2);font-weight:bold;',
 		rowSelection: true,
 		multiSelect: false,
 		checkbox: true
@@ -118,9 +114,6 @@
 		else model.selected = selected;
 	}
 
-	function changeSelectionStyle(b){
-		model.selectedRowStyle = b.getAttribute('style');
-	}
 	</script>
 
 	<index-links page="selected-rows.html"></index-links>

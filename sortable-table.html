@@ -5,18 +5,94 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="json-5.html">
 
-<polymer-element name="sortable-table" attributes="
-	data columns sortColumn sortDescending rowSelection multiSelect selected selectedRowStyle
-	headerTemplate cellTemplate rowTemplate footerTemplate checkbox pageSize page
-	rowEditorTemplate disableColumnMove
-">
+<polymer-element
+	name="sortable-table"
+	attributes="
+		data columns sortColumn sortDescending rowSelection multiSelect selected
+		headerTemplate cellTemplate rowTemplate footerTemplate checkbox pageSize page
+		rowEditorTemplate disableColumnMove noStyle"
+	style="display:block"
+>
 <template>
 	<style>
 	.sortable-table {
-		width: inherit;
+		width: 100%;
+		max-width: 100%;
 		border-collapse: collapse;
 	}
+	.checkbox-column {
+		width: 1em;
+		vertical-align: middle;
+	}
+	.checkbox-column input[type=checkbox] {
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	th.checkbox-column input[type=checkbox] {
+		vertical-align: middle;
+	}
 	</style>
+	<template if="{{!noStyle}}">
+		<style>
+			.sortable-table {
+				border-collapse: collapse;
+			}
+			.sortable-table .row-selection {
+				cursor: pointer;
+			}
+			.sortable-table tbody tr:nth-of-type(even) {
+				background-color: rgba(255,255,224,0.25);
+			}
+			.sortable-table tbody td {
+				border: 1px solid #ccc;
+			}
+			.sortable-table tfoot td {
+				border: 1px solid #ccc;
+				background-color: #F5F8FA;
+			}
+			.sortable-table thead th {
+				border: 1px solid #ccc;
+				background-color: #0084B4;
+				color: white;
+				text-align: center;
+				cursor: pointer;
+			}
+			.sortable-table thead th.sorted-column-asc::after {
+				content: '▲';
+				position: absolute;
+			}
+			.sortable-table thead th.sorted-column-desc::after {
+				content: '▼';
+				position: absolute;
+			}
+			.sortable-table thead th.column-move-right {
+				border-right-color: #FBBA37;
+				background: #FBBA37; /* Older browsers */
+				background: -moz-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* FF3.6+ */
+				background: -webkit-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* Chrome10+,Safari5.1+ */
+				background: -o-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* Opera 11.10+ */
+				background: -ms-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* IE10+ */
+				background: linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* W3C */
+			}
+			.sortable-table thead th.column-move-left {
+				border-left-color: #FBBA37;
+				background: #FBBA37; /* Older browsers */
+				background: -moz-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* FF3.6+ */
+				background: -webkit-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* Chrome10+,Safari5.1+ */
+				background: -o-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* Opera 11.10+ */
+				background: -ms-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* IE10+ */
+				background: linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* W3C */
+			}
+			.sortable-table thead th.column-in-move {
+				opacity: 0.4;
+			}
+			.sortable-table tbody tr.selected-row {
+				background-color: rgba(0,96,200,0.2);
+			}
+		</style>
+	</template>
+
 	<template id="defaultPaging">
 		<div style="text-align:center">
 			<div style="float:left;cursor:pointer;color:{{page == 1 ? '#AAA':'#000'}}" on-click="{{moveToPreviousPage}}">Prev</div>
@@ -24,11 +100,41 @@
 			Page {{page}} of {{lastPage}}
 		</div>
 	</template>
+
+	<template id="bootstrapPaging">
+		<div style="width:100%;text-align:center;">
+			<ul class="pagination">
+				<li class="{{page==1 ? 'disabled' : ''}}" on-click="{{moveToFirstPage}}"><a href="#" onclick="return false;">«</a></li>
+				<template repeat="{{i in lastPage | naturalNumbers(page)}}">
+					<li class="{{page==i ? 'active' : ''}}" on-click="{{moveToPage}}"><a href="#" onclick="return false;">{{i}}</a></li>
+				</template>
+				<li class="{{page==lastPage ? 'disabled' : ''}}" on-click="{{moveToLastPage}}"><a href="#" onclick="return false;">»</a></li>
+			</ul>
+		</div>
+	</template>
+
+	<template id="extjsPaging">
+		<div horizontal layout center>
+			<button disabled?="{{page==1}}" on-click="{{moveToFirstPage}}">&#9198;</button>
+			<button disabled?="{{page<=1}}" on-click="{{moveToPreviousPage}}">&#9194;</button>
+
+			<span class="x-toolbar-separator-horizontal"></span>
+
+			<span style="margin:0 8px">Page <input type="number" style="width:30px;text-align:right;margin:0" min="1" max="{{lastPage}}" value="{{page}}"> of {{lastPage}}</span>
+
+			<span class="x-toolbar-separator-horizontal"></span>
+
+			<button disabled?="{{page>=lastPage}}" on-click="{{moveToNextPage}}">&#9193;</button>
+			<button disabled?="{{page==lastPage}}" on-click="{{moveToLastPage}}">&#9197;</button>
+			<span flex style="text-align:right;margin-right:6px;">Displaying {{page > lastPage ? (lastPage-1) * pageSize + 1 : ((page - 1) * pageSize) + 1}} - {{page >= lastPage ? data.length : page * pageSize}} of {{data.length}}</span>
+		</div>
+	</template>
+
 	<table class="sortable-table">
 		<thead>
 			<tr on-click="{{changeSort}}">
 				<template if="{{checkbox}}">
-					<th style="width:1em"><input type="checkbox" on-change="{{checkall}}" hidden?="{{!multiSelect}}" checked?="{{data.length == selected.length}}"></th>
+					<th class="checkbox-column"><input type="checkbox" on-change="{{checkall}}" hidden?="{{!multiSelect}}" checked?="{{data.length == selected.length}}"></th>
 				</template>
 				<template repeat="{{column in columns}}">
 					<template ref="{{column.headerTemplate || headerTemplate}}" bind>
@@ -56,7 +162,7 @@
 					on-dblclick="{{rowEdit}}"
 				>
 					<template if="{{checkbox}}">
-						<td><input type="checkbox" on-change="{{checkedbox}}" checked?="{{record.selected}}"></td>
+						<td class="checkbox-column"><input type="checkbox" on-change="{{checkedbox}}" checked?="{{record.selected}}"></td>
 					</template>
 					<template if="{{record.edit}}" ref="{{rowEditorTemplate}}"></template>
 					<template if="{{!record.edit}}" ref="{{rowTemplate}}" bind>
@@ -102,6 +208,7 @@
 		headerTemplate: null,
 		lastPage: 1,
 		multiSelect: false,
+		noStyle: false,
 		page: 1,
 		pageSize: Number.MAX_VALUE,
 		rowEditorTemplate: null,
@@ -255,8 +362,11 @@
 			this.forceRefresh++;
 		},
 		rowSelectionChanged: function(a,val){
-			var table = this.shadowRoot.querySelector('table')
-			if(table) table.style.cursor = (val ? 'pointer' : 'auto');
+			var table = this.shadowRoot.querySelector('tbody')
+			if(table){
+				if(val) table.classList.add('row-selection');
+				else table.classList.remove('row-selection');
+			}
 		},
 		multiSelectChanged: function(a,val){
 			if(val){
@@ -337,6 +447,7 @@
 		/**
 		 *	Row Editor helper functions
 		 */
+		moveToPage: function(e){ this.page = Number(e.currentTarget.textContent); },
 		moveToPreviousPage: function(){ if(this.page > 1) this.page--; },
 		moveToNextPage: function(){ if(this.data.length > this.page * this.pageSize) this.page++; },
 		moveToFirstPage: function(){ this.page = 1; },
@@ -536,6 +647,19 @@
 				arr.push(value);
 			}
 			return { values: arr, rowValues: rowArr, column: column };
+		},
+		naturalNumbers: function(n,mid){
+			if(mid !== null){
+				var range = 4;
+				var start = Math.max(1, mid-range);
+				var end = Math.min(n, mid+range);
+			}else{
+				var start = 1;
+				var end = n;
+			}
+			var arr = [];
+			for(var i=start;i<=end;i++) arr.push(i);
+			return arr;
 		},
 		/**
 		  *	TODO: clean this up, it was put in to trigger a reprocess on initial load when templates are imported into the shadow dom.

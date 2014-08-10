@@ -9,9 +9,16 @@
 	<link rel="import" href="../sortable-table.html">
 	<link rel="import" href="fruit-icon.html">
 	<link rel="import" href="index-links.html">
-	<link rel="stylesheet" href="../css/default.css" shim-shadowdom>
-	<style>
-		sortable-table { width: 100% }
+
+	<style shim-shadowdom>
+		sortable-table /deep/ td.column-apple,
+		sortable-table /deep/ td.column-banana,
+		sortable-table /deep/ td.column-pear,
+		sortable-table /deep/ td.column-grape,
+		sortable-table /deep/ td.column-strawberry,
+		sortable-table /deep/ td.column-total {
+			text-align: right;
+		}
 	</style>
 </head>
 <body unresolved>
@@ -20,7 +27,7 @@
 	In lieu of built in groupby functionality, it should be possible to nest sortable tables into other sortable tables.<br/>
 	The <code>columns</code> contains a nested <code>columns</code> property, and we can link all nested table's sort field by storing it
 	in the nested <code>columns</code>.<br>
-	<em style="color:red">Slow in Firefox because of use of a cellHeader.</em>
+
 	<p>
 
 	<template id="example" bind>
@@ -45,7 +52,7 @@
 
 						<!-- template to print fruit icon in header -->
 						<template id="fruitsTemplate">
-							<th style="{{sortColumn==column.name && sortDescending ? 'text-decoration:overline;' : ''}}
+							<th class="column-{{column.name}}" style="{{sortColumn==column.name && sortDescending ? 'text-decoration:overline;' : ''}}
 							{{sortColumn==column.name && !sortDescending ? 'text-decoration:underline;' : ''}}">
 								<fruit-icon fruit="{{column.name}}"></fruit-icon>
 								{{column.name}}

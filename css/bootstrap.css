@@ -1,0 +1,197 @@
+.panel {
+	margin-bottom:20px;
+	background-color:#fff;
+	border:1px solid transparent;
+	border-radius:4px;
+	-webkit-box-shadow:0 1px 1px rgba(0,0,0,.05);
+	box-shadow:0 1px 1px rgba(0,0,0,.05);
+}
+.panel-default{
+	border-color:#ddd
+}
+
+.bootstrap::shadow table > tbody > tr:nth-child(odd),
+.bootstrap::shadow table > tbody > tr:nth-child(odd) {
+	background-color:#fefefe
+}
+
+/*.bootstrap::shadow .table-hover > tbody > tr:hover > td,
+.bootstrap::shadow .table-hover > tbody > tr:hover > th*/
+.bootstrap::shadow table > tbody > tr:hover {
+	background-color:#f5f5f5;
+}
+
+.bootstrap::shadow .pagination {
+	display:inline-block;
+	padding-left:0;
+	margin: 5px 0 0 0;
+	border-radius:4px;
+}
+
+.bootstrap::shadow .pagination > li {
+	display:inline;
+}
+
+.bootstrap::shadow .pagination > li > a,
+.bootstrap::shadow .pagination > li > span {
+	position:relative;
+	float:left;
+	padding:6px 12px;
+	margin-left:-1px;
+	line-height:1.42857143;
+	color:#428bca;
+	text-decoration:none;
+	background-color:#fff;
+	border:1px solid #ddd;
+}
+
+.bootstrap::shadow .pagination > li:first-child > a,
+.bootstrap::shadow .pagination > li:first-child > span {
+	margin-left:0;
+	border-top-left-radius:4px;
+	border-bottom-left-radius:4px;
+}
+
+.bootstrap::shadow .pagination > li:last-child > a,
+.bootstrap::shadow .pagination > li:last-child > span {
+	border-top-right-radius:4px;
+	border-bottom-right-radius:4px;
+}
+
+.bootstrap::shadow .pagination > li > a:hover,.pagination > li > span:hover,
+.bootstrap::shadow .pagination > li > a:focus,.pagination > li > span:focus {
+	color:#2a6496;
+	background-color:#eee;
+	border-color:#ddd;
+}
+
+.bootstrap::shadow .pagination > .active > a,.pagination > .active > span,
+.bootstrap::shadow .pagination > .active > a:hover,.pagination > .active > span:hover,
+.bootstrap::shadow .pagination > .active > a:focus,.pagination > .active > span:focus {
+	z-index:2;
+	color:#fff;
+	cursor:default;
+	background-color:#428bca;
+	border-color:#428bca;
+}
+
+.bootstrap::shadow .pagination > .disabled > span,
+.bootstrap::shadow .pagination > .disabled > span:hover,
+.bootstrap::shadow .pagination > .disabled > span:focus,.pagination > .disabled > a,
+.bootstrap::shadow .pagination > .disabled > a:hover,
+.bootstrap::shadow .pagination > .disabled > a:focus {
+	color:#777;
+	cursor:not-allowed;
+	background-color:#fff;
+	border-color:#ddd;
+}
+
+.bootstrap::shadow .pagination-lg > li > a,
+.bootstrap::shadow .pagination-lg > li > span {
+	padding:10px 16px;
+	font-size:18px;
+}
+
+.bootstrap::shadow .pagination-lg > li:first-child > a,
+.bootstrap::shadow .pagination-lg > li:first-child > span {
+	border-top-left-radius:6px;
+	border-bottom-left-radius:6px;
+}
+
+.bootstrap::shadow .pagination-lg > li:last-child > a,
+.bootstrap::shadow .pagination-lg > li:last-child > span {
+	border-top-right-radius:6px;
+	border-bottom-right-radius:6px;
+}
+
+.bootstrap::shadow .pagination-sm > li > a,
+.bootstrap::shadow .pagination-sm > li > span {
+	padding:5px 10px;
+	font-size:12px;
+}
+
+.bootstrap::shadow .pagination-sm > li:first-child > a,
+.bootstrap::shadow .pagination-sm > li:first-child > span {
+	border-top-left-radius:3px;
+	border-bottom-left-radius:3px;
+}
+
+.bootstrap::shadow .pagination-sm > li:last-child > a,
+.bootstrap::shadow .pagination-sm > li:last-child > span {
+	border-top-right-radius:3px;
+	border-bottom-right-radius:3px;
+} 
+
+.bootstrap::shadow tr {
+	font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size:14px;
+	line-height:1.42857143;
+	color:#333;
+}
+
+
+.bootstrap::shadow th {
+	text-align:left;
+}
+
+.bootstrap::shadow table {
+	width:100%;
+	max-width:100%;
+}
+
+.bootstrap::shadow table > thead > tr > th,
+.bootstrap::shadow table > tbody > tr > th,
+.bootstrap::shadow table > thead > tr > td,
+.bootstrap::shadow table > tbody > tr > td {
+	padding:8px;
+	line-height:1.42857143;
+	vertical-align:top;
+	border-top:1px solid #ddd;
+}
+.bootstrap::shadow table > tfoot > tr > th,
+.bootstrap::shadow table > tfoot > tr > td {
+	line-height:1.42857143;
+	border-top:1px solid #ddd;
+}
+
+.bootstrap::shadow table > thead > tr > th {
+	vertical-align:bottom;
+	border-bottom:2px solid #ddd;
+}
+
+.bootstrap::shadow table > caption+thead > tr:first-child > th,
+.bootstrap::shadow table > colgroup+thead > tr:first-child > th,
+.bootstrap::shadow table > thead:first-child > tr:first-child > th,
+.bootstrap::shadow table > caption+thead > tr:first-child > td,
+.bootstrap::shadow table > colgroup+thead > tr:first-child > td,
+.bootstrap::shadow table > thead:first-child > tr:first-child > td {
+	border-top:0;
+}
+
+.bootstrap::shadow table > tbody+tbody {
+	border-top:2px solid #ddd;
+}
+
+.bootstrap::shadow tbody tr.selected-row {
+/*	background-color: #428BCA !important;
+	color: white !important;*/
+	background-color: #DFF0D8 !important;
+}
+
+.bootstrap::shadow thead th.column-move-right {
+	background-color: #D9EDF7 !important;
+}
+.bootstrap::shadow thead th.column-move-left {
+	background-color: #D9EDF7 !important;
+}
+.bootstrap::shadow .checkbox-column {
+	vertical-align: middle !important;
+}
+.bootstrap::shadow .sortable-table thead th.sorted-column-asc::after {
+	content: '▲';
+	position: absolute;
+}
+.bootstrap::shadow .sortable-table thead th.sorted-column-desc::after {
+	content: '▼';
+	position: absolute;
+}
