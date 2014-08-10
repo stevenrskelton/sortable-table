@@ -10,8 +10,18 @@
 	<link rel="import" href="fruit-icon.html">
 	<link rel="import" href="json-stringify.html">
 	<link rel="import" href="index-links.html">
-	<style>
-		sortable-table { width: 800px; }
+	<link rel="stylesheet" href="../css/default.css" shim-shadowdom>
+	<style shim-shadowdom>
+		sortable-table { width: 500px; margin-left: 65px; display: block; }
+		sortable-table::shadow td.column-alice,
+		sortable-table::shadow td.column-bill,
+		sortable-table::shadow td.column-casey,
+		sortable-table::shadow td.column-average,
+		sortable-table::shadow td.column-total {
+			text-align: right;
+			padding-right: 5px;
+			height: 30px;
+		}
 	</style>
 </head>
 <body unresolved>

@@ -1,0 +1,50 @@
+::shadow.sortable-table::shadow {
+	border-collapse: collapse;
+}
+::shadow.sortable-table::shadow tbody tr:nth-of-type(even) {
+	background-color: rgba(255,255,224,0.25);
+}
+.sortable-table::shadow tbody td {
+	border: 1px solid #ccc;
+}
+.sortable-table::shadow tfoot td {
+	border: 1px solid #ccc;
+	background-color: #F5F8FA;
+}
+.sortable-table::shadow thead th {
+	border: 1px solid #ccc;
+	background-color: #0084B4;
+	color: white;
+	text-align: center;
+	cursor: pointer;
+}
+.sortable-table::shadow thead th.sorted-column-asc {
+	text-decoration: overline;
+}
+.sortable-table::shadow thead th.sorted-column-desc {
+	text-decoration: underline;
+}
+.sortable-table::shadow thead th.column-move-right {
+	border-right-color: #FBBA37;
+	background: #FBBA37; /* Older browsers */
+	background: -moz-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* FF3.6+ */
+	background: -webkit-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* IE10+ */
+	background: linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* W3C */
+}
+.sortable-table::shadow thead th.column-move-left {
+	border-left-color: #FBBA37;
+	background: #FBBA37; /* Older browsers */
+	background: -moz-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* FF3.6+ */
+	background: -webkit-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* IE10+ */
+	background: linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* W3C */
+}
+.sortable-table::shadow thead th.column-in-move {
+	opacity: 0.4;
+}
+.sortable-table::shadow tbody tr.selected-row {
+	background-color: rgba(0,96,200,0.2);
+} 
