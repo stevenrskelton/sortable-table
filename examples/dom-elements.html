@@ -8,7 +8,9 @@
 	<script src="../../platform/platform.js"></script>
 	<link rel="import" href="../sortable-table.html">
 	<link rel="import" href="fruit-icon.html">
-	<link rel="import" href="index-links.html">
+	<link rel="import" href="index-links.html"><!--
+	<link rel="stylesheet" href="../css/extjs.css" shim-shadowdom>
+	<link rel="stylesheet" href="../css/bootstrap.css" shim-shadowdom>-->
 
 	<style shim-shadowdom>
 		sortable-table { width: 500px; margin-left: 65px; }
@@ -25,7 +27,23 @@
 	</style>
 </head>
 <body unresolved>
-
+<!--
+	<input type="radio" name="theme" onclick="" id="default" value="Default" onchange="change('')"><label for="default">Default</label>
+	<input type="radio" name="theme" onclick="" id="extjs" value="ExtJS" onchange="change('extjs')"><label for="extjs">ExtJS</label>
+	<input type="radio" name="theme" onclick="" id="bootstrap" value="Bootstrap" onchange="change('bootstrap')"><label for="bootstrap">Bootstrap</label>
+<script>
+function change(t){
+	[].forEach.call(document.querySelectorAll('sortable-table'), function(element){
+		element.classList.remove('extjs');
+		element.classList.remove('bootstrap');
+		if(t){
+			element.classList.add(t);
+			element.noStyle = true;
+		}else element.noStyle = false;
+	});
+};
+</script>
+-->
 	<h2>DOM Elements</h2>
 
 	The <code>sortable-column</code> elements should work the same way as a <code>columns</code> array.
@@ -51,7 +69,7 @@
 	&lt;/sortable-table&gt;
 	</pre>
 
-	<sortable-table>
+	<sortable-table defaultStyle class="panel panel-default x-panel x-grid x-panel-default-framed">
 		<sortable-column name="fruit" cellTemplate="fruitsTemplate">Type of Fruit</sortable-column>
 		<sortable-column name="alice"></sortable-column>
 		<sortable-column name="bill"></sortable-column>
@@ -89,7 +107,7 @@
 	&lt;/sortable-table&gt;
 	</pre>
 
-	<sortable-table>
+	<sortable-table defaultStyle>
 		[[ "apple", 4, 10, 2 ],
 		 [ "banana", 0, 4, 0 ],
 		 [ "grape", 2, 3, 5 ],

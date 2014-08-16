@@ -11,7 +11,6 @@
 
 	<style>
 		sortable-table { width: 800px; }
-		.noborder td { border: none; }
 	</style>
 </head>
 <body unresolved>
@@ -26,7 +25,7 @@
 	<p>
 
 	<template id="example" bind>
-		<sortable-table data="{{data}}" selected="{{selected}}" rowSelection="{{rowSelection}}" multiSelect="{{multiSelect}}" checkbox="{{checkbox}}"></sortable-table>
+		<sortable-table defaultStyle data="{{data}}" selected="{{selected}}" rowSelection="{{rowSelection}}" multiSelect="{{multiSelect}}" checkbox="{{checkbox}}"></sortable-table>
 		<p>
 		<strong>Enabled Interactions:</strong><br>
 		<input type="checkbox" checked="{{rowSelection}}">rowSelection<br>
@@ -38,7 +37,7 @@
 
 	<strong>Selected</strong>
 	<template id="selectedRow" bind>
-		<table class="noborder">
+		<table>
 			<template bind="{{selected}}" if="{{selected.fruit}}">
 				<tr>
 					<td>{ id: {{id}}, </td>
@@ -69,7 +68,7 @@
 	<h2>Non-Interactive Selection</h2>
 
 	<template id="example2" bind>
-		<sortable-table data="{{data}}" selected="{{selected}}"></sortable-table>
+		<sortable-table defaultStyle data="{{data}}" selected="{{selected}}"></sortable-table>
 	</template>
 
 	<script>

@@ -11,6 +11,7 @@
 	<link rel="import" href="index-links.html">
 	<link rel="stylesheet" href="../css/extjs.css" shim-shadowdom>
 	<link rel="stylesheet" href="../css/bootstrap.css" shim-shadowdom>
+	<link rel="stylesheet" href="../css/espn.css" shim-shadowdom>
 	<style shim-shadowdom>
 		sortable-table::shadow table > tbody > tr > td.column-alice,
 		sortable-table::shadow table > tbody > tr > td.column-bill,
@@ -22,15 +23,97 @@
 			vertical-align: middle;
 			width: 65px;
 		}
+		sortable-table.espn::shadow table > tbody > tr > td.column-alice,
+		sortable-table.espn::shadow table > tbody > tr > td.column-bill,
+		sortable-table.espn::shadow table > tbody > tr > td.column-casey,
+		sortable-table.espn::shadow table > tbody > tr > td.column-average,
+		sortable-table.espn::shadow table > tbody > tr > td.column-total {
+			text-align: right;
+		}
 	</style>
 </head>
 <body unresolved>
 
 	<h2>Themes</h2>
 
+	CSS should be used to define the presentation of a <code>sortable-table</code>, and a <code>template</code> should be used to define any custom content.<br>
+	A theme is a combination of presentation and content: CSS defines the overall look, while a collection of templates may be used to define certain behaviours such as paging toolbars.
+
+	<p>
+
+	It is easy enough to define a custom theme, as long as one understands the proper syntax to affect <a href="https://w3c.github.io/webcomponents/spec/shadow/" target="_blank" alt="shadow dom">Shadow DOM</a>.
+
+	<p>
+
+	<hr style="width:75%;height:1px;border:none;color:#DDD;background-color:#DDD;" align="left">
+
+	<h3>A theme inspired by Bootstrap</h3>
+
+	<pre>&lt;link rel="stylesheet" href="<a href="../css/bootstrap.css" target="_blank">../css/bootstrap.css</a>" <strong>shim-shadowdom</strong>&gt;</pre>
+
+	<pre>
+&lt;div class="panel panel-default"&gt;
+	&lt;sortable-table class="bootstrap" footerTemplate="bootstrapPaging"&gt;
+		&lt;!-- data --&gt;
+	&lt;/sortable-table&gt;
+&lt;/div&gt;
+	</pre>
+
+	<p>
+
+	<div class="panel panel-default" style="width:721px">
+		<sortable-table
+			class="bootstrap"
+			footerTemplate="bootstrapPaging"
+			rowSelection
+			pageSize="5"
+			checkbox
+			multiSelect
+		>
+			<sortable-column name="fruit" cellTemplate="fruitsTemplate">Fruit</sortable-column>
+			<sortable-column name="alice">Alice</sortable-column>
+			<sortable-column name="bill">Bill</sortable-column>
+			<sortable-column name="casey">Casey</sortable-column>
+			<sortable-column name="average" formula="function(row){ return Math.round((row.alice + row.bill + row.casey)/3*10)/10; }">Average</sortable-column>
+			<sortable-column name="total" formula="function(row){ return row.alice + row.bill + row.casey; }">Total</sortable-column>
+
+			<template id="fruitsTemplate">
+				<td style="text-align:left;vertical-align:middle;width:250px;">
+					<fruit-icon fruit="{{value}}"></fruit-icon>
+					{{value}}
+				</td>
+			</template>
+
+			[
+				{fruit: 'apple', alice: 4, bill: 10, casey: 2 },
+				{fruit: 'banana', alice: 0, bill: 4, casey: 0 },
+				{fruit: 'grape', alice: 2, bill: 3, casey: 5 },
+				{fruit: 'pear', alice: 4, bill: 2, casey: 8 },
+				{fruit: 'strawberry', alice: 0, bill: 14, casey: 0 },
+				{fruit: 'strawberry', alice: 4, bill: 5, casey: 2 },
+				{fruit: 'pear', alice: 0, bill: 7, casey: 4 },
+				{fruit: 'banana', alice: 3, bill: 9, casey: 2 },
+				{fruit: 'apple', alice: 5, bill: 6, casey: 4 },
+				{fruit: 'grape', alice: 8, bill: 3, casey: 0 }
+			]
+		</sortable-table>
+	</div>
+
+	<br>
+
+	<hr style="width:75%;height:1px;border:none;color:#DDD;background-color:#DDD;" align="left">
+
 	<h3>A theme inspired by Sencha's ExtJS Grid.</h3>
 
-	CSS File: <a href="../css/extjs.css" target="_blank">extjs.css</a>
+	<pre>&lt;link rel="stylesheet" href="<a href="../css/extjs.css" target="_blank">../css/extjs.css</a>" <strong>shim-shadowdom</strong>&gt;</pre>
+
+	<pre>
+&lt;div class="x-panel x-grid x-panel-default-framed"&gt;
+	&lt;sortable-table class="extjs" footerTemplate="extjsPaging"&gt;
+		&lt;!-- data --&gt;
+	&lt;/sortable-table&gt;
+&lt;/div&gt;
+	</pre>
 
 	<p>
 
@@ -42,7 +125,6 @@
 			pageSize="5"
 			checkbox
 			multiSelect
-			noStyle
 		>
 			<sortable-column name="fruit" cellTemplate="fruitsTemplate">Fruit</sortable-column>
 			<sortable-column name="alice">Alice</sortable-column>
@@ -77,21 +159,30 @@
 
 	<hr style="width:75%;height:1px;border:none;color:#DDD;background-color:#DDD;" align="left">
 
-	<h3>A theme inspired by Bootstrap</h3>
+	<h3>A theme inspired by ESPN.com</h3>
 
-	CSS File: <a href="../css/bootstrap.css" target="_blank">bootstrap.css</a>
+	<pre>&lt;link rel="stylesheet" href="<a href="../css/espn.css" target="_blank">../css/espn.css</a>" <strong>shim-shadowdom</strong>&gt;</pre>
+
+	<pre>
+&lt;div class="mod-container"&gt;
+	&lt;div class="mod-header"&gt;Optional Header&lt;/div&gt;
+	&lt;sortable-table class="espn" footerTemplate="espnPaging"&gt;
+		&lt;!-- data --&gt;
+	&lt;/sortable-table&gt;
+&lt;/div&gt;
+	</pre>
 
 	<p>
 
-	<div class="panel panel-default" style="width:721px">
+	<div style="width:723px;" class="mod-container">
+		<div class="mod-header">Optional Header</div>
 		<sortable-table
-			class="bootstrap"
-			footerTemplate="bootstrapPaging"
+			class="espn"
+			footerTemplate="espnPaging"
 			rowSelection
 			pageSize="5"
 			checkbox
 			multiSelect
-			noStyle
 		>
 			<sortable-column name="fruit" cellTemplate="fruitsTemplate">Fruit</sortable-column>
 			<sortable-column name="alice">Alice</sortable-column>
@@ -101,7 +192,12 @@
 			<sortable-column name="total" formula="function(row){ return row.alice + row.bill + row.casey; }">Total</sortable-column>
 
 			<template id="fruitsTemplate">
-				<td style="text-align:left;vertical-align:middle;width:250px;">
+				<td
+					style="text-align:left;vertical-align:middle;width:250px;"
+					class="column-{{column.name}}
+						{{sortColumn == column.name && sortDescending ? 'sorted-column-desc' : ''}}
+						{{sortColumn == column.name && !sortDescending ? 'sorted-column-asc' : ''}}"
+				>
 					<fruit-icon fruit="{{value}}"></fruit-icon>
 					{{value}}
 				</td>

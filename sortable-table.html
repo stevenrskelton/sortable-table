@@ -10,7 +10,7 @@
 	attributes="
 		data columns sortColumn sortDescending rowSelection multiSelect selected
 		headerTemplate cellTemplate rowTemplate footerTemplate checkbox pageSize page
-		rowEditorTemplate disableColumnMove noStyle"
+		rowEditorTemplate disableColumnMove defaultStyle"
 	style="display:block"
 >
 <template>
@@ -33,19 +33,20 @@
 		vertical-align: middle;
 	}
 	</style>
-	<template if="{{!noStyle}}">
+	<template if="{{defaultStyle}}">
 		<style>
 			.sortable-table {
 				border-collapse: collapse;
+				border: 1px solid #ccc;
 			}
 			.sortable-table .row-selection {
 				cursor: pointer;
 			}
+			.sortable-table tbody td {
+				border: 1px dotted #ccc;
+			}
 			.sortable-table tbody tr:nth-of-type(even) {
 				background-color: rgba(255,255,224,0.25);
-			}
-			.sortable-table tbody td {
-				border: 1px solid #ccc;
 			}
 			.sortable-table tfoot td {
 				border: 1px solid #ccc;
@@ -55,16 +56,13 @@
 				border: 1px solid #ccc;
 				background-color: #0084B4;
 				color: white;
-				text-align: center;
 				cursor: pointer;
 			}
-			.sortable-table thead th.sorted-column-asc::after {
-				content: '▲';
-				position: absolute;
+			.sortable-table thead th.sorted-column-asc {
+				text-decoration: overline;
 			}
-			.sortable-table thead th.sorted-column-desc::after {
-				content: '▼';
-				position: absolute;
+			.sortable-table thead th.sorted-column-desc {
+				text-decoration: underline;
 			}
 			.sortable-table thead th.column-move-right {
 				border-right-color: #FBBA37;
@@ -130,6 +128,17 @@
 		</div>
 	</template>
 
+	<template id="espnPaging">
+		<div horizontal layout center>
+			<span flex>{{data.length}} Results</span>
+			<span>
+				<button disabled?="{{page<=1}}" on-click="{{moveToPreviousPage}}">&#10094;</button>
+				{{page}} of {{lastPage}}
+				<button disabled?="{{page>=lastPage}}" on-click="{{moveToNextPage}}">&#10095;</button>
+			</span>
+		</div>
+	</template>
+
 	<table class="sortable-table">
 		<thead>
 			<tr on-click="{{changeSort}}">
@@ -166,9 +175,13 @@
 					</template>
 					<template if="{{record.edit}}" ref="{{rowEditorTemplate}}"></template>
 					<template if="{{!record.edit}}" ref="{{rowTemplate}}" bind>
-						<template repeat="{{column in columns}}">
+						<template repeat="{{column in columns}}" bind>
 							<template ref="{{column.cellTemplate || cellTemplate}}" bind="{{record.fields[column.name]}}">
-								<td class="column-{{column.name}}">{{value}}</td>
+								<td
+									class="column-{{column.name}}
+										{{sortColumn == column.name && sortDescending ? 'sorted-column-desc' : ''}}
+										{{sortColumn == column.name && !sortDescending ? 'sorted-column-asc' : ''}}"
+								>{{value}}</td>
 							</template>
 						</template>
 					</template>
@@ -208,7 +221,7 @@
 		headerTemplate: null,
 		lastPage: 1,
 		multiSelect: false,
-		noStyle: false,
+		defaultStyle: false,
 		page: 1,
 		pageSize: Number.MAX_VALUE,
 		rowEditorTemplate: null,
@@ -505,6 +518,12 @@
 					th.classList.remove('column-move-left');
 					th.classList.add('column-move-right');
 				}
+				[].forEach.call(this.shadowRoot.querySelectorAll('th'), function(element) {
+					if(element!==th){
+						element.classList.remove('column-move-left');
+						element.classList.remove('column-move-right');
+					}
+				});
 			}
 		},
 		handleTHDragLeave: function(e) {
@@ -626,7 +645,7 @@
 					}else{
 						value = row[column.name];
 					}
-					fields[column.name] = { value: value, row: row, column: column };
+					fields[column.name] = { value: value, row: row, column: column, sortColumn: key };
 				});
 				records.push({ selected: isSelected, edit: isEditMode, fields: fields, row: row });
 			}

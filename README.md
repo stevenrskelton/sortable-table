@@ -26,6 +26,10 @@ There are many capable Javascript grids, this one aims to have all the same feat
 
 ![ExtJS](https://raw.githubusercontent.com/stevenrskelton/sortable-table/master/examples/extjs-theme.png "ExtJS")
 
+#### ESPN
+
+![ESPN](https://raw.githubusercontent.com/stevenrskelton/sortable-table/master/examples/espn-theme.png "ESPN")
+
 ## Live Examples
 
 > [Data Formats](http://files.stevenskelton.ca/sortable-table/examples/data-formats.html)
@@ -66,7 +70,14 @@ There are many capable Javascript grids, this one aims to have all the same feat
 	<link rel="import" href="bower_components/sortable-table/sortable-table.html">
 	```
 
-4. Start using it!
+4. Import a Theme, such as [Bootstrap](http://getbootstrap.com/) _(Optional)_:
+
+	```html
+	<link rel="stylesheet" href="../css/bootstrap.css" shim-shadowdom>
+	```
+	And include `class="bootstrap"` on any `sortable-table` to apply.
+
+5. Start using it!
 
 	Start simple and use DOM to configure the grid:
 

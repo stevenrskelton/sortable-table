@@ -47,7 +47,7 @@
 
 	<p>
 
-	<sortable-table>
+	<sortable-table defaultStyle>
 	[
 		{ "fruit":"apple",		"alice": 4,	"bill": 10,	"casey": 2 },
 		{ "fruit":"banana",		"alice": 0,	"bill": 4,	"casey": 0 },
@@ -77,7 +77,7 @@
 	&lt;/sortable-table&gt;
 	</pre>
 
-	<sortable-table>
+	<sortable-table defaultStyle>
 		<sortable-column>fruit</sortable-column>
 		<sortable-column>alice</sortable-column>
 		<sortable-column>bill</sortable-column>
@@ -108,7 +108,7 @@
 	&lt;/sortable-table&gt;
 	</pre>
 
-	<sortable-table columns='["fruit","alice","bill","casey"]' data='[
+	<sortable-table defaultStyle columns='["fruit","alice","bill","casey"]' data='[
 		[ "apple", 4, 10, 2 ],
 		[ "banana", 0, 4, 0 ],
 		[ "grape", 2, 3, 5 ],
@@ -131,7 +131,7 @@
 	&lt;/sortable-table&gt;
 	</pre>
 
-	<sortable-table columns='["fruit","alice","bill","casey"]'>
+	<sortable-table defaultStyle columns='["fruit","alice","bill","casey"]'>
 	[
 		[ "apple", 4, 10, 2 ],
 		[ "banana", 0, 4, 0 ],
@@ -169,7 +169,7 @@
 		{ "fruit":"strawberry",	"alice": 0,	"bill": 14,	"casey": 0 }
 	];});
 	</script>
-	<sortable-table id="mytable"></sortable-table>
+	<sortable-table defaultStyle id="mytable"></sortable-table>
 
 	<index-links page="data-formats.html"></index-links>
 </body>

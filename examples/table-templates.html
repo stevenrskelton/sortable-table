@@ -22,7 +22,7 @@
 	<p>
 
 	<template id="tableTemplate" bind>
-		<sortable-table class="t" data="{{data}}" columns="{{columns}}" sortColumn="p50" sortDescending="false" headerTemplate="blueHeaderTemplate">
+		<sortable-table defaultStyle data="{{data}}" columns="{{columns}}" sortColumn="p50" sortDescending="false" headerTemplate="blueHeaderTemplate">
 			<template id="summaryTemplate">
 				<td style="border:1px solid {{value <= 1000 ? 'blue' : 'red'}};color:{{value <= 1000 ? 'blue' : 'red'}}">
 					max: {{value}}, min: {{row.minimum}}

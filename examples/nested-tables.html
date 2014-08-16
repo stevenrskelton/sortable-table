@@ -31,11 +31,11 @@
 	<p>
 
 	<template id="example" bind>
-		<sortable-table data="{{data}}" columns="{{columns}}">
+		<sortable-table defaultStyle data="{{data}}" columns="{{columns}}">
 			<!-- nested table as a cell -->
 			<template id="nestedTable">
 				<td style="padding:0;">
-					<sortable-table style="width:100%" data="{{row[column.name]}}" columns="{{column.columns}}" sortColumn="{{column.sortColumn}}" sortDescending="{{column.sortDescending}}">
+					<sortable-table defaultStyle style="width:100%" data="{{row[column.name]}}" columns="{{column.columns}}" sortColumn="{{column.sortColumn}}" sortDescending="{{column.sortDescending}}">
 
 						<!-- template to convert int to day of week -->
 						<template id="dayTable">
@@ -79,7 +79,7 @@
 			<!-- nested table as a footer -->
 			<template id="nestedFooterTable">
 				<td style="padding:0;">
-					<sortable-table style="width:100%" data="{{rowValues | cube}}" columns="{{column.columns}}" sortColumn="{{column.sortColumn}}" sortDescending="{{column.sortDescending}}">
+					<sortable-table defaultStyle style="width:100%" data="{{rowValues | cube}}" columns="{{column.columns}}" sortColumn="{{column.sortColumn}}" sortDescending="{{column.sortDescending}}">
 						<!-- template to convert int to day of week -->
 						<template id="dayTable">
 							<td style="width:100px;text-align:left;">

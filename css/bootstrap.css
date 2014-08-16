@@ -10,14 +10,11 @@
 	border-color:#ddd
 }
 
-.bootstrap::shadow table > tbody > tr:nth-child(odd),
-.bootstrap::shadow table > tbody > tr:nth-child(odd) {
-	background-color:#fefefe
+.bootstrap::shadow tbody tr:nth-child(odd) {
+	background-color:#fefefe;
 }
 
-/*.bootstrap::shadow .table-hover > tbody > tr:hover > td,
-.bootstrap::shadow .table-hover > tbody > tr:hover > th*/
-.bootstrap::shadow table > tbody > tr:hover {
+.bootstrap::shadow tbody tr:hover {
 	background-color:#f5f5f5;
 }
 
@@ -129,7 +126,6 @@
 	color:#333;
 }
 
-
 .bootstrap::shadow th {
 	text-align:left;
 }
@@ -175,17 +171,20 @@
 .bootstrap::shadow tbody tr.selected-row {
 /*	background-color: #428BCA !important;
 	color: white !important;*/
-	background-color: #DFF0D8 !important;
+	background-color: #DFF0D8;
 }
 
 .bootstrap::shadow thead th.column-move-right {
-	background-color: #D9EDF7 !important;
+	background-color: #D9EDF7;
 }
 .bootstrap::shadow thead th.column-move-left {
-	background-color: #D9EDF7 !important;
+	background-color: #D9EDF7;
+}
+.bootstrap::shadow thead th.column-in-move {
+	background-color: #F2DEDE;
 }
 .bootstrap::shadow .checkbox-column {
-	vertical-align: middle !important;
+	vertical-align: middle;
 }
 .bootstrap::shadow .sortable-table thead th.sorted-column-asc::after {
 	content: '▲';
