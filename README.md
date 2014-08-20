@@ -70,7 +70,7 @@ There are many capable Javascript grids, this one aims to have all the same feat
 	<link rel="import" href="bower_components/sortable-table/sortable-table.html">
 	```
 
-4. Import a Theme, such as [Bootstrap](http://getbootstrap.com/) _(Optional)_:
+4. Import a theme, like the [Bootstrap](http://getbootstrap.com/) compatible theme _(Optional)_:
 
 	```html
 	<link rel="stylesheet" href="../css/bootstrap.css" shim-shadowdom>
