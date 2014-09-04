@@ -587,44 +587,48 @@
 		 *	Expression Filters
 		 */
 		sortByKey: function(array, key, desc, columns, selected, pageSize, page, editRow, l) {
-			//ignore l, it is used to trigger observe.js watch only
-			var sortedArray = array.sort(function(a, b) {
-				var x, y;
-				//determine if computed field
-				var formula = null;
-				for(var i=0;i<columns.length;i++){
-					if(columns[i].name === key){
-						formula = columns[i].formula;
-						break;
+			var sortedArray;
+			if(key){
+				//ignore l, it is used to trigger observe.js watch only
+				sortedArray = array.sort(function(a, b) {
+					var x, y;
+					//determine if computed field
+					var formula = null;
+					for(var i=0;i<columns.length;i++){
+						if(columns[i].name === key){
+							formula = columns[i].formula;
+							break;
+						}
 					}
-				}
-				if(formula){
-					x = formula(a);
-					y = formula(b);
-				}else{
-					x = a[key];
-					y = b[key];
-				}
+					if(formula){
+						x = formula(a);
+						y = formula(b);
+					}else{
+						x = a[key];
+						y = b[key];
+					}
 
-				if(typeof x === 'undefined' || typeof y === 'undefined'){
-					//sort undefined after
-					if(typeof x === 'undefined'){
-						return !desc;
+					if(typeof x === 'undefined' || typeof y === 'undefined'){
+						//sort undefined after
+						if(typeof x === 'undefined'){
+							return !desc;
+						}else{
+							return desc;
+						}
 					}else{
-						return desc;
+						if (typeof x === "string" && typeof y === "string" && !(isNaN(x) && isNaN(y))){
+							x = x.toLowerCase();
+							y = y.toLowerCase();
+						}
+						if(desc){
+							return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+						}else{
+							return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+						}
 					}
-				}else{
-					if (typeof x === "string" && typeof y === "string" && !(isNaN(x) && isNaN(y))){
-						x = x.toLowerCase();
-						y = y.toLowerCase();
-					}
-					if(desc){
-						return ((x < y) ? 1 : ((x > y) ? -1 : 0));
-					}else{
-						return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-					}
-				}
-			});
+				});
+			}else sortedArray = array;
+
 			var records = [];
 			var isMultiSelect = this.isArray(selected);
 
