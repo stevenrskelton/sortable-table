@@ -164,7 +164,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<template repeat="{{record in data | sortByKey(sortColumn, sortDescending, columns, selected, pageSize, page, editRow, (selected || []).length + data.length, forceRefresh)}}">
+			<template repeat="{{record in data | sortByKey(sortColumn, sortDescending, columns, selected, pageSize, page, editRow, (selected || []).length + data.length + forceRefresh)}}">
 				<tr
 					class="{{record.selected ? 'selected-row' : '' }}{{record.edit ? ' editor-row' : ''}}"
 					on-click="{{rowSelect}}"
@@ -215,7 +215,6 @@
 <script>
 	"use strict";
 	Polymer('sortable-table', {
-		editRow: null,
 		disableColumnMove: false,
 		footerTemplate: null,
 		headerTemplate: null,
@@ -235,6 +234,7 @@
 		created: function(){
 			if(!this.data) this.data = [];
 			if(!this.columns) this.columns = [];
+			this.undoStack = [];
 		},
 		ready: function(){
 			var array = [];
@@ -413,44 +413,87 @@
 		 *	Row Edit
 		 */
 		editChanged: false,
+		editRow: null,
 		updateEditChanged: function(){
-			if(this.originalEditRow !== null && this.editRow !== null){
-				var self = this;
-				self.editChanged = Object.getOwnPropertyNames(this.originalEditRow).some(function(val, idx, array) {
-					return self.editRow[val] !== self.originalEditRow[val] && self.originalEditRow[val] !== null;
-				});
-			}else this.editChanged = false;
+			if(this.undoStack.length > 1) this.editChanged = true;
+			else if(this.undoStack.length === 1) this.editChanged = this.rowHasBeenEdited(this.undoStack[0]);
+			else this.editChanged = false;
 			return this.editChanged;
 		},
+		rowHasBeenEdited: function(undoElement){
+			return Object.getOwnPropertyNames(undoElement.original).some(function(val, idx, array) {
+				return undoElement.ref[val] !== undoElement.original[val] && undoElement.original[val] !== null;
+			});
+		},
 		rowEdit: function(e,p){
-			if(this.rowEditorTemplate && (this.multiRowEdit || !this.editRow)){
+			if(this.rowEditorTemplate && (this.multiRowEdit || this.undoStack.length === 0)){
 				var model = e.target.templateInstance.model;
 				var row = model.row;
 				if(model.record) row = model.record.row;
-				if(this.editRow !== row){
+
+				var editRow = null;
+				if(this.undoStack.length === 0){
 					this.editChanged = false;
-					this.originalEditRow = JSON.parse(JSON.stringify(row));
-					this.editRow = row;
+					this.undoStack.push({
+						ref: row,
+						original: JSON.parse(JSON.stringify(row))
+					});
+				}else{
+					var editRow = this.undoStack[this.undoStack.length - 1];
+					if(editRow.ref !== row){
+						//check if previous edit made changes
+						if(!this.rowHasBeenEdited(editRow)) this.undoStack.pop();
+
+						this.editChanged = this.undoStack.length > 0;
+
+						//initialize new edit
+						// - reuse element if already on undoStack, move to top
+						// - otherwise push new
+						var editRowIndex = -1;
+						this.undoStack.every(function(element,index){
+							if(element.ref === row){
+								editRowIndex = index;
+								return false;
+							}else return true;
+						});
+						if(editRowIndex > -1){
+							if(editRow !== this.undoStack.length - 1){
+								this.undoStack.push(this.undoStack.splice(editRowIndex, 1)[0]);
+							}
+						}else{
+							this.undoStack.push({
+								ref: row,
+								original: JSON.parse(JSON.stringify(row))
+							});
+						}
+					}
 				}
+				this.editRow = row;
 			}
 		},
 		closeEdit: function(e){
 			this.editChanged = false;
-			this.originalEditRow = null;
+			this.undoStack = [];
 			this.editRow = null;
 		},
+		undoAllEdit: function(e){
+			while(this.undoStack.length>0) this.undoEdit.call(this, e);
+		},
 		undoEdit: function(e){
-			if(this.originalEditRow && this.editRow){
+			if(this.undoStack.length > 0){
 				var self = this;
-				Object.getOwnPropertyNames(this.originalEditRow).forEach(function(val, idx, array) {
-					if(self.editRow[val] !== self.originalEditRow[val] && self.originalEditRow[val] !== null)
-						self.editRow[val] = self.originalEditRow[val];
+				var first = this.undoStack.pop();
+				Object.getOwnPropertyNames(first.original).forEach(function(val, idx, array) {
+					if(first.ref[val] !== first.original[val] && first.original[val] !== null)
+						first.ref[val] = first.original[val];
 				});
+				if(this.undoStack.length > 0) this.editRow = this.undoStack[this.undoStack.length - 1].ref;
+				else this.editRow = null;
 				this.refreshFooter();
 			}
 		},
 		cancelEdit: function(e){
-			this.undoEdit.call(this, e); this.closeEdit.call(this, e);
+			this.undoAllEdit.call(this, e); this.closeEdit.call(this, e);
 		},
 		/**
 		 *	Checkbox helper functions
@@ -599,7 +642,7 @@
 		/**
 		 *	Expression Filters
 		 */
-		sortByKey: function(array, key, desc, columns, selected, pageSize, page, editRow, l) {
+		sortByKey: function(array, key, desc, columns, selected, pageSize, page, l) {
 			var sortedArray;
 			if(key){
 				//ignore l, it is used to trigger observe.js watch only
@@ -653,7 +696,7 @@
 			for(var i=start;i<end;i++){
 				var row = sortedArray[i];
 				var isSelected = isMultiSelect ? selected.indexOf(row) > -1 : row === selected;
-				var isEditMode = editRow === row
+				var isEditMode = this.editRow === row
 				var fields = {};
 				columns.forEach(function(column, index, array) {
 					var value;

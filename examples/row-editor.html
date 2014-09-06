@@ -141,6 +141,10 @@
 
 		<p>
 
+		Undo history can span multiple row edits, and <em>update</em> and <em>cancel</em> can create pseudo transactions.
+
+		<p>
+
 		<div class="x-panel x-grid x-panel-default-framed" style="width:1200px">
 			<sortable-table 
 				class="extjs"
@@ -202,14 +206,14 @@
 					<div horizontal layout>
 						<div flex>
 							<button on-click="{{undoEdit}}" title="Reload" disabled?="{{!editChanged}}">&#10227;</button>
-							<template if="{{editRow && editChanged}}">
+							<template if="{{undoStack.length > 0 && editChanged}}">
 								<strong>Original Values: </strong>
-								{{originalEditRow | originalValues(columns)}}
+								{{undoStack | originalValues(columns, editRow)}}
 							</template>
 						</div>
 						<div>
-							<button on-click="{{closeEdit}}" title="Update" disabled?="{{!editRow}}">&#10004; Update</button>
-							<button on-click="{{cancelEdit}}" title="Cancel" disabled?="{{!editRow}}">&#10008; Cancel</button>
+							<button on-click="{{closeEdit}}" title="Update" disabled?="{{undoStack.length==0}}">&#10004; Update</button>
+							<button on-click="{{cancelEdit}}" title="Cancel" disabled?="{{undoStack.length==0}}">&#10008; Cancel</button>
 						</div>
 					</div>
 				</template>
@@ -229,6 +233,10 @@
 		<hr style="width:75%;height:1px;border:none;color:#DDD;background-color:#DDD;" align="left">
 
 		<h3>ESPN.com Theme</h3>
+
+		<p>
+
+		It's possible to completely ignore explicit <em>update</em> and <em>cancel</em> buttons, and make data editing as quick as possible.
 
 		<p>
 
@@ -340,11 +348,12 @@
 			PolymerExpressions.prototype.sum = function(arr) {
 				return Math.round(arr.reduce(function(a, b) { return +a + +b; }, 0));
 			}
-			PolymerExpressions.prototype.originalValues = function(o, columns) {
-				if(o){
+			PolymerExpressions.prototype.originalValues = function(undoStack, columns) {
+				if(undoStack.length > 0){
+					var currentEdit = undoStack[undoStack.length-1].original;
 					var values = '';
 					columns.forEach(function(element){
-						var v = o[element.name];
+						var v = currentEdit[element.name];
 						if(v != null) values += v + ', ';
 					});
 					return values.substring(0, values.length-2);
