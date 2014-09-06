@@ -37,6 +37,21 @@
 /*x-box-inner*/
 	/*border-width:0*/
 }
+
+.extjs::shadow tbody input,
+.extjs::shadow tbody select {
+	width: 90%;
+	margin-left:auto;
+	margin-right:auto;
+	display: block;
+	border: 1px solid #7eadd9;
+	background-image:none;
+	background-color:#ffffff;
+	background-image:-webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dee3e6), color-stop(39%, #fdfefe), color-stop(40%, #ffffff), color-stop(100%, #ffffff));
+	background-image:-moz-linear-gradient(top, #dee3e6,#fdfefe 39%,#ffffff 40%,#ffffff);
+	background-image:linear-gradient(top, #dee3e6,#fdfefe 39%,#ffffff 40%,#ffffff);
+}
+
 .extjs::shadow thead tr th {
 	cursor: auto;
 	color: #000;
@@ -167,9 +182,11 @@
 	border-style:solid;
 	border-color:transparent;
 	height: 22px;
-	width: 22px;
+	padding-left: 1px;
+	padding-right: 1px;
 	margin: 0 2px;
 	line-height: 11px;
+	min-width: 22px;
 }
 .extjs::shadow button:not([disabled]):hover {
 	border-color:#81a4d0;
@@ -211,17 +228,23 @@
 	margin-right:6px;
 	white-space:nowrap;
 	color:#4c4c4c !important;
-	line-height:16px;
+	line-height:22px;
 	font-family:tahoma, arial, verdana, sans-serif;
 	font-size:11px;
 	font-weight:normal;
 	/*x-toolbar-text-default x-box-item x-toolbar-item*/
 	margin:0 6px 0 0;
 }
-.extjs::shadow tfoot td {
+.extjs::shadow tfoot tr:first-of-type {
 	background-color: #D8E4F2;
 	border:1px solid #99bbe8;
 	padding: 2px;
+}
+.extjs::shadow tfoot tr:nth-of-type(2) {
+	background-color:#dfe8f6;
+}
+.extjs::shadow tfoot tr:nth-of-type(2) td {
+	padding-top: 5px;
 }
 .extjs::shadow thead th.column-move-right {
 	border-right-color: #FBBA37;
@@ -250,4 +273,7 @@
 	content: '▼';
 	position: absolute;
 	color:#6190CD;
+}
+.extjs::shadow tbody tr.editor-row {
+	background-color: #eaf1fb;
 }

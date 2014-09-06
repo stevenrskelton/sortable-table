@@ -43,7 +43,6 @@
 .espn::shadow th {
 	text-align:center;
 	background-color:#d6d6d6;
-	border-bottom:1px #c2c2c2 solid;
 	cursor:pointer;
 	background:#e8e8e8;
 	background-image:-webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #CECECE), color-stop(100%, #E7E7E7));
@@ -54,6 +53,12 @@
 	color:#444;
 	font-size:11px;
 	text-decoration:underline;
+}
+.espn::shadow .sortable-table-footer {
+	padding:3px 6px;
+	font-weight:700;
+	color:#444;
+	font-size:11px;
 }
 .espn::shadow th:hover,
 .espn::shadow thead a:hover {
@@ -111,4 +116,11 @@
 	background-image:-webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(0%, #E7E7E7), color-stop(100%, #CECECE));
 	background-image:-moz-linear-gradient(right, #CECECE,#E7E7E7);
 	background-image:linear-gradient(right, #CECECE,#E7E7E7);
+}
+.espn::shadow tbody input,
+.espn::shadow tbody input:focus,
+.espn::shadow tbody input:active,
+.espn::shadow tbody select {
+	background: inherit;
+	border: none;
 }

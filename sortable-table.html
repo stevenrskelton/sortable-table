@@ -10,7 +10,7 @@
 	attributes="
 		data columns sortColumn sortDescending rowSelection multiSelect selected
 		headerTemplate cellTemplate rowTemplate footerTemplate checkbox pageSize page
-		rowEditorTemplate disableColumnMove defaultStyle"
+		rowEditorTemplate multiRowEdit disableColumnMove defaultStyle"
 	style="display:block"
 >
 <template>
@@ -100,7 +100,7 @@
 	</template>
 
 	<template id="bootstrapPaging">
-		<div style="width:100%;text-align:center;">
+		<div style="width:100%;text-align:center;font-weight:normal;">
 			<ul class="pagination">
 				<li class="{{page==1 ? 'disabled' : ''}}" on-click="{{moveToFirstPage}}"><a href="#" onclick="return false;">«</a></li>
 				<template repeat="{{i in lastPage | naturalNumbers(page)}}">
@@ -118,7 +118,7 @@
 
 			<span class="x-toolbar-separator-horizontal"></span>
 
-			<span style="margin:0 8px">Page <input type="number" style="width:30px;text-align:right;margin:0" min="1" max="{{lastPage}}" value="{{page}}"> of {{lastPage}}</span>
+			<span style="margin:0 8px">Page <input type="number" style="width:30px;text-align:right;margin:0;display:inline-block;padding-bottom:2px;" min="1" max="{{lastPage}}" value="{{page}}"> of {{lastPage}}</span>
 
 			<span class="x-toolbar-separator-horizontal"></span>
 
@@ -166,7 +166,7 @@
 		<tbody>
 			<template repeat="{{record in data | sortByKey(sortColumn, sortDescending, columns, selected, pageSize, page, editRow, (selected || []).length + data.length, forceRefresh)}}">
 				<tr
-					class="{{record.selected ? 'selected-row' : '' }}"
+					class="{{record.selected ? 'selected-row' : '' }}{{record.edit ? ' editor-row' : ''}}"
 					on-click="{{rowSelect}}"
 					on-dblclick="{{rowEdit}}"
 				>
@@ -225,6 +225,7 @@
 		page: 1,
 		pageSize: Number.MAX_VALUE,
 		rowEditorTemplate: null,
+		multiRowEdit: false,
 		rowSelection: false,
 		rowTemplate: null,
 		selected: null,
@@ -290,7 +291,7 @@
 			}
 		},
 		rebuildColumns: function(){
-			if(this.columns.length === 0 && this.data && this.data.length > 0){
+			if(this.columns.length === 0 && this.data !== null && this.data.length > 0){
 				//try and load from DOM
 				var columnNodes = this.querySelectorAll('sortable-column');
 				var c = [];
@@ -411,18 +412,30 @@
 		/**
 		 *	Row Edit
 		 */
+		editChanged: false,
+		updateEditChanged: function(){
+			if(this.originalEditRow !== null && this.editRow !== null){
+				var self = this;
+				self.editChanged = Object.getOwnPropertyNames(this.originalEditRow).some(function(val, idx, array) {
+					return self.editRow[val] !== self.originalEditRow[val] && self.originalEditRow[val] !== null;
+				});
+			}else this.editChanged = false;
+			return this.editChanged;
+		},
 		rowEdit: function(e,p){
-			if(this.rowEditorTemplate){
+			if(this.rowEditorTemplate && (this.multiRowEdit || !this.editRow)){
 				var model = e.target.templateInstance.model;
 				var row = model.row;
 				if(model.record) row = model.record.row;
 				if(this.editRow !== row){
+					this.editChanged = false;
 					this.originalEditRow = JSON.parse(JSON.stringify(row));
 					this.editRow = row;
 				}
 			}
 		},
 		closeEdit: function(e){
+			this.editChanged = false;
 			this.originalEditRow = null;
 			this.editRow = null;
 		},
@@ -430,7 +443,7 @@
 			if(this.originalEditRow && this.editRow){
 				var self = this;
 				Object.getOwnPropertyNames(this.originalEditRow).forEach(function(val, idx, array) {
-					if(self.editRow[val] !== self.originalEditRow[val] && self.originalEditRow[val])
+					if(self.editRow[val] !== self.originalEditRow[val] && self.originalEditRow[val] !== null)
 						self.editRow[val] = self.originalEditRow[val];
 				});
 				this.refreshFooter();
@@ -689,7 +702,10 @@
 		  */
 		forceRefresh: 0,
 		forceFooterRefresh: 1,
-		refreshFooter: function(){ this.forceFooterRefresh++; }
+		refreshFooter: function(){
+			this.updateEditChanged();
+			this.forceFooterRefresh++;
+		}
 	});
 </script>
 </polymer-element>

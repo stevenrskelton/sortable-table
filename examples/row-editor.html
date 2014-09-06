@@ -5,10 +5,29 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<script src="../../platform/platform.js"></script>
+	<script src="../../platform/platform.js" debug log="bind,ready,events"></script>
 	<link rel="import" href="../sortable-table.html">
 	<link rel="import" href="fruit-icon.html">
 	<link rel="import" href="index-links.html">
+	<link rel="stylesheet" href="../css/extjs.css" shim-shadowdom>
+	<link rel="stylesheet" href="../css/bootstrap.css" shim-shadowdom>
+	<link rel="stylesheet" href="../css/espn.css" shim-shadowdom>
+	<style shim-shadowdom>
+		sortable-table.bootstrap::shadow table > tbody > tr > td,
+		sortable-table.extjs::shadow table > tbody > tr > td,
+		sortable-table.espn::shadow table > tbody > tr > td {
+			vertical-align: middle;
+		}
+		sortable-table.espn::shadow tbody tr td,
+		sortable-table.espn::shadow tfoot tr td,
+		sortable-table.espn::shadow tbody tr td input {
+			text-align: right;
+		}
+		sortable-table.espn::shadow tbody tr td:first-of-type,
+		sortable-table.espn::shadow tfoot tr td:first-of-type {
+			text-align: left;
+		}
+	</style>
 </head>
 <body unresolved>
 
@@ -21,69 +40,293 @@
 	<p>
 
 	<template is="auto-binding">
-		<sortable-table defaultStyle rowTemplate="row" rowEditorTemplate="editor">
-			<sortable-column name="fruit" footerTemplate="footerLabel">Fruit</sortable-column>
-			<sortable-column name="alice" footerTemplate="footer">Alice</sortable-column>
-			<sortable-column name="bill" footerTemplate="footer">Bill</sortable-column>
-			<sortable-column name="casey" footerTemplate="footer">Casey</sortable-column>
-			<sortable-column name="average" formula="average" footerTemplate="footer">Average</sortable-column>
-			<sortable-column name="total" formula="total" footerTemplate="footer">Total</sortable-column>
+		<h3>Bootstrap Theme</h3>
 
-			<template id="row">
-				<td style="width:250px;text-align:left;">
-					<fruit-icon fruit="{{record.row.fruit}}"></fruit-icon>{{record.row.fruit}}
-				</td>
-				<td style="width:20%;text-align:right">{{record.row.alice}}</td>
-				<td style="width:20%;text-align:right">{{record.row.bill}}</td>
-				<td style="width:20%;text-align:right">{{record.row.casey}}</td>
-				<td style="text-align:right">{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
-				<td style="text-align:right">{{record.row | total(record.row.alice,record.row.bill,record.row.casey)}}</td>
-			</template>
-			<template id="editor">
-				<td style="width:250px;box-shadow: 0 0 4px 1px #FBBA37 inset;text-align:left;">
-					<fruit-icon fruit="{{record.row.fruit}}"></fruit-icon>
-					<select value="{{record.row.fruit}}" style="width:150px; height:27px; font-size: large; margin:0px;">
-						<option></option>
-						<option value="apple">apple</option>
-						<option value="banana">banana</option>
-						<option value="grape">grape</option>
-						<option value="pear">pear</option>
-						<option value="strawberry">strawberry</option>
-					</select>
-				</td>
-				<td style="box-shadow: 0 0 4px 1px #FBBA37 inset;text-align:right;">
-					<input type="number" value="{{record.row.alice}}" on-change="{{refreshFooter}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;">
-					<button on-click="{{closeEdit}}" title="Done" style="vertical-align:top">&#10004;</button>
-					<button on-click="{{cancelEdit}}" title="Undo" style="vertical-align:top">&#10008;</button>
-				</td>
-				<td style="box-shadow: 0 0 4px 1px #FBBA37 inset;text-align:right;">
-					<input type="number" value="{{record.row.bill}}" on-change="{{refreshFooter}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;">
-					<button on-click="{{closeEdit}}" title="Done" style="vertical-align:top">&#10004;</button>
-					<button on-click="{{cancelEdit}}" title="Undo" style="vertical-align:top">&#10008;</button>
-				</td>
-				<td style="box-shadow: 0 0 4px 1px #FBBA37 inset;text-align:right;">
-					<input type="number" value="{{record.row.casey}}" on-change="{{refreshFooter}}" style="text-align:right;font-size:large;height:20px;width:100px;margin:0px;">
-					<button on-click="{{closeEdit}}" title="Done" style="vertical-align:top">&#10004;</button>
-					<button on-click="{{cancelEdit}}" title="Undo" style="vertical-align:top">&#10008;</button>
-				</td>
-				<td style="box-shadow: 0 0 8px 1px #FFEEDD inset;text-align:right;">{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
-				<td style="box-shadow: 0 0 8px 1px #FFEEDD inset;text-align:right;">{{record.row | total(record.row.alice,record.row.bill,record.row.casey)}}</td>
-			</template>
-			<template id="footer">
-				<td class="sortable-table-footer" style="text-align:right">{{values | sum}}</td>
-			</template>
-			<template id="footerLabel">
-				<td class="sortable-table-footer" style="text-align:left">Total Fruit Per Person</td>
-			</template>
+		<p>
+		Each control can has an individual <em>save</em> and <em>cancel</em> button.
+		<p>
 
-			[
-				{ fruit: 'apple', alice: 4, bill: 10, casey: 2 },
-				{ fruit: 'banana', alice: 0, bill: 4, casey: 0 },
-				{ fruit: 'grape', alice: 2, bill: 3, casey: 5 },
-				{ fruit: 'pear', alice: 4, bill: 2, casey: 8 },
-				{ fruit: 'strawberry', alice: 0, bill: 14, casey: 0 }
-			]
-		</sortable-table>
+		<div class="panel panel-default" style="width:1200px">
+			<sortable-table
+				class="bootstrap"
+				rowTemplate="row"
+				rowEditorTemplate="editor"
+			>
+				<sortable-column name="fruit" footerTemplate="footerLabel">Fruit</sortable-column>
+				<sortable-column name="alice" footerTemplate="footer">Alice</sortable-column>
+				<sortable-column name="bill" footerTemplate="footer">Bill</sortable-column>
+				<sortable-column name="casey" footerTemplate="footer">Casey</sortable-column>
+				<sortable-column name="average" formula="average" footerTemplate="footer">Average</sortable-column>
+				<sortable-column name="total" formula="total" footerTemplate="footer">Total</sortable-column>
+
+				<template id="row">
+					<td style="width:250px;text-align:left;">
+						<fruit-icon fruit="{{record.row.fruit}}"></fruit-icon>{{record.row.fruit}}
+					</td>
+					<td style="width:20%;">{{record.row.alice}}</td>
+					<td style="width:20%;">{{record.row.bill}}</td>
+					<td style="width:20%;">{{record.row.casey}}</td>
+					<td>{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
+					<td>{{record.row | total(record.row.alice,record.row.bill,record.row.casey)}}</td>
+				</template>
+				<template id="editor">
+					<td horizontal layout>
+						<fruit-icon fruit="{{record.row.fruit}}"></fruit-icon>
+						<div flex horizontal layout center class="form-group">
+							<select value="{{record.row.fruit}}" class="form-control" on-change="{{refreshFooter}}">
+								<option></option>
+								<option value="apple">apple</option>
+								<option value="banana">banana</option>
+								<option value="grape">grape</option>
+								<option value="pear">pear</option>
+								<option value="strawberry">strawberry</option>
+							</select>
+						</div>
+					</td>
+					<td>
+						<div class="form-group has-success has-feedback">
+							<input type="number" class="form-control" value="{{record.row.alice}}" on-change="{{refreshFooter}}">
+							<span class="form-control-feedback" style="vertical-align:top;">
+								<button class="btn btn-primary" on-click="{{closeEdit}}" disabled?="{{!editChanged}}" title="Done">&#10004;</button>
+								<button class="btn btn-primary" on-click="{{undoEdit}}" hidden?="{{!editChanged}}" title="Undo">&#10227;</button>
+								<button class="btn btn-primary" on-click="{{cancelEdit}}" hidden?="{{editChanged}}" title="Cancel">&#10008;</button>
+							</span>
+						</div>
+					</td>
+					<td>
+						<div class="form-group has-success has-feedback">
+							<input type="number" class="form-control" value="{{record.row.bill}}" on-change="{{refreshFooter}}">
+							<span class="form-control-feedback">
+								<button class="btn btn-primary" on-click="{{closeEdit}}" disabled?="{{!editChanged}}" title="Done">&#10004;</button>
+								<button class="btn btn-primary" on-click="{{undoEdit}}" hidden?="{{!editChanged}}" title="Undo">&#10227;</button>
+								<button class="btn btn-primary" on-click="{{cancelEdit}}" hidden?="{{editChanged}}" title="Cancel">&#10008;</button>
+							</span>
+						</div>
+					</td>
+					<td>
+						<div class="form-group has-success has-feedback">
+							<input type="number" class="form-control" value="{{record.row.casey}}" on-change="{{refreshFooter}}">
+							<span class="form-control-feedback">
+								<button class="btn btn-primary" on-click="{{closeEdit}}" disabled?="{{!editChanged}}" title="Done">&#10004;</button>
+								<button class="btn btn-primary" on-click="{{undoEdit}}" hidden?="{{!editChanged}}" title="Undo">&#10227;</button>
+								<button class="btn btn-primary" on-click="{{cancelEdit}}" hidden?="{{editChanged}}" title="Cancel">&#10008;</button>
+							</span>
+						</div>
+					</td>
+					<td>{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
+					<td>{{record.row | total(record.row.alice,record.row.bill,record.row.casey)}}</td>
+				</template>
+				<template id="footer">
+					<td class="sortable-table-footer">{{values | sum}}</td>
+				</template>
+				<template id="footerLabel">
+					<td class="sortable-table-footer">Total Fruit Per Person</td>
+				</template>
+
+				[
+					{ fruit: 'apple', alice: 4, bill: 10, casey: 2 },
+					{ fruit: 'banana', alice: 0, bill: 4, casey: 0 },
+					{ fruit: 'grape', alice: 2, bill: 3, casey: 5 },
+					{ fruit: 'pear', alice: 4, bill: 2, casey: 8 },
+					{ fruit: 'strawberry', alice: 0, bill: 14, casey: 0 }
+				]
+			</sortable-table>
+		</div>
+
+		<br>
+
+		<hr style="width:75%;height:1px;border:none;color:#DDD;background-color:#DDD;" align="left">
+
+		<h3>ExtJS Theme</h3>
+
+		<p>
+
+		<div class="x-panel x-grid x-panel-default-framed" style="width:1200px">
+			<sortable-table 
+				class="extjs"
+				rowTemplate="row"
+				rowEditorTemplate="editor"
+				footerTemplate="updateCancelTemplate"
+				multiRowEdit
+			>
+				<sortable-column name="fruit" footerTemplate="footerLabel">Fruit</sortable-column>
+				<sortable-column name="alice" footerTemplate="footer">Alice</sortable-column>
+				<sortable-column name="bill" footerTemplate="footer">Bill</sortable-column>
+				<sortable-column name="casey" footerTemplate="footer">Casey</sortable-column>
+				<sortable-column name="average" formula="average" footerTemplate="footer">Average</sortable-column>
+				<sortable-column name="total" formula="total" footerTemplate="footer">Total</sortable-column>
+
+				<template id="row">
+					<td style="width:250px;text-align:left;">
+						<fruit-icon fruit="{{record.row.fruit}}"></fruit-icon>{{record.row.fruit}}
+					</td>
+					<td style="width:20%;">{{record.row.alice}}</td>
+					<td style="width:20%;">{{record.row.bill}}</td>
+					<td style="width:20%;">{{record.row.casey}}</td>
+					<td>{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
+					<td>{{record.row | total(record.row.alice,record.row.bill,record.row.casey)}}</td>
+				</template>
+				<template id="editor">
+					<td horizontal layout>
+						<fruit-icon fruit="{{record.row.fruit}}"></fruit-icon>
+						<div flex horizontal layout center>
+							<select value="{{record.row.fruit}}" class="form-control" on-change="{{refreshFooter}}">
+								<option></option>
+								<option value="apple">apple</option>
+								<option value="banana">banana</option>
+								<option value="grape">grape</option>
+								<option value="pear">pear</option>
+								<option value="strawberry">strawberry</option>
+							</select>
+						</div>
+					</td>
+					<td>
+						<input type="number" value="{{record.row.alice}}" on-change="{{refreshFooter}}">
+					</td>
+					<td>
+						<input type="number" value="{{record.row.bill}}" on-change="{{refreshFooter}}">
+					</td>
+					<td>
+						<input type="number" value="{{record.row.casey}}" on-change="{{refreshFooter}}">
+					</td>
+					<td>{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
+					<td>{{record.row | total(record.row.alice,record.row.bill,record.row.casey)}}</td>
+				</template>
+				<template id="footer">
+					<td class="sortable-table-footer">{{values | sum}}</td>
+				</template>
+				<template id="footerLabel">
+					<td class="sortable-table-footer">Total Fruit Per Person</td>
+				</template>
+				<template id="updateCancelTemplate">
+					<div horizontal layout>
+						<div flex>
+							<button on-click="{{undoEdit}}" title="Reload" disabled?="{{!editChanged}}">&#10227;</button>
+							<template if="{{editRow && editChanged}}">
+								<strong>Original Values: </strong>
+								{{originalEditRow | originalValues(columns)}}
+							</template>
+						</div>
+						<div>
+							<button on-click="{{closeEdit}}" title="Update" disabled?="{{!editRow}}">&#10004; Update</button>
+							<button on-click="{{cancelEdit}}" title="Cancel" disabled?="{{!editRow}}">&#10008; Cancel</button>
+						</div>
+					</div>
+				</template>
+
+				[
+					{ fruit: 'apple', alice: 4, bill: 10, casey: 2 },
+					{ fruit: 'banana', alice: 0, bill: 4, casey: 0 },
+					{ fruit: 'grape', alice: 2, bill: 3, casey: 5 },
+					{ fruit: 'pear', alice: 4, bill: 2, casey: 8 },
+					{ fruit: 'strawberry', alice: 0, bill: 14, casey: 0 }
+				]
+			</sortable-table>
+		</div>
+
+		<br>
+
+		<hr style="width:75%;height:1px;border:none;color:#DDD;background-color:#DDD;" align="left">
+
+		<h3>ESPN.com Theme</h3>
+
+		<p>
+
+		<div class="mod-container" style="width:1200px">
+			<div class="mod-header">Optional Header</div>
+			<sortable-table
+				class="espn"
+				rowTemplate="row"
+				rowEditorTemplate="editor"
+				multiRowEdit
+			>
+				<sortable-column name="fruit" footerTemplate="footerLabel">Fruit</sortable-column>
+				<sortable-column name="alice" footerTemplate="footer">Alice</sortable-column>
+				<sortable-column name="bill" footerTemplate="footer">Bill</sortable-column>
+				<sortable-column name="casey" footerTemplate="footer">Casey</sortable-column>
+				<sortable-column name="average" formula="average" footerTemplate="footer">Average</sortable-column>
+				<sortable-column name="total" formula="total" footerTemplate="footer">Total</sortable-column>
+
+				<template id="row">
+					<td
+						style="width:250px;text-align:left;"
+						class="column-fruit
+						{{sortColumn == 'fruit' && sortDescending ? 'sorted-column-desc' : ''}}
+						{{sortColumn == 'fruit' && !sortDescending ? 'sorted-column-asc' : ''}}"
+					>
+						<fruit-icon fruit="{{record.row.fruit}}"></fruit-icon>{{record.row.fruit}}
+					</td>
+					<td
+						style="width:20%;"
+						class="column-alice
+						{{sortColumn == 'alice' && sortDescending ? 'sorted-column-desc' : ''}}
+						{{sortColumn == 'alice' && !sortDescending ? 'sorted-column-asc' : ''}}"
+					>{{record.row.alice}}</td>
+					<td
+						style="width:20%;"
+						class="column-bill
+						{{sortColumn == 'bill' && sortDescending ? 'sorted-column-desc' : ''}}
+						{{sortColumn == 'bill' && !sortDescending ? 'sorted-column-asc' : ''}}"
+					>{{record.row.bill}}</td>
+					<td
+						style="width:20%;"
+						class="column-casey
+						{{sortColumn == 'casey' && sortDescending ? 'sorted-column-desc' : ''}}
+						{{sortColumn == 'casey' && !sortDescending ? 'sorted-column-asc' : ''}}"
+					>{{record.row.casey}}</td>
+					<td
+						class="column-average
+						{{sortColumn == 'average' && sortDescending ? 'sorted-column-desc' : ''}}
+						{{sortColumn == 'average' && !sortDescending ? 'sorted-column-asc' : ''}}"
+					>{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
+					<td
+						class="column-total
+						{{sortColumn == 'total' && sortDescending ? 'sorted-column-desc' : ''}}
+						{{sortColumn == 'total' && !sortDescending ? 'sorted-column-asc' : ''}}"
+					>{{record.row | total(record.row.alice,record.row.bill,record.row.casey)}}</td>
+				</template>
+				<template id="editor">
+					<td horizontal layout on-dblclick="{{closeEdit}}">
+						<fruit-icon fruit="{{record.row.fruit}}"></fruit-icon>
+						<div flex horizontal layout center>
+							<select value="{{record.row.fruit}}" on-blur="{{closeEdit}}">
+								<option></option>
+								<option value="apple">apple</option>
+								<option value="banana">banana</option>
+								<option value="grape">grape</option>
+								<option value="pear">pear</option>
+								<option value="strawberry">strawberry</option>
+							</select>
+						</div>
+					</td>
+					<td>
+						<input type="number" value="{{record.row.alice}}" on-change="{{refreshFooter}}" on-blur="{{closeEdit}}">
+					</td>
+					<td>
+						<input type="number" value="{{record.row.bill}}" on-change="{{refreshFooter}}" on-blur="{{closeEdit}}">
+					</td>
+					<td>
+						<input type="number" value="{{record.row.casey}}" on-change="{{refreshFooter}}" on-blur="{{closeEdit}}">
+					</td>
+					<td>{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
+					<td>{{record.row | total(record.row.alice,record.row.bill,record.row.casey)}}</td>
+				</template>
+				<template id="footer">
+					<td class="sortable-table-footer">{{values | sum}}</td>
+				</template>
+				<template id="footerLabel">
+					<td class="sortable-table-footer">Total Fruit Per Person</td>
+				</template>
+
+				[
+					{ fruit: 'apple', alice: 4, bill: 10, casey: 2 },
+					{ fruit: 'banana', alice: 0, bill: 4, casey: 0 },
+					{ fruit: 'grape', alice: 2, bill: 3, casey: 5 },
+					{ fruit: 'pear', alice: 4, bill: 2, casey: 8 },
+					{ fruit: 'strawberry', alice: 0, bill: 14, casey: 0 }
+				]
+			</sortable-table>
+		</div>
 	</template>
 
 	<script>
@@ -96,6 +339,16 @@
 			}
 			PolymerExpressions.prototype.sum = function(arr) {
 				return Math.round(arr.reduce(function(a, b) { return +a + +b; }, 0));
+			}
+			PolymerExpressions.prototype.originalValues = function(o, columns) {
+				if(o){
+					var values = '';
+					columns.forEach(function(element){
+						var v = o[element.name];
+						if(v != null) values += v + ', ';
+					});
+					return values.substring(0, values.length-2);
+				} else return '';
 			}
 		})
 	</script>
