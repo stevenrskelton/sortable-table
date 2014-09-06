@@ -166,15 +166,15 @@
 		<tbody>
 			<template repeat="{{record in data | sortByKey(sortColumn, sortDescending, columns, selected, pageSize, page, editRow, (selected || []).length + data.length + forceRefresh)}}">
 				<tr
-					class="{{record.selected ? 'selected-row' : '' }}{{record.edit ? ' editor-row' : ''}}"
+					class="{{record.selected ? 'selected-row' : '' }}{{record.editMode ? ' editor-row' : ''}}{{record.dirty ? ' edited-row' : ''}}"
 					on-click="{{rowSelect}}"
 					on-dblclick="{{rowEdit}}"
 				>
 					<template if="{{checkbox}}">
 						<td class="checkbox-column"><input type="checkbox" on-change="{{checkedbox}}" checked?="{{record.selected}}"></td>
 					</template>
-					<template if="{{record.edit}}" ref="{{rowEditorTemplate}}"></template>
-					<template if="{{!record.edit}}" ref="{{rowTemplate}}" bind>
+					<template if="{{record.editMode}}" ref="{{rowEditorTemplate}}"></template>
+					<template if="{{!record.editMode}}" ref="{{rowTemplate}}" bind>
 						<template repeat="{{column in columns}}" bind>
 							<template ref="{{column.cellTemplate || cellTemplate}}" bind="{{record.fields[column.name]}}">
 								<td
@@ -696,7 +696,10 @@
 			for(var i=start;i<end;i++){
 				var row = sortedArray[i];
 				var isSelected = isMultiSelect ? selected.indexOf(row) > -1 : row === selected;
-				var isEditMode = this.editRow === row
+				var isEditMode = this.editRow === row;
+				var isDirty = false;
+				var isInUndo = this.undoStack.filter(function(element){ return element.ref === row });
+				if(isInUndo.length>0) isDirty = this.rowHasBeenEdited(isInUndo[0]);
 				var fields = {};
 				columns.forEach(function(column, index, array) {
 					var value;
@@ -707,7 +710,7 @@
 					}
 					fields[column.name] = { value: value, row: row, column: column, sortColumn: key };
 				});
-				records.push({ selected: isSelected, edit: isEditMode, fields: fields, row: row });
+				records.push({ selected: isSelected, editMode: isEditMode, dirty: isDirty, fields: fields, row: row });
 			}
 			return records;
 		},

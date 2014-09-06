@@ -277,3 +277,6 @@
 .extjs::shadow tbody tr.editor-row {
 	background-color: #eaf1fb;
 }
+.extjs::shadow tbody tr.edited-row td {
+	background-color: rgba(255,0,0,0.33);
+}
