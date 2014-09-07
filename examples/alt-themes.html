@@ -18,6 +18,7 @@
 		.article::shadow table.nutrients {
 			border-collapse: collapse;
 			text-align: left;
+			width:282px;
 		}
 		.article::shadow table.nutrients td {
 			width: 70px;
@@ -102,7 +103,7 @@
 				</p>
 				<span style="font-size:90%">Scientific Name: <em>{{record.row.scientificName}}</em></span>
 			</td>
-			<td style="width:282px">
+			<td>
 				<table class="nutrients">
 					<caption>Nutritive value per 100 g</caption>
 					<tr><td>Energy</td>						<td>{{record.row.energy}} Kcal</td>		<td>{{record.row.energy / 2000 * 100 | round(2)}}%</td></tr>
