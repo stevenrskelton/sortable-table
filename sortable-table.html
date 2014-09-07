@@ -445,7 +445,8 @@
 				var row = model.row;
 				if(model.record) row = model.record.row;
 
-				var editRow = null;
+				if(this.undoStack.length > 0 && !this.rowHasBeenEdited(this.undoStack[this.undoStack.length - 1])) this.undoStack.pop();
+
 				if(this.undoStack.length === 0){
 					this.editChanged = false;
 					this.undoStack.push({
@@ -453,33 +454,12 @@
 						original: JSON.parse(JSON.stringify(row))
 					});
 				}else{
-					var editRow = this.undoStack[this.undoStack.length - 1];
-					if(editRow.ref !== row){
-						//check if previous edit made changes
-						if(!this.rowHasBeenEdited(editRow)) this.undoStack.pop();
-
-						this.editChanged = this.undoStack.length > 0;
-
-						//initialize new edit
-						// - reuse element if already on undoStack, move to top
-						// - otherwise push new
-						var editRowIndex = -1;
-						this.undoStack.every(function(element,index){
-							if(element.ref === row){
-								editRowIndex = index;
-								return false;
-							}else return true;
+					this.editChanged = true;
+					if(this.undoStack[this.undoStack.length - 1].ref !== row){
+						this.undoStack.push({
+							ref: row,
+							original: JSON.parse(JSON.stringify(row))
 						});
-						if(editRowIndex > -1){
-							if(editRow !== this.undoStack.length - 1){
-								this.undoStack.push(this.undoStack.splice(editRowIndex, 1)[0]);
-							}
-						}else{
-							this.undoStack.push({
-								ref: row,
-								original: JSON.parse(JSON.stringify(row))
-							});
-						}
 					}
 				}
 				this.editRow = row;
