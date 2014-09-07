@@ -139,16 +139,30 @@
 		</div>
 	</template>
 
+	<template id="articlePaging">
+		<table>
+			<tr>
+				<template if="{{data.length > pageSize}}">
+					<td on-click="{{showMore}}">Show More</td>
+				</template>
+				<template if="{{data.length <= pageSize}}">
+					<td style="display:none"></td>
+				</template>
+				<td>Showing {{pageSize}} of {{data.length}}</td>
+			</tr>
+		</table>
+	</template>
+
 	<table class="sortable-table">
 		<thead>
 			<tr on-click="{{changeSort}}">
 				<template if="{{checkbox}}">
 					<th class="checkbox-column"><input type="checkbox" on-change="{{checkall}}" hidden?="{{!multiSelect}}" checked?="{{data.length == selected.length}}"></th>
 				</template>
-				<template repeat="{{column in columns}}">
+				<template repeat="{{column,i in columns}}">
 					<template ref="{{column.headerTemplate || headerTemplate}}" bind>
 						<th
-							class="column-{{column.name}}
+							class="column-{{column.name}} column-{{i}}
 								{{sortColumn == column.name && sortDescending ? 'sorted-column-desc' : ''}}
 								{{sortColumn == column.name && !sortDescending ? 'sorted-column-asc' : ''}}"
 							draggable="{{!disableColumnMove && !(rowTemplate || rowEditorTemplate)}}"
@@ -521,6 +535,10 @@
 		moveToNextPage: function(){ if(this.data.length > this.page * this.pageSize) this.page++; },
 		moveToFirstPage: function(){ this.page = 1; },
 		moveToLastPage: function(){ this.page = this.lastPage; },
+		showMore: function(){
+			if(!this.originalPageSize) this.originalPageSize = this.pageSize;
+			this.pageSize = Math.min(this.data.length, this.pageSize + this.originalPageSize);
+		},
 		/**
 		 *	Column Drag-and-Drop
 		 */
