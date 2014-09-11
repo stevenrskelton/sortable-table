@@ -13,6 +13,7 @@ There are many capable Javascript grids, this one aims to have all the same feat
 - Drag-and-Drop columns to reorder
 - Edit rows with multi-row Undo
 - Row paging, checkbox selection, and multi-select
+- Supports table, single row/article, and flowing grid layouts
 - Use of HTML5 `template` for customization (Cells, Rows, Column Headers and Footers)
 - 2-way data binding with the outside world
 
@@ -35,6 +36,10 @@ There are many capable Javascript grids, this one aims to have all the same feat
 #### Article
 
 ![Article](https://raw.githubusercontent.com/stevenrskelton/sortable-table/master/examples/article-theme.png "Article")
+
+#### Article in Grid Mode
+
+![Article in Grid Mode](https://raw.githubusercontent.com/stevenrskelton/sortable-table/master/examples/article-theme-grid.png "Article in Grid Mode")
 
 ## Live Examples
 

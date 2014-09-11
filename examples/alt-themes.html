@@ -54,6 +54,24 @@
 		.article::shadow .sortable-table thead th.sorted-column-desc.column-5::before {
 			content: 'Highest in ';
 		}
+		.article::shadow tbody.grid > tr {
+			width: 100%;
+		}
+		@media screen and (min-width: 780px) {
+			.article::shadow tbody.grid > tr {
+				width: 50%;
+			}
+		}
+		@media screen and (min-width: 1150px) {
+			.article::shadow tbody.grid > tr {
+				width: 33.333333%;
+			}
+		}
+		@media screen and (min-width: 1500px) {
+			.article::shadow tbody.grid > tr {
+				width: 25%;
+			}
+		}
 	</style>
 </head>
 <body unresolved>
@@ -62,6 +80,10 @@
 
 	A <code>rowTemplate</code> can be used to render items in a more descriptive, article based format.<br>
 	This is useful when items are sortable, but the actual values are less important than the relative order.
+
+	<p>
+
+	<code>grid</code> should refresh render when changed, and have a suitable CSS formatting.
 
 	<h3>Article theme</h3>
 
@@ -92,27 +114,46 @@
 		<sortable-column name="fibre">Fibre</sortable-column>
 
 		<template id="fruitDescTemplate">
-			<td>
-				<fruit-icon fruit="{{record.fields.fruit.value}}"></fruit-icon>
-			</td>
-			<td colspan="4">
-				<h3 style="margin:0;">{{record.row.fruit}}</h3>
-				<a href="{{record.row.link}}" target="_blank" style="font-size:small">{{record.row.link}}</a>
-				<p>
-					{{record.row.description}}
-				</p>
-				<span style="font-size:90%">Scientific Name: <em>{{record.row.scientificName}}</em></span>
-			</td>
-			<td>
-				<table class="nutrients">
-					<caption>Nutritive value per 100 g</caption>
-					<tr><td>Energy</td>						<td>{{record.row.energy}} Kcal</td>		<td>{{record.row.energy / 2000 * 100 | round(2)}}%</td></tr>
-					<tr><td class="alt">Carbohydrates</td>	<td>{{record.row.carbohydrates}} g</td>	<td>{{record.row.carbohydrates / 125 * 100 | round(2)}} %</td></tr>
-					<tr><td>Protein</td>					<td>{{record.row.protein}} g</td>		<td>{{record.row.protein / 50 * 100 | round(2)}} %</td></tr>
-					<tr><td class="alt">Total Fat</td>		<td>{{record.row.fat}} g</td>			<td>{{record.row.fat / 35 * 100 | round(2)}} %</td></tr>
-					<tr><td>Dietary Fibre</td>				<td>{{record.row.fibre}} g</td>			<td>{{record.row.fibre / 40 * 100 | round(2)}} %</td></tr>
-				</table>
-			</td>
+			<template if="{{!grid}}">
+				<td>
+					<fruit-icon fruit="{{record.fields.fruit.value}}"></fruit-icon>
+				</td>
+				<td colspan="4">
+					<h3 style="margin:0;">{{record.row.fruit}}</h3>
+					<a href="{{record.row.link}}" target="_blank" style="font-size:small">{{record.row.link}}</a>
+					<p>
+						{{record.row.description}}
+					</p>
+					<span style="font-size:90%">Scientific Name: <em>{{record.row.scientificName}}</em></span>
+				</td>
+				<td>
+					<table class="nutrients">
+						<caption>Nutritive value per 100 g</caption>
+						<tr><td>Energy</td>						<td>{{record.row.energy}} Kcal</td>		<td>{{record.row.energy / 2000 * 100 | round(2)}}%</td></tr>
+						<tr><td class="alt">Carbohydrates</td>	<td>{{record.row.carbohydrates}} g</td>	<td>{{record.row.carbohydrates / 125 * 100 | round(2)}} %</td></tr>
+						<tr><td>Protein</td>					<td>{{record.row.protein}} g</td>		<td>{{record.row.protein / 50 * 100 | round(2)}} %</td></tr>
+						<tr><td class="alt">Total Fat</td>		<td>{{record.row.fat}} g</td>			<td>{{record.row.fat / 35 * 100 | round(2)}} %</td></tr>
+						<tr><td>Dietary Fibre</td>				<td>{{record.row.fibre}} g</td>			<td>{{record.row.fibre / 40 * 100 | round(2)}} %</td></tr>
+					</table>
+				</td>
+			</template>
+			<template if="{{grid}}">
+				<td style="width:100%;text-align:center;">
+					<div>
+						<fruit-icon fruit="{{record.fields.fruit.value}}"></fruit-icon>
+						<h3 style="display:inline;">{{record.row.fruit}}</h3>
+					</div>
+					<table class="nutrients" style="text-align:left;margin-left:auto;margin-right:auto">
+						<caption>Nutritive value per 100 g</caption>
+						<tr><td>Energy</td>						<td>{{record.row.energy}} Kcal</td>		<td>{{record.row.energy / 2000 * 100 | round(2)}}%</td></tr>
+						<tr><td class="alt">Carbohydrates</td>	<td>{{record.row.carbohydrates}} g</td>	<td>{{record.row.carbohydrates / 125 * 100 | round(2)}} %</td></tr>
+						<tr><td>Protein</td>					<td>{{record.row.protein}} g</td>		<td>{{record.row.protein / 50 * 100 | round(2)}} %</td></tr>
+						<tr><td class="alt">Total Fat</td>		<td>{{record.row.fat}} g</td>			<td>{{record.row.fat / 35 * 100 | round(2)}} %</td></tr>
+						<tr><td>Dietary Fibre</td>				<td>{{record.row.fibre}} g</td>			<td>{{record.row.fibre / 40 * 100 | round(2)}} %</td></tr>
+					</table>
+					<a href="{{record.row.link}}" target="_blank" style="font-size:small">{{record.row.link}}</a>
+				</td>
+			</template>
 		</template>
 
 		[

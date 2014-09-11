@@ -12,7 +12,7 @@ https://github.com/stevenrskelton/sortable-table
 	attributes="
 		data columns sortColumn sortDescending rowSelection multiSelect selected
 		headerTemplate cellTemplate rowTemplate footerTemplate checkbox pageSize page
-		rowEditorTemplate multiRowEdit disableColumnMove defaultStyle"
+		rowEditorTemplate multiRowEdit disableColumnMove grid args defaultStyle"
 	style="display:block"
 >
 <template>
@@ -33,6 +33,14 @@ https://github.com/stevenrskelton/sortable-table
 	}
 	th.checkbox-column input[type=checkbox] {
 		vertical-align: middle;
+	}
+	tbody.grid {
+		font-size: 0;
+	}
+	tbody.grid > tr {
+		box-sizing: border-box;
+		display: inline-block;
+		font-size: initial;
 	}
 	</style>
 	<template if="{{defaultStyle}}">
@@ -151,6 +159,14 @@ https://github.com/stevenrskelton/sortable-table
 					<td style="display:none"></td>
 				</template>
 				<td>Showing {{pageSize}} of {{data.length}}</td>
+				<td>
+					<template if="{{grid!=null}}">
+						<select on-change="{{changeGrid}}">
+							<option value="grid" selected?="{{grid}}">▦ Grid</option>
+							<option value="grid" selected?="{{!grid}}">▤ List</option>
+						</select>
+					</template>
+				</td>
 			</tr>
 		</table>
 	</template>
@@ -179,8 +195,8 @@ https://github.com/stevenrskelton/sortable-table
 				</template>
 			</tr>
 		</thead>
-		<tbody>
-			<template repeat="{{record in data | sortByKey(sortColumn, sortDescending, columns, selected, pageSize, page, editRow, (selected || []).length + data.length + forceRefresh)}}">
+		<tbody class="{{grid ? ' grid' : ''}}">
+			<template repeat="{{record in data | sortByKey(sortColumn, sortDescending, columns, selected, pageSize, page, editRow, args, (args || []).length + (selected || []).length + data.length + forceRefresh)}}">
 				<tr
 					class="{{record.selected ? 'selected-row' : '' }}{{record.editMode ? ' editor-row' : ''}}{{record.dirty ? ' edited-row' : ''}}"
 					on-click="{{rowSelect}}"
@@ -247,6 +263,9 @@ https://github.com/stevenrskelton/sortable-table
 		sortColumn: null,
 		sortDescending: false,
 		showFooter: false,
+		grid: false,
+		changeGrid: function(e){ this.grid = !this.grid; },
+		args: {},
 		created: function(){
 			if(!this.data) this.data = [];
 			if(!this.columns) this.columns = [];
