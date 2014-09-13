@@ -1,10 +1,20 @@
 <link rel="import" href="../polymer/polymer.html">
-<polymer-element name="json-stringify" attributes="data">
+<polymer-element name="json-stringify" attributes="data array">
 	<template><pre>{{json}}</pre></template>
 	<script>
-	Polymer('json-stringify', { 
+	Polymer('json-stringify', {
+		array: false,
 		dataChanged: function() {
-			this.job('refreshJSON', function() { this.json = JSON.stringify(this.data); }, 500);
+			var json;
+			if(this.array){
+				json = JSON.stringify(this.data)
+					.replace(/\[\[/, '[\n\t[')
+					.replace(/\],\[/g, '],\n\t[')
+					.replace(/\]\]/, ']\n]');
+			}else{
+				json = JSON.stringify(this.data, null, 2);
+			}
+			this.json = json;
 		}
 	});
 	</script>
