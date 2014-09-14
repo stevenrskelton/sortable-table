@@ -19,26 +19,32 @@ class SSP {
 	/**
 	 * Create the data output array for the DataTables rows
 	 *
+	 *  @param  array $request Data sent to server by DataTables
 	 *  @param  array $columns Column information array
 	 *  @param  array $data    Data from the SQL get
 	 *  @return array          Formatted data in a row based format
 	 */
-	static function data_output ( $columns, $data )
+	static function data_output ( $request, $columns, $data )
 	{
 		$out = array();
+
+		$requestColumns = self::pluck($request['columns'], 'name');
+		$dbColumns = self::pluck( $columns, 'db' );
 
 		for ( $i=0, $ien=count($data) ; $i<$ien ; $i++ ) {
 			$row = array();
 
-			for ( $j=0, $jen=count($columns) ; $j<$jen ; $j++ ) {
-				$column = $columns[$j];
+			for ( $j=0, $jen=count($requestColumns) ; $j<$jen ; $j++ ) {
+
+				$columnIdx = array_search( $requestColumns[$j], $dbColumns );
+				$column = $columns[ $columnIdx ];
 
 				// Is there a formatter?
 				if ( isset( $column['formatter'] ) ) {
-					$row[ $column['dt'] ] = $column['formatter']( $data[$i][ $column['db'] ], $data[$i] );
+					$row[ $j ] = $column['formatter']( $data[$i][ $requestColumns[$j] ], $data[$i] );
 				}
 				else {
-					$row[ $column['dt'] ] = $data[$i][ $columns[$j]['db'] ];
+					$row[ $j ] = $data[$i][ $requestColumns[$j] ];
 				}
 			}
 
@@ -241,7 +247,7 @@ class SSP {
 			"draw"            => intval( $request['draw'] ),
 			"recordsTotal"    => intval( $recordsTotal ),
 			"recordsFiltered" => intval( $recordsFiltered ),
-			"data"            => self::data_output( $columns, $data )
+			"data"            => self::data_output( $request, $columns, $data )
 		);
 	}
 

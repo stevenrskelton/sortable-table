@@ -1,18 +1,21 @@
 <link rel="import" href="../polymer/polymer.html">
-<polymer-element name="json-stringify" attributes="data array">
+<polymer-element name="json-stringify" attributes="data full">
 	<template><pre>{{json}}</pre></template>
 	<script>
 	Polymer('json-stringify', {
-		array: false,
+		full: false,
 		dataChanged: function() {
 			var json;
-			if(this.array){
+			if(this.full){
+				json = JSON.stringify(this.data, null, 2);
+			}else{
 				json = JSON.stringify(this.data)
 					.replace(/\[\[/, '[\n\t[')
+					.replace(/\[\{/, '[\n\t{')
 					.replace(/\],\[/g, '],\n\t[')
-					.replace(/\]\]/, ']\n]');
-			}else{
-				json = JSON.stringify(this.data, null, 2);
+					.replace(/\},\{/g, '},\n\t{')
+					.replace(/\]\]/, ']\n]')
+					.replace(/\}\]/, '}\n]');
 			}
 			this.json = json;
 		}

@@ -12,10 +12,12 @@
 	attributes="
 		data columns sortColumn sortDescending rowSelection multiSelect selected
 		headerTemplate cellTemplate rowTemplate footerTemplate checkbox pageSize page
-		rowEditorTemplate multiRowEdit disableColumnMove grid args defaultStyle"
+		rowEditorTemplate multiRowEdit disableColumnMove grid args defaultStyle
+		ajax dataSize"
 	style="display:block"
 >
 <template>
+	<content select="datatables-ajax"></content>
 	<style>
 	.sortable-table {
 		width: 100%;
@@ -104,7 +106,7 @@
 	<template id="defaultPaging">
 		<div style="text-align:center">
 			<div style="float:left;cursor:pointer;color:{{page == 1 ? '#AAA':'#000'}}" on-click="{{moveToPreviousPage}}">Prev</div>
-			<div style="float:right;cursor:pointer;color:{{page * pageSize > data.length ? '#AAA':'#000'}}" on-click="{{moveToNextPage}}">Next</div>
+			<div style="float:right;cursor:pointer;color:{{page * pageSize > dataSize ? '#AAA':'#000'}}" on-click="{{moveToNextPage}}">Next</div>
 			Page {{page}} of {{lastPage}}
 		</div>
 	</template>
@@ -134,13 +136,13 @@
 
 			<button disabled?="{{page>=lastPage}}" on-click="{{moveToNextPage}}">&#9193;</button>
 			<button disabled?="{{page==lastPage}}" on-click="{{moveToLastPage}}">&#9197;</button>
-			<span flex style="text-align:right;margin-right:6px;">Displaying {{page > lastPage ? (lastPage-1) * pageSize + 1 : ((page - 1) * pageSize) + 1}} - {{page >= lastPage ? data.length : page * pageSize}} of {{data.length}}</span>
+			<span flex style="text-align:right;margin-right:6px;">Displaying {{page > lastPage ? (lastPage-1) * pageSize + 1 : ((page - 1) * pageSize) + 1}} - {{page >= lastPage ? dataSize : page * pageSize}} of {{dataSize}}</span>
 		</div>
 	</template>
 
 	<template id="espnPaging">
 		<div horizontal layout center>
-			<span flex>{{data.length}} Results</span>
+			<span flex>{{dataSize}} Results</span>
 			<span>
 				<button disabled?="{{page<=1}}" on-click="{{moveToPreviousPage}}">&#10094;</button>
 				{{page}} of {{lastPage}}
@@ -152,13 +154,13 @@
 	<template id="articlePaging">
 		<table>
 			<tr>
-				<template if="{{data.length > pageSize}}">
+				<template if="{{dataSize > pageSize}}">
 					<td on-click="{{showMore}}">Show More</td>
 				</template>
-				<template if="{{data.length <= pageSize}}">
+				<template if="{{dataSize <= pageSize}}">
 					<td style="display:none"></td>
 				</template>
-				<td>Showing {{pageSize}} of {{data.length}}</td>
+				<td>Showing {{pageSize}} of {{dataSize}}</td>
 				<td>
 					<template if="{{grid!=null}}">
 						<select on-change="{{changeGrid}}">
@@ -175,7 +177,7 @@
 		<thead>
 			<tr on-click="{{changeSort}}">
 				<template if="{{checkbox}}">
-					<th class="checkbox-column"><input type="checkbox" on-change="{{checkall}}" hidden?="{{!multiSelect}}" checked?="{{data.length == selected.length}}"></th>
+					<th class="checkbox-column"><input type="checkbox" on-change="{{checkall}}" hidden?="{{!multiSelect}}" checked?="{{dataSize == selected.length}}"></th>
 				</template>
 				<template repeat="{{column,i in columns}}">
 					<template ref="{{column.headerTemplate || headerTemplate}}" bind>
@@ -255,6 +257,7 @@
 		defaultStyle: false,
 		page: 1,
 		pageSize: Number.MAX_VALUE,
+		dataSize: 0,
 		rowEditorTemplate: null,
 		multiRowEdit: false,
 		rowSelection: false,
@@ -266,35 +269,52 @@
 		grid: false,
 		changeGrid: function(e){ this.grid = !this.grid; },
 		args: {},
+		ajax: null,
 		created: function(){
 			if(!this.data) this.data = [];
 			if(!this.columns) this.columns = [];
 			this.undoStack = [];
 		},
 		ready: function(){
-			var array = [];
-			var self = this;
-			[].forEach.call(this.childNodes, function(element) {
-				if(element.nodeName === "#text"){
-					var text = element.textContent.trim();
-					if(text.length>0){
-						var data;
-						try{
-							data = JSON.parse(text);
-						} catch(e){
-							try {
-								data = JSON5.parse(text);
-							} catch(e){
-								alert('Could not parse data.\n\nArrays, JSON and JSON5 are supported.');
-							}
-						}
-						if(data){
-							self.data = data;
-							self.rebuildColumns();
-						}else self.data = [];
-					}
+			var ajax = this.querySelector('datatables-ajax');
+			if(ajax){
+				if(!this.ajax){
+					this.ajax = ajax;
+					this.rebuildColumns();
+					this.ajax.length = this.pageSize;
+					this.ajax.sortColumn = this.sortColumn;
+					this.ajax.sortDescending = this.sortDescending;
+					var self = this;
+					this.ajax.addEventListener("core-response", function(e){
+						self.data = e.detail.data;
+						self.dataSize = e.detail.dataSize;
+					});
 				}
-			});
+			}else{
+				var self = this;
+				[].forEach.call(this.childNodes, function(element) {
+					if(element.nodeName === "#text"){
+						var text = element.textContent.trim();
+						if(text.length>0){
+							var data;
+							try{
+								data = JSON.parse(text);
+							} catch(e){
+								try {
+									data = JSON5.parse(text);
+								} catch(e){
+									alert('Could not parse data.\n\nArrays, JSON and JSON5 are supported.');
+								}
+							}
+							if(data){
+								self.data = data;
+								self.dataSize = data.length;
+								self.rebuildColumns();
+							}else self.data = [];
+						}
+					}
+				});
+			}
 			this.onMutation(this, this.ready);
 		},
 		/**
@@ -302,6 +322,10 @@
 		 */
 		isArray: function(a){
 			return Object.prototype.toString.call(a) === '[object Array]';
+		},
+		customFormat: function(v,format){
+			if(format) return format(v);
+			else return v;
 		},
 		toggleRowFromSelected: function(row){
 			if(this.isArray(this.selected)){
@@ -326,7 +350,7 @@
 			}
 		},
 		rebuildColumns: function(){
-			if(this.columns.length === 0 && this.data !== null && this.data.length > 0){
+			if(this.columns.length === 0){
 				//try and load from DOM
 				var columnNodes = this.querySelectorAll('sortable-column');
 				var c = [];
@@ -362,7 +386,7 @@
 					});
 					this.columns = c;
 					this.columnsChanged();
-				}else{
+				}else if(this.data !== null && this.data.length > 0){
 					var unique = [];
 					for(var i=0;i<this.data.length;i++){
 						Object.keys(this.data[i]).forEach(function(property) {
@@ -408,6 +432,7 @@
 				addTemplateWatches(c,'headerTemplate');
 				addTemplateWatches(c,'footerTemplate');
 			}
+			if(this.ajax) this.ajax.columns = this.columns;
 			this.forceRefresh++;
 		},
 		rowSelectionChanged: function(a,val){
@@ -437,13 +462,20 @@
 				}
 			}
 		},
+		sortColumnChanged: function(){ if(this.ajax) this.ajax.sortColumn = this.sortColumn; },
+		sortDescendingChanged: function(){ if(this.ajax) this.ajax.sortDescending = this.sortDescending; },
 		dataChanged: function(){ this.rebuildColumns(); this.pageSizeChanged(); },
 		cellTemplateChanged: function(a, t){ this.addTemplateIfNotInDocument(t); },
 		rowTemplateChanged: function(a, t){ this.addTemplateIfNotInDocument(t); },
 		headerTemplateChanged: function(a, t){ this.addTemplateIfNotInDocument(t); this.forceRefresh++; },
 		footerTemplateChanged: function(a, t){ this.addTemplateIfNotInDocument(t); this.forceRefresh++; },
 		rowEditorTemplateChanged: function(a, t){ this.addTemplateIfNotInDocument(t); },
-		pageSizeChanged: function(){ this.lastPage = Math.max(1,Math.ceil(this.data.length / this.pageSize)); },
+		pageSizeChanged: function(){
+			if(this.ajax) this.ajax.length = this.pageSize;
+			else this.dataSize = this.data.length;
+			this.lastPage = Math.max(1,Math.ceil(this.dataSize / this.pageSize));
+		},
+		pageChanged: function(){ if(this.ajax) this.ajax.start = (this.page - 1) * this.pageSize; },
 		/**
 		 *	Row Edit
 		 */
@@ -533,12 +565,12 @@
 		 */
 		moveToPage: function(e){ this.page = Number(e.currentTarget.textContent); },
 		moveToPreviousPage: function(){ if(this.page > 1) this.page--; },
-		moveToNextPage: function(){ if(this.data.length > this.page * this.pageSize) this.page++; },
+		moveToNextPage: function(){ if(this.dataSize > this.page * this.pageSize) this.page++; },
 		moveToFirstPage: function(){ this.page = 1; },
 		moveToLastPage: function(){ this.page = this.lastPage; },
 		showMore: function(){
 			if(!this.originalPageSize) this.originalPageSize = this.pageSize;
-			this.pageSize = Math.min(this.data.length, this.pageSize + this.originalPageSize);
+			this.pageSize = Math.min(this.dataSize, this.pageSize + this.originalPageSize);
 		},
 		/**
 		 *	Column Drag-and-Drop
@@ -662,9 +694,11 @@
 		 *	Expression Filters
 		 */
 		sortByKey: function(array, key, desc, columns, selected, pageSize, page, l) {
+			//ignore l, it is used to trigger observe.js watch only
+
 			var sortedArray;
-			if(key){
-				//ignore l, it is used to trigger observe.js watch only
+
+			if(key && !this.ajax){
 				sortedArray = array.sort(function(a, b) {
 					var x, y;
 					//determine if computed field
@@ -709,8 +743,15 @@
 
 			if(page < 1) page = 1;
 
-			var start = (pageSize < Number.MAX_VALUE) ? Math.min(pageSize * (page - 1), sortedArray.length) : 0;
-			var end = (pageSize < Number.MAX_VALUE) ? Math.min(start + +pageSize, sortedArray.length) : sortedArray.length;
+			var start, end;
+
+			if(this.ajax){
+				start = 0;
+				end = array.length;
+			}else{
+				start = (pageSize < Number.MAX_VALUE) ? Math.min(pageSize * (page - 1), sortedArray.length) : 0;
+				end = (pageSize < Number.MAX_VALUE) ? Math.min(start + +pageSize, sortedArray.length) : sortedArray.length;
+			}
 
 			for(var i=start;i<end;i++){
 				var row = sortedArray[i];
@@ -723,7 +764,8 @@
 				columns.forEach(function(column, index, array) {
 					var value;
 					if(column.formula){
-						value = column.formula(row);
+						if(typeof row[column.name] !== 'undefined') value = column.formula(row[column.name], row);
+						else value = column.formula(row);
 					}else{
 						value = row[column.name];
 					}

@@ -9,9 +9,10 @@
 
 <polymer-element hidden
 	name="datatables-ajax"
-	attributes="url withCredentials start length search sortColumn sortDescending columns data recordsTotal"
+	attributes="url withCredentials start length search sortColumn sortDescending columns data dataSize"
 >
 <script>
+	"use strict";
 	Polymer('datatables-ajax', {
 		url: null,
 		withCredentials: false,
@@ -24,6 +25,7 @@
 		ajax: null,
 		draw: 0,
 		drawReceived: 0,
+		columnsCache: [],
 		ready: function() {
 			var ajax = document.createElement('core-ajax');
 			ajax.handleAs = 'json';
@@ -32,67 +34,83 @@
 			this.ajax = ajax;
 			this.ajax.url = this.url;
 			this.ajax.withCredentials = this.withCredentials;
-			this.go();
+			this.job('go',this.go);
 		},
 		handleResponse: function(e){
 			var response = e.detail.response;
+			var columns;
+			this.columnsCache = this.columnsCache.filter(function(element){
+				if(element.draw === response.draw) columns = element.columns;
+				return element.draw > response.draw;
+			});
 			if(response.draw > this.drawReceived){
 				this.drawReceived = response.draw;
-				this.recordsTotal = response.recordsTotal;
-				this.data = response.data;
+				this.dataSize = response.recordsTotal;
+				if(columns.length>0){
+					this.data = response.data.map(function(currentValue){
+						var obj = {};
+						currentValue.forEach(function(element, i){
+							obj[columns[i].name] = element;
+						});
+						return obj;
+					});
+				}else this.data = response.data;
 			}
+			this.fire('core-response', { data: this.data, dataSize: this.dataSize });
 		},
 		go: function(){
-			this.draw++;
-			var params = {
-				draw: this.draw,
-				start: this.start,
-				length: this.length, /*,
-				"search[value]": this.search,
-				"search[regex]": false,*/
-				"columns[0][data]": 0,
-				"columns[0][name]": "",
-				"columns[0][searchable]": true,
-				"columns[0][orderable]": true,
-				"columns[0][search][value]": "",
-				"columns[0][search][regex]": false
-			};
 			if(this.columns.length>0){
+				this.draw++;
+				var params = {
+					draw: this.draw,
+					start: this.start,
+					length: this.length /*,
+					"search[value]": this.search,
+					"search[regex]": false,
+					"columns[0][data]": "",
+					"columns[0][name]": "",
+					"columns[0][searchable]": true,
+					"columns[0][orderable]": true,
+					"columns[0][search][value]": "",
+					"columns[0][search][regex]": false*/
+				};
 				this.columns.forEach(function(element,i){
-					params["columns[" + i + "][data]"] = element.data;
+					params["columns[" + i + "][data]"] = element.name;
 					params["columns[" + i + "][name]"] = element.name;
 					params["columns[" + i + "][searchable]"] = true;
 					params["columns[" + i + "][orderable]"] = true;
 					params["columns[" + i + "][search][value]"] = "";
 					params["columns[" + i + "][search][regex]"] = false;
 				});
-			}
-			if(this.sortColumn){
-				if(this.columns.length===0) alert('columns must be defined to define sort');
-				else {
-					var index = -1;
-					var self = this;
-					if(this.columns.every(function(element,i){
-						if(element.name !== self.sortColumn) return true;
-						else{
-							index = i;
-							return false;
-						}
-					})) alert('could not find column `' + this.sortColumn + '` in `columns`');
+				if(this.sortColumn){
+					if(this.columns.length===0) alert('columns must be defined to define sort');
 					else {
-						params['order[0][column]'] = index;
-						if(this.sortDescending) params['order[0][dir]'] = 'desc';
-						else params['order[0][dir]'] = 'asc';
+						var index = -1;
+						var self = this;
+						if(this.columns.every(function(element,i){
+							if(element.name !== self.sortColumn) return true;
+							else{
+								index = i;
+								return false;
+							}
+						})) alert('could not find column `' + this.sortColumn + '` in `columns`');
+						else {
+							params['order[0][column]'] = index;
+							if(this.sortDescending) params['order[0][dir]'] = 'desc';
+							else params['order[0][dir]'] = 'asc';
+						}
 					}
 				}
+				this.ajax.params = params;
+				this.columnsCache.push({draw: this.draw, columns: JSON.parse(JSON.stringify(this.columns))});
+				this.ajax.go();
 			}
-			this.ajax.params = params;
-			this.ajax.go();
 		},
-		startChanged: function(){ this.go(); },
-		lengthChanged: function(){ this.go(); },
-		sortColumnChanged: function(){ this.go(); },
-		sortDescendingChanged: function(){ this.go(); }
+		columnsChanged: function(){ this.job('go',this.go); },
+		startChanged: function(){ this.job('go',this.go); },
+		lengthChanged: function(){ this.job('go',this.go); },
+		sortColumnChanged: function(){ this.job('go',this.go); },
+		sortDescendingChanged: function(){ this.job('go',this.go); }
 	});
 </script>
 </polymer-element>

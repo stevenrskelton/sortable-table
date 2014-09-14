@@ -9,6 +9,9 @@
 	<link rel="import" href="../polymer/polymer.html">
 	<link rel="import" href="../datatables-ajax.html">
 	<link rel="import" href="json-stringify.html">
+	<style>
+		.paramType { color: #ddd }
+	</style>
 </head>
 <body unresolved>
 
@@ -34,17 +37,17 @@
 	<strong>&lt;datatables-ajax</strong>
 		url="<a href="http://files.stevenskelton.ca/sortable-table/examples/datatables.net/server_processing.php" target="_blank" alt="api"
 				>http://files.stevenskelton.ca/sortable-table/examples/datatables.net/server_processing.php</a>"
-		start=
-		length=
-		sortColumn=
-		sortDescending=
+		start=<span class="paramType">[int]</span>
+		length=<span class="paramType">[int]</span>
+		sortColumn=<span class="paramType">[string]</span>
+		sortDescending=<span class="paramType">[boolean]</span>
 		columns='[
-			{"name":"first_name",	"data":0},
-			{"name":"last_name",	"data":1},
-			{"name":"position",	"data":2},
-			{"name":"office",	"data":3},
-			{"name":"start_date",	"data":4},
-			{"name":"salary",	"data":5}
+			{"name":"first_name"},
+			{"name":"last_name"},
+			{"name":"position"},
+			{"name":"office"},
+			{"name":"start_date"},
+			{"name":"salary"}
 		]'
 	<strong>&gt;&lt;/datatables-ajax&gt;</strong>
 
@@ -58,72 +61,66 @@
 
 	<p>
 
-	<polymer-element name="demo-1" noscript>
-		<template>
-			<div>
-				<table>
-					<tr>
-						<td>Start</td>
-						<td><input type="number" min="0" max="57" value="{{start}}" style="text-align:right"></td>
-						<td><input type="range" min="0" max="57" value="{{start}}"></td>
-						<td>Paging first record indicator. This is the start point in the current data set (0 index based - i.e. 0 is the first record).</td>
-					</tr>
-					<tr>
-						<td>Length</td>
-						<td><input type="number" min="-1" max="57" value="{{length}}" style="text-align:right"></td>
-						<td><input type="range" min="-1" max="57" value="{{length}}"></td>
-						<td>Number of records that the table can display in the current draw. It is expected that the number of records returned will be equal to this number, unless the server has fewer records to return. Note that this can be -1 to indicate that all records should be returned (although that negates any benefits of server-side processing!)</td>
-					</tr>
-					<tr>
-						<td style="white-space: nowrap;">Sort Column</td>
-						<td>
-							<select value="{{sortColumn}}">
-								<option value="">-</option>
-								<option value="first_name">First Name</option>
-								<option value="last_name">Last Name</option>
-								<option value="position">Position</option>
-								<option value="office">Office</option>
-								<option value="start_date">Start Date</option>
-								<option value="salary">Salary</option>
-							</select>
-						</td>
-						<td><input type="checkbox" checked="{{sortDescending}}">Descending</td>
-						<td>Column by which to sort the records.</td>
-					</tr>
-				</table>
+	<template is="auto-binding">
+		<table>
+			<tr>
+				<td>Start</td>
+				<td><input type="number" min="0" max="57" value="{{start}}" style="text-align:right"></td>
+				<td><input type="range" min="0" max="57" value="{{start}}"></td>
+				<td>Paging first record indicator. This is the start point in the current data set (0 index based - i.e. 0 is the first record).</td>
+			</tr>
+			<tr>
+				<td>Length</td>
+				<td><input type="number" min="-1" max="57" value="{{length}}" style="text-align:right"></td>
+				<td><input type="range" min="-1" max="57" value="{{length}}"></td>
+				<td>Number of records that the table can display in the current draw. It is expected that the number of records returned will be equal to this number, unless the server has fewer records to return. Note that this can be -1 to indicate that all records should be returned (although that negates any benefits of server-side processing!)</td>
+			</tr>
+			<tr>
+				<td style="white-space: nowrap;">Sort Column</td>
+				<td>
+					<select value="{{sortColumn}}">
+						<option value="">-</option>
+						<option value="first_name">First Name</option>
+						<option value="last_name">Last Name</option>
+						<option value="position">Position</option>
+						<option value="office">Office</option>
+						<option value="start_date">Start Date</option>
+						<option value="salary">Salary</option>
+					</select>
+				</td>
+				<td><input type="checkbox" checked="{{sortDescending}}">Descending</td>
+				<td>Column by which to sort the records.</td>
+			</tr>
+		</table>
 
-				<datatables-ajax
-					url="datatables.net/server_processing.php"
-					data="{{data}}"
-					recordsTotal="{{recordsTotal}}"
-					start="{{start}}"
-					length="{{length}}"
-					sortColumn="{{sortColumn}}"
-					sortDescending="{{sortDescending}}"
-					columns='[
-						{"name":"first_name",	"data":0},
-						{"name":"last_name",	"data":1},
-						{"name":"position",		"data":2},
-						{"name":"office",		"data":3},
-						{"name":"start_date",	"data":4},
-						{"name":"salary",		"data":5}
-					]'
-				></datatables-ajax>
+		<datatables-ajax
+			url="datatables.net/server_processing.php"
+			data="{{data}}"
+			dataSize="{{dataSize}}"
+			start="{{start}}"
+			length="{{length}}"
+			sortColumn="{{sortColumn}}"
+			sortDescending="{{sortDescending}}"
+			columns='[
+				{"name":"first_name"},
+				{"name":"last_name"},
+				{"name":"position"},
+				{"name":"office"},
+				{"name":"start_date"},
+				{"name":"salary"}
+			]'
+		></datatables-ajax>
 
-				<p>
+		<p>
 
-				<strong>{{recordsTotal}} Total Records</strong><br>
-				<strong>{{data.length}} Records Returned</strong><br>
+		<strong>{{dataSize}} Total Records</strong><br>
+		<strong>{{data.length}} Records Returned</strong><br>
 
-				<json-stringify
-					array data="{{data}}"
-					style="overflow-y:auto;display:block;border:1px solid #333;"
-				></json-stringify>
-			</div>
-		</template>
-	</polymer-element>
-
-	<demo-1></demo-1>
+		<json-stringify
+			data="{{data}}"
+			style="overflow-y:auto;display:block;border:1px solid #333;"
+		></json-stringify>
+	</template>
 
 </body>
 </html>

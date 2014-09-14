@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sortable Table using Polymer Web Components</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<script src="../../platform/platform.js" debug log="bind,ready,events"></script>
+	<link rel="import" href="../sortable-table.html">
+	<link rel="import" href="../datatables-ajax.html">
+	<link rel="import" href="index-links.html">
+
+	<style shim-shadowdom>
+		/*sortable-table { width: 500px; margin-left: 65px; }*/
+		sortable-table::shadow td.column-first_name,
+		sortable-table::shadow td.column-last_name,
+		sortable-table::shadow td.column-position,
+		sortable-table::shadow td.column-office,
+		sortable-table::shadow td.column-start_date,
+		sortable-table::shadow td.column-salary {
+			/*text-align: right;*/
+			padding-right: 5px;
+			width: 250px;
+			vertical-align: middle;
+		}
+		sortable-table::shadow td.column-start_date {
+			text-align: center;
+		}
+		sortable-table::shadow td.column-salary {
+			text-align: right;
+		}
+	</style>
+</head>
+<body unresolved>
+
+	<h2>AJAX</h2>
+
+	<template is="auto-binding">
+
+		AJAX = {{ajax!=null}}
+
+		<p>
+
+		<sortable-table
+			defaultStyle
+			ajax="{{ajax}}"
+			footerTemplate="extjsPaging"
+			pageSize="10"
+		>
+			<sortable-column name="first_name">First</sortable-column>
+			<sortable-column name="last_name">Last</sortable-column>
+			<sortable-column name="position">Position</sortable-column>
+			<sortable-column name="office">Office</sortable-column>
+			<sortable-column name="start_date" formula="function(v){ return (new Date(v * 1000)).toString().substring(4,15); }">Start Date</sortable-column>
+			<sortable-column name="salary" formula="function(v){ return '$' + v; }">Salary</sortable-column>
+
+			<datatables-ajax url="datatables.net/server_processing.php"></datatables-ajax>
+		</sortable-table>
+	</template>
+
+	<index-links page="ajax.html"></index-links>
+</body>
+</html>
