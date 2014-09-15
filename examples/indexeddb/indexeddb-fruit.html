@@ -25,7 +25,7 @@
 			var request = indexedDB.open("fruits", dbVersion);
 			request.onupgradeneeded = function(event) {
 				var db = event.target.result;
-				db.deleteObjectStore("fruits");
+				if(db.objectStoreNames.contains('fruits')) db.deleteObjectStore("fruits");
 				var objectStore = db.createObjectStore("fruits", { autoIncrement: true });
 				objectStore.createIndex("name", dbFields[0], { unique: true });
 				objectStore.createIndex("energy", dbFields[2], { unique: false });
