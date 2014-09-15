@@ -13,7 +13,7 @@
 		data columns sortColumn sortDescending rowSelection multiSelect selected
 		headerTemplate cellTemplate rowTemplate footerTemplate checkbox pageSize page
 		rowEditorTemplate multiRowEdit disableColumnMove grid args defaultStyle
-		ajax dataSize"
+		serverSide dataSize"
 	style="display:block"
 >
 <template>
@@ -269,28 +269,31 @@
 		grid: false,
 		changeGrid: function(e){ this.grid = !this.grid; },
 		args: {},
-		ajax: null,
+		serverSide: false,
+		dataSource: null,
 		created: function(){
 			if(!this.data) this.data = [];
 			if(!this.columns) this.columns = [];
 			this.undoStack = [];
 		},
 		ready: function(){
-			var ajax = this.querySelector('datatables-ajax');
-			if(ajax){
-				if(!this.ajax){
-					this.ajax = ajax;
+			var dataSource = this.querySelector('datatables-ajax');
+			if(dataSource){
+				if(!this.dataSource){
+					this.serverSide = dataSource.serverSide;
+					this.dataSource = dataSource;
 					this.rebuildColumns();
-					this.ajax.length = this.pageSize;
-					this.ajax.sortColumn = this.sortColumn;
-					this.ajax.sortDescending = this.sortDescending;
+					this.dataSource.length = this.pageSize;
+					this.dataSource.sortColumn = this.sortColumn;
+					this.dataSource.sortDescending = this.sortDescending;
 					var self = this;
-					this.ajax.addEventListener("core-response", function(e){
+					this.dataSource.addEventListener("data-updated", function(e){
 						self.data = e.detail.data;
 						self.dataSize = e.detail.dataSize;
 					});
 				}
 			}else{
+				this.serverSide = false;
 				var self = this;
 				[].forEach.call(this.childNodes, function(element) {
 					if(element.nodeName === "#text"){
@@ -432,7 +435,7 @@
 				addTemplateWatches(c,'headerTemplate');
 				addTemplateWatches(c,'footerTemplate');
 			}
-			if(this.ajax) this.ajax.columns = this.columns;
+			if(this.dataSource) this.dataSource.columns = this.columns;
 			this.forceRefresh++;
 		},
 		rowSelectionChanged: function(a,val){
@@ -462,8 +465,8 @@
 				}
 			}
 		},
-		sortColumnChanged: function(){ if(this.ajax) this.ajax.sortColumn = this.sortColumn; },
-		sortDescendingChanged: function(){ if(this.ajax) this.ajax.sortDescending = this.sortDescending; },
+		sortColumnChanged: function(){ if(this.dataSource) this.dataSource.sortColumn = this.sortColumn; },
+		sortDescendingChanged: function(){ if(this.dataSource) this.dataSource.sortDescending = this.sortDescending; },
 		dataChanged: function(){ this.rebuildColumns(); this.pageSizeChanged(); },
 		cellTemplateChanged: function(a, t){ this.addTemplateIfNotInDocument(t); },
 		rowTemplateChanged: function(a, t){ this.addTemplateIfNotInDocument(t); },
@@ -471,11 +474,11 @@
 		footerTemplateChanged: function(a, t){ this.addTemplateIfNotInDocument(t); this.forceRefresh++; },
 		rowEditorTemplateChanged: function(a, t){ this.addTemplateIfNotInDocument(t); },
 		pageSizeChanged: function(){
-			if(this.ajax) this.ajax.length = this.pageSize;
+			if(this.dataSource) this.dataSource.length = this.pageSize;
 			else this.dataSize = this.data.length;
 			this.lastPage = Math.max(1,Math.ceil(this.dataSize / this.pageSize));
 		},
-		pageChanged: function(){ if(this.ajax) this.ajax.start = (this.page - 1) * this.pageSize; },
+		pageChanged: function(){ if(this.dataSource) this.dataSource.start = (this.page - 1) * this.pageSize; },
 		/**
 		 *	Row Edit
 		 */
@@ -698,7 +701,7 @@
 
 			var sortedArray;
 
-			if(key && !this.ajax){
+			if(key && !this.serverSide){
 				sortedArray = array.sort(function(a, b) {
 					var x, y;
 					//determine if computed field
@@ -745,7 +748,7 @@
 
 			var start, end;
 
-			if(this.ajax){
+			if(this.serverSide){
 				start = 0;
 				end = array.length;
 			}else{

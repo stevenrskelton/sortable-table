@@ -9,11 +9,12 @@
 
 <polymer-element hidden
 	name="datatables-ajax"
-	attributes="url withCredentials start length search sortColumn sortDescending columns data dataSize"
+	attributes="url withCredentials start length search sortColumn sortDescending columns data dataSize serverSide"
 >
 <script>
 	"use strict";
 	Polymer('datatables-ajax', {
+		serverSide: true,
 		url: null,
 		withCredentials: false,
 		start: 0,
@@ -56,7 +57,7 @@
 					});
 				}else this.data = response.data;
 			}
-			this.fire('core-response', { data: this.data, dataSize: this.dataSize });
+			this.fire('data-updated', { data: this.data, dataSize: this.dataSize });
 		},
 		go: function(){
 			if(this.columns.length>0){

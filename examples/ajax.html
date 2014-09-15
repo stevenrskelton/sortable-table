@@ -11,14 +11,12 @@
 	<link rel="import" href="index-links.html">
 
 	<style shim-shadowdom>
-		/*sortable-table { width: 500px; margin-left: 65px; }*/
 		sortable-table::shadow td.column-first_name,
 		sortable-table::shadow td.column-last_name,
 		sortable-table::shadow td.column-position,
 		sortable-table::shadow td.column-office,
 		sortable-table::shadow td.column-start_date,
 		sortable-table::shadow td.column-salary {
-			/*text-align: right;*/
 			padding-right: 5px;
 			width: 250px;
 			vertical-align: middle;
@@ -37,13 +35,13 @@
 
 	<template is="auto-binding">
 
-		AJAX = {{ajax!=null}}
+		Server-side = {{serverSide}}
 
 		<p>
 
 		<sortable-table
 			defaultStyle
-			ajax="{{ajax}}"
+			serverSide="{{serverSide}}"
 			footerTemplate="extjsPaging"
 			pageSize="10"
 		>
