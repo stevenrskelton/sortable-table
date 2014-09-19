@@ -9,12 +9,11 @@
 
 <polymer-element hidden
 	name="datatables-ajax"
-	attributes="url withCredentials start length search sortColumn sortDescending columns data dataSize serverSide"
+	attributes="url withCredentials start length search sortColumn sortDescending columns data dataSize"
 >
 <script>
 	"use strict";
-	Polymer('datatables-ajax', {
-		serverSide: true,
+	Polymer({
 		url: null,
 		withCredentials: false,
 		start: 0,

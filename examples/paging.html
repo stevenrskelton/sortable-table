@@ -34,7 +34,17 @@
 	<p>
 
 	<template id="example" bind>
-		<sortable-table defaultStyle page="{{page}}" pageSize="{{pageSize}}" checkbox multiselect columns="{{columns}}" selected="{{selected}}" sortColumn="fruit" footerTemplate="defaultPaging">
+		<sortable-table
+			class="default"
+			page="{{page}}"
+			pageSize="{{pageSize}}"
+			checkbox
+			multiselect
+			columns="{{columns}}"
+			selected="{{selected}}"
+			sortColumn="fruit"
+			footerTemplate="defaultPaging"
+		>
 		[
 			{fruit: 'apple', alice: 4, bill: 10, casey: 2 },
 			{fruit: 'banana', alice: 0, bill: 4, casey: 0 },
@@ -65,7 +75,7 @@
 			<tr><td><strong>Selected</strong></td><td>{{selected.length}}</td></tr>
 		</table>
 		<br>
-		<sortable-table defaultStyle data="{{selected}}"></sortable-table>
+		<sortable-table class="default" data="{{selected}}"></sortable-table>
 	</template>
 
 	<script>

@@ -25,7 +25,14 @@
 	<p>
 
 	<template id="example" bind>
-		<sortable-table defaultStyle data="{{data}}" selected="{{selected}}" rowSelection="{{rowSelection}}" multiSelect="{{multiSelect}}" checkbox="{{checkbox}}"></sortable-table>
+		<sortable-table
+			class="default"
+			data="{{data}}"
+			selected="{{selected}}"
+			rowSelection="{{rowSelection}}"
+			multiSelect="{{multiSelect}}"
+			checkbox="{{checkbox}}"
+		></sortable-table>
 		<p>
 		<strong>Enabled Interactions:</strong><br>
 		<input type="checkbox" checked="{{rowSelection}}">rowSelection<br>
@@ -68,7 +75,7 @@
 	<h2>Non-Interactive Selection</h2>
 
 	<template id="example2" bind>
-		<sortable-table defaultStyle data="{{data}}" selected="{{selected}}"></sortable-table>
+		<sortable-table class="default" data="{{data}}" selected="{{selected}}"></sortable-table>
 	</template>
 
 	<script>

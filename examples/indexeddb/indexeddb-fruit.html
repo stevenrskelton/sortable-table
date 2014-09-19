@@ -2,12 +2,11 @@
 
 <polymer-element hidden
 	name="indexeddb-fruit"
-	attributes="url withCredentials start length search sortColumn sortDescending columns data dataSize serverSide"
+	attributes="url withCredentials start length search sortColumn sortDescending columns data dataSize"
 >
 <script>
 	"use strict";
-	Polymer('indexeddb-fruit', {
-		serverSide: true,
+	Polymer({
 		url: null,
 		withCredentials: false,
 		start: 0,
@@ -15,8 +14,10 @@
 		search: "",
 		sortColumn: null,
 		sortDescending: false,
-		columns: [],
 		db: null,
+		created: function(){
+			if(!this.columns) this.columns = [];
+		},
 		ready: function() {
 			var self = this;
 			var dbVersion = 15;
@@ -35,7 +36,7 @@
 				objectStore.transaction.oncomplete = function(event) {
 					// Store values in the newly created objectStore.
 					var fruitsObjectStore = db.transaction("fruits", "readwrite").objectStore("fruits");
-					//Measure 100 grams; raw
+					//This data could come from anywhere, including a compressed file
 					var dbData = [
 						["Acerola",94.3,23,0.4,0.3,4.8,4.5,0.3,0,0,0.068,0.082,0.09,10,0.086,0.5,12,9,97,0.1,3,0.1,25,1600,0.004,0,0,0.18,0,14,0,1.4,0.4,0,0.06,0.02,305,0,0,17,0,0,0],
 						["Apple",85.56,52,0.26,0.17,13.81,10.39,2.4,0,0,0.028,0.007,0.051,6,0.027,0.12,5,11,107,0,1,0.04,3,4.6,0.041,0,0,0.18,0,3,0,2.2,0.091,0,0.026,0.017,27,0,11,29,0,0,0],
@@ -110,6 +111,9 @@
 					var length = this.length;
 					var results = [];
 					var direction = this.sortDescending ? "prev" : "next";
+					objectStore.count().onsuccess = function(event){
+						self.dataSize = event.target.result;
+					}
 					objectStore.openCursor(null, direction).onsuccess = function(event) {
 						var cursor = event.target.result;
 						if (cursor && length !== 0) {
@@ -124,7 +128,6 @@
 							}
 						}else{
 							self.data = results;
-							self.dataSize = results.length;
 						}
 					};
 				};

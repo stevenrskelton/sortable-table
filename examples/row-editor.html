@@ -145,87 +145,90 @@
 
 		<p>
 
-		<div class="x-panel x-grid x-panel-default-framed" style="width:1200px">
-			<sortable-table 
-				class="extjs"
-				rowTemplate="row"
-				rowEditorTemplate="editor"
-				footerTemplate="updateCancelTemplate"
-				multiRowEdit
-			>
-				<sortable-column name="fruit" footerTemplate="footerLabel">Fruit</sortable-column>
-				<sortable-column name="alice" footerTemplate="footer">Alice</sortable-column>
-				<sortable-column name="bill" footerTemplate="footer">Bill</sortable-column>
-				<sortable-column name="casey" footerTemplate="footer">Casey</sortable-column>
-				<sortable-column name="average" formula="average" footerTemplate="footer">Average</sortable-column>
-				<sortable-column name="total" formula="total" footerTemplate="footer">Total</sortable-column>
+		<div class="x-panel x-grid" style="width:1200px">
+			<div class="x-panel-header-default-framed-top">Optional Header</div>
+			<div class="x-panel-default-framed">
+				<sortable-table
+					class="extjs"
+					rowTemplate="row"
+					rowEditorTemplate="editor"
+					footerTemplate="updateCancelTemplate"
+					multiRowEdit
+				>
+					<sortable-column name="fruit" footerTemplate="footerLabel">Fruit</sortable-column>
+					<sortable-column name="alice" footerTemplate="footer">Alice</sortable-column>
+					<sortable-column name="bill" footerTemplate="footer">Bill</sortable-column>
+					<sortable-column name="casey" footerTemplate="footer">Casey</sortable-column>
+					<sortable-column name="average" formula="average" footerTemplate="footer">Average</sortable-column>
+					<sortable-column name="total" formula="total" footerTemplate="footer">Total</sortable-column>
 
-				<template id="row">
-					<td style="width:250px;text-align:left;">
-						<fruit-icon fruit="{{record.row.fruit}}"></fruit-icon>{{record.row.fruit}}
-					</td>
-					<td style="width:20%;">{{record.row.alice}}</td>
-					<td style="width:20%;">{{record.row.bill}}</td>
-					<td style="width:20%;">{{record.row.casey}}</td>
-					<td>{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
-					<td>{{record.row | total(record.row.alice,record.row.bill,record.row.casey)}}</td>
-				</template>
-				<template id="editor">
-					<td horizontal layout>
-						<fruit-icon fruit="{{record.row.fruit}}"></fruit-icon>
-						<div flex horizontal layout center>
-							<select value="{{record.row.fruit}}" class="form-control" on-change="{{refreshFooter}}">
-								<option></option>
-								<option value="apple">apple</option>
-								<option value="banana">banana</option>
-								<option value="grape">grape</option>
-								<option value="pear">pear</option>
-								<option value="strawberry">strawberry</option>
-							</select>
+					<template id="row">
+						<td style="width:250px;text-align:left;">
+							<fruit-icon fruit="{{record.row.fruit}}"></fruit-icon>{{record.row.fruit}}
+						</td>
+						<td style="width:20%;">{{record.row.alice}}</td>
+						<td style="width:20%;">{{record.row.bill}}</td>
+						<td style="width:20%;">{{record.row.casey}}</td>
+						<td>{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
+						<td>{{record.row | total(record.row.alice,record.row.bill,record.row.casey)}}</td>
+					</template>
+					<template id="editor">
+						<td horizontal layout>
+							<fruit-icon fruit="{{record.row.fruit}}"></fruit-icon>
+							<div flex horizontal layout center>
+								<select value="{{record.row.fruit}}" class="form-control" on-change="{{refreshFooter}}">
+									<option></option>
+									<option value="apple">apple</option>
+									<option value="banana">banana</option>
+									<option value="grape">grape</option>
+									<option value="pear">pear</option>
+									<option value="strawberry">strawberry</option>
+								</select>
+							</div>
+						</td>
+						<td>
+							<input type="number" value="{{record.row.alice}}" on-change="{{refreshFooter}}">
+						</td>
+						<td>
+							<input type="number" value="{{record.row.bill}}" on-change="{{refreshFooter}}">
+						</td>
+						<td>
+							<input type="number" value="{{record.row.casey}}" on-change="{{refreshFooter}}">
+						</td>
+						<td>{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
+						<td>{{record.row | total(record.row.alice,record.row.bill,record.row.casey)}}</td>
+					</template>
+					<template id="footer">
+						<td class="sortable-table-footer">{{values | sum}}</td>
+					</template>
+					<template id="footerLabel">
+						<td class="sortable-table-footer">Total Fruit Per Person</td>
+					</template>
+					<template id="updateCancelTemplate">
+						<div horizontal layout>
+							<div flex>
+								<button on-click="{{undoEdit}}" title="Reload" disabled?="{{!editChanged}}">&#10227;</button>
+								<template if="{{undoStack.length > 0 && editChanged}}">
+									<strong>Original Values: </strong>
+									{{undoStack | originalValues(columns, editRow)}}
+								</template>
+							</div>
+							<div>
+								<button on-click="{{closeEdit}}" title="Update" disabled?="{{undoStack.length==0}}">&#10004; Update</button>
+								<button on-click="{{cancelEdit}}" title="Cancel" disabled?="{{undoStack.length==0}}">&#10008; Cancel</button>
+							</div>
 						</div>
-					</td>
-					<td>
-						<input type="number" value="{{record.row.alice}}" on-change="{{refreshFooter}}">
-					</td>
-					<td>
-						<input type="number" value="{{record.row.bill}}" on-change="{{refreshFooter}}">
-					</td>
-					<td>
-						<input type="number" value="{{record.row.casey}}" on-change="{{refreshFooter}}">
-					</td>
-					<td>{{record.row | average(record.row.alice,record.row.bill,record.row.casey)}}</td>
-					<td>{{record.row | total(record.row.alice,record.row.bill,record.row.casey)}}</td>
-				</template>
-				<template id="footer">
-					<td class="sortable-table-footer">{{values | sum}}</td>
-				</template>
-				<template id="footerLabel">
-					<td class="sortable-table-footer">Total Fruit Per Person</td>
-				</template>
-				<template id="updateCancelTemplate">
-					<div horizontal layout>
-						<div flex>
-							<button on-click="{{undoEdit}}" title="Reload" disabled?="{{!editChanged}}">&#10227;</button>
-							<template if="{{undoStack.length > 0 && editChanged}}">
-								<strong>Original Values: </strong>
-								{{undoStack | originalValues(columns, editRow)}}
-							</template>
-						</div>
-						<div>
-							<button on-click="{{closeEdit}}" title="Update" disabled?="{{undoStack.length==0}}">&#10004; Update</button>
-							<button on-click="{{cancelEdit}}" title="Cancel" disabled?="{{undoStack.length==0}}">&#10008; Cancel</button>
-						</div>
-					</div>
-				</template>
+					</template>
 
-				[
-					{ fruit: 'apple', alice: 4, bill: 10, casey: 2 },
-					{ fruit: 'banana', alice: 0, bill: 4, casey: 0 },
-					{ fruit: 'grape', alice: 2, bill: 3, casey: 5 },
-					{ fruit: 'pear', alice: 4, bill: 2, casey: 8 },
-					{ fruit: 'strawberry', alice: 0, bill: 14, casey: 0 }
-				]
-			</sortable-table>
+					[
+						{ fruit: 'apple', alice: 4, bill: 10, casey: 2 },
+						{ fruit: 'banana', alice: 0, bill: 4, casey: 0 },
+						{ fruit: 'grape', alice: 2, bill: 3, casey: 5 },
+						{ fruit: 'pear', alice: 4, bill: 2, casey: 8 },
+						{ fruit: 'strawberry', alice: 0, bill: 14, casey: 0 }
+					]
+				</sortable-table>
+			</div>
 		</div>
 
 		<br>

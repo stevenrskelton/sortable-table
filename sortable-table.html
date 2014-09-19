@@ -12,12 +12,11 @@
 	attributes="
 		data columns sortColumn sortDescending rowSelection multiSelect selected
 		headerTemplate cellTemplate rowTemplate footerTemplate checkbox pageSize page
-		rowEditorTemplate multiRowEdit disableColumnMove grid args defaultStyle
-		serverSide dataSize"
+		rowEditorTemplate multiRowEdit disableColumnMove grid args dataSize"
 	style="display:block"
 >
 <template>
-	<content select="datatables-ajax"></content>
+	<content select='[role="datasource"]'></content>
 	<style>
 	.sortable-table {
 		width: 100%;
@@ -44,64 +43,61 @@
 		display: inline-block;
 		font-size: initial;
 	}
-	</style>
-	<template if="{{defaultStyle}}">
-		<style>
-			.sortable-table {
-				border-collapse: collapse;
-				border: 1px solid #ccc;
-			}
-			.sortable-table .row-selection {
-				cursor: pointer;
-			}
-			.sortable-table tbody td {
-				border: 1px dotted #ccc;
-			}
-			.sortable-table tbody tr:nth-of-type(even) {
-				background-color: rgba(255,255,224,0.25);
-			}
-			.sortable-table tfoot td {
-				border: 1px solid #ccc;
-				background-color: #F5F8FA;
-			}
-			.sortable-table thead th {
-				border: 1px solid #ccc;
-				background-color: #0084B4;
-				color: white;
-				cursor: pointer;
-			}
-			.sortable-table thead th.sorted-column-asc {
-				text-decoration: overline;
-			}
-			.sortable-table thead th.sorted-column-desc {
-				text-decoration: underline;
-			}
-			.sortable-table thead th.column-move-right {
-				border-right-color: #FBBA37;
-				background: #FBBA37; /* Older browsers */
-				background: -moz-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* FF3.6+ */
-				background: -webkit-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* Chrome10+,Safari5.1+ */
-				background: -o-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* Opera 11.10+ */
-				background: -ms-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* IE10+ */
-				background: linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* W3C */
-			}
-			.sortable-table thead th.column-move-left {
-				border-left-color: #FBBA37;
-				background: #FBBA37; /* Older browsers */
-				background: -moz-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* FF3.6+ */
-				background: -webkit-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* Chrome10+,Safari5.1+ */
-				background: -o-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* Opera 11.10+ */
-				background: -ms-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* IE10+ */
-				background: linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* W3C */
-			}
-			.sortable-table thead th.column-in-move {
-				opacity: 0.4;
-			}
-			.sortable-table tbody tr.selected-row {
-				background-color: rgba(0,96,200,0.2);
-			}
-		</style>
-	</template>
+
+	:host(.default) .sortable-table {
+		border-collapse: collapse;
+		border: 1px solid #ccc;
+	}
+	:host(.default) .sortable-table .row-selection {
+		cursor: pointer;
+	}
+	:host(.default) .sortable-table tbody td {
+		border: 1px dotted #ccc;
+	}
+	:host(.default) .sortable-table tbody tr:nth-of-type(even) {
+		background-color: rgba(255,255,224,0.25);
+	}
+	:host(.default) .sortable-table tfoot td {
+		border: 1px solid #ccc;
+		background-color: #F5F8FA;
+	}
+	:host(.default) .sortable-table thead th {
+		border: 1px solid #ccc;
+		background-color: #0084B4;
+		color: white;
+		cursor: pointer;
+	}
+	:host(.default) .sortable-table thead th.sorted-column-asc {
+		text-decoration: overline;
+	}
+	:host(.default) .sortable-table thead th.sorted-column-desc {
+		text-decoration: underline;
+	}
+	:host(.default) .sortable-table thead th.column-move-right {
+		border-right-color: #FBBA37;
+		background: #FBBA37; /* Older browsers */
+		background: -moz-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* FF3.6+ */
+		background: -webkit-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* IE10+ */
+		background: linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* W3C */
+	}
+	:host(.default) .sortable-table thead th.column-move-left {
+		border-left-color: #FBBA37;
+		background: #FBBA37; /* Older browsers */
+		background: -moz-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* FF3.6+ */
+		background: -webkit-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* IE10+ */
+		background: linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* W3C */
+	}
+	:host(.default) .sortable-table thead th.column-in-move {
+		opacity: 0.4;
+	}
+	:host(.default) .sortable-table tbody tr.selected-row {
+		background-color: rgba(0,96,200,0.2);
+	}
+</style>
 
 	<template id="defaultPaging">
 		<div style="text-align:center">
@@ -155,7 +151,7 @@
 		<table>
 			<tr>
 				<template if="{{dataSize > pageSize}}">
-					<td on-click="{{showMore}}">Show More</td>
+					<td role="button" on-click="{{showMore}}">Show More</td>
 				</template>
 				<template if="{{dataSize <= pageSize}}">
 					<td style="display:none"></td>
@@ -163,7 +159,7 @@
 				<td>Showing {{pageSize}} of {{dataSize}}</td>
 				<td>
 					<template if="{{grid!=null}}">
-						<select on-change="{{changeGrid}}">
+						<select on-change="{{toggleGrid}}">
 							<option value="grid" selected?="{{grid}}">▦ Grid</option>
 							<option value="grid" selected?="{{!grid}}">▤ List</option>
 						</select>
@@ -248,13 +244,12 @@
 
 <script>
 	"use strict";
-	Polymer('sortable-table', {
+	Polymer({
 		disableColumnMove: false,
 		footerTemplate: null,
 		headerTemplate: null,
 		lastPage: 1,
 		multiSelect: false,
-		defaultStyle: false,
 		page: 1,
 		pageSize: Number.MAX_VALUE,
 		dataSize: 0,
@@ -267,9 +262,8 @@
 		sortDescending: false,
 		showFooter: false,
 		grid: false,
-		changeGrid: function(e){ this.grid = !this.grid; },
+		toggleGrid: function(e){ this.grid = !this.grid; },
 		args: {},
-		serverSide: false,
 		dataSource: null,
 		created: function(){
 			if(!this.data) this.data = [];
@@ -277,23 +271,23 @@
 			this.undoStack = [];
 		},
 		ready: function(){
-			var dataSource = this.querySelector('datatables-ajax');
+			var dataSource = this.querySelector('[role="datasource"]');
 			if(dataSource){
 				if(!this.dataSource){
-					this.serverSide = dataSource.serverSide;
 					this.dataSource = dataSource;
 					this.rebuildColumns();
 					this.dataSource.length = this.pageSize;
 					this.dataSource.sortColumn = this.sortColumn;
 					this.dataSource.sortDescending = this.sortDescending;
 					var self = this;
-					this.dataSource.addEventListener("data-updated", function(e){
-						self.data = e.detail.data;
-						self.dataSize = e.detail.dataSize;
+					(new PathObserver(this.dataSource, 'data')).open(function(newValue) {
+						self.data = newValue;
+					});
+					(new PathObserver(this.dataSource, 'dataSize')).open(function(newValue) {
+						self.dataSize = newValue;
 					});
 				}
 			}else{
-				this.serverSide = false;
 				var self = this;
 				[].forEach.call(this.childNodes, function(element) {
 					if(element.nodeName === "#text"){
@@ -701,7 +695,7 @@
 
 			var sortedArray;
 
-			if(key && !this.serverSide){
+			if(key && !this.dataSource){
 				sortedArray = array.sort(function(a, b) {
 					var x, y;
 					//determine if computed field
@@ -748,7 +742,7 @@
 
 			var start, end;
 
-			if(this.serverSide){
+			if(this.dataSource){
 				start = 0;
 				end = array.length;
 			}else{

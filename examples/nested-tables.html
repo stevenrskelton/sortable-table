@@ -31,11 +31,11 @@
 	<p>
 
 	<template id="example" bind>
-		<sortable-table defaultStyle data="{{data}}" columns="{{columns}}">
+		<sortable-table class="default" data="{{data}}" columns="{{columns}}">
 			<!-- nested table as a cell -->
 			<template id="nestedTable">
 				<td style="padding:0;">
-					<sortable-table defaultStyle style="width:100%" data="{{row[column.name]}}" columns="{{column.columns}}" sortColumn="{{column.sortColumn}}" sortDescending="{{column.sortDescending}}">
+					<sortable-table class="default" style="width:100%" data="{{row[column.name]}}" columns="{{column.columns}}" sortColumn="{{column.sortColumn}}" sortDescending="{{column.sortDescending}}">
 
 						<!-- template to convert int to day of week -->
 						<template id="dayTable">
@@ -79,7 +79,7 @@
 			<!-- nested table as a footer -->
 			<template id="nestedFooterTable">
 				<td style="padding:0;">
-					<sortable-table defaultStyle style="width:100%" data="{{rowValues | cube}}" columns="{{column.columns}}" sortColumn="{{column.sortColumn}}" sortDescending="{{column.sortDescending}}">
+					<sortable-table class="default" style="width:100%" data="{{rowValues | cube}}" columns="{{column.columns}}" sortColumn="{{column.sortColumn}}" sortDescending="{{column.sortDescending}}">
 						<!-- template to convert int to day of week -->
 						<template id="dayTable">
 							<td style="width:100px;text-align:left;">
@@ -169,7 +169,8 @@
 				{ name:'strawberry', headerTemplate: 'fruitsTemplate', footerTemplate: 'sumTemplate' },
 				{ name:'total', title: 'Total', formula: function(row){ return row.apple + row.pear + row.strawberry + row.grape + row.banana }, footerTemplate: 'sumTemplate' }
 			],
-			formula: function(row){
+			formula: function(value,row){
+				row = row || value;
 				var s = 0;
 				//sum over all the worker's sales
 				for(var i=0;i<row.unitsSold.length;i++){
