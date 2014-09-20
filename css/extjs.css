@@ -1,5 +1,5 @@
 /*x-panel x-grid x-panel-default-framed*/
-.x-panel-default-framed {
+sortable-table.extjs {
 	border-color:#99bbe8;
 	-moz-border-radius:4px;
 	-webkit-border-radius:4px;
@@ -55,7 +55,7 @@
 	border-color: #99BBE8;
 	box-shadow: 0px 1px 0px 0px #F4F8FD inset, -1px 0px 0px 0px #F4F8FD inset, 1px 0px 0px 0px #F4F8FD inset;
 }
-.x-panel-header-default-framed-top + .x-panel-default-framed {
+.x-panel-header-default-framed-top + sortable-table.extjs {
 	border-radius: 0 0 4px 4px;
 }
 .extjs::shadow {

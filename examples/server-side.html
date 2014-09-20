@@ -125,21 +125,19 @@
 
 		<div class="x-panel x-grid" style="width:715px">
 			<div class="x-panel-header-default-framed-top">Measure per 100 grams; raw</div>
-			<div class="x-panel-default-framed">
-				<sortable-table
-					class="extjs"
-					footerTemplate="extjsPaging"
-					pageSize="10"
-				>
-					<sortable-column name="name">Fruit</sortable-column>
-					<sortable-column name="energy">Energy (kcal)</sortable-column>
-					<sortable-column name="protein">Protein (g)</sortable-column>
-					<sortable-column name="fat">Fat, total (g)</sortable-column>
-					<sortable-column name="carbohydrates">Carbohydrate (g)</sortable-column>
+			<sortable-table
+				class="extjs"
+				footerTemplate="extjsPaging"
+				pageSize="10"
+			>
+				<sortable-column name="name">Fruit</sortable-column>
+				<sortable-column name="energy">Energy (kcal)</sortable-column>
+				<sortable-column name="protein">Protein (g)</sortable-column>
+				<sortable-column name="fat">Fat, total (g)</sortable-column>
+				<sortable-column name="carbohydrates">Carbohydrate (g)</sortable-column>
 
-					<indexeddb-fruit role="datasource"></indexeddb-fruit>
-				</sortable-table>
-			</div>
+				<indexeddb-fruit role="datasource"></indexeddb-fruit>
+			</sortable-table>
 		</div>
 
 	</template>
