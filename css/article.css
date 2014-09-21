@@ -18,11 +18,10 @@
 	margin-bottom: 25px;
 	display: table-caption;
 }
-.article::shadow > table > tfoot > tr > td > table {
+.article::shadow > table > tfoot > tr > td > table.articlePager {
 	margin-top:25px;
 	color: #777;
 	border-collapse: collapse;
-	width: 100%;
 }
 .article::shadow > table > thead > tr {
 	width: 100%;
@@ -31,7 +30,7 @@
 	border-top:1px solid transparent;
 }
 .article::shadow > table > thead > tr > th,
-.article::shadow > table > tfoot > tr > td > table td {
+.article::shadow > table > tfoot > tr > td > table.articlePager td {
 	border-color: #ccc;
 	border-style: solid;
 	color: #777;
@@ -40,13 +39,13 @@
 	border-width: 0 0 1px 0;
 }
 .article::shadow > table > thead > tr > th:not(.checkbox-column),
-.article::shadow > table > tfoot > tr > td > table td {
+.article::shadow > table > tfoot > tr > td > table.articlePager td {
 	padding: 0 20px 5px;
 	white-space: nowrap;
 	height: 40px;
 	vertical-align: bottom;
 }
-.article::shadow > table > tfoot > tr > td > table td {
+.article::shadow > table > tfoot > tr > td > table.articlePager td {
 	border-width: 1px 0 0 0;
 	height: 25px;
 	vertical-align: top;
@@ -57,40 +56,35 @@
 	vertical-align: bottom;
 }
 .article::shadow > table > thead > tr > th:hover,
-.article::shadow > table > tfoot > tr > td > table td:first-of-type:hover {
+.article::shadow > table > tfoot > tr > td > table.articlePager td:first-of-type:hover {
 	color: #d38b28;
 }
 .article::shadow > table > thead > tr > th.sorted-column-asc,
 .article::shadow > table > thead > tr > th.sorted-column-desc,
-.article::shadow > table > tfoot > tr > td > table td:first-of-type {
+.article::shadow > table > tfoot > tr > td > table.articlePager td:first-of-type {
 	border-width: 1px 1px 0 1px;
 	padding: 0px 30px;
 	vertical-align: middle;
 	color: #333;
 }
-.article::shadow > table > tfoot > tr > td > table td:first-of-type {
+.article::shadow > table > tfoot > tr > td > table.articlePager td:first-of-type {
 	border-width: 0 1px 1px 1px;
 	font-weight: 700;
-	cursor: pointer;
 }
-.article::shadow > table > tfoot > tr > td > table td:nth-of-type(2) {
-	width: 100%;
-}
-.article::shadow > table > tfoot > tr > td > table td:nth-of-type(3) {
+.article::shadow > table > tfoot > tr > td > table.articlePager td:nth-of-type(3) {
 	font-weight: 700;
-	cursor: pointer;
 	padding-right: 4px;
 }
-.article::shadow > table > tfoot > tr > td > table td select {
+.article::shadow > table > tfoot > tr > td > table.articlePager td select {
 	-webkit-appearance: none;
 	border: 1px solid #ccc;
 	color: #333;
 	font-size: 16px;
 	background-color: inherit;
 }
-.article::shadow > table > tfoot > tr > td > table td select:hover,
-.article::shadow > table > tfoot > tr > td > table td select:active,
-.article::shadow > table > tfoot > tr > td > table td select:focus {
+.article::shadow > table > tfoot > tr > td > table.articlePager td select:hover,
+.article::shadow > table > tfoot > tr > td > table.articlePager td select:active,
+.article::shadow > table > tfoot > tr > td > table.articlePager td select:focus {
 	color: #d38b28;
 }
 .article::shadow > table > thead > tr > th.column-0.sorted-column-asc,

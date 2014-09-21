@@ -1,3 +1,3 @@
-CREATE DATABASE datatables_demo;
-CREATE USER datatables_demo@localhost IDENTIFIED BY '';
-GRANT SELECT ON datatables_demo.datatables_demo TO datatables_demo@localhost;
+CREATE DATABASE sortabletable;
+CREATE USER sortabletable@localhost IDENTIFIED BY '';
+GRANT SELECT ON sortabletable.datatables_demo TO sortabletable@localhost;

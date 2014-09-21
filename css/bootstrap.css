@@ -1,4 +1,8 @@
 .panel {
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size:14px;
+	line-height:1.42857143;
+	color:#333;
 	margin-bottom:20px;
 	background-color:#fff;
 	border:1px solid transparent;
@@ -9,7 +13,23 @@
 .panel-default{
 	border-color:#ddd
 }
-
+.panel-heading{
+	padding:10px 15px;
+	border-bottom:1px solid transparent;
+	border-top-left-radius:3px;
+	border-top-right-radius:3px
+}
+.panel-default>.panel-heading{
+	color:#333;
+	background-color:#f5f5f5;
+	border-color:#ddd
+}
+.bootstrap::shadow {
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size:14px;
+	line-height:1.42857143;
+	color:#333;
+}
 .bootstrap::shadow .btn{
 	display:inline-block;
 	padding:6px 12px;
@@ -103,6 +123,124 @@
 	border-color:#357ebd
 }
 
+.bootstrap::shadow .btn-default{
+	color:#333;
+	background-color:#fff;
+	border-color:#ccc
+}
+
+.bootstrap::shadow .btn-default:hover,
+.bootstrap::shadow .btn-default:focus,
+.bootstrap::shadow .btn-default:active,
+.bootstrap::shadow .btn-default.active {
+	color:#333;
+	background-color:#e6e6e6;
+	border-color:#adadad
+}
+
+.bootstrap::shadow .btn-default:active,
+.bootstrap::shadow .btn-default.active {
+	background-image:none
+}
+
+.bootstrap::shadow .btn-default.disabled,
+.bootstrap::shadow .btn-default[disabled],
+.bootstrap::shadow fieldset[disabled] .btn-default,
+.bootstrap::shadow .btn-default.disabled:hover,
+.bootstrap::shadow .btn-default[disabled]:hover,
+.bootstrap::shadow fieldset[disabled] .btn-default:hover,
+.bootstrap::shadow .btn-default.disabled:focus,
+.bootstrap::shadow .btn-default[disabled]:focus,
+.bootstrap::shadow fieldset[disabled] .btn-default:focus,
+.bootstrap::shadow .btn-default.disabled:active,
+.bootstrap::shadow .btn-default[disabled]:active,
+.bootstrap::shadow fieldset[disabled] .btn-default:active,
+.bootstrap::shadow .btn-default.disabled.active,
+.bootstrap::shadow .btn-default[disabled].active,
+.bootstrap::shadow fieldset[disabled] .btn-default.active {
+	background-color:#fff;
+	border-color:#ccc
+}
+
+.bootstrap::shadow .btn-sm {
+	padding:5px 10px;
+	font-size:12px;
+	line-height:1.5;
+	border-radius:3px;
+}
+
+.bootstrap::shadow .btn-group,
+.bootstrap::shadow .btn-group-vertical{
+	position:relative;
+	display:inline-block;
+	vertical-align:middle
+}
+
+.bootstrap::shadow .btn-group>.btn,
+.bootstrap::shadow .btn-group-vertical>.btn{
+	position:relative;
+	float:left;
+}
+
+.bootstrap::shadow .btn-group>.btn:hover,
+.bootstrap::shadow .btn-group-vertical>.btn:hover,
+.bootstrap::shadow .btn-group>.btn:focus,
+.bootstrap::shadow .btn-group-vertical>.btn:focus,
+.bootstrap::shadow .btn-group>.btn:active,
+.bootstrap::shadow .btn-group-vertical>.btn:active,
+.bootstrap::shadow .btn-group>.btn.active,
+.bootstrap::shadow .btn-group-vertical>.btn.active{
+	z-index:2
+}
+
+.bootstrap::shadow .btn-group>.btn:focus,
+.bootstrap::shadow .btn-group-vertical>.btn:focus{
+	outline:0
+}
+
+.bootstrap::shadow .btn-group .btn+.btn,
+.bootstrap::shadow .btn-group .btn+.btn-group,
+.bootstrap::shadow .btn-group .btn-group+.btn,
+.bootstrap::shadow .btn-group .btn-group+.btn-group{
+	margin-left:-1px
+}
+
+.bootstrap::shadow .btn-group>.btn:not(:first-child):not(:last-child):not(.dropdown-toggle){
+	border-radius:0
+}
+
+.bootstrap::shadow .btn-group>.btn:first-child{
+	margin-left:0
+}
+
+.bootstrap::shadow .btn-group>.btn:first-child:not(:last-child):not(.dropdown-toggle){
+	border-top-right-radius:0;
+	border-bottom-right-radius:0
+}
+
+.bootstrap::shadow .btn-group>.btn:last-child:not(:first-child),.btn-group>.dropdown-toggle:not(:first-child){
+	border-top-left-radius:0;
+	border-bottom-left-radius:0
+}
+
+.bootstrap::shadow .btn-group>.btn-group{
+	float:left
+}
+
+.bootstrap::shadow .btn-group>.btn-group:not(:first-child):not(:last-child)>.btn{
+	border-radius:0
+}
+
+.bootstrap::shadow .btn-group>.btn-group:first-child>.btn:last-child,.btn-group>.btn-group:first-child>.dropdown-toggle{
+	border-top-right-radius:0;
+	border-bottom-right-radius:0
+}
+
+.bootstrap::shadow .btn-group>.btn-group:last-child>.btn:first-child{
+	border-top-left-radius:0;
+	border-bottom-left-radius:0
+}
+
 .bootstrap::shadow .form-control{
 	box-sizing: border-box;
 	display:inline-block;
@@ -158,7 +296,6 @@
 	vertical-align: baseline;
 	padding: 0px 4px;
 }
-
 .bootstrap::shadow .has-feedback{
 	position:relative
 }
@@ -182,7 +319,7 @@
 	background-color:#fefefe;
 }
 
-.bootstrap::shadow tbody tr:hover {
+.bootstrap::shadow > table > tbody > tr:hover {
 	background-color:#f5f5f5;
 }
 
@@ -201,13 +338,15 @@
 .bootstrap::shadow .pagination > li > span {
 	position:relative;
 	float:left;
-	padding:6px 12px;
+	padding:6px;
+	text-align:center;
 	margin-left:-1px;
 	line-height:1.42857143;
 	color:#428bca;
 	text-decoration:none;
 	background-color:#fff;
 	border:1px solid #ddd;
+	min-width:30px;
 }
 
 .bootstrap::shadow .pagination > li:first-child > a,
@@ -285,59 +424,52 @@
 .bootstrap::shadow .pagination-sm > li:last-child > span {
 	border-top-right-radius:3px;
 	border-bottom-right-radius:3px;
-} 
-
-.bootstrap::shadow tr {
-	font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
-	font-size:14px;
-	line-height:1.42857143;
-	color:#333;
 }
 
 .bootstrap::shadow th {
 	text-align:left;
 }
 
-.bootstrap::shadow table {
+.bootstrap::shadow > table {
 	width:100%;
 	max-width:100%;
 }
 
-.bootstrap::shadow table > thead > tr > th,
-.bootstrap::shadow table > tbody > tr > th,
-.bootstrap::shadow table > thead > tr > td,
-.bootstrap::shadow table > tbody > tr > td,
-.bootstrap::shadow table > tfoot > tr > td {
+.bootstrap::shadow > table > thead > tr > th,
+.bootstrap::shadow > table > tbody > tr > th,
+.bootstrap::shadow > table > thead > tr > td,
+.bootstrap::shadow > table > tbody > tr > td,
+.bootstrap::shadow > table > tfoot > tr > td {
 	padding:8px;
 	line-height:1.42857143;
 	vertical-align:top;
 	border-top:1px solid #ddd;
 }
-.bootstrap::shadow table > tfoot > tr > th,
-.bootstrap::shadow table > tfoot > tr > td {
+.bootstrap::shadow > table > tfoot > tr > th,
+.bootstrap::shadow > table > tfoot > tr > td {
 	line-height:1.42857143;
 	border-top:1px solid #ddd;
 }
 
-.bootstrap::shadow table > thead > tr > th {
+.bootstrap::shadow > table > thead > tr > th {
 	vertical-align:bottom;
 	border-bottom:2px solid #ddd;
 }
-.bootstrap::shadow table > thead > tr > th,
-.bootstrap::shadow table > tfoot > tr > td {
+.bootstrap::shadow > table > thead > tr > th,
+.bootstrap::shadow > table > tfoot > tr.footercells > td {
 	font-weight: 700;
 }
 
-.bootstrap::shadow table > caption+thead > tr:first-child > th,
-.bootstrap::shadow table > colgroup+thead > tr:first-child > th,
-.bootstrap::shadow table > thead:first-child > tr:first-child > th,
-.bootstrap::shadow table > caption+thead > tr:first-child > td,
-.bootstrap::shadow table > colgroup+thead > tr:first-child > td,
-.bootstrap::shadow table > thead:first-child > tr:first-child > td {
+.bootstrap::shadow > table > caption+thead > tr:first-child > th,
+.bootstrap::shadow > table > colgroup+thead > tr:first-child > th,
+.bootstrap::shadow > table > thead:first-child > tr:first-child > th,
+.bootstrap::shadow > table > caption+thead > tr:first-child > td,
+.bootstrap::shadow > table > colgroup+thead > tr:first-child > td,
+.bootstrap::shadow > table > thead:first-child > tr:first-child > td {
 	border-top:0;
 }
 
-.bootstrap::shadow table > tbody+tbody {
+.bootstrap::shadow > table > tbody+tbody {
 	border-top:2px solid #ddd;
 }
 

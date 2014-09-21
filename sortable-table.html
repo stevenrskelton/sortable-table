@@ -43,7 +43,18 @@
 		display: inline-block;
 		font-size: initial;
 	}
-
+	table.articlePager {
+		width: 100%;
+	}
+	table.articlePager td:first-of-type {
+		cursor: pointer;
+	}
+	table.articlePager td:nth-of-type(2) {
+		width: 100%;
+	}
+	table.articlePager td:nth-of-type(3) {
+		cursor: pointer;
+	}
 	:host(.default) .sortable-table {
 		border-collapse: collapse;
 		border: 1px solid #ccc;
@@ -99,15 +110,18 @@
 	}
 </style>
 
-	<template id="defaultPaging">
-		<div style="text-align:center">
-			<div style="float:left;cursor:pointer;color:{{page == 1 ? '#AAA':'#000'}}" on-click="{{moveToPreviousPage}}">Prev</div>
-			<div style="float:right;cursor:pointer;color:{{page * pageSize > dataSize ? '#AAA':'#000'}}" on-click="{{moveToNextPage}}">Next</div>
-			Page {{page}} of {{lastPage}}
+	<template id="simplePager">
+		<div horizontal layout center>
+			<span flex>{{dataSize}} Results</span>
+			<span>
+				<button disabled?="{{page<=1}}" class="btn btn-primary btn-sm" on-click="{{moveToPreviousPage}}">&#10094;</button>
+				{{page}} of {{lastPage}}
+				<button disabled?="{{page>=lastPage}}" class="btn btn-primary btn-sm" on-click="{{moveToNextPage}}">&#10095;</button>
+			</span>
 		</div>
 	</template>
 
-	<template id="bootstrapPaging">
+	<template id="indexedPager">
 		<div style="width:100%;text-align:center;font-weight:normal;">
 			<ul class="pagination">
 				<li class="{{page==1 ? 'disabled' : ''}}" on-click="{{moveToFirstPage}}"><a href="#" onclick="return false;">«</a></li>
@@ -119,10 +133,12 @@
 		</div>
 	</template>
 
-	<template id="extjsPaging">
+	<template id="defaultPager">
 		<div horizontal layout center>
-			<button disabled?="{{page==1}}" on-click="{{moveToFirstPage}}">&#9198;</button>
-			<button disabled?="{{page<=1}}" on-click="{{moveToPreviousPage}}">&#9194;</button>
+			<div class="btn-group">
+				<button disabled?="{{page==1}}" class="btn btn-default btn-sm" on-click="{{moveToFirstPage}}">&#9198;</button><!--
+				--><button disabled?="{{page<=1}}" class="btn btn-default btn-sm" on-click="{{moveToPreviousPage}}">&#9194;</button>
+			</div>
 
 			<span class="x-toolbar-separator-horizontal"></span>
 
@@ -130,28 +146,19 @@
 
 			<span class="x-toolbar-separator-horizontal"></span>
 
-			<button disabled?="{{page>=lastPage}}" on-click="{{moveToNextPage}}">&#9193;</button>
-			<button disabled?="{{page==lastPage}}" on-click="{{moveToLastPage}}">&#9197;</button>
+			<div class="btn-group">
+				<button disabled?="{{page>=lastPage}}" class="btn btn-default btn-sm" on-click="{{moveToNextPage}}">&#9193;</button><!--
+				--><button disabled?="{{page==lastPage}}" class="btn btn-default btn-sm" on-click="{{moveToLastPage}}">&#9197;</button>
+			</div>
 			<span flex style="text-align:right;margin-right:6px;">Displaying {{page > lastPage ? (lastPage-1) * pageSize + 1 : ((page - 1) * pageSize) + 1}} - {{page >= lastPage ? dataSize : page * pageSize}} of {{dataSize}}</span>
 		</div>
 	</template>
 
-	<template id="espnPaging">
-		<div horizontal layout center>
-			<span flex>{{dataSize}} Results</span>
-			<span>
-				<button disabled?="{{page<=1}}" on-click="{{moveToPreviousPage}}">&#10094;</button>
-				{{page}} of {{lastPage}}
-				<button disabled?="{{page>=lastPage}}" on-click="{{moveToNextPage}}">&#10095;</button>
-			</span>
-		</div>
-	</template>
-
-	<template id="articlePaging">
-		<table>
+	<template id="articlePager">
+		<table class="articlePager">
 			<tr>
 				<template if="{{dataSize > pageSize}}">
-					<td role="button" on-click="{{showMore}}">Show More</td>
+					<td role="button" class="btn btn-default" on-click="{{showMore}}">Show More</td>
 				</template>
 				<template if="{{dataSize <= pageSize}}">
 					<td style="display:none"></td>
@@ -220,7 +227,7 @@
 		</tbody>
 		<tfoot>
 			<template if="{{showFooter && forceFooterRefresh}}">
-				<tr>
+				<tr class="footercells">
 					<template if="{{checkbox}}">
 						<td></td>
 					</template>
@@ -789,13 +796,23 @@
 			return { values: arr, rowValues: rowArr, column: column };
 		},
 		naturalNumbers: function(n,mid){
+			var visible = 5;
+			var start,end;
 			if(mid !== null){
-				var range = 4;
-				var start = Math.max(1, mid-range);
-				var end = Math.min(n, mid+range);
+				var range = Math.min(visible,n);
+				if(mid < range){
+					start = 1;
+					end = Math.min(mid+range,range);
+				}else if(mid > n - range + 1){
+					start = Math.max(n-range+1,1);
+					end = n;
+				}else{
+					start = Math.max(1, mid-Math.floor(range/2));
+					end = Math.min(n, mid+Math.floor((range-1)/2));
+				}
 			}else{
-				var start = 1;
-				var end = n;
+				start = 1;
+				end = n;
 			}
 			var arr = [];
 			for(var i=start;i<=end;i++) arr.push(i);
