@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sortable Table using Polymer Web Components</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<script src="../../platform/platform.js" debug log="bind,ready,events"></script>
+	<link rel="import" href="../sortable-table.html">
+	<link rel="import" href="fruit-icon.html">
+	<link rel="import" href="index-links.html">
+	<link rel="import" href="my-filters.html">
+
+	<style shim-shadowdom>
+		sortable-table {
+			width: 600px;
+			margin-left: 65px;
+		}
+		::shadow .sortable-table tbody td:not(.column-fruit) {
+			width: 100px;
+			text-align: right;
+		}
+		::shadow .sortable-table tfoot td {
+			text-align: right;
+		}
+		::shadow .sortable-table td {
+			padding-right: 5px;
+			vertical-align: middle;
+		}
+	</style>
+</head>
+<body unresolved>
+
+	<h2>Additional Data Arguments</h2>
+
+	There is often a need for data that is outside the dataset bound to the <code>sortable-table</code>'s <code>data</code> attribute.<br>
+	These can be argument parameters used for presentation, or within field calculations, and they can be passed in using the <code>args</code> attribute.
+
+	<p>
+
+	<template is="auto-binding" id="demo">
+		<table style="border:1px solid #333;padding:10px;">
+			<tr>
+				<td>Tax Rate</td>
+				<td>
+					<input type="number" step="any" onchange="document.querySelector('sortable-table').args.tax = this.value / 100;" value="5.5" style="width: 50px;text-align:right;"> %
+				</td>
+			</tr>
+			<tr>
+				<td>Body Color</td>
+				<td>
+					<input type="radio" name="bodycolor" id="bodycolororange" value="orange" checked?="{{args.totalcolor=='orange'}}" onchange="changeArgs('totalcolor','orange');"><label for="bodycolororange" style="color:orange">orange</label>
+					<input type="radio" name="bodycolor" id="bodycolorblue" value="blue" checked?="{{args.totalcolor=='blue'}}" onchange="changeArgs('totalcolor','blue');"><label for="bodycolorblue" style="color:blue">blue</label>
+				</td>
+			</tr>
+			<tr>
+				<td>Footer Color</td>
+				<td>
+					<input type="radio" name="footcolor" id="footcolororange" value="orange" checked?="{{args.foottotalcolor=='orange'}}" onchange="changeArgs('foottotalcolor','orange');"><label for="footcolororange" style="color:orange">orange</label>
+					<input type="radio" name="footcolor" id="footcolorblue" value="blue" checked?="{{args.foottotalcolor=='blue'}}" onchange="changeArgs('foottotalcolor','blue');"><label for="footcolorblue" style="color:blue">blue</label>
+				</td>
+			</tr>
+		</table>
+
+		<p>
+
+		<hr style="width:75%;height:1px;border:none;color:#DDD;background-color:#DDD;" align="left">
+
+		<p>
+
+		<pre>
+	&lt;style&gt;
+		::shadow tbody .column-tax,
+		::shadow tbody .column-total {
+			color: {{'{{'}}args.totalcolor}};
+		}
+	&lt;/style&gt;
+	&lt;sortable-table
+		args='{	"tax":{{args.tax}},	"totalcolor":"{{args.totalcolor}}",	"foottotalcolor":"{{args.foottotalcolor}}"}'
+	&gt;&lt;/sortable-table&gt;
+		</pre>
+
+		<p>
+		<style>
+			::shadow tbody .column-tax,
+			::shadow tbody .column-total {
+				color: {{args.totalcolor}};
+			}
+		</style>
+		<sortable-table
+			class="default"
+			args="{{args}}"
+		>
+			<sortable-column name="fruit" cellTemplate="fruitsTemplate">Fruit</sortable-column>
+			<sortable-column name="price" formula="PolymerExpressions.prototype.currency">Price ($)</sortable-column>
+			<sortable-column name="weight">Amount</sortable-column>
+			<sortable-column
+				name="tax"
+				formula="function(row, args){ return PolymerExpressions.prototype.currency(row.price * row.weight * args.tax); }"
+				footerTemplate="sumTemplate"
+			>Tax ($)</sortable-column>
+			<sortable-column
+				name="total"
+				formula="function(row, args){ return PolymerExpressions.prototype.currency(row.price * row.weight * (1 + args.tax)); }"
+				footerTemplate="sumTemplate"
+			>Total ($)</sortable-column>
+
+			<template id="fruitsTemplate">
+				<td class="column-fruit">
+					<fruit-icon fruit="{{value}}"></fruit-icon>
+					{{value}}
+				</td>
+			</template>
+
+			<template id="sumTemplate">
+				<td style="color:{{args.foottotalcolor}}">
+					{{values | sum | currency}}
+				</td>
+			</template>
+
+			[
+				{fruit: 'apple', price: 1.29, weight: 12.4 },
+				{fruit: 'banana',  price: 0.89, weight: 5.8 },
+				{fruit: 'grape',  price: 3, weight: 3.1 },
+				{fruit: 'pear',  price: 2.40, weight: 2.1 },
+				{fruit: 'strawberry',   price: 3.99, weight: 3.5 }
+			]
+		</sortable-table>
+	</template>
+
+	<script>
+		function changeArgs(field,value){
+			var demo = document.getElementById('demo');
+			demo.args[field] = value;
+			if(Platform.ShadowCSS) Platform.ShadowCSS.addCssToDocument(".column-tax, .column-total { color: " + demo.args.totalcolor + "; }");
+		}
+		window.addEventListener('polymer-ready', function(){
+			document.getElementById('demo').args = {
+				tax: 0.055,
+				totalcolor: "orange",
+				foottotalcolor: "blue"
+			}
+			if(Platform.ShadowCSS) Platform.ShadowCSS.addCssToDocument(".column-tax, .column-total { color: orange; }");
+		});
+	</script>
+	<index-links page="args.html"></index-links>
+</body>
+</html>

@@ -11,13 +11,22 @@ PolymerExpressions.prototype.round = function (val, precision, method) {
 	precision = precision || 0;
 	var factor = Math.pow(10, precision);
 	var rounder;
-	if (method == 'ceil') {
+	if (method === 'ceil') {
 		rounder = Math.ceil;
-	} else if (method == 'floor') {
+	} else if (method === 'floor') {
 		rounder = Math.floor;
 	} else {
 		rounder = Math.round;
 	}
 	return rounder(val * factor) / factor;
-}; 
+};
+
+PolymerExpressions.prototype.currency = function (val) {
+	if(Number.isNaN(val)) val = 0;
+	return val.toFixed(2);
+};
+
+PolymerExpressions.prototype.sum = function(arr) {
+	return arr.reduce(function(a, b) { return +a + +b; }, 0);
+}
 </script>

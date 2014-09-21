@@ -71,8 +71,7 @@
 		<table style="margin-left: 65px;">
 			<tr><td><strong>Page</strong></td><td><input type="number" value="{{page}}"></td></tr>
 			<tr><td><strong>PageSize</strong></td><td><input type="number" value="{{pageSize}}"></td></tr>
-			<tr><td><strong>Total Count</strong></td><td>{{data.length}}</td></tr>
-			<tr><td><strong>Selected</strong></td><td>{{selected.length}}</td></tr>
+			<tr><td><strong>Selected</strong></td><td style="text-align:right;padding-right:17px;">{{selected.length}}</td></tr>
 		</table>
 		<br>
 		<sortable-table class="default" data="{{selected}}"></sortable-table>

@@ -16,6 +16,7 @@ There are many capable Javascript grids, this one aims to have all the same feat
 - Supports table, single row/article, and flowing grid layouts
 - Use of HTML5 `template` for customization (Cells, Rows, Column Headers and Footers)
 - 2-way data binding with the outside world
+- Separate argument input for metadata, presentation and value calculation in all templates
 - Local or remote data: AJAX support from server-side pagination
 
 ### Themes
@@ -49,6 +50,8 @@ There are many capable Javascript grids, this one aims to have all the same feat
 > [Alternative Row Themes](http://files.stevenskelton.ca/sortable-table/examples/alt-themes.html)
 
 > [Row Editor with Undo Functionality](http://files.stevenskelton.ca/sortable-table/examples/row-editor.html)
+
+> [Additional Arguments](http://files.stevenskelton.ca/sortable-table/examples/args.html)
 
 > [Data Formats](http://files.stevenskelton.ca/sortable-table/examples/data-formats.html)
 

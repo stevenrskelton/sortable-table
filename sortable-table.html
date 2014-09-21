@@ -201,7 +201,7 @@
 			</tr>
 		</thead>
 		<tbody class="{{grid ? ' grid' : ''}}">
-			<template repeat="{{record in data | sortByKey(sortColumn, sortDescending, columns, selected, pageSize, page, editRow, args, (args || []).length + (selected || []).length + data.length + forceRefresh)}}">
+			<template repeat="{{record in data | sortByKey(sortColumn, sortDescending, columns, selected, pageSize, page, args, editRow, (args || []).length + (selected || []).length + data.length + forceRefresh)}}">
 				<tr
 					class="{{record.selected ? 'selected-row' : '' }}{{record.editMode ? ' editor-row' : ''}}{{record.dirty ? ' edited-row' : ''}}"
 					on-click="{{rowSelect}}"
@@ -232,7 +232,7 @@
 						<td></td>
 					</template>
 					<template repeat="{{column in columns}}">
-						<template bind="{{templateData in data | selectProperty(column, forceFooterRefresh)}}">
+						<template bind="{{templateData in data | selectProperty(column, args, forceFooterRefresh)}}">
 							<template ref="{{column.footerTemplate}}" bind="{{templateData}}">
 								<td></td>
 							</template>
@@ -379,6 +379,10 @@
 							}else if(PolymerExpressions.prototype[formula]){
 								//not an inlined function, or member of this, check PolymerExpressions.prototype
 								formula = PolymerExpressions.prototype[formula];
+							}else if(formula.substring(0,29) === 'PolymerExpressions.prototype.'){
+								var f = formula.substring(29);
+								formula = PolymerExpressions.prototype[f];
+								if(!formula) alert('Could not load formula `'+ formula +'` from PolymerExpressions.prototype for column `' + name + '`');
 							}else alert('Could not load formula `'+ formula +'` for column `' + name + '`');
 						}
 						c.push({
@@ -407,6 +411,14 @@
 		/**
 		 *	Change Observers
 		 */
+		argsChanged: function(oldValue,newValue){
+			var observer = new ObjectObserver(newValue);
+			var self = this;
+			observer.open(function(added, removed, changed, getOldValueFn) {
+				self.forceFooterRefresh++;
+				self.forceRefresh++;
+			});
+		},
 		columnsChanged: function(){
 			var self = this;
 			//explode columns if simple text array
@@ -697,7 +709,7 @@
 		/**
 		 *	Expression Filters
 		 */
-		sortByKey: function(array, key, desc, columns, selected, pageSize, page, l) {
+		sortByKey: function(array, key, desc, columns, selected, pageSize, page, args, l) {
 			//ignore l, it is used to trigger observe.js watch only
 
 			var sortedArray;
@@ -714,13 +726,17 @@
 						}
 					}
 					if(formula){
-						x = formula(a);
-						y = formula(b);
+						if(typeof a[key] === 'undefined'){
+							x = formula(a, args);
+							y = formula(b, args);
+						}else{
+							x = formula(a[key], a, args);
+							y = formula(b[key], b, args);
+						}
 					}else{
 						x = a[key];
 						y = b[key];
 					}
-
 					if(typeof x === 'undefined' || typeof y === 'undefined'){
 						//sort undefined after
 						if(typeof x === 'undefined'){
@@ -729,9 +745,14 @@
 							return desc;
 						}
 					}else{
-						if (typeof x === "string" && typeof y === "string" && !(isNaN(x) && isNaN(y))){
-							x = x.toLowerCase();
-							y = y.toLowerCase();
+						if (typeof x === "string" && typeof y === "string"){
+							if(isNaN(x) || isNaN(y)){
+								x = x.toLowerCase();
+								y = y.toLowerCase();
+							}else{
+								x = +x;
+								y = +y;
+							}
 						}
 						if(desc){
 							return ((x < y) ? 1 : ((x > y) ? -1 : 0));
@@ -768,32 +789,36 @@
 				columns.forEach(function(column, index, array) {
 					var value;
 					if(column.formula){
-						if(typeof row[column.name] !== 'undefined') value = column.formula(row[column.name], row);
-						else value = column.formula(row);
+						if(typeof row[column.name] !== 'undefined') value = column.formula(row[column.name], row, args);
+						else value = column.formula(row, args);
 					}else{
 						value = row[column.name];
 					}
-					fields[column.name] = { value: value, row: row, column: column, sortColumn: key };
+					fields[column.name] = { value: value, row: row, column: column, sortColumn: key, args: args };
 				});
 				records.push({ selected: isSelected, editMode: isEditMode, dirty: isDirty, fields: fields, row: row });
 			}
 			return records;
 		},
-		selectProperty: function(objects, column) {
+		selectProperty: function(objects, column, args) {
 			var arr = [];
 			var rowArr = [];
 			for(var i=0;i<objects.length;i++){
 				var row = objects[i];
 				var value;
 				if(column.formula){
-					value = column.formula(row);
+					if(typeof row[column.name] === 'undefined'){
+						value = column.formula(row, args);
+					}else{
+						value = column.formula(row[column.name], row, args);
+					}
 				}else{
 					value = row[column.name];
 				}
 				rowArr.push(row[column.name]);
 				arr.push(value);
 			}
-			return { values: arr, rowValues: rowArr, column: column };
+			return { values: arr, rowValues: rowArr, column: column, args: args };
 		},
 		naturalNumbers: function(n,mid){
 			var visible = 5;
