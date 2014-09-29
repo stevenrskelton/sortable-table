@@ -94,6 +94,7 @@
 			url="datatables.net/server_processing.php"
 			data="{{data}}"
 			dataSize="{{dataSize}}"
+			loading="{{loading}}"
 			start="{{start}}"
 			length="{{length}}"
 			sortColumn="{{sortColumn}}"
@@ -110,8 +111,12 @@
 
 		<p>
 
-		<strong>{{dataSize}} Total Records</strong><br>
-		<strong>{{data.length}} Records Returned</strong><br>
+		<strong>
+			<template if="{{!loading}}">Waiting for Query<br></template>
+			<template if="{{loading}}">Loading<br></template>
+			{{dataSize}} Total Records<br>
+			{{data.length}} Records Returned<br>
+		</strong>
 
 		<json-stringify
 			data="{{data}}"

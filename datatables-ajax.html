@@ -9,7 +9,7 @@
 
 <polymer-element hidden
 	name="datatables-ajax"
-	attributes="url withCredentials start length search sortColumn sortDescending columns data dataSize"
+	attributes="url withCredentials start length search sortColumn sortDescending columns data dataSize loading"
 >
 <script>
 	"use strict";
@@ -26,6 +26,7 @@
 		draw: 0,
 		drawReceived: 0,
 		columnsCache: [],
+		loading: false,
 		ready: function() {
 			var ajax = document.createElement('core-ajax');
 			ajax.handleAs = 'json';
@@ -56,6 +57,7 @@
 					});
 				}else this.data = response.data;
 			}
+			if(this.draw <= this.drawReceived) this.loading = false;
 			this.fire('data-updated', { data: this.data, dataSize: this.dataSize });
 		},
 		go: function(){
@@ -103,6 +105,7 @@
 				}
 				this.ajax.params = params;
 				this.columnsCache.push({draw: this.draw, columns: JSON.parse(JSON.stringify(this.columns))});
+				if(!this.loading) this.loading = true;
 				this.ajax.go();
 			}
 		},

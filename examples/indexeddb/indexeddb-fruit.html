@@ -2,7 +2,7 @@
 
 <polymer-element hidden
 	name="indexeddb-fruit"
-	attributes="url withCredentials start length search sortColumn sortDescending columns data dataSize"
+	attributes="url withCredentials start length search sortColumn sortDescending columns data dataSize loading"
 >
 <script>
 	"use strict";
@@ -15,6 +15,8 @@
 		sortColumn: null,
 		sortDescending: false,
 		db: null,
+		loading: false,
+		openTransactionCount: 0,
 		created: function(){
 			if(!this.columns) this.columns = [];
 		},
@@ -111,8 +113,12 @@
 					var length = this.length;
 					var results = [];
 					var direction = this.sortDescending ? "prev" : "next";
+					this.openTransactionCount += 2;
+					if(!this.loading) this.loading = true;
 					objectStore.count().onsuccess = function(event){
 						self.dataSize = event.target.result;
+						self.openTransactionCount--;
+						if(self.openTransactionCount === 0) self.loading = false;
 					}
 					objectStore.openCursor(null, direction).onsuccess = function(event) {
 						var cursor = event.target.result;
@@ -128,6 +134,8 @@
 							}
 						}else{
 							self.data = results;
+							self.openTransactionCount--;
+							if(self.openTransactionCount === 0) self.loading = false;
 						}
 					};
 				};

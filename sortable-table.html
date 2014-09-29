@@ -12,7 +12,8 @@
 	attributes="
 		data columns sortColumn sortDescending rowSelection multiSelect selected
 		headerTemplate cellTemplate rowTemplate footerTemplate checkbox pageSize page
-		rowEditorTemplate multiRowEdit disableColumnMove grid args dataSize"
+		rowEditorTemplate multiRowEdit disableColumnMove grid args dataSize userSort
+		loading"
 	style="display:block"
 >
 <template>
@@ -102,11 +103,43 @@
 		background: -ms-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* IE10+ */
 		background: linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* W3C */
 	}
-	:host(.default) .sortable-table thead th.column-in-move {
+	:host(.default) .sortable-table thead th.column-in-move,
+	:host(.default) .sortable-table tbody tr.row-in-move {
 		opacity: 0.4;
+	}
+	:host(.default) .sortable-table tbody tr.row-move-above {
+		background-color: purple;
+	}
+	:host(.default) .sortable-table tbody tr.row-move-below {
+		background-color: red;
 	}
 	:host(.default) .sortable-table tbody tr.selected-row {
 		background-color: rgba(0,96,200,0.2);
+	}
+	@-webkit-keyframes progress-bar-stripes{
+		from{
+			background-position:40px 0
+		}
+		to{
+			background-position:0 0
+		}
+	}
+	@-o-keyframes progress-bar-stripes{
+		from{
+			background-position:40px 0
+		}
+		to{
+			background-position:0 0
+		}
+	}
+	@keyframes progress-bar-stripes{
+		from{
+			background-position:40px 0
+		}
+
+		to{
+			background-position:0 0
+		}
 	}
 </style>
 
@@ -176,6 +209,17 @@
 		</table>
 	</template>
 
+	<template id="infinitePager">
+		<div class="infinitePager">
+			<template if="{{loading}}">
+				<div class="loading">Loading</div>
+			</template>
+			<template if="{{!loading && ((data.length < dataSize) || (page < lastPage))}}">
+				<div class="more" on-click="{{moveToNextPage}}">More</div>
+			</template>
+		</div>
+	</template>
+
 	<table class="sortable-table">
 		<thead>
 			<tr on-click="{{changeSort}}">
@@ -206,6 +250,13 @@
 					class="{{record.selected ? 'selected-row' : '' }}{{record.editMode ? ' editor-row' : ''}}{{record.dirty ? ' edited-row' : ''}}"
 					on-click="{{rowSelect}}"
 					on-dblclick="{{rowEdit}}"
+					draggable="{{userSort}}"
+					on-dragstart="{{handleTRDragStart}}"
+					on-dragenter="{{handleTRDragEnter}}"
+					on-dragover="{{handleTRDragOver}}"
+					on-dragleave="{{handleTRDragLeave}}"
+					on-drop="{{handleTRDrop}}"
+					on-dragend="{{handleTRDragEnd}}"
 				>
 					<template if="{{checkbox}}">
 						<td class="checkbox-column"><input type="checkbox" on-change="{{checkedbox}}" checked?="{{record.selected}}"></td>
@@ -272,6 +323,8 @@
 		toggleGrid: function(e){ this.grid = !this.grid; },
 		args: {},
 		dataSource: null,
+		userSort: false,
+		loading: false,
 		created: function(){
 			if(!this.data) this.data = [];
 			if(!this.columns) this.columns = [];
@@ -287,6 +340,9 @@
 					this.dataSource.sortColumn = this.sortColumn;
 					this.dataSource.sortDescending = this.sortDescending;
 					var self = this;
+					(new PathObserver(this.dataSource, 'loading')).open(function(newValue) {
+						self.loading = newValue;
+					});
 					(new PathObserver(this.dataSource, 'data')).open(function(newValue) {
 						self.data = newValue;
 					});
@@ -611,7 +667,7 @@
 			this.handleTHDragEnter(e);
 			return false;
 		},
-		findDropSide: function(e,self){
+		findTHDropSide: function(e,self){
 			var th = e.target;
 			var index = self.columns.indexOf(th.templateInstance.model.column);
 			if((index < self.dragColumn.index - 1) || (index > self.dragColumn.index + 1)){
@@ -633,7 +689,7 @@
 					th = th.parentElement;
 					if(th.tagName === 'TH') this.dragColumn.entered = th;
 				}
-				var dragSide = this.findDropSide(e,this);
+				var dragSide = this.findTHDropSide(e,this);
 				if(dragSide < 0){
 					th.classList.remove('column-move-right');
 					th.classList.add('column-move-left');
@@ -664,7 +720,7 @@
 			if(this.dragColumn && this.dragColumn.th.parentNode === e.target.parentNode){
 				var newIndex = this.columns.indexOf(e.target.templateInstance.model.column);
 				var oldIndex = +e.dataTransfer.getData('application/sortable-table-column-name');
-				var dragSide = this.findDropSide(e,this);
+				var dragSide = this.findTHDropSide(e,this);
 				if(newIndex < oldIndex && dragSide === 1) newIndex++;
 				else if(newIndex > oldIndex && dragSide === -1) newIndex--;
 				if(newIndex !== oldIndex){
@@ -685,10 +741,115 @@
 			this.dragColumn = null;
 		},
 		/**
+		 *	Row Drag-and-Drop
+		 */
+		dragRow: null,
+		handleTRDragStart: function(e) {
+			if(this.userSort){
+				this.dragRow = {
+					tr: e.target,
+					row: e.target.templateInstance.model.record.row,
+					entered: null,
+					index: this.data.indexOf(e.target.templateInstance.model.record.row)
+				};
+				e.target.classList.add('row-in-move');
+				e.dataTransfer.effectAllowed = 'move';
+				e.dataTransfer.setData('application/sortable-table-row-index', this.data.indexOf(e.target.templateInstance.model.record.row));
+			}
+		},
+		handleTRDragOver: function(e) {
+			if (e.preventDefault) e.preventDefault(); // Necessary. Allows us to drop.
+			e.dataTransfer.dropEffect = 'move';
+			this.handleTRDragEnter(e);
+			return false;
+		},
+		findTRDropSide: function(e,self){
+			var tr = e.target;
+			while(tr.tagName !== 'TR' && tr.parentElement){
+				tr = tr.parentElement;
+				if(tr.tagName === 'TR') self.dragRow.entered = tr;
+			}
+			var index = self.data.indexOf(tr.templateInstance.model.record.row);
+			if((index < self.dragRow.index - 1) || (index > self.dragRow.index + 1)){
+				if(tr.getBoundingClientRect){
+					var center = tr.clientHeight/2 + tr.getBoundingClientRect().top;
+					return (center >= e.clientY) ? -1 : 1;
+				}else return 0;
+			}else if(index === self.dragRow.index - 1){
+				return -1;
+			}else if(index === self.dragRow.index + 1){
+				return 1;
+			}
+		},
+		handleTRDragEnter: function(e) {
+			if(this.dragRow){
+				var tr = e.target;
+				this.dragRow.entered = null;
+				while(tr.tagName !== 'TR' && tr.parentElement){
+					tr = tr.parentElement;
+					if(tr.tagName === 'TR') this.dragRow.entered = tr;
+				}
+				var dragSide = this.findTRDropSide(e,this);
+				if(dragSide < 0){
+					tr.classList.remove('row-move-below');
+					tr.classList.add('row-move-above');
+				}else if(dragSide > 0){
+					tr.classList.remove('row-move-above');
+					tr.classList.add('row-move-below');
+				}
+				[].forEach.call(this.shadowRoot.querySelectorAll('tr'), function(element) {
+					if(element!==tr){
+						element.classList.remove('row-move-above');
+						element.classList.remove('row-move-below');
+					}
+				});
+			}
+		},
+		handleTRDragLeave: function(e) {
+			if(this.dragRow){
+				var tr = e.target;
+				while(tr.tagName !== 'TR' && tr.parentElement){
+					tr = tr.parentElement;
+					if(tr.tagName === 'TR') this.dragRow.entered = tr;
+				}
+				if(this.dragRow.entered === tr) this.dragRow.entered === null;
+				else if(tr.classList){
+					if(tr.classList.contains('row-move-above')) tr.classList.remove('row-move-above');
+					if(tr.classList.contains('row-move-below')) tr.classList.remove('row-move-below');
+				}
+			}
+		},
+		handleTRDrop: function(e) {
+			if (e.stopPropagation) e.stopPropagation(); // stops the browser from redirecting.
+			if(this.dragRow && this.dragRow.tr.parentNode === e.target.parentNode.parentNode){
+				var newIndex = this.data.indexOf(e.target.templateInstance.model.row);
+				var oldIndex = +e.dataTransfer.getData('application/sortable-table-row-index');
+				var dragSide = this.findTRDropSide(e,this);
+				if(newIndex < oldIndex && dragSide === 1) newIndex++;
+				else if(newIndex > oldIndex && dragSide === -1) newIndex--;
+				if(newIndex !== oldIndex){
+					var b = this.data.splice(oldIndex,1);
+					this.data.splice(newIndex,0,b[0]);
+					this.forceRefresh++;
+				}
+			}
+			return false;
+		},
+		handleTRDragEnd: function(e) {
+			if(this.dragRow){
+				this.dragRow.tr.classList.remove('row-in-move');
+				[].forEach.call(this.shadowRoot.querySelectorAll('tr'), function(element) {
+					element.classList.remove('row-move-above');
+					element.classList.remove('row-move-below');
+				});
+			}
+			this.dragRow = null;
+		},
+		/**
 		 *	Template Functions
 		 */
 		changeSort: function(e,p){
-			if(e.target.templateInstance.model.column){
+			if(!this.userSort && e.target.templateInstance.model.column){
 				var clickedSortColumn = e.target.templateInstance.model.column.name;
 				if(clickedSortColumn === this.sortColumn){
 					//column already sorted, reverse sort
@@ -714,7 +875,7 @@
 
 			var sortedArray;
 
-			if(key && !this.dataSource){
+			if(key && !this.dataSource && !this.userSort){
 				sortedArray = array.sort(function(a, b) {
 					var x, y;
 					//determine if computed field

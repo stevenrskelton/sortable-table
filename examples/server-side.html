@@ -57,6 +57,7 @@
 		sortColumn=<span class="paramType">[string]</span>
 		sortDescending=<span class="paramType">[boolean]</span>
 		columns='<span class="paramType">[array({ name: [string] })]</span>'
+		<em>(output)</em> loading=<span class="paramType">[boolean]</span>
 		<em>(output)</em> data=<span class="paramType">[array(json)]</span>
 		<em>(output)</em> dataSize=<span class="paramType">[int]</span>
 	<strong>&gt;&lt;/your-component&gt;</strong>
@@ -89,6 +90,7 @@
 			class="datatables default"
 			footerTemplate="defaultPager"
 			pageSize="10"
+			loading="{{loading}}"
 		>
 			<sortable-column name="first_name">First</sortable-column>
 			<sortable-column name="last_name">Last</sortable-column>
@@ -99,6 +101,10 @@
 
 			<datatables-ajax role="datasource" url="datatables.net/server_processing.php"></datatables-ajax>
 		</sortable-table>
+
+		<p>
+
+		Data is loading = {{loading}}
 	</template>
 
 	<hr style="width:75%;height:1px;border:none;color:#DDD;background-color:#DDD;" align="left">
@@ -129,6 +135,7 @@
 				class="extjs"
 				footerTemplate="defaultPager"
 				pageSize="10"
+				loading="{{loading}}"
 			>
 				<sortable-column name="name">Fruit</sortable-column>
 				<sortable-column name="energy">Energy (kcal)</sortable-column>
@@ -140,6 +147,9 @@
 			</sortable-table>
 		</div>
 
+		<p>
+
+		Data is loading = {{loading}}
 	</template>
 
 	<index-links page="server-side.html"></index-links>

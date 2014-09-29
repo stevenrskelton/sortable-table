@@ -39,9 +39,12 @@
 		<div class="container">
 			<h1>Bootstrap Theme</h1>
 			<p>
-				The <code>class="bootstrap"</code> CSS theme is compatible with <a href="http://getbootstrap.com/" alt="Bootstrap" target="_blank">Bootstrap</a>.<br>
-				Like all Web Components, <a href="https://w3c.github.io/webcomponents/spec/shadow/" alt="Shadow DOM" target="_blank">Shadow DOM</a> prevents any document styles
-				from being applied to the component, unless special <code>::shadow</code> or <code>/deep/</code> selectors are used.
+				The <code>class="bootstrap"</code> CSS theme is compatible with the default <a href="http://getbootstrap.com/" alt="Bootstrap" target="_blank">Bootstrap</a> theme.
+				<p>
+				Like all Web Components, <a href="https://w3c.github.io/webcomponents/spec/shadow/" alt="Shadow DOM" target="_blank">Shadow DOM</a> prevents CSS styles, including those
+				loaded by Bootstrap, from affecting style within a component.
+				<p>
+				To style <strong>sortable-table</strong>, use the special <code>::shadow</code> or <code>/deep/</code> CSS selectors.
 			</p>
 		</div>
 	</div>
@@ -117,12 +120,19 @@
 			sortableTable.pageSize = 2;
 			clone.querySelector('h3').innerHTML = 'footerTemplate="<strong>' + templateName + '</strong>"';
 			div.appendChild(clone);
+			toggleLoading(sortableTable);
+		}
+
+		function toggleLoading(sortableTable){
+			sortableTable.loading = !sortableTable.loading;
+			setTimeout(function(){ toggleLoading(sortableTable); }, 5000);
 		}
 
 		clone('simplePager');
 		clone('indexedPager');
 		clone('defaultPager');
 		clone('articlePager');
+		clone('infinitePager');
 	</script>
 
 	<index-links page="bootstrap.html"></index-links>
