@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sortable Table using Polymer Web Components</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<script src="../../platform/platform.js" debug log="bind,ready,events"></script>
+	<link rel="import" href="../extjs-ajax.html">
+	<link rel="import" href="json-stringify.html">
+	<style>
+		.paramType { color: #ddd }
+	</style>
+</head>
+<body unresolved>
+
+	<h1>ExtJS AJAX</h1>
+
+	The <code style="font-weight:bold">extj-ajax</code> component is a client-side binding to a server-side XHR datasource,
+	supporting paging, sorting, <span style="text-decoration: line-through;" title="Not yet supported by this web component">and filtering.</span>
+
+	<p>
+
+	The API was designed for both version 4 and 5 of Sencha's <a href="http://www.sencha.com/products/extjs/" target="_blank" alt="Sencha's ExtJS">
+	ExtJS Grid</a> (available free under <a href="http://www.gnu.org/copyleft/gpl.html" alt="GPL3" target="_blank">GPL 3</a>), and full documentation can be found on Sencha's web site.
+
+	<p>
+
+	<hr style="width:75%;height:1px;border:none;color:#DDD;background-color:#DDD;" align="left">
+
+	<h2>Basic Use</h2>
+
+	<pre>
+	<strong>&lt;extjs-ajax</strong>
+		url="<a href="http://files.stevenskelton.ca/sortable-table/examples/extjs/grid-filter.php" target="_blank" alt="api"
+				>http://files.stevenskelton.ca/sortable-table/examples/extjs/grid-filter.php</a>"
+		start=<span class="paramType">[int]</span>
+		length=<span class="paramType">[int]</span>
+		sortColumn=<span class="paramType">[string]</span>
+		sortDescending=<span class="paramType">[boolean]</span>
+		columns='[
+			{"name":"id"},
+			{"name":"name"},
+			{"name":"last"},
+			{"name":"volume"},
+			{"name":"daily"},
+			{"name":"ytd"}
+		]'
+	<strong>&gt;&lt;/extjs-ajax&gt;</strong>
+	</pre>
+
+	<hr style="width:75%;height:1px;border:none;color:#DDD;background-color:#DDD;" align="left">
+
+	<p>
+
+	<h2>Demo</h2>
+
+	<p>
+
+	<template is="auto-binding">
+		<table>
+			<tr>
+				<td>Start</td>
+				<td><input type="number" min="0" max="503" value="{{start}}" style="text-align:right"></td>
+				<td><input type="range" min="0" max="503" value="{{start}}"></td>
+				<td>Paging first record indicator. This is the start point in the current data set (0 index based - i.e. 0 is the first record).</td>
+			</tr>
+			<tr>
+				<td>Length</td>
+				<td><input type="number" min="-1" max="503" value="{{length}}" style="text-align:right"></td>
+				<td><input type="range" min="-1" max="503" value="{{length}}"></td>
+				<td>Number of records that the table can display in the current draw. It is expected that the number of records returned will be equal to this number, unless the server has fewer records to return. Note that this can be -1 to indicate that all records should be returned (although that negates any benefits of server-side processing!)</td>
+			</tr>
+			<tr>
+				<td style="white-space: nowrap;">Sort Column</td>
+				<td>
+					<select value="{{sortColumn}}">
+						<option value="">-</option>
+						<option value="id">ID</option>
+						<option value="name">Name</option>
+						<option value="last">Last Price</option>
+						<option value="volume">Volume</option>
+						<option value="daily">Daily Change %</option>
+						<option value="ytd">YTD Change %</option>
+					</select>
+				</td>
+				<td><input type="checkbox" checked="{{sortDescending}}">Descending</td>
+				<td>Column by which to sort the records.</td>
+			</tr>
+		</table>
+
+		<extjs-ajax
+			url="extjs/grid-filter.php"
+			data="{{data}}"
+			dataSize="{{dataSize}}"
+			loading="{{loading}}"
+			start="{{start}}"
+			length="{{length}}"
+			sortColumn="{{sortColumn}}"
+			sortDescending="{{sortDescending}}"
+			columns='[
+				{"name":"id"},
+				{"name":"name"},
+				{"name":"last"},
+				{"name":"volume"},
+				{"name":"daily"},
+				{"name":"ytd"}
+			]'
+		></extjs-ajax>
+
+		<p>
+
+		<strong>
+			<template if="{{!loading}}">Waiting for Query<br></template>
+			<template if="{{loading}}">Loading<br></template>
+			{{dataSize}} Total Records<br>
+			{{data.length}} Records Returned<br>
+		</strong>
+
+		<json-stringify
+			data="{{data}}"
+			style="overflow-y:auto;display:block;border:1px solid #333;"
+		></json-stringify>
+	</template>
+
+</body>
+</html>

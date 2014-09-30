@@ -8,9 +8,11 @@
 	<script src="../../platform/platform.js" debug log="bind,ready,events"></script>
 	<link rel="import" href="../sortable-table.html">
 	<link rel="import" href="../datatables-ajax.html">
+	<link rel="import" href="../extjs-ajax.html">
 	<link rel="import" href="indexeddb/indexeddb-fruit.html">
 	<link rel="import" href="index-links.html">
-	<link rel="stylesheet" href="../css/extjs.css" shim-shadowdom>
+	<link rel="import" href="my-filters.html">
+	<link rel="stylesheet" href="../css/extjs4.css" shim-shadowdom>
 
 	<style shim-shadowdom>
 		.paramType { color: #ddd }
@@ -30,12 +32,20 @@
 		sortable-table.datatables::shadow td.column-salary {
 			text-align: right;
 		}
-		sortable-table.extjs::shadow tbody td { line-height: 1.2em; }
-		sortable-table.extjs::shadow td.column-name { width: 30%; }
-		sortable-table.extjs::shadow td.column-energy,
-		sortable-table.extjs::shadow td.column-protein,
-		sortable-table.extjs::shadow td.column-fat,
-		sortable-table.extjs::shadow td.column-carbohydrates { width: 15%; text-align: right; }
+		sortable-table.extjsajax::shadow td.column-last,
+		sortable-table.extjsajax::shadow td.column-volume,
+		sortable-table.extjsajax::shadow td.column-daily,
+		sortable-table.extjsajax::shadow td.column-ytd {
+			text-align: right;
+			padding-right: 5px;
+			width: 10%;
+		}
+		sortable-table.extjs4::shadow tbody td { line-height: 1.2em; }
+		sortable-table.extjs4::shadow td.column-name { width: 30%; }
+		sortable-table.extjs4::shadow td.column-energy,
+		sortable-table.extjs4::shadow td.column-protein,
+		sortable-table.extjs4::shadow td.column-fat,
+		sortable-table.extjs4::shadow td.column-carbohydrates { width: 15%; text-align: right; }
 	</style>
 </head>
 <body unresolved>
@@ -62,9 +72,6 @@
 		<em>(output)</em> dataSize=<span class="paramType">[int]</span>
 	<strong>&gt;&lt;/your-component&gt;</strong>
 	</pre>
-
-	<p>
-
 
 	<p>
 
@@ -109,6 +116,46 @@
 
 	<hr style="width:75%;height:1px;border:none;color:#DDD;background-color:#DDD;" align="left">
 
+	<h2>ExtJS API</h2>
+
+	This is a REST API using JSON to pass paged data from the server to the client.<br>
+	See the <a href="extjs-ajax.html" alt="extjs-ajax documentation">full documentation</a>.
+
+	<p>
+
+	<pre>
+	&lt;sortable-table pageSize="10"&gt;
+		&lt;extjs-ajax role="datasource" url="<a href="extjs/grid-filter.php" target="_blank" alt="api">extjs/grid-filter.php</a>"&gt;&lt;/extjs-ajax&gt;
+	&lt;/sortable-table&gt;
+	</pre>
+
+	<p>
+
+	<em>The server is hosted in the Netherlands, so users outside of Europe might notice extra latency loading data</em><br>
+
+	<template is="auto-binding">
+		<sortable-table
+			class="extjsajax default"
+			footerTemplate="defaultPager"
+			pageSize="10"
+			loading="{{loading}}"
+		>
+			<sortable-column name="name">Name</sortable-column>
+			<sortable-column name="last" formula="currency">Last</sortable-column>
+			<sortable-column name="volume" formula="function(v){ if(v > 1000000) return v/1000000 + 'M'; else return v/1000 + 'K'; }">Volume</sortable-column>
+			<sortable-column name="daily" formula="function(v){ return v + ' %'; }">Daily</sortable-column>
+			<sortable-column name="ytd" formula="function(v){ return v + ' %'; }">YTD</sortable-column>
+
+			<extjs-ajax role="datasource" url="extjs/grid-filter.php"></extjs-ajax>
+		</sortable-table>
+
+		<p>
+
+		Data is loading = {{loading}}
+	</template>
+
+	<hr style="width:75%;height:1px;border:none;color:#DDD;background-color:#DDD;" align="left">
+
 	<h2>IndexedDB API</h2>
 
 	An alternative to server-side storage is using HTML5's built in database IndexedDB.<br>
@@ -132,7 +179,7 @@
 		<div class="x-panel x-grid" style="width:715px">
 			<div class="x-panel-header-default-framed-top">Measure per 100 grams; raw</div>
 			<sortable-table
-				class="extjs"
+				class="extjs4"
 				footerTemplate="defaultPager"
 				pageSize="10"
 				loading="{{loading}}"

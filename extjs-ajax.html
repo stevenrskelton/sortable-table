@@ -1,0 +1,82 @@
+<!--
+@homepage https://github.com/stevenrskelton/sortable-table
+@element extjs-ajax
+@demo http://files.stevenskelton.ca/sortable-table/examples/extjs-ajax
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../core-ajax/core-ajax.html">
+
+<polymer-element hidden
+	name="extjs-ajax"
+	attributes="url withCredentials start length search sortColumn sortDescending columns data dataSize loading"
+>
+<script>
+	"use strict";
+	Polymer({
+		url: null,
+		withCredentials: false,
+		start: 0,
+		length: -1,
+		search: "",
+		sortColumn: null,
+		sortDescending: false,
+		columns: [],
+		ajax: null,
+		loading: false,
+		openTransactionCount: 0,
+		ready: function() {
+			var ajax = document.createElement('core-ajax');
+			ajax.handleAs = 'json';
+			var self = this;
+			ajax.addEventListener("core-response", function(e){ self.handleResponse.call(self, e); });
+			this.ajax = ajax;
+			this.ajax.url = this.url;
+			this.ajax.withCredentials = this.withCredentials;
+			this.job('go',this.go);
+		},
+		handleResponse: function(e){
+			var response = e.detail.response;
+			var columns;
+			this.dataSize = response.recordsTotal;
+			var self = this;
+			if(this.columns.length>0){
+				this.data = response.data.map(function(currentValue){
+					var obj = {};
+					self.columns.forEach(function(column){
+						obj[column.name] = currentValue[column.name];
+					});
+					return obj;
+				});
+			}else this.data = response.data;
+			this.dataSize = +response.total;
+			this.openTransactionCount--;
+			if(this.openTransactionCount === 0) this.loading = false;
+			this.fire('data-updated', { data: this.data, dataSize: this.dataSize });
+		},
+		go: function(){
+			if(this.columns.length>0){
+				var params = {
+					_dc: (new Date).getTime(),
+					page: 0,
+					start: this.start
+				};
+				if(this.length > -1) params.limit = this.length;
+				if(this.sortColumn){
+					var dir = this.sortDescending ? 'DESC' : 'ASC';
+					params.sort = JSON.stringify([{ property: this.sortColumn, direction: dir }]);
+				} 
+				this.ajax.params = params;
+				this.openTransactionCount++;
+				if(!this.loading) this.loading = true;
+				this.ajax.go();
+			}
+		},
+		columnsChanged: function(){ this.job('go',this.go); },
+		startChanged: function(){ this.job('go',this.go); },
+		lengthChanged: function(){ this.job('go',this.go); },
+		sortColumnChanged: function(){ this.job('go',this.go); },
+		sortDescendingChanged: function(){ this.job('go',this.go); }
+	});
+</script>
+</polymer-element>

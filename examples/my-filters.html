@@ -22,6 +22,7 @@ PolymerExpressions.prototype.round = function (val, precision, method) {
 };
 
 PolymerExpressions.prototype.currency = function (val) {
+	if(typeof val !== 'number') val = Number(val);
 	if(Number.isNaN(val)) val = 0;
 	return val.toFixed(2);
 };

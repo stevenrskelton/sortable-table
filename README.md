@@ -25,9 +25,9 @@ There are many capable Javascript grids, this one aims to have all the same feat
 
 ![Bootstrap](https://raw.githubusercontent.com/stevenrskelton/sortable-table/master/examples/bootstrap-theme.png "Bootstrap")
 
-#### ExtJS
+#### ExtJS 4
 
-![ExtJS](https://raw.githubusercontent.com/stevenrskelton/sortable-table/master/examples/extjs-theme.png "ExtJS")
+![ExtJS4](https://raw.githubusercontent.com/stevenrskelton/sortable-table/master/examples/extjs4-theme.png "ExtJS 4")
 
 #### ESPN
 
