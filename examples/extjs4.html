@@ -6,9 +6,11 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<script src="../../platform/platform.js" debug log="bind,ready,events"></script>
+	<script src="extjs/4.2.883/ext-all.js"></script>
 	<link rel="import" href="../sortable-table.html">
 	<link rel="import" href="fruit-icon.html">
 	<link rel="import" href="index-links.html">
+	<link rel="stylesheet" href="extjs/4.2.883/ext-theme-classic-all.css">
 	<link rel="stylesheet" href="../css/extjs4.css" shim-shadowdom>
 	<style shim-shadowdom>
 		sortable-table::shadow > table > tbody > tr > td.column-alice,
@@ -29,106 +31,140 @@
 			padding-left: 20px;
 			padding-right: 20px;
 		}
+		index-links::shadow div {
+			margin-top: 0 !important;
+			border-top: 0 !important;
+		}
 	</style>
 </head>
 <body unresolved>
-	<div class="jumbotron">
-		<div class="container">
-			<h1>ExtJS 4 Theme</h1>
-			<p>
-				The <code>class="bootstrap"</code> CSS theme is compatible with <a href="http://getbootstrap.com/" alt="Bootstrap" target="_blank">Bootstrap</a>.<br>
-				Like all Web Components, <a href="https://w3c.github.io/webcomponents/spec/shadow/" alt="Shadow DOM" target="_blank">Shadow DOM</a> prevents any document styles
-				from being applied to the component, unless special <code>::shadow</code> or <code>/deep/</code> selectors are used.
-			</p>
-		</div>
+	<div id="north" class="x-hide-display">
+		<h1>ExtJS 4 Theme</h1>
+		<p style="font-size:14px;">
+			The <code>class="extjs4"</code> CSS theme is compatible with the default theme of Sencha's <a href="http://www.sencha.com/products/extjs/" target="_blank" alt="Sencha's ExtJS">
+			ExtJS 4</a>.
+		</p>
+		<p style="font-size:14px;">
+			Like all Web Components, <a href="https://w3c.github.io/webcomponents/spec/shadow/" alt="Shadow DOM" target="_blank">Shadow DOM</a> prevents any document styles
+			from being applied to the component, unless special <code>::shadow</code> or <code>/deep/</code> selectors are used.
+		</p>
 	</div>
+	<div id="center" class="x-hide-display">
+		<section id="paginationDiv"></section>
 
-	<section>
-		<h2>Pagination Templates</h2>
+		<template id="pagination">
+			<div template class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title"></h3>
+				</div>
+				<div class="panel-body">
+					<div class="panel panel-default">
+						<sortable-table
+							class="extjs4"
+							rowSelection
+							checkbox
+							multiSelect
+						>
+							<sortable-column name="fruit" cellTemplate="fruitsTemplate">Fruit</sortable-column>
+							<sortable-column name="alice">Alice</sortable-column>
+							<sortable-column name="bill">Bill</sortable-column>
+							<sortable-column name="casey">Casey</sortable-column>
+							<sortable-column name="average" formula="function(row){ return Math.round((row.alice + row.bill + row.casey)/3*10)/10; }">Average</sortable-column>
+							<sortable-column name="total" formula="function(row){ return row.alice + row.bill + row.casey; }">Total</sortable-column>
 
-		<div id="paginationDiv"></div>
-	</section>
+							<template id="fruitsTemplate">
+								<td style="text-align:left;vertical-align:middle;width:250px;">
+									<fruit-icon fruit="{{value}}"></fruit-icon>
+									{{value}}
+								</td>
+							</template>
 
-	<template id="pagination">
-		<div template class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title"></h3>
-			</div>
-			<div class="panel-body">
-				<div class="panel panel-default">
-					<sortable-table
-						class="extjs4"
-						rowSelection
-						checkbox
-						multiSelect
-					>
-						<sortable-column name="fruit" cellTemplate="fruitsTemplate">Fruit</sortable-column>
-						<sortable-column name="alice">Alice</sortable-column>
-						<sortable-column name="bill">Bill</sortable-column>
-						<sortable-column name="casey">Casey</sortable-column>
-						<sortable-column name="average" formula="function(row){ return Math.round((row.alice + row.bill + row.casey)/3*10)/10; }">Average</sortable-column>
-						<sortable-column name="total" formula="function(row){ return row.alice + row.bill + row.casey; }">Total</sortable-column>
-
-						<template id="fruitsTemplate">
-							<td style="text-align:left;vertical-align:middle;width:250px;">
-								<fruit-icon fruit="{{value}}"></fruit-icon>
-								{{value}}
-							</td>
-						</template>
-
-						[
-							{fruit: 'apple', alice: 4, bill: 10, casey: 2 },
-							{fruit: 'banana', alice: 0, bill: 4, casey: 0 },
-							{fruit: 'grape', alice: 2, bill: 3, casey: 5 },
-							{fruit: 'pear', alice: 4, bill: 2, casey: 8 },
-							{fruit: 'strawberry', alice: 0, bill: 14, casey: 0 },
-							{fruit: 'strawberry', alice: 4, bill: 5, casey: 2 },
-							{fruit: 'pear', alice: 0, bill: 7, casey: 4 },
-							{fruit: 'banana', alice: 3, bill: 9, casey: 2 },
-							{fruit: 'apple', alice: 5, bill: 6, casey: 4 },
-							{fruit: 'grape', alice: 8, bill: 3, casey: 0 },
-							{fruit: 'apple', alice: 4, bill: 10, casey: 2 },
-							{fruit: 'banana', alice: 0, bill: 4, casey: 0 },
-							{fruit: 'grape', alice: 2, bill: 3, casey: 5 },
-							{fruit: 'pear', alice: 4, bill: 2, casey: 8 },
-							{fruit: 'strawberry', alice: 0, bill: 14, casey: 0 },
-							{fruit: 'strawberry', alice: 4, bill: 5, casey: 2 },
-							{fruit: 'pear', alice: 0, bill: 7, casey: 4 },
-							{fruit: 'banana', alice: 3, bill: 9, casey: 2 },
-							{fruit: 'apple', alice: 5, bill: 6, casey: 4 },
-							{fruit: 'grape', alice: 8, bill: 3, casey: 0 }
-						]
-					</sortable-table>
+							[
+								{fruit: 'apple', alice: 4, bill: 10, casey: 2 },
+								{fruit: 'banana', alice: 0, bill: 4, casey: 0 },
+								{fruit: 'grape', alice: 2, bill: 3, casey: 5 },
+								{fruit: 'pear', alice: 4, bill: 2, casey: 8 },
+								{fruit: 'strawberry', alice: 0, bill: 14, casey: 0 },
+								{fruit: 'strawberry', alice: 4, bill: 5, casey: 2 },
+								{fruit: 'pear', alice: 0, bill: 7, casey: 4 },
+								{fruit: 'banana', alice: 3, bill: 9, casey: 2 },
+								{fruit: 'apple', alice: 5, bill: 6, casey: 4 },
+								{fruit: 'grape', alice: 8, bill: 3, casey: 0 },
+								{fruit: 'apple', alice: 4, bill: 10, casey: 2 },
+								{fruit: 'banana', alice: 0, bill: 4, casey: 0 },
+								{fruit: 'grape', alice: 2, bill: 3, casey: 5 },
+								{fruit: 'pear', alice: 4, bill: 2, casey: 8 },
+								{fruit: 'strawberry', alice: 0, bill: 14, casey: 0 },
+								{fruit: 'strawberry', alice: 4, bill: 5, casey: 2 },
+								{fruit: 'pear', alice: 0, bill: 7, casey: 4 },
+								{fruit: 'banana', alice: 3, bill: 9, casey: 2 },
+								{fruit: 'apple', alice: 5, bill: 6, casey: 4 },
+								{fruit: 'grape', alice: 8, bill: 3, casey: 0 }
+							]
+						</sortable-table>
+					</div>
 				</div>
 			</div>
-		</div>
-	</template>
+		</template>
+		<script>
+			var template = document.getElementById('pagination');
+			var div = document.getElementById('paginationDiv');
+
+			function clone(templateName){
+				var clone = document.importNode(template.content, true);
+				var sortableTable = clone.querySelector('sortable-table');
+				sortableTable.footerTemplate = templateName;
+				sortableTable.pageSize = 2;
+				clone.querySelector('h3').innerHTML = 'footerTemplate="<strong>' + templateName + '</strong>"';
+				div.appendChild(clone);
+				toggleLoading(sortableTable);
+			}
+
+			function toggleLoading(sortableTable){
+				sortableTable.loading = !sortableTable.loading;
+				setTimeout(function(){ toggleLoading(sortableTable); }, 5000);
+			}
+
+			clone('simplePager');
+			clone('indexedPager');
+			clone('defaultPager');
+			clone('articlePager');
+			clone('infinitePager');
+		</script>
+	</div>
 	<script>
-		var template = document.getElementById('pagination');
-		var div = document.getElementById('paginationDiv');
-
-		function clone(templateName){
-			var clone = document.importNode(template.content, true);
-			var sortableTable = clone.querySelector('sortable-table');
-			sortableTable.footerTemplate = templateName;
-			sortableTable.pageSize = 2;
-			clone.querySelector('h3').innerHTML = 'footerTemplate="<strong>' + templateName + '</strong>"';
-			div.appendChild(clone);
-			toggleLoading(sortableTable);
-		}
-
-		function toggleLoading(sortableTable){
-			sortableTable.loading = !sortableTable.loading;
-			setTimeout(function(){ toggleLoading(sortableTable); }, 1000);
-		}
-
-		clone('simplePager');
-		clone('indexedPager');
-		clone('defaultPager');
-		clone('articlePager');
-		clone('infinitePager');
+Ext.require(['*']);
+Ext.onReady(function() {
+    var cw;
+    Ext.create('Ext.Viewport', {
+        layout: {
+            type: 'border',
+            padding: 5
+        },
+        defaults: {
+            split: false
+        },
+        items: [{
+            region: 'north',
+            autoHeight: true,
+            contentEl: 'north',
+            bodyStyle: 'padding-left: 12px;'
+        },{
+            region: 'center',
+            layout: 'border',
+            border: false,
+            items: [{
+				title: '<h2 style="margin:4px">Pagination Templates</h2>',
+				region: 'center',
+				overflowY: 'scroll',
+				contentEl: 'center'
+			}]
+        },{
+			region: 'south',
+            html: '<index-links page="extjs4.html"></index-links>'
+        }]
+    });
+});
 	</script>
-
-	<index-links page="extjs4.html"></index-links>
 </body>
 </html>

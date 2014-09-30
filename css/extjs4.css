@@ -62,7 +62,7 @@ sortable-table.extjs4 {
 	border-width: 1px;
 	border-collapse: collapse;
 }
-.extjs4::shadow thead tr {
+.extjs4::shadow > table > thead > tr {
 	height: 22px;
 /*x-grid-header-ct*/
 	cursor:default;
@@ -84,8 +84,8 @@ sortable-table.extjs4 {
 	/*border-width:0*/
 }
 
-.extjs4::shadow tbody input,
-.extjs4::shadow tbody select {
+.extjs4::shadow > table > tbody input,
+.extjs4::shadow > table > tbody select {
 	width: 90%;
 	margin-left:auto;
 	margin-right:auto;
@@ -98,7 +98,7 @@ sortable-table.extjs4 {
 	background-image:linear-gradient(top, #dee3e6,#fdfefe 39%,#ffffff 40%,#ffffff);
 }
 
-.extjs4::shadow thead tr th {
+.extjs4::shadow > table > thead > tr > th {
 	cursor: auto;
 	color: #000;
 	/*x-unselectable*/
@@ -129,9 +129,9 @@ sortable-table.extjs4 {
 	padding:0px 6px;
 	text-decoration: none;
 }
-.extjs4::shadow thead tr th:hover,
-.extjs4::shadow thead th.sorted-column-asc,
-.extjs4::shadow thead th.sorted-column-desc
+.extjs4::shadow > table > thead > tr > th:hover,
+.extjs4::shadow > table > thead > tr > th.sorted-column-asc,
+.extjs4::shadow > table > thead > tr > th.sorted-column-desc
 {
 	/* x-column-header-over */
 	border-left-color:#aaccf6;
@@ -142,7 +142,7 @@ sortable-table.extjs4 {
 	background-image:-moz-linear-gradient(top, #ebf3fd,#ebf3fd 39%,#d9e8fb 40%,#d9e8fb);
 	background-image:linear-gradient(top, #ebf3fd,#ebf3fd 39%,#d9e8fb 40%,#d9e8fb);
 }
-.extjs4::shadow tbody {
+.extjs4::shadow > table > tbody {
 	cursor: auto !important;
 	border-top-width: 1px;
 	border-bottom-width: 1px;
@@ -175,7 +175,7 @@ sortable-table.extjs4 {
 	*/
 	/*x-grid-table-resizer*/
 }
-.extjs4::shadow tbody tr {
+.extjs4::shadow > table > tbody > tr {
 	font:normal 13px helvetica,tahoma,verdana,sans-serif;
 /*x-grid-row*/
 	line-height:13px;
@@ -186,25 +186,25 @@ sortable-table.extjs4 {
 	-webkit-user-select:ignore;
 	border: 1px solid #dddddd;
 }
-.extjs4::shadow tbody tr td:last-of-type {
+.extjs4::shadow > table > tbody > tr > td:last-of-type {
 	border-right:1px solid #99bbe8;
 }
-.extjs4::shadow tbody tr td:first-of-type {
+.extjs4::shadow > table > tbody > tr > td:first-of-type {
 	border-left:1px solid #99bbe8;
 }
-.extjs4::shadow tbody tr:last-of-type td {
+.extjs4::shadow > table > tbody > tr:last-of-type td {
 	border-bottom:1px solid #99bbe8;
 }
-.extjs4::shadow tbody tr:nth-of-type(even) {
+.extjs4::shadow > table > tbody > tr:nth-of-type(even) {
 	/*x-grid-row-alt*/
 	background-color:#fafafa;
 }
-.extjs4::shadow tbody tr:hover {
+.extjs4::shadow > table > tbody > tr:hover {
 	/*x-grid-row-over*/
 	background-color:#efefef;
 	border-color:#dddddd;
 }
-.extjs4::shadow tbody tr.selected-row {
+.extjs4::shadow > table > tbody > tr.selected-row {
 /*x-grid-row-selected*/
 	border-style:dotted;
 	border-color:#a3bae9;
@@ -215,7 +215,8 @@ sortable-table.extjs4 {
 	background-color:#efefef;
 */
 }
-.extjs4::shadow button {
+.extjs4::shadow button,
+.extjs4::shadow [role*="button"] {
 	background-color: inherit;
 	-moz-border-radius:3px;
 	-webkit-border-radius:3px;
@@ -234,7 +235,10 @@ sortable-table.extjs4 {
 	line-height: 11px;
 	min-width: 22px;
 }
-.extjs4::shadow button:not([disabled]):hover {
+.extjs4::shadow button:not([disabled]):not(.active):hover,
+.extjs4::shadow [role*="button"]:not([disabled]):not(.active):hover,
+.extjs4::shadow button:not(.disabled):not(.active):hover,
+.extjs4::shadow [role*="button"]:not(.disabled):not(.active):hover{
 	border-color:#81a4d0;
 	border-width:1px;
 	background-image:none;
@@ -243,6 +247,18 @@ sortable-table.extjs4 {
 	background-image:-moz-linear-gradient(top, #dbeeff,#d0e7ff 48%,#bbd2f0 52%,#bed6f5);
 	background-image:linear-gradient(top, #dbeeff,#d0e7ff 48%,#bbd2f0 52%,#bed6f5);
 }
+.extjs4::shadow button.active,
+.extjs4::shadow [role*="button"].active{
+	border-color:#9ebae1;
+	background-image:none;
+	background-color:#b6cbe4;
+	background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#b6cbe4),color-stop(48%,#bfd2e6),color-stop(52%,#8dc0f5),color-stop(100%,#98c5f5));
+	background-image:-webkit-linear-gradient(top,#b6cbe4,#bfd2e6 48%,#8dc0f5 52%,#98c5f5);
+	background-image:-moz-linear-gradient(top,#b6cbe4,#bfd2e6 48%,#8dc0f5 52%,#98c5f5);
+	background-image:-o-linear-gradient(top,#b6cbe4,#bfd2e6 48%,#8dc0f5 52%,#98c5f5);
+	background-image:linear-gradient(top,#b6cbe4,#bfd2e6 48%,#8dc0f5 52%,#98c5f5)
+}
+
 .extjs4::shadow .x-toolbar-separator-horizontal {
 	margin: 0px 3px 0px 2px;
 	height: 13px;
@@ -250,8 +266,9 @@ sortable-table.extjs4 {
 	border-left: 1px solid #98C8FF;
 	border-right: 1px solid #FFF;
 	display: inline-block;
+	vertical-align: middle;
 }
-.extjs4::shadow tfoot {
+.extjs4::shadow > table > tfoot {
 	height: 22px;
 	/*x-toolbar*/
 	font-size:11px;
@@ -274,25 +291,25 @@ sortable-table.extjs4 {
 	margin-right:6px;
 	white-space:nowrap;
 	color:#4c4c4c !important;
-	line-height:22px;
+	/*line-height:22px;*/
 	font-family:tahoma, arial, verdana, sans-serif;
 	font-size:11px;
 	font-weight:normal;
 	/*x-toolbar-text-default x-box-item x-toolbar-item*/
 	margin:0 6px 0 0;
 }
-.extjs4::shadow tfoot tr:first-of-type {
+.extjs4::shadow > table > tfoot > tr:first-of-type {
 	background-color: #D8E4F2;
 	border:1px solid #99bbe8;
 	padding: 2px;
 }
-.extjs4::shadow tfoot tr:nth-of-type(2) {
+.extjs4::shadow > table > tfoot > tr:nth-of-type(2) {
 	background-color:#dfe8f6;
 }
-.extjs4::shadow tfoot tr:nth-of-type(2) td {
+.extjs4::shadow > table > tfoot > tr:nth-of-type(2) td {
 	padding-top: 5px;
 }
-.extjs4::shadow thead th.column-move-right {
+.extjs4::shadow > table > thead > tr > th.column-move-right {
 	border-right-color: #FBBA37;
 	background: #FBBA37; /* Older browsers */
 	background: -moz-linear-gradient(left, #ebedec 50%, #FBBA37 100%); /* FF3.6+ */
@@ -301,7 +318,7 @@ sortable-table.extjs4 {
 	background: -ms-linear-gradient(left, #ebedec 50%, #FBBA37 100%); /* IE10+ */
 	background: linear-gradient(left, #ebedec 50%, #FBBA37 100%); /* W3C */
 }
-.extjs4::shadow thead th.column-move-left {
+.extjs4::shadow > table > thead > tr > th.column-move-left {
 	border-left-color: #FBBA37;
 	background: #FBBA37; /* Older browsers */
 	background: -moz-linear-gradient(left, #FBBA37 0%, #ebedec 50%); /* FF3.6+ */
@@ -310,19 +327,51 @@ sortable-table.extjs4 {
 	background: -ms-linear-gradient(left, #FBBA37 0%, #ebedec 50%); /* IE10+ */
 	background: linear-gradient(left, #FBBA37 0%, #ebedec 50%); /* W3C */
 }
-.extjs4::shadow .sortable-table thead th.sorted-column-asc::after {
+.extjs4::shadow > table > thead > tr > th.sorted-column-asc::after {
 	content: '▲';
 	position: absolute;
 	color:#6190CD;
 }
-.extjs4::shadow .sortable-table thead th.sorted-column-desc::after {
+.extjs4::shadow > table > thead > tr > th.sorted-column-desc::after {
 	content: '▼';
 	position: absolute;
 	color:#6190CD;
 }
-.extjs4::shadow tbody tr.editor-row {
+.extjs4::shadow > table > tbody > tr.editor-row {
 	background-color: #eaf1fb;
 }
-.extjs4::shadow tbody tr.edited-row td {
+.extjs4::shadow > table > tbody > tr.edited-row > td {
 	background-color: rgba(255,0,0,0.33);
+}
+.extjs4::shadow .simplePager {
+	padding-left: 8px;
+}
+.extjs4::shadow .articlePager {
+	border: 0;
+	border-spacing: 0;
+	height: 24px;
+}
+.extjs4::shadow .articlePager [role*="button"] {
+	padding: 0 6px 0 4px;
+}
+.extjs4::shadow .infinitePager {
+	text-align: center;
+	height: 22px;
+	line-height:22px;
+}
+.extjs4::shadow .infinitePager [role*="button"] {
+	width: 100%;
+	display: block;
+}
+.extjs4::shadow .indexedPager a {
+	text-decoration: none;
+	color: #000;
+}
+.extjs4::shadow .indexedPager ul {
+	margin: 0;
+}
+.extjs4::shadow .indexedPager li {
+	display: inline-block;
+	padding: 0 8px;
+	line-height: 22px;
 }

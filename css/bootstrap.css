@@ -501,7 +501,7 @@
 }
 .bootstrap::shadow .infinitePager > .loading {
 	border-radius: 4px;
-	line-height:20px;
+	line-height:24px;
 	color:#fff;
 	text-align:center;
 	background-color:#428bca;
@@ -520,7 +520,9 @@
 }
 .bootstrap::shadow .infinitePager > .more {
 	text-align: center;
+	width: 100%;
 	cursor: pointer;
+	line-height:10px;
 }
 .bootstrap::shadow table.articlePager td:nth-of-type(2) {
 	padding-left: 10px;

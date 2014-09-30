@@ -144,7 +144,7 @@
 			<sortable-column name="last" formula="currency">Last</sortable-column>
 			<sortable-column name="volume" formula="function(v){ if(v > 1000000) return v/1000000 + 'M'; else return v/1000 + 'K'; }">Volume</sortable-column>
 			<sortable-column name="daily" formula="function(v){ return v + ' %'; }">Daily</sortable-column>
-			<sortable-column name="ytd" formula="function(v){ return v + ' %'; }">YTD</sortable-column>
+			<sortable-column name="ytd" formula="function(v){ if(v) return v + ' %'; else return '-'; }">YTD</sortable-column>
 
 			<extjs-ajax role="datasource" url="extjs/grid-filter.php"></extjs-ajax>
 		</sortable-table>

@@ -144,7 +144,7 @@
 </style>
 
 	<template id="simplePager">
-		<div horizontal layout center>
+		<div class="simplePager" horizontal layout center>
 			<span flex>{{dataSize}} Results</span>
 			<span>
 				<button disabled?="{{page<=1}}" class="btn btn-primary btn-sm" on-click="{{moveToPreviousPage}}">&#10094;</button>
@@ -155,19 +155,19 @@
 	</template>
 
 	<template id="indexedPager">
-		<div style="width:100%;text-align:center;font-weight:normal;">
+		<div class="indexedPager" style="width:100%;text-align:center;font-weight:normal;">
 			<ul class="pagination">
-				<li class="{{page==1 ? 'disabled' : ''}}" on-click="{{moveToFirstPage}}"><a href="#" onclick="return false;">«</a></li>
+				<li class="{{page==1 ? 'disabled' : ''}}" disabled?="{{page==1}}" on-click="{{moveToFirstPage}}" role="button"><a href="#" onclick="return false;">«</a></li>
 				<template repeat="{{i in lastPage | naturalNumbers(page)}}">
-					<li class="{{page==i ? 'active' : ''}}" on-click="{{moveToPage}}"><a href="#" onclick="return false;">{{i}}</a></li>
+					<li class="{{page==i ? 'active' : ''}}" on-click="{{moveToPage}}" role="button"><a href="#" onclick="return false;">{{i}}</a></li>
 				</template>
-				<li class="{{page==lastPage ? 'disabled' : ''}}" on-click="{{moveToLastPage}}"><a href="#" onclick="return false;">»</a></li>
+				<li class="{{page==lastPage ? 'disabled' : ''}}" disabled="{{page==lastPage}}" on-click="{{moveToLastPage}}" role="button"><a href="#" onclick="return false;">»</a></li>
 			</ul>
 		</div>
 	</template>
 
 	<template id="defaultPager">
-		<div horizontal layout center>
+		<div class="defaultPager" horizontal layout center>
 			<div class="btn-group">
 				<button disabled?="{{page==1}}" class="btn btn-default btn-sm" on-click="{{moveToFirstPage}}">&#9198;</button><!--
 				--><button disabled?="{{page<=1}}" class="btn btn-default btn-sm" on-click="{{moveToPreviousPage}}">&#9194;</button>
@@ -196,7 +196,7 @@
 				<template if="{{dataSize <= pageSize}}">
 					<td style="display:none"></td>
 				</template>
-				<td>Showing {{pageSize}} of {{dataSize}}</td>
+				<td><span class="x-toolbar-separator-horizontal" hidden?="{{dataSize <= pageSize}}"></span> Showing {{pageSize}} of {{dataSize}}</td>
 				<td>
 					<template if="{{grid!=null}}">
 						<select on-change="{{toggleGrid}}">
@@ -215,7 +215,7 @@
 				<div class="loading">Loading</div>
 			</template>
 			<template if="{{!loading && ((data.length < dataSize) || (page < lastPage))}}">
-				<div class="more" on-click="{{moveToNextPage}}">More</div>
+				<button class="more btn btn-primary" on-click="{{moveToNextPage}}">More</div>
 			</template>
 		</div>
 	</template>
