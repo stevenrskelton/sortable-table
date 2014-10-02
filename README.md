@@ -41,7 +41,7 @@ There are many capable Javascript grids, this one aims to have all the same feat
 
 #### Article in Grid Mode
 
-![Article in Grid Mode](https://raw.githubusercontent.com/stevenrskelton/sortable-table/master/themes/examples/themes/article-theme-grid.png "Article in Grid Mode")
+![Article in Grid Mode](https://raw.githubusercontent.com/stevenrskelton/sortable-table/master/examples/themes/article-theme-grid.png "Article in Grid Mode")
 
 ## Live Examples and Documentation
 
