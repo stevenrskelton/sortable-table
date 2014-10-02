@@ -8,7 +8,7 @@
 	<script src="../../platform/platform.js" debug log="bind,ready,events"></script>
 	<link rel="import" href="../sortable-table.html">
 	<link rel="import" href="fruit-icon.html">
-	<link rel="import" href="index-links.html">
+	<link rel="import" href="project-docs.html">
 	<link rel="stylesheet" href="../css/extjs4.css" shim-shadowdom>
 	<link rel="stylesheet" href="../css/bootstrap.css" shim-shadowdom>
 	<link rel="stylesheet" href="../css/espn.css" shim-shadowdom>
@@ -29,9 +29,9 @@
 		}
 	</style>
 </head>
-<body unresolved>
+<body unresolved is="project-docs">
 
-	<h2>Row Editor</h2>
+	<h1>Row Editor</h1>
 
 	<b><em>Double clicking</em></b> on a row should transform the row into the <code>rowEditorTemplate</code>.<br>
 	Within an edit, formulas should work, templates should work, and original data should be modified and reflected in the table.<br>
@@ -362,7 +362,5 @@
 			}
 		})
 	</script>
-
-	<index-links page="row-editor.html"></index-links>
 </body>
 </html>

@@ -8,13 +8,13 @@
 	<script src="../../platform/platform.js"></script>
 	<link rel="import" href="../sortable-table.html">
 	<link rel="import" href="fruit-icon.html">
-	<link rel="import" href="index-links.html">
+	<link rel="import" href="project-docs.html">
 
 	<style>
 		sortable-table { width: 800px; }
 	</style>
 </head>
-<body unresolved>
+<body unresolved is="project-docs">
 
 	<h2>Refreshing <code>data</code> should work</h2>
 	It seems that the bound <code>data</code> is sorted by the web component. Sort should be maintained on data refresh.
@@ -108,7 +108,5 @@
 		updateHotData();
 	});
 	</script>
-
-	<index-links page="refreshing-data.html"></index-links>
 </body>
 </html>

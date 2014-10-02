@@ -8,7 +8,7 @@
 	<script src="../../platform/platform.js"></script>
 	<link rel="import" href="../sortable-table.html">
 	<link rel="import" href="fruit-icon.html">
-	<link rel="import" href="index-links.html">
+	<link rel="import" href="project-docs.html">
 	<style shim-shadowdom>
 		sortable-table { width: 500px; margin-left: 65px; }
 		sortable-table::shadow td.column-alice,
@@ -23,9 +23,9 @@
 		}
 	</style>
 </head>
-<body unresolved>
+<body unresolved is="project-docs">
 
-	<h2>DOM Elements</h2>
+	<h1>DOM Elements</h1>
 
 	The <code>sortable-column</code> elements should work the same way as a <code>columns</code> array.
 
@@ -95,7 +95,5 @@
 		 [ "pear", 4, 2, 8 ],
 		 [ "strawberry", 0, 14, 0 ]]
 	</sortable-table>
-
-	<index-links page="dom-elements.html"></index-links>
 </body>
 </html>

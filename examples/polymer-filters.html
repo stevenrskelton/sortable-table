@@ -1,0 +1,44 @@
+<html>
+<head>
+	<title>Sortable Table using Polymer Web Components</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<script src="../../platform/platform.js"></script>
+	<link rel="import" href="../../polymer/polymer.html">
+	<link rel="import" href="../../prism-js/prism-js.html">
+	<link rel="import" href="project-docs.html">
+	<style>
+		li { margin: 5px 0; }
+	</style>
+</head>
+<body unresolved is="project-docs">
+	<h1>Polymer Filters and Formatting Data</h1>
+
+	Referencing the <a href="http://www.polymer-project.org/docs/polymer/expressions.html#filters" target="_blank">polymer documentation</a>, filters can be used in expressions to transform data:
+
+	<prism-js language="javascript">{{ expression | filterName([optional parameters]}}</prism-js>
+
+	<p>To use a filter in one of your <em>sortable-table</em> templates, it must be registered into the <em>PolymerExpressions</em> scope, which is accessible after polymer has loaded:</p>
+
+	<prism-js language="javascript">window.addEventListener('polymer-ready', function(){
+	PolymerExpressions.prototype.myFilter = function(){ ... }
+});</prism-js>
+
+	<p>If a filter is being used in a <code>rowTemplate</code> or <code>rowEditorTemplate</code> and references more than one field, it might be useful to pass the <code>row</code> as an argument:
+	<code>{{ record.row | myFilter }}</code> however, this won't automatically observe the individual fields of the <code>row</code>.  To tell polymer to watch individual fields, they must all be sent as optional parameters:
+	<code>{{ record.row | myFilter(record.row.myField1, record.row.myField2) }}</code></p>
+
+	<p>The added benefit is that the function can be reused in <code>rowTemplate</code>s and as a <code>column.formula</code>:</p>
+
+	<prism-js language="javascript">function myFilter(row){
+	return [your logic here];
+}
+...
+PolymerExpressions.prototype.myFilter = myFilter
+...
+//in the columns array
+{ name:'field1', formula: myFilter }</prism-js>
+
+</body>
+</html>

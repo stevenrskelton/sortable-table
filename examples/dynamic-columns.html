@@ -9,7 +9,7 @@
 	<link rel="import" href="../sortable-table.html">
 	<link rel="import" href="fruit-icon.html">
 	<link rel="import" href="json-stringify.html">
-	<link rel="import" href="index-links.html">
+	<link rel="import" href="project-docs.html">
 
 	<style shim-shadowdom>
 		sortable-table { width: 500px; margin-left: 65px; }
@@ -24,9 +24,10 @@
 		}
 	</style>
 </head>
-<body unresolved>
+<body unresolved is="project-docs">
 
-	<h2>Dynamic columns</h2>
+	<h1>Dynamically Changing Columns and Templates</h1>
+
 	Adding, removing, and reordering <code>columns</code> should not break sort.<br>
 	Changing a <code>cellTemplate</code>, and column scoped <code>headerTemplate</code>, or <code>footerTemplate</code> after load should work correctly.<br>
 	Column reordering via drag-and-drop should work correctly.
@@ -125,7 +126,5 @@
 		document.getElementById('example').model = model;
 	});
 	</script>
-
-	<index-links page="dynamic-columns.html"></index-links>
 </body>
 </html>

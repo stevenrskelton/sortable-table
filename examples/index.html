@@ -6,11 +6,244 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<script src="../../platform/platform.js"></script>
 	<link rel="import" href="../../polymer/polymer.html">
-	<link rel="import" href="index-links.html">
+	<link rel="import" href="../../prism-js/prism-js.html">
+	<link rel="import" href="project-docs.html">
+	<style>
+		li { margin: 5px 0; }
+	</style>
 </head>
-<body>
-	<h1>&lt;sortable-table&gt; Examples</h1>
+<body unresolved is="project-docs">
+	<h1>Getting Started</h1>
 
-	<index-links index></index-links>
+	<h2>Setup</h2>
+
+	<ol>
+		<li>
+			Add the library using the Javascript package manager <a href="http://bower.io/" alt="Bower: A package manager for the web">Bower</a>:
+			<prism-js language="css">bower install --save sortable-table</prism-js>
+		</li>
+		<li>
+			Import Web Components' polyfill:
+			<prism-js language="markup">&lt;script src="bower_components/platform/platform.js"&gt;&lt;/script&gt;</prism-js>
+		</li>
+		<li>
+			Import Custom Element:
+			<prism-js language="markup">&lt;link rel="import" href="bower_components/sortable-table/sortable-table.html"&gt;</prism-js>
+		</li>
+		<li>
+			Import a theme, like the <a href="http://getbootstrap.com/" alt="Bootstrap" target="_blank">Bootstrap</a> compatible theme <em>(Optional)</em>:
+			<prism-js language="markup">&lt;link href="bower_components/sortable-table/css/bootstrap.css" rel="stylesheet" shim-shadowdom&gt;</prism-js>
+			<em>And include <code>class="bootstrap"</code> on any sortable-table to apply.</em>
+		</li>
+		<li>
+			<p>
+			Start using it!
+			</p>
+			Start simple and use DOM to configure the grid:
+			<prism-js language="markup" escape="true"><sortable-table>
+	<sortable-column>fruit</sortable-column>
+	<sortable-column>alice</sortable-column>
+	<sortable-column>bill</sortable-column>
+	<sortable-column>casey</sortable-column>
+	<!-- data case be either an Array, JSON, or JSON5 -->
+	[
+		[ "apple", 4, 10, 2 ],
+		[ "banana", 0, 4, 0 ],
+		[ "grape", 2, 3, 5 ],
+		[ "pear", 4, 2, 8 ],
+		[ "strawberry", 0, 14, 0 ]
+	]
+</sortable-table></prism-js>
+			<p>
+			Or use Javascript attributes:
+			<p>
+			<prism-js language="markup">&lt;sortable-table columns='["fruit","alice","bill","casey"]' data='[
+		[ "apple", 4, 10, 2 ],
+		[ "banana", 0, 4, 0 ],
+		[ "grape", 2, 3, 5 ],
+		[ "pear", 4, 2, 8 ],
+		[ "strawberry", 0, 14, 0 ] ]'&gt;
+&lt;/sortable-table&gt;</prism-js>
+			<p>
+			Or take advanced control with custom templates, 2-way data binding, and a remote datasource:
+			<prism-js language="markup" escape="true"><sortable-table columns="{{columns}}" data="{{data}}">
+	<!-- add templates here -->
+	<!-- add remote datasource here -->
+</sortable-table></prism-js>
+		</li>
+	</ol>
+	
+	<h2>Node Attributes</h2>
+
+	<table class="docs">
+		<thead>
+			<tr>
+				<th>Attribute</th>
+				<th>Options</th>
+				<th>Default</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><code>data</code></td>
+				<td><em>array</em></td>
+				<td><code>[]</code></td>
+				<td>Data rows</td>
+			</tr>
+			<tr>
+				<td><code>columns</code></td>
+				<td><em>array</em></td>
+				<td><code>[]</code></td>
+				<td>Columns to display, with options. If <code>[]</code>, columns will be computed from <code>data</code>.  <em>See</em> <a href="#columns">Columns</a></td>
+			</tr>
+			<tr>
+				<td><code>sortColumn</code></td>
+				<td><em>string</em></td>
+				<td><code>null</code></td>
+				<td>Current sorted <code>column.name</code></td>
+			</tr>
+			<tr>
+				<td><code>sortDescending</code></td>
+				<td><em>boolean</em></td>
+				<td><code>false</code></td>
+				<td>Current sorted column sort direction</td>
+			</tr>
+			<tr>
+				<td><code>checkbox</code></td>
+				<td><em>boolean</em></td>
+				<td><code>false</code></td>
+				<td>Renders a checkbox column as first column, facilitating row selection.</td>
+			</tr>
+			<tr>
+				<td><code>disableColumnMove</code></td>
+				<td><em>boolean</em></td>
+				<td><code>false</code></td>
+				<td>Disables columns from being drag-and-dropped into different positions.  Drag-and-drop will be automatically disabled if entire row templates (<code>rowTemplate</code> or <code>rowEditorTemplate</code>) are used. CSS styling using <em>:nth-of-type</em> will likely break unless this is set to true.</td>
+			</tr>
+			<tr>
+				<td><code>rowSelection</code></td>
+				<td><em>boolean</em></td>
+				<td><code>false</code></td>
+				<td>Enable user interactive row selection</td>
+			</tr>
+			<tr>
+				<td><code>multiSelect</code></td>
+				<td><em>boolean</em></td>
+				<td><code>false</code></td>
+				<td>Multiple rows can be selected</td>
+			</tr>
+			<tr>
+				<td><code>selected</code></td>
+				<td><em>object</em></td>
+				<td><code>null</code></td>
+				<td>Element of <code>data</code> (if <code>!multiSelect</code>)</td>
+			</tr>
+			<tr>
+				<td><code>selected</code></td>
+				<td><em>array</em></td>
+				<td><code>[]</code></td>
+				<td>Elements of <code>data</code> (if <code>multiSelect</code>)</td>
+			</tr>
+			<tr>
+				<td><code>selectedRowStyle</code></td>
+				<td><em>string</em></td>
+				<td>
+				<code>background-color:</code> <code>rgba(0,96,200,0.2);</code></td>
+				<td>CSS style to apply to <code>selected</code> row</td>
+			</tr>
+			<tr>
+				<td><code>pageSize</code></td>
+				<td><em>int</em></td>
+				<td><code>-1</code></td>
+				<td>Maximum number of records to display, <code>-1</code> is all records.</td>
+			</tr>
+			<tr>
+				<td><code>page</code></td>
+				<td><em>int</em></td>
+				<td><code>1</code></td>
+				<td>Number of pages to skip, <code>pageSize * (page-1)</code> records skipped.</td>
+			</tr>
+			<tr>
+				<td><code>rowTemplate</code></td>
+				<td><em>string</em></td>
+				<td><code>null</code></td>
+				<td><em>See</em> <a href="#table--rowtemplate">Table § rowTemplate</a></td>
+			</tr>
+			<tr>
+				<td><code>rowEditorTemplate</code></td>
+				<td><em>string</em></td>
+				<td><code>null</code></td>
+				<td><em>See</em> <a href="#table--roweditortemplate">Table § rowEditorTemplate</a></td>
+			</tr>
+			<tr>
+				<td><code>cellTemplate</code></td>
+				<td><em>string</em></td>
+				<td><code>null</code></td>
+				<td><em>See</em> <a href="#table--celltemplate">Table § cellTemplate</a></td>
+			</tr>
+			<tr>
+				<td><code>headerTemplate</code></td>
+				<td><em>string</em></td>
+				<td><code>null</code></td>
+				<td><em>See</em> <a href="#table--headertemplate">Table § headerTemplate</a></td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<h3><a name="user-content-data" class="anchor" href="#data" aria-hidden="true"><span class="octicon octicon-link"></span></a>Data</h3>
+
+	<p>Input format for <code>data</code> rows is an array of objects, where data for each column is a property of the row object.</p>
+
+	<h3><a name="user-content-columns" class="anchor" href="#columns" aria-hidden="true"><span class="octicon octicon-link"></span></a>Columns</h3>
+
+	<table class="docs">
+		<thead>
+			<tr>
+				<th>Attribute</th>
+				<th>Options</th>
+				<th>Default</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><code>name</code></td>
+				<td><em>string</em></td>
+				<td><em>required</em></td>
+				<td>Name of row property</td>
+			</tr>
+			<tr>
+				<td><code>title</code></td>
+				<td><em>string</em></td>
+				<td><code>name</code></td>
+				<td>Text to display in column header</td>
+			</tr>
+			<tr>
+				<td><code>formula</code></td>
+				<td><em>function</em></td>
+				<td><code>null</code></td>
+				<td>Single parameter <code>row</code>, return will override any value for property in <code>data</code>, as well as be used for sorting</td>
+			</tr>
+			<tr>
+				<td><code>cellTemplate</code></td>
+				<td><em>string</em></td>
+				<td><code>null</code></td>
+				<td><em>See</em> <a href="#column--celltemplate">Column § cellTemplate</a></td>
+			</tr>
+			<tr>
+				<td><code>headerTemplate</code></td>
+				<td><em>string</em></td>
+				<td><code>null</code></td>
+				<td><em>See</em> <a href="#column--headertemplate">Column § headerTemplate</a></td>
+			</tr>
+			<tr>
+				<td><code>footerTemplate</code></td>
+				<td><em>string</em></td>
+				<td><code>null</code></td>
+				<td><em>See</em> <a href="#column--footertemplate">Column § footerTemplate</a></td>
+			</tr>
+		</tbody>
+	</table>
 </body>
 </html>

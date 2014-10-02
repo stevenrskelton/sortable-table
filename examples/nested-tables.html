@@ -8,7 +8,7 @@
 	<script src="../../platform/platform.js"></script>
 	<link rel="import" href="../sortable-table.html">
 	<link rel="import" href="fruit-icon.html">
-	<link rel="import" href="index-links.html">
+	<link rel="import" href="project-docs.html">
 
 	<style shim-shadowdom>
 		sortable-table /deep/ td.column-apple,
@@ -21,9 +21,10 @@
 		}
 	</style>
 </head>
-<body unresolved>
+<body unresolved is="project-docs">
 
-	<h2>Nested Tables and Hierarchical JSON</h2>
+	<h1>Nested Tables and Hierarchical JSON</h1>
+
 	In lieu of built in groupby functionality, it should be possible to nest sortable tables into other sortable tables.<br/>
 	The <code>columns</code> contains a nested <code>columns</code> property, and we can link all nested table's sort field by storing it
 	in the nested <code>columns</code>.<br>
@@ -225,7 +226,5 @@
 		document.getElementById('example').model = model;
 	});
 	</script>
-
-	<index-links page="nested-tables.html"></index-links>
 </body>
 </html>

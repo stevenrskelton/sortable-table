@@ -7,7 +7,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<script src="../../platform/platform.js"></script>
 	<link rel="import" href="../sortable-table.html">
-	<link rel="import" href="index-links.html">
+	<link rel="import" href="project-docs.html">
 
 	<style shim-shadowdom>
 		input { text-align: right }
@@ -24,9 +24,10 @@
 		}
 	</style>
 </head>
-<body unresolved>
+<body unresolved is="project-docs">
 
-	<h2>Paging, (Top N-Rows when <code>page==1</code>)</h2>
+	<h1>Paging, (Top N-Rows when <code>page==1</code>)</h1>
+
 	Respond to changes in `page` and `pageSize`.<br>
 	Gracefully handle out of range values.<br>
 	Don't be confused by sorting, selection or select all.<br>
@@ -95,7 +96,5 @@
 		document.getElementById('info').model = model;
 	});
 	</script>
-
-	<index-links page="paging.html"></index-links>
 </body>
 </html>

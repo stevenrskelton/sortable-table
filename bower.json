@@ -35,6 +35,9 @@
     "json5": "json5#>=0.3.0"
   },
   "devDependencies": {
-	"bootstrap": "bootstrap#>=3.2.0"
+    "bootstrap": "bootstrap#>=3.2.0",
+    "core-elements": "Polymer/core-elements#>=0.4.1",
+    "paper-item": "Polymer/paper-item#>=0.4.1",
+    "prism-js": "prism-js#>=0.1.0"
   }
 }

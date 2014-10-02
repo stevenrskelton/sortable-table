@@ -1,0 +1,334 @@
+<html>
+<head>
+	<title>Sortable Table using Polymer Web Components</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<script src="../../platform/platform.js"></script>
+	<link rel="import" href="../../polymer/polymer.html">
+	<link rel="import" href="../../prism-js/prism-js.html">
+	<link rel="import" href="project-docs.html">
+</head>
+<body unresolved is="project-docs">
+	<h1>Template Variables</h1>
+
+	All templates must be nested inside the <code>&lt;sortable-table&gt;</code> tag to be accessible to the polymer element.</p>
+
+	<p>Any filter used (eg: <code>sum</code> in a following example) must be a member of <code>PolymerExpressions.prototype</code>.
+	See the <a href="#polymer-filters">Polymer Filters</a> section for more details.</p>
+
+	<p>As always, only a very limited subset of Javascript is allowed within <code>{{ }}</code> expressions.
+	See the <a href="http://www.polymer-project.org/docs/polymer/expressions.html">Polymer documentation</a> on Expression syntax.</p>
+
+	<h4>
+	<a name="user-content-table-scoped-templates" class="anchor" href="#table-scoped-templates" aria-hidden="true"><span class="octicon octicon-link"></a>Table Scoped Templates</h4>
+
+	<p>These are passed as attributes to the <code>sortable-table</code> element, and act across all rows and columns in the table - unless overwritten by a corresponding <a href="#column-scoped-templates">Column Scoped Template</a>.</p>
+
+	<h5>
+	<a name="user-content-table--rowtemplate" class="anchor" href="#table--rowtemplate" aria-hidden="true"><span class="octicon octicon-link"></a>Table § rowTemplate</h5>
+
+	<p>Renderer for contents of <code>&lt;tr&gt;&lt;/tr&gt;</code> row.</p>
+
+	<table class="docs">
+		<thead>
+			<tr>
+				<th>Template Variable</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><code>{{record}}</code></td>
+				<td>JSON object</td>
+			</tr>
+			<tr>
+				<td><code>{{record.selected}}</code></td>
+				<td>Boolean indicating this row is contained in <code>selected</code></td>
+			</tr>
+			<tr>
+				<td><code>{{record.editMode}}</code></td>
+				<td>Boolean indicating this row is in edit mode</td>
+			</tr>
+			<tr>
+				<td><code>{{record.dirty}}</code></td>
+				<td>Boolean indicating this row has been edited, and changes can be undone by reversing the <code>undoStack</code>
+			</td>
+			</tr>
+			<tr>
+				<td><code>{{record.fields}}</code></td>
+				<td>JSON map with keys for each <code>column.name</code>.  Values are JSON objects containing computed <code>value</code> for the cell, the <code>row</code> and <code>column</code></td>
+			</tr>
+			<tr>
+				<td><code>{{record.row}}</code></td>
+				<td>Row in <code>data</code></td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<p>Example of a <code>rowTemplate</code> that prints out column values directly from the raw <code>row</code> of the <code>data</code> array.
+	This is useful for rows that need to recalculate when values change:</p>
+
+	<prism-js language="markup" escape="true"><template>
+    <td><input type="text" value="{{record.row.number}}"></td>
+    <td>{{record.row.price}}</td>
+    <td>{{record.row.number * record.row.price}}</td>
+</template></prism-js>
+
+	<p>Example of a <code>rowTemplate</code> that prints out column values based on internally calculated field values.
+	The <code>field</code> names (ie: alice, bill, casey) are the names of the table columns, this is useful where <code>column</code> formulas are applied:</p>
+
+<prism-js language="markup" escape="true"><template>
+    <td>{{record.fields.alice.value}}</td>
+    <td>{{record.fields.bill.value}}</td>
+    <td>{{record.fields.casey.value}}</td>
+</template></prism-js>
+
+	<p>Example of a <code>rowTemplate</code> that uses a template (and a filter <code>toKeyValueArray</code> that turns an object into an array):</p>
+
+<prism-js language="markup" escape="true"><template>
+    <template repeat="{{kv in record.fields | toKeyValueArray}}" bind>
+        <td>{{kv.value.value}}</td>
+    </template>
+</template></prism-js>
+
+	<h5><a name="user-content-table--roweditortemplate" class="anchor" href="#table--roweditortemplate" aria-hidden="true"><span class="octicon octicon-link"></a>Table § rowEditorTemplate</h5>
+
+	<p>Row template to use for a row in its user editing state.  Only 1 row can be in the editing state at a time.
+	Renderer for contents of <code>&lt;tr&gt;&lt;/tr&gt;</code> row when in edit mode (<em>double clicked</em>).
+	Similiar to <a href="#table--rowtemplate">Table § rowTemplate</a>.</p>
+
+	<p>In addtion to the template variables available to <code>rowTemplate</code>, there are:</p>
+
+	<table class="docs">
+		<thead>
+			<tr>
+				<th>Template Variable</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><code>{{editRow}}</code></td>
+				<td>Current <code>row</code> being edited</td>
+			</tr>
+			<tr>
+				<td><code>{{editChanged}}</code></td>
+				<td>Boolean indicating at least 1 dirty field in current edit</td>
+			</tr>
+			<tr>
+				<td><code>{{undoStack}}</code></td>
+				<td>All dirty rows of current edit</td>
+			</tr>
+			<tr>
+				<td><code>{{undoEdit}}</code></td>
+				<td>Function to restore original values of <code>editRow</code></td>
+			</tr>
+			<tr>
+				<td><code>{{undoAllEdit}}</code></td>
+				<td>Function to restore original values of all dirty rows</td>
+			</tr>
+			<tr>
+				<td><code>{{closeEdit}}</code></td>
+				<td>Function to untoggle edit state, resets <code>undoStack</code></td>
+			</tr>
+			<tr>
+				<td><code>{{cancelEdit}}</code></td>
+				<td>Function to restore original values of dirty rows and untoggle edit state</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<p>It should be noted that all changes are immediate (via 2-way binding). The "undo" functionality attempts to update values back to their original state, any side effects that may have occured cannot be undone.</p>
+
+	<p>The <code>undoStack</code> contains an ordered list of all changed rows along with their original values.
+	<code>undoStack.original</code> contains a copy of the row, and <code>undoStack.ref</code> is a reference to the row.</p>
+
+	<h5><a name="user-content-table--celltemplate" class="anchor" href="#table--celltemplate" aria-hidden="true"><span class="octicon octicon-link"></a>Table § cellTemplate</h5>
+
+	<p>Renderer for entire <code>&lt;td&gt;&lt;/td&gt;</code> cell. Will be overwritten if <code>columns</code> specifies a <code>cellTemplate</code>.</p>
+
+	<table class="docs">
+		<thead>
+			<tr>
+				<th>Template Variable</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><code>{{column}}</code></td>
+				<td>Current column from <code>columns</code></td>
+			</tr>
+			<tr>
+				<td><code>{{value}}</code></td>
+				<td>Computed value for cell</td>
+			</tr>
+			<tr>
+				<td><code>{{row}}</code></td>
+				<td>Current row from <code>data</code></td>
+			</tr>
+			<tr>
+				<td><code>{{args}}</code></td>
+				<td>User supplied additional arguments</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<p>Example of a <code>cellTemplate</code> that displays an image beside the column value:</p>
+
+<prism-js language="markup" escape="true"><template>
+    <td>
+        <img src="{{row.img}}" alt="{{row.title}}"/>{{value}}
+    </td>
+</template></prism-js>
+
+	<p><strong>Note:</strong>  Normally <code>row[column.name] == value</code>, but <code>value</code> can be manually set by specifying a <code>formula</code>. This is useful if <code>value</code> won't sort correctly but you need access to the original value.</p>
+
+	<h5><a name="user-content-table--headertemplate" class="anchor" href="#table--headertemplate" aria-hidden="true"><span class="octicon octicon-link"></a>Table § headerTemplate</h5>
+
+	<p>Renderer for entire <code>&lt;th&gt;&lt;/th&gt;</code> cell. Access to <code>{{column}}</code>.  Will be overwritten if specified in <code>columns</code>.</p>
+
+	<p>Example of a <code>headerTemplate</code> using images to indicate sorting:</p>
+
+<prism-js language="markup" escape="true"><template>
+    <th>
+        {{!(column.title) ? column.name : column.title}}
+        <img hidden?="{{!(sortColumn==column.name && sortDescending)}}" alt="up" />
+        <img hidden?="{{!(sortColumn==column.name && !sortDescending)}}" alt="down" />
+    </th>
+</template></prism-js>
+
+	<h5><a name="user-content-table--footertemplate" class="anchor" href="#table--footertemplate" aria-hidden="true"><span class="octicon octicon-link"></a>Table § footerTemplate</h5>
+
+	<p>Renderer for an additional row which spans all columns at the bottom of the table.  This is useful for paging buttons.
+	There is a built in template called <code>defaultPaging</code> that can be used, or a different one can be specified.
+	This is independent to <a href="#column--footertemplate">Column § footerTemplate</a> as they serve different purposes and can be used concurrently.</p>
+
+	<table class="docs">
+		<thead>
+			<tr>
+				<th>Template Variable</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><code>{{page}}</code></td>
+				<td>Current page number of data</td>
+			</tr>
+			<tr>
+				<td><code>{{lastPage}}</code></td>
+				<td>Number of pages</td>
+			</tr>
+			<tr>
+				<td><code>{{pageSize}}</code></td>
+				<td>Number of records per page</td>
+			</tr>
+			<tr>
+				<td><code>{{moveToFirstPage}}</code></td>
+				<td>Function to move to the first page</td>
+			</tr>
+			<tr>
+				<td><code>{{moveToPreviousPage}}</code></td>
+				<td>Function to move to the previous page (only if one exists)</td>
+			</tr>
+			<tr>
+				<td><code>{{moveToNextPage}}</code></td>
+				<td>Function to move to the next page (only if one exists)</td>
+			</tr>
+			<tr>
+				<td><code>{{moveToLastPage}}</code></td>
+				<td>Function to move to the last page</td>
+			</tr>
+			<tr>
+				<td><code>{{showMore}}</code></td>
+				<td>Function to increase the <code>pageSize</code> by the original value of <code>pageSize</code></td>
+			</tr>
+			<tr>
+				<td><code>{{data}}</code></td>
+				<td><code>data</code></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<p>Example of a simple <code>footerTemplate</code> which allows the user to traverse pages.</p>
+
+<prism-js language="markup" escape="true"><template>
+    <div horizontal layout center>
+        <button
+            disabled?="{{page<=1}}"
+            on-click="{{moveToPreviousPage}}"
+        >
+            Prev
+        </button>
+        <span flex>Page {{page}} of {{lastPage}}</span>
+        <button
+            disabled?="{{page>=lastPage}}"
+            on-click="{{moveToNextPage}}"
+        >
+            Next
+        </button>
+    </div>
+</template></prism-js>
+
+	<h4><a name="user-content-column-scoped-templates" class="anchor" href="#column-scoped-templates" aria-hidden="true"><span class="octicon octicon-link"></a>Column Scoped Templates</h4>
+
+	<p>These are defined within the <code>columns</code> attribute at a per-column scope.</p>
+
+	<h5><a name="user-content-column--celltemplate" class="anchor" href="#column--celltemplate" aria-hidden="true"><span class="octicon octicon-link"></a>Column § cellTemplate</h5>
+
+	<p>Renderer for entire <code>&lt;td&gt;&lt;/td&gt;</code> cell.
+	Overrides table's global cell template for a specific column.
+	See <a href="#table--celltemplate">Table § cellTemplate</a>.</p>
+
+	<h5><a name="user-content-column--headertemplate" class="anchor" href="#column--headertemplate" aria-hidden="true"><span class="octicon octicon-link"></a>Column § headerTemplate</h5>
+
+	<p>Renderer for entire <code>&lt;th&gt;&lt;/th&gt;</code> cell. Access to <code>{{column}}</code>.
+	Overrides table's global header template for a specific column.
+	See <a href="#table--celltemplate">Table § cellTemplate</a>.</p>
+
+	<h5><a name="user-content-column--footertemplate" class="anchor" href="#column--footertemplate" aria-hidden="true"><span class="octicon octicon-link"></a>Column § footerTemplate</h5>
+
+	<p>Renderer for entire <code>&lt;td&gt;&lt;/td&gt;</code> cell. If no columns specify a <code>footerTemplate</code> the additional footer row will be omitted.
+	If some but not all columns specify a template, the columns without a template specified will render an empty cell.</p>
+
+	<table class="docs">
+		<thead>
+			<tr>
+				<th>Template Variable</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><code>{{column}}</code></td>
+				<td>Current column from <code>columns</code></td>
+			</tr>
+			<tr>
+				<td><code>{{values}}</code></td>
+				<td>Array of all computed values for cells in the current column</td>
+			</tr>
+			<tr>
+				<td><code>{{rowValues}}</code></td>
+				<td>Array of all values from <code>data</code> for cells in the current column.  Since a column may use a function to compute its value, there may not be any bound values: so this array may be empty.</td>
+			</tr>
+			<tr>
+				<td><code>{{args}}</code></td>
+				<td>User supplied additional arguments</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<p>Two convinience polymer filters are included, <code>sum</code> and <code>average</code> which compute the numerical sum and average.  Custom filters can also be used, see <a href="#polymer-filters">Polymer Filters</a>.</p>
+
+	<p>Example of a <code>footerTemplate</code> that computes the sum of a column using a filter named <code>sum</code>:</p>
+
+<prism-js language="markup" escape="true"><template id="sumTemplate">
+    <td class="sortable-table-header" style="text-align:right">
+        {{values | sum}}
+    </td>
+</template></prism-js>
+
+</body>
+</html>

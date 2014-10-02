@@ -7,7 +7,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<script src="../../platform/platform.js"></script>
 	<link rel="import" href="../sortable-table.html">
-	<link rel="import" href="index-links.html">
+	<link rel="import" href="project-docs.html">
 
 	<style shim-shadowdom>
 		sortable-table { width: 500px; margin-left: 65px; }
@@ -22,9 +22,9 @@
 		}
 	</style>
 </head>
-<body unresolved>
+<body unresolved is="project-docs">
 
-	<h2>Data Formats</h2>
+	<h1>Data Input Formats</h1>
 
 	Table data can be loaded using the <code>data</code> attribute, or by in-lining valid <a href="http://json.org/" target="_blank">JSON</a> between the <code>sortable-table</code> tags.
 
@@ -169,7 +169,5 @@
 	];});
 	</script>
 	<sortable-table class="default" id="mytable"></sortable-table>
-
-	<index-links page="data-formats.html"></index-links>
 </body>
 </html>

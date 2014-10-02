@@ -5,25 +5,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<script src="../../platform/platform.js" debug log="bind,ready,events"></script>
-	<link rel="import" href="../sortable-table.html">
-	<link rel="import" href="fruit-icon.html">
-	<link rel="import" href="index-links.html">
-	<link rel="stylesheet" href="../css/bootstrap.css" shim-shadowdom>
-	<link rel="stylesheet" href="../../bootstrap/dist/css/bootstrap.min.css">
-	<!--<link rel="stylesheet" href="../../bootstrap/dist/css/bootstrap-theme.min.css">
-	<script src="../../bootstrap/dist/js/bootstrap.min.js"></script>-->
+	<script src="../../../platform/platform.js" debug log="bind,ready,events"></script>
+	<link rel="import" href="../../sortable-table.html">
+	<link rel="import" href="../fruit-icon.html">
+	<link rel="import" href="../index-links.html">
+	<link rel="stylesheet" href="../../css/article.css" shim-shadowdom>
 	<style shim-shadowdom>
-		sortable-table::shadow > table > tbody > tr > td.column-alice,
-		sortable-table::shadow > table > tbody > tr > td.column-bill,
-		sortable-table::shadow > table > tbody > tr > td.column-casey,
-		sortable-table::shadow > table > tbody > tr > td.column-average,
-		sortable-table::shadow > table > tbody > tr > td.column-total {
-			margin-left: 5px;
-			overflow: hidden;
-			vertical-align: middle;
-			width: 65px;
-		}
 		#paginationDiv sortable-table::shadow > table > thead,
 		#paginationDiv sortable-table::shadow > table > tbody {
 			display: none;
@@ -37,12 +24,12 @@
 <body unresolved>
 	<div class="jumbotron">
 		<div class="container">
-			<h1>Bootstrap Theme</h1>
+			<h1>Article Theme</h1>
 			<p>
-				The <code>class="bootstrap"</code> CSS theme is compatible with the default <a href="http://getbootstrap.com/" alt="Bootstrap" target="_blank">Bootstrap</a> theme.
+				The <code>class="article"</code> CSS theme is designed to be a flexible way to present sorted data that doesn't fit into a tabular format.
 				<p>
-				Like all Web Components, <a href="https://w3c.github.io/webcomponents/spec/shadow/" alt="Shadow DOM" target="_blank">Shadow DOM</a> prevents CSS styles, including those
-				loaded by Bootstrap, from affecting style within a component.
+				Like all Web Components, <a href="https://w3c.github.io/webcomponents/spec/shadow/" alt="Shadow DOM" target="_blank">Shadow DOM</a> prevents CSS styles
+				from affecting style within a component.
 				<p>
 				To style <strong>sortable-table</strong>, use the special <code>::shadow</code> or <code>/deep/</code> CSS selectors.
 			</p>
@@ -63,7 +50,7 @@
 			<div class="panel-body">
 				<div class="panel panel-default">
 					<sortable-table
-						class="bootstrap"
+						class="article"
 						rowSelection
 						checkbox
 						multiSelect
@@ -135,6 +122,6 @@
 		clone('infinitePager');
 	</script>
 
-	<index-links page="bootstrap.html"></index-links>
+	<index-links page="article.html"></index-links>
 </body>
 </html>

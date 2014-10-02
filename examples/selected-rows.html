@@ -7,15 +7,14 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<script src="../../platform/platform.js"></script>
 	<link rel="import" href="../sortable-table.html">
-	<link rel="import" href="index-links.html">
-
+	<link rel="import" href="project-docs.html">
 	<style>
 		sortable-table { width: 800px; }
 	</style>
 </head>
-<body unresolved>
+<body unresolved is="project-docs">
 
-	<h2>Interactive Row Selection</h2>
+	<h1>Interactive Row Selection</h1>
 
 	Rows should be selectable through HTML attributes as well as by user interaction.<br>
 	Row selection styles should be able to be dynamically set.<br>
@@ -119,9 +118,6 @@
 		}
 		else model.selected = selected;
 	}
-
 	</script>
-
-	<index-links page="selected-rows.html"></index-links>
 </body>
 </html>

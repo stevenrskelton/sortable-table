@@ -7,11 +7,11 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<script src="../../platform/platform.js"></script>
 	<link rel="import" href="../sortable-table.html">
-	<link rel="import" href="index-links.html">
+	<link rel="import" href="project-docs.html">
 </head>
-<body unresolved>
+<body unresolved is="project-docs">
 
-	<h2>Header and Footer Templates</h2>
+	<h1>Header and Footer Templates</h1>
 
 	Using <code>headerTemplate</code> should not break sort. Using <code>cellTemplate</code> and <code>footerTemplate</code> should work when a cell <code>formula</code> is specified.
 
@@ -290,7 +290,5 @@
 		document.getElementById('tableTemplate').model.columns = bindData();
 	});
 	</script>
-
-	<index-links page="table-templates.html"></index-links>
 </body>
 </html>

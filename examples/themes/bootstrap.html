@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sortable Table using Polymer Web Components</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<script src="../../../platform/platform.js" debug log="bind,ready,events"></script>
+	<link rel="import" href="../../sortable-table.html">
+	<link rel="import" href="../fruit-icon.html">
+	<link rel="import" href="../index-links.html">
+	<link rel="stylesheet" href="../../css/bootstrap.css" shim-shadowdom>
+	<link rel="stylesheet" href="../../../bootstrap/dist/css/bootstrap.min.css">
+	<!--<link rel="stylesheet" href="../../bootstrap/dist/css/bootstrap-theme.min.css">
+	<script src="../../bootstrap/dist/js/bootstrap.min.js"></script>-->
+	<style shim-shadowdom>
+		sortable-table::shadow > table > tbody > tr > td.column-alice,
+		sortable-table::shadow > table > tbody > tr > td.column-bill,
+		sortable-table::shadow > table > tbody > tr > td.column-casey,
+		sortable-table::shadow > table > tbody > tr > td.column-average,
+		sortable-table::shadow > table > tbody > tr > td.column-total {
+			margin-left: 5px;
+			overflow: hidden;
+			vertical-align: middle;
+			width: 65px;
+		}
+		#paginationDiv sortable-table::shadow > table > thead,
+		#paginationDiv sortable-table::shadow > table > tbody {
+			display: none;
+		}
+		section {
+			padding-left: 20px;
+			padding-right: 20px;
+		}
+	</style>
+</head>
+<body unresolved>
+	<div class="jumbotron">
+		<div class="container">
+			<h1>Bootstrap Theme</h1>
+			<p>
+				The <code>class="bootstrap"</code> CSS theme is compatible with the default <a href="http://getbootstrap.com/" alt="Bootstrap" target="_blank">Bootstrap</a> theme.
+				<p>
+				Like all Web Components, <a href="https://w3c.github.io/webcomponents/spec/shadow/" alt="Shadow DOM" target="_blank">Shadow DOM</a> prevents CSS styles, including those
+				loaded by Bootstrap, from affecting style within a component.
+				<p>
+				To style <strong>sortable-table</strong>, use the special <code>::shadow</code> or <code>/deep/</code> CSS selectors.
+			</p>
+		</div>
+	</div>
+
+	<section>
+		<h2>Pagination Templates</h2>
+
+		<div id="paginationDiv"></div>
+	</section>
+
+	<template id="pagination">
+		<div template class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"></h3>
+			</div>
+			<div class="panel-body">
+				<div class="panel panel-default">
+					<sortable-table
+						class="bootstrap"
+						rowSelection
+						checkbox
+						multiSelect
+					>
+						<sortable-column name="fruit" cellTemplate="fruitsTemplate">Fruit</sortable-column>
+						<sortable-column name="alice">Alice</sortable-column>
+						<sortable-column name="bill">Bill</sortable-column>
+						<sortable-column name="casey">Casey</sortable-column>
+						<sortable-column name="average" formula="function(row){ return Math.round((row.alice + row.bill + row.casey)/3*10)/10; }">Average</sortable-column>
+						<sortable-column name="total" formula="function(row){ return row.alice + row.bill + row.casey; }">Total</sortable-column>
+
+						<template id="fruitsTemplate">
+							<td style="text-align:left;vertical-align:middle;width:250px;">
+								<fruit-icon fruit="{{value}}"></fruit-icon>
+								{{value}}
+							</td>
+						</template>
+
+						[
+							{fruit: 'apple', alice: 4, bill: 10, casey: 2 },
+							{fruit: 'banana', alice: 0, bill: 4, casey: 0 },
+							{fruit: 'grape', alice: 2, bill: 3, casey: 5 },
+							{fruit: 'pear', alice: 4, bill: 2, casey: 8 },
+							{fruit: 'strawberry', alice: 0, bill: 14, casey: 0 },
+							{fruit: 'strawberry', alice: 4, bill: 5, casey: 2 },
+							{fruit: 'pear', alice: 0, bill: 7, casey: 4 },
+							{fruit: 'banana', alice: 3, bill: 9, casey: 2 },
+							{fruit: 'apple', alice: 5, bill: 6, casey: 4 },
+							{fruit: 'grape', alice: 8, bill: 3, casey: 0 },
+							{fruit: 'apple', alice: 4, bill: 10, casey: 2 },
+							{fruit: 'banana', alice: 0, bill: 4, casey: 0 },
+							{fruit: 'grape', alice: 2, bill: 3, casey: 5 },
+							{fruit: 'pear', alice: 4, bill: 2, casey: 8 },
+							{fruit: 'strawberry', alice: 0, bill: 14, casey: 0 },
+							{fruit: 'strawberry', alice: 4, bill: 5, casey: 2 },
+							{fruit: 'pear', alice: 0, bill: 7, casey: 4 },
+							{fruit: 'banana', alice: 3, bill: 9, casey: 2 },
+							{fruit: 'apple', alice: 5, bill: 6, casey: 4 },
+							{fruit: 'grape', alice: 8, bill: 3, casey: 0 }
+						]
+					</sortable-table>
+				</div>
+			</div>
+		</div>
+	</template>
+	<script>
+		var template = document.getElementById('pagination');
+		var div = document.getElementById('paginationDiv');
+
+		function clone(templateName){
+			var clone = document.importNode(template.content, true);
+			var sortableTable = clone.querySelector('sortable-table');
+			sortableTable.footerTemplate = templateName;
+			sortableTable.pageSize = 2;
+			clone.querySelector('h3').innerHTML = 'footerTemplate="<strong>' + templateName + '</strong>"';
+			div.appendChild(clone);
+			toggleLoading(sortableTable);
+		}
+
+		function toggleLoading(sortableTable){
+			sortableTable.loading = !sortableTable.loading;
+			setTimeout(function(){ toggleLoading(sortableTable); }, 5000);
+		}
+
+		clone('simplePager');
+		clone('indexedPager');
+		clone('defaultPager');
+		clone('articlePager');
+		clone('infinitePager');
+	</script>
+
+	<index-links page="bootstrap.html"></index-links>
+</body>
+</html>

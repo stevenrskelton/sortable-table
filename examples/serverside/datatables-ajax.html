@@ -5,20 +5,26 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<script src="../../platform/platform.js" debug log="bind,ready,events"></script>
-	<link rel="import" href="../../polymer/polymer.html">
-	<link rel="import" href="indexeddb/indexeddb-fruit.html">
-	<link rel="import" href="json-stringify.html">
+	<script src="../../../platform/platform.js" debug log="bind,ready,events"></script>
+	<link rel="import" href="../../datatables-ajax.html">
+	<link rel="import" href="../json-stringify.html">
+	<link rel="import" href="../project-docs.html">
 	<style>
 		.paramType { color: #ddd }
 	</style>
 </head>
-<body unresolved>
+<body unresolved is="project-docs">
 
-	<h1>IndexedDB</h1>
+	<h1>DataTables AJAX</h1>
 
-	The is a sample implementation using only HTML5 <a href="http://www.w3.org/TR/IndexedDB/" target="_blank" alt="IndexedDB on W3C">
-	IndexedDB</a>, a full implementation would require a secondary method to load the initial DB on each user's browser.
+	The <code style="font-weight:bold">datatables-ajax</code> component is a client-side binding to a server-side XHR datasource,
+	supporting paging, sorting, <span style="text-decoration: line-through;" title="Not yet supported by this web component">and filtering.</span>
+
+	<p>
+
+	The API was designed for the popular <a href="https://github.com/DataTables/DataTables" target="_blank" alt="DataTables on GitHub">
+	DataTables</a> table plug-in for jQuery, and full documentation can be found on the DataTables.net web site:<br>
+	<a href="http://datatables.net/manual/server-side" target="_blank" alt="API documentation">http://datatables.net/manual/server-side</a>
 
 	<p>
 
@@ -27,19 +33,22 @@
 	<h2>Basic Use</h2>
 
 	<pre>
-	<strong>&lt;indexeddb-fruit</strong>
+	<strong>&lt;datatables-ajax</strong>
+		url="<a href="http://files.stevenskelton.ca/sortable-table/examples/datatables.net/server_processing.php" target="_blank" alt="api"
+				>http://files.stevenskelton.ca/sortable-table/examples/datatables.net/server_processing.php</a>"
 		start=<span class="paramType">[int]</span>
 		length=<span class="paramType">[int]</span>
 		sortColumn=<span class="paramType">[string]</span>
 		sortDescending=<span class="paramType">[boolean]</span>
 		columns='[
-			{"name":"name"},
-			{"name":"energy"},
-			{"name":"protein"},
-			{"name":"fat"},
-			{"name":"carbohydrates"}
+			{"name":"first_name"},
+			{"name":"last_name"},
+			{"name":"position"},
+			{"name":"office"},
+			{"name":"start_date"},
+			{"name":"salary"}
 		]'
-	<strong>&gt;&lt;/indexeddb-fruit&gt;</strong>
+	<strong>&gt;&lt;/datatables-ajax&gt;</strong>
 	</pre>
 
 	<hr style="width:75%;height:1px;border:none;color:#DDD;background-color:#DDD;" align="left">
@@ -54,14 +63,14 @@
 		<table>
 			<tr>
 				<td>Start</td>
-				<td><input type="number" min="0" max="47" value="{{start}}" style="text-align:right"></td>
-				<td><input type="range" min="0" max="47" value="{{start}}"></td>
+				<td><input type="number" min="0" max="57" value="{{start}}" style="text-align:right"></td>
+				<td><input type="range" min="0" max="57" value="{{start}}"></td>
 				<td>Paging first record indicator. This is the start point in the current data set (0 index based - i.e. 0 is the first record).</td>
 			</tr>
 			<tr>
 				<td>Length</td>
-				<td><input type="number" min="-1" max="47" value="{{length}}" style="text-align:right"></td>
-				<td><input type="range" min="-1" max="47" value="{{length}}"></td>
+				<td><input type="number" min="-1" max="57" value="{{length}}" style="text-align:right"></td>
+				<td><input type="range" min="-1" max="57" value="{{length}}"></td>
 				<td>Number of records that the table can display in the current draw. It is expected that the number of records returned will be equal to this number, unless the server has fewer records to return. Note that this can be -1 to indicate that all records should be returned (although that negates any benefits of server-side processing!)</td>
 			</tr>
 			<tr>
@@ -69,11 +78,12 @@
 				<td>
 					<select value="{{sortColumn}}">
 						<option value="">-</option>
-						<option value="name">Fruit</option>
-						<option value="energy">Energy (kcal)</option>
-						<option value="protein">Protein (g)</option>
-						<option value="fat">Fat, total (g)</option>
-						<option value="carbohydrates">Carbohydrate (g)</option>
+						<option value="first_name">First Name</option>
+						<option value="last_name">Last Name</option>
+						<option value="position">Position</option>
+						<option value="office">Office</option>
+						<option value="start_date">Start Date</option>
+						<option value="salary">Salary</option>
 					</select>
 				</td>
 				<td><input type="checkbox" checked="{{sortDescending}}">Descending</td>
@@ -81,7 +91,8 @@
 			</tr>
 		</table>
 
-		<indexeddb-fruit
+		<datatables-ajax
+			url="../datatables.net/server_processing.php"
 			data="{{data}}"
 			dataSize="{{dataSize}}"
 			loading="{{loading}}"
@@ -90,13 +101,14 @@
 			sortColumn="{{sortColumn}}"
 			sortDescending="{{sortDescending}}"
 			columns='[
-				{"name":"name"},
-				{"name":"energy"},
-				{"name":"protein"},
-				{"name":"fat"},
-				{"name":"carbohydrates"}
+				{"name":"first_name"},
+				{"name":"last_name"},
+				{"name":"position"},
+				{"name":"office"},
+				{"name":"start_date"},
+				{"name":"salary"}
 			]'
-		></indexeddb-fruit>
+		></datatables-ajax>
 
 		<p>
 

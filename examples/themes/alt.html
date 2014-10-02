@@ -5,12 +5,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<script src="../../platform/platform.js"></script>
-	<link rel="import" href="../sortable-table.html">
-	<link rel="import" href="my-filters.html">
-	<link rel="import" href="fruit-icon.html">
-	<link rel="import" href="index-links.html">
-	<link rel="stylesheet" href="../css/article.css" shim-shadowdom>
+	<script src="../../../platform/platform.js"></script>
+	<link rel="import" href="../../sortable-table.html">
+	<link rel="import" href="../my-filters.html">
+	<link rel="import" href="../fruit-icon.html">
+	<link rel="import" href="../project-docs.html">
+	<link rel="stylesheet" href="../../css/article.css" shim-shadowdom>
 	<style shim-shadowdom>
 		.article::shadow table.nutrients {
 			font-family: verdana,Arial,Helvetica,sans-serif;
@@ -74,9 +74,9 @@
 		}
 	</style>
 </head>
-<body unresolved>
+<body unresolved is="project-docs">
 
-	<h2>Alternative Row-Based Templates</h2>
+	<h1>Alternative Row-Based Templates</h1>
 
 	A <code>rowTemplate</code> can be used to render items in a more descriptive, article based format.<br>
 	This is useful when items are sortable, but the actual values are less important than the relative order.
@@ -85,9 +85,9 @@
 
 	<code>grid</code> should refresh render when changed, and have a suitable CSS formatting.
 
-	<h3>Article theme</h3>
+	<h3>Article theme <a href="article.html" alt="Article Theme"><button>See full options ➦</button></a></h3>
 
-	<pre>&lt;link rel="stylesheet" href="<a href="../css/article.css" target="_blank">../css/article.css</a>" <strong>shim-shadowdom</strong>&gt;</pre>
+	<pre>&lt;link rel="stylesheet" href="<a href="../../css/article.css" target="_blank">../../css/article.css</a>" <strong>shim-shadowdom</strong>&gt;</pre>
 
 	<pre>
 &lt;sortable-table <strong>class="article"</strong> rowTemplate="fruitDescTemplate" footerTemplate="articlePager"&gt;
