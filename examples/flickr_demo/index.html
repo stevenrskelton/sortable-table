@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sortable Table using Polymer Web Components</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<script src="../../../platform/platform.js" debug log="bind,ready,events"></script>
+	<link rel="import" href="../../sortable-table.html">
+	<link rel="import" href="../fruit-icon.html">
+	<link rel="stylesheet" href="../../css/article.css" shim-shadowdom>
+	<link rel="import" href="../project-docs.html">
+	<link rel="import" href="flickr-jsonp.html">
+	<link rel="import" href="../json-stringify.html">
+	<style shim-shadowdom>
+		.paramType { color: #ddd }
+		#paginationDiv sortable-table::shadow > table > thead,
+		#paginationDiv sortable-table::shadow > table > tbody {
+			display: none;
+		}
+		section {
+			padding-left: 20px;
+			padding-right: 20px;
+		}
+		sortable-table.article::shadow > table > tbody > tr {
+			border: none;
+		}
+		sortable-table::shadow .photo {
+			position: relative;
+			float: left;
+			display: inline;
+			width: 200px;
+			margin: 0px;
+			padding: 7px 0px 23px;
+		}
+		sortable-table::shadow .photo:after {
+			display: block;
+			height: 1px;
+			position: absolute;
+			bottom: -1px;
+			left: 0px;
+			right: 0px;
+			margin: 0px -10px;
+			background: none repeat scroll 0% 0% #DDD;
+			border-bottom: 1px solid #F6F6F6;
+			content: "";
+			overflow: hidden;
+		}
+		sortable-table::shadow .photo .photo-wrapper {
+			box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.4), 0px 1px 0px 1px rgba(255, 255, 255, 0.1);
+			position: relative;
+			margin: 0px 20px 10px;
+		}
+		sortable-table::shadow .photo:hover .bg {
+			margin: -28px -12px;
+			padding: 28px 12px;
+			transition-duration: 0.1s;
+			box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 1px 5px rgba(0, 0, 0, 0.2);
+		}
+		sortable-table::shadow .photo .bg {
+			position: absolute;
+			top: 25px;
+			left: 0px;
+			bottom: 0px;
+			width: 100%;
+			margin: -5px;
+			padding: 5px;
+			box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 1px 5px rgba(0, 0, 0, 0.1);
+			transition: all 0.15s ease-out 0.1s;
+			background: url('//d36xtkk24g8jdx.cloudfront.net/bluebar/af31943/images/bg/white-gradient-300px.png') repeat-x scroll 0px 100% rgba(204, 204, 204, 0.8);
+		}
+		sortable-table::shadow .photo .photo-wrapper .Image {
+			padding-bottom: 100%;
+		}
+		sortable-table::shadow .photo .Image {
+			width: 100%;
+			height: auto;
+			display: block;
+		}
+		sortable-table::shadow .photo .iLoaded.iWithTransition {
+			transition: opacity 2s ease 0s;
+		}
+		sortable-table::shadow .photo .tThumbImage {
+			padding-bottom: 100%;
+		}
+		sortable-table::shadow .photo .Image {
+			background-size: 100% 100%;
+			position: relative;
+		}
+		sortable-table::shadow .photo .iLoaded {
+			opacity: 1;
+		}
+		sortable-table::shadow .photo .photo:hover h3 {
+			opacity: 0;
+		}
+		sortable-table::shadow .photo:hover .photo-date,
+		sortable-table::shadow .photo:hover .photo-stats {
+			opacity: 1;
+		}
+		sortable-table::shadow .photo .photo-wrapper .photoShadow {
+			background-color: rgba(0, 0, 0, 0.1);
+			border: 1px solid rgba(0, 0, 0, 0.12);
+			bottom: 0px;
+			left: 0px;
+			position: absolute;
+			right: 0px;
+			top: 0px;
+			z-index: 1;
+			transition: background-color 0.05s ease-out 0s;
+		}
+		sortable-table::shadow .feed-photos .photo-stats,
+		sortable-table::shadow .feed-photos .more-photos {
+			font-weight: 700;
+			text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.8);
+		}
+		sortable-table::shadow .feed-photos .photo-stats {
+			font-size: 13px;
+			color: #999;
+		}
+		sortable-table::shadow .photo .profile-comp ul,
+		sortable-table::shadow .photo-grid ul {
+			padding: 0px;
+		}
+		sortable-table::shadow .photo-grid a {
+			display: block;
+			position: relative;
+		}
+		sortable-table::shadow .photo-stats {
+			position: absolute;
+			left: 0px;
+			bottom: -25px;
+			width: 100%;
+			text-align: center;
+			margin: 0px 0px 1px;
+		}
+		sortable-table::shadow .photo-date,
+		sortable-table::shadow .photo-stats {
+			display: block;
+			opacity: 0;
+			pointer-events: none;
+		}
+		sortable-table::shadow .photo h3 {
+			position: absolute;
+			top: -3px;
+			left: 0px;
+			margin: 0px;
+			opacity: 1;
+			transition: opacity 0.05s ease-out 0s;
+		}
+		sortable-table::shadow .photo h3,
+		sortable-table::shadow .photo-date,
+		sortable-table::shadow .photo-stats {
+			font-size: 12px;
+			line-height: 20px;
+			font-weight: 700;
+			color: #777;
+			text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.8);
+			overflow: hidden;
+			height: 20px;
+			width: 100%;
+		}
+		sortable-table::shadow .feed-photos h3,
+		sortable-table::shadow .feed-photos .photo-date {
+			font-weight: 700;
+			color: #777;
+			text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.8);
+			font-size: 12px;
+		}
+		sortable-table::shadow .photo-date {
+			height: 20px;
+			padding: 1px 0px 4px;
+			text-align: center;
+			transition: opacity 0.05s ease-out 0s;
+		}
+		sortable-table::shadow .photo-date,
+		sortable-table::shadow .photo-stats {
+			display: block;
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.05s ease-out 0s;
+		}
+		sortable-table::shadow .photo-date {
+			position: relative;
+		}
+		sortable-table::shadow .freight-sans-pro,
+		sortable-table::shadow h1,
+		sortable-table::shadow h2,
+		sortable-table::shadow h3 {
+			font-family: "freight-sans-pro","proxima-nova","Helvetica Neue",Arial,Helvetica,sans-serif;
+		}
+		sortable-table::shadow tfoot td {
+			padding-top: 20px;
+		}
+	</style>
+</head>
+<body unresolved is="project-docs">
+	<h1>Insta-Flickr Fruit</h1>
+
+	<template is="auto-binding">
+		<sortable-table
+			class="article"
+			rowTemplate="instagram"
+			footerTemplate="infinitePager"
+			sortColumn="fruit"
+			grid
+		>
+			<sortable-column name="fruit"></sortable-column>
+			<sortable-column name="apple"></sortable-column>
+			<sortable-column name="banana"></sortable-column>
+			<sortable-column name="grape"></sortable-column>
+			<sortable-column name="pear"></sortable-column>
+			<sortable-column name="strawberry"></sortable-column>
+
+			<template id="instagram">
+				<td colspan="6" class="photo photo-grid" role="img">
+					<div class="photo-wrapper">
+						<h3>{{record.row.title}}</h3>
+						<a class="bg" href="{{record.row.link}}" target="_blank" aria-haspopup="true"></a>
+						<time class="photo-date" is="local-time" datetime="{{record.row.date_taken}}" weekday="short" year="numeric" month="short" day="numeric">
+							{{record.row.date_taken}}
+						</time>
+						<a href="{{record.row.link}}" target="_blank" aria-haspopup="true">
+							<div class="tThumbImage Image iLoaded iWithTransition"
+								src="{{record.row.media.m}}"
+								style="background-image:url('{{record.row.media.m}}');background-size:cover;"></div>
+							<div class="photoShadow"></div>
+						</a>
+						<div class="photo-stats stat-comments">
+							{{record.row.tags}}
+						</div>
+					</div>
+				</td>
+			</template>
+
+			<flickr-jsonp role="datasource"></flickr-jsonp>
+		</sortable-table>
+	</template>
+
+	<h2>JSONP</h2>
+
+	The is a sample implementation using a modified version of <a href="https://github.com/PolymerLabs/polymer-jsonp" target="_blank" alt="JSONP web component">
+	Polymer JSONP</a> web component, retriving the top 20 results on <a href="https://www.flickr.com/photos/tags/" target="_blank">Flickr</a> for a given tag.<br>
+	As results are limited to 20 using their API, <code>start</code> and <code>length</code> perform client-side filtering, new data is fetched only when the 
+	<code>sortColumn</code> tag changes.
+
+	<p>
+
+	<a href="http://api.flickr.com/services/feeds/photos_public.gne?format=json&jsoncallback=_polymer_jsonp_callback_0" target="_blank" alt="Flickr API">
+	http://api.flickr.com/services/feeds/photos_public.gne?format=json&jsoncallback=_polymer_jsonp_callback_0
+	</a>
+
+	<p>
+
+	<hr style="width:75%;height:1px;border:none;color:#DDD;background-color:#DDD;" align="left">
+
+	<h3>Basic Use</h3>
+
+	<pre>
+	<strong>&lt;flickr-jsonp</strong>
+		start=<span class="paramType">[int]</span>
+		length=<span class="paramType">[int]</span>
+		sortColumn=<span class="paramType">[string]</span>
+	<strong>&gt;&lt;/flickr-jsonp&gt;</strong>
+	</pre>
+
+	<hr style="width:75%;height:1px;border:none;color:#DDD;background-color:#DDD;" align="left">
+
+	<p>
+
+	<h3>Demo</h3>
+
+	<p>
+
+	<template is="auto-binding">
+		<table>
+			<tr>
+				<td>Start</td>
+				<td><input type="number" min="0" max="20" value="{{start}}" style="text-align:right"></td>
+				<td><input type="range" min="0" max="20" value="{{start}}"></td>
+				<td>Paging first record indicator. This is the start point in the current data set (0 index based - i.e. 0 is the first record).</td>
+			</tr>
+			<tr>
+				<td>Length</td>
+				<td><input type="number" min="-1" max="20" value="{{length}}" style="text-align:right"></td>
+				<td><input type="range" min="-1" max="20" value="{{length}}"></td>
+				<td>Number of records that the table can display in the current draw. It is expected that the number of records returned will be equal to this number, unless the server has fewer records to return. Note that this can be -1 to indicate that all records should be returned (although that negates any benefits of server-side processing!)</td>
+			</tr>
+			<tr>
+				<td style="white-space: nowrap;">Sort Column</td>
+				<td colspan="3">
+					<select value="{{sortColumn}}">
+						<option value="">-</option>
+						<option value="fruit">Fruit</option>
+						<option value="kiwi">Kiwi</option>
+						<option value="pineapple">Pineapple</option>
+						<option value="grapes">Grapes</option>
+						<option value="strawberry">Strawberry</option>
+					</select>
+				</td>
+			</tr>
+		</table>
+
+		<flickr-jsonp
+			data="{{data}}"
+			dataSize="{{dataSize}}"
+			loading="{{loading}}"
+			start="{{start}}"
+			length="{{length}}"
+			sortColumn="{{sortColumn}}"
+		></flickr-jsonp>
+
+		<p>
+
+		<strong>
+			<template if="{{!loading}}">Waiting for Query<br></template>
+			<template if="{{loading}}">Loading<br></template>
+			{{dataSize}} Total Records<br>
+			{{data.length}} Records Returned<br>
+		</strong>
+
+		<json-stringify
+			data="{{data}}"
+			style="overflow-y:auto;display:block;border:1px solid #333;"
+		></json-stringify>
+	</template>
+
+</body>
+</html>

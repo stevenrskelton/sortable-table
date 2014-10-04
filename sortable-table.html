@@ -5,7 +5,9 @@
 -->
 
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="json-5.html">
+<script src="../json5/lib/json5.js"></script>
+<script src="../time-elements/time-elements.js"></script>
+<link rel="import" href="html-echo.html">
 
 <polymer-element
 	name="sortable-table"
@@ -142,6 +144,10 @@
 		}
 	}
 </style>
+
+	<template id="html">
+		<html-echo html="{{value}}"></html-echo>
+	</template>
 
 	<template id="simplePager">
 		<div class="simplePager" horizontal layout center>

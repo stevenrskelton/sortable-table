@@ -21,12 +21,16 @@
 		search: "",
 		sortColumn: null,
 		sortDescending: false,
-		columns: [],
+		columns: null,
 		ajax: null,
 		draw: 0,
 		drawReceived: 0,
-		columnsCache: [],
+		columnsCache: null,
 		loading: false,
+		created: function(){
+			if(!this.columns) this.columns = [];
+			this.columnsCache = [];
+		},
 		ready: function() {
 			var ajax = document.createElement('core-ajax');
 			ajax.handleAs = 'json';

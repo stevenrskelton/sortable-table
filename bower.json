@@ -30,14 +30,15 @@
     "ajax"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#>=0.4.1",
-    "core-ajax": "Polymer/core-ajax#>=0.4.1",
-    "json5": "json5#>=0.3.0"
+    "polymer": "Polymer/polymer#>=0.4.2",
+    "core-ajax": "Polymer/core-ajax#>=0.4.2",
+    "json5": "json5#>=0.3.0",
+    "time-elements": "time-elements#>=0.4.0"
   },
   "devDependencies": {
     "bootstrap": "bootstrap#>=3.2.0",
-    "core-elements": "Polymer/core-elements#>=0.4.1",
-    "paper-item": "Polymer/paper-item#>=0.4.1",
+    "core-elements": "Polymer/core-elements#>=0.4.2",
+    "paper-item": "Polymer/paper-item#>=0.4.2",
     "prism-js": "prism-js#>=0.1.0"
   }
 }

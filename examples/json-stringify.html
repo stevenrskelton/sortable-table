@@ -2,7 +2,7 @@
 <polymer-element name="json-stringify" attributes="data full">
 	<template><pre>{{json}}</pre></template>
 	<script>
-	Polymer('json-stringify', {
+	Polymer({
 		full: false,
 		dataChanged: function() {
 			var json;

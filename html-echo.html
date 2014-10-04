@@ -1,0 +1,12 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<polymer-element name="html-echo" attributes="html">
+	<script>
+	Polymer('html-echo', {
+		htmlChanged: function() {
+			// WARNING: potential XSS vulnerability if `html` comes from an untrusted source
+			this.innerHTML = this.html;
+		}
+	});
+	</script>
+</polymer-element> 

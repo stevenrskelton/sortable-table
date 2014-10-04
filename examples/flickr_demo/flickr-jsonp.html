@@ -1,0 +1,67 @@
+<link rel="import" href="../../../polymer/polymer.html">
+<link rel="import" href="../../polymer-jsonp.html">
+
+<polymer-element hidden
+	name="flickr-jsonp"
+	attributes="start length sortColumn data dataSize loading"
+>
+<script>
+	"use strict";
+	Polymer({
+		url: 'http://api.flickr.com/services/feeds/photos_public.gne',
+		start: 0,
+		length: -1,
+		sortColumn: null,
+		ajax: null,
+		loading: false,
+		openTransactionCount: 0,
+		internalData: null,
+		ready: function() {
+			var ajax = document.createElement('polymer-jsonp');
+			var self = this;
+			ajax.addEventListener("polymer-response", function(e){ self.handleResponse.call(self, e); });
+			this.ajax = ajax;
+			this.job('go',this.go);
+		},
+		handleResponse: function(e){
+			this.openTransactionCount--;
+			if(this.openTransactionCount === 0) this.loading = false;
+			var response = e.detail.response;
+			this.internalData = response.items;
+			this.dataSize = this.internalData.length;
+			this.pageData();
+		},
+		pageData: function(){
+			if(this.internalData){
+				if(+this.length > -1) this.data = this.internalData.slice(this.start, +this.start + +this.length);
+				else this.data = this.internalData.slice(this.start);
+			}
+		},
+		toQueryString: function(params) {
+			var r = [];
+			for (var n in params) {
+				var v = params[n];
+				n = encodeURIComponent(n);
+				r.push(v == null ? n : (n + '=' + encodeURIComponent(v)));
+			}
+			return r.join('&');
+		},
+		go: function(){
+			var params = {
+				tags: this.sortColumn,
+				/*tagmode: 'all',
+				lang: 'en-us',*/
+				format: 'json',
+				jsoncallback: ''
+			};
+			this.ajax.url = this.url + '?' + this.toQueryString(params);
+			this.openTransactionCount++;
+			if(!this.loading) this.loading = true;
+			this.ajax.go();
+		},
+		startChanged: function(){ this.pageData(); },
+		lengthChanged: function(){ this.pageData(); },
+		sortColumnChanged: function(){ this.job('go',this.go); }
+	});
+</script>
+</polymer-element>

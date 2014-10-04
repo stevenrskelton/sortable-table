@@ -9,7 +9,6 @@
 	<script src="../extjs/4.2.883/ext-all.js"></script>
 	<link rel="import" href="../../sortable-table.html">
 	<link rel="import" href="../fruit-icon.html">
-	<link rel="import" href="../index-links.html">
 	<link rel="stylesheet" href="../extjs/4.2.883/ext-theme-classic-all.css">
 	<link rel="stylesheet" href="../../css/extjs4.css" shim-shadowdom>
 	<style shim-shadowdom>
@@ -30,10 +29,6 @@
 		section {
 			padding-left: 20px;
 			padding-right: 20px;
-		}
-		index-links::shadow div {
-			margin-top: 0 !important;
-			border-top: 0 !important;
 		}
 	</style>
 </head>
@@ -161,7 +156,7 @@ Ext.onReady(function() {
 			}]
         },{
 			region: 'south',
-            html: '<index-links page="extjs4.html"></index-links>'
+            html: ''
         }]
     });
 });
