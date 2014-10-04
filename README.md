@@ -130,7 +130,7 @@ There are many capable Javascript grids, this one aims to have all the same feat
 	Or take advanced control with custom templates, 2-way data binding, and a remote datasource:
 
 	```html
-	<sortable-table columns="{{columns}}" data="{{data}}">
+	<sortable-table columns="{{columns}}">
 		<!-- add templates here -->
 		<!-- add remote datasource here -->
 	</sortable-table>
