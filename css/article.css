@@ -8,11 +8,9 @@
 	background-color: #f7f7f7;
 }
 .article::shadow > table > thead {
-	margin-bottom: 25px;
 	display: table-caption;
 }
 .article::shadow > table > tfoot > tr > td > table.articlePager {
-	margin-top:25px;
 	color: #777;
 	border-collapse: collapse;
 }
@@ -24,7 +22,10 @@
 }
 .article::shadow > table > thead > tr > th,
 .article::shadow > table > tfoot > tr > td > table.articlePager td,
-.article::shadow .infinitePager {
+.article::shadow .infinitePager,
+.article::shadow .defaultPager,
+.article::shadow .simplePager,
+.article::shadow .indexedPager {
 	border-color: #ccc;
 	border-style: solid;
 	color: #777;
@@ -33,13 +34,17 @@
 	border-width: 0 0 1px 0;
 }
 .article::shadow > table > thead > tr > th:not(.checkbox-column),
-.article::shadow > table > tfoot > tr > td > table.articlePager td {
+.article::shadow > table > tfoot > tr > td > table.articlePager td,
+.article::shadow .indexedPager > ul {
 	padding: 0 20px 5px;
 	white-space: nowrap;
 	height: 40px;
 	vertical-align: bottom;
 }
-.article::shadow > table > tfoot > tr > td > table.articlePager td {
+.article::shadow > table > tfoot > tr > td > table.articlePager td,
+.article::shadow .defaultPager,
+.article::shadow .simplePager,
+.article::shadow .indexedPager {
 	border-width: 1px 0 0 0;
 	height: 25px;
 	vertical-align: top;
@@ -51,12 +56,14 @@
 }
 .article::shadow > table > thead > tr > th:hover,
 .article::shadow > table > tfoot > tr > td > table.articlePager td:first-of-type:hover,
-.article::shadow .infinitePager button:hover {
+.article::shadow .infinitePager button:hover,
+.article::shadow .indexedPager li:not(.disabled) a:hover {
 	color: #d38b28;
 }
 .article::shadow > table > thead > tr > th.sorted-column-asc,
 .article::shadow > table > thead > tr > th.sorted-column-desc,
-.article::shadow > table > tfoot > tr > td > table.articlePager td:first-of-type {
+.article::shadow > table > tfoot > tr > td > table.articlePager td:first-of-type,
+.article::shadow .indexedPager > ul > li.active > a {
 	border-width: 1px 1px 0 1px;
 	padding: 0px 30px;
 	vertical-align: middle;
@@ -92,7 +99,8 @@
 	width: 100%;
 	text-align: left;
 }
-.article::shadow .infinitePager {
+.article::shadow .infinitePager,
+.article::shadow .indexedPager {
 	width: 100%;
 	text-align: center;
 	border-width: 1px 0 0 0;
@@ -100,7 +108,8 @@
 	font-size: 16px;
 	font-family: inherit;
 }
-.article::shadow .infinitePager button {
+.article::shadow .infinitePager button,
+.article::shadow .indexedPager > ul > li > a {
 	border: none;
 	background-color: transparent;
 	font-size: 16px;
@@ -108,4 +117,23 @@
 	color: #777;
 	font-family: inherit;
 	outline: 0;
+	cursor: pointer;
+}
+.article::shadow .indexedPager > ul > li.disabled > a,
+.article::shadow .indexedPager > ul > li.active > a {
+	cursor: inherit;
+}
+.article::shadow .indexedPager > ul > li > a {
+	text-decoration: none;
+}
+.article::shadow .indexedPager > ul {
+	margin: 0;
+}
+.article::shadow .indexedPager > ul > li {
+	padding: 0 6px;
+	display:inline-block;
+	height: 10px;
+}
+.article::shadow .indexedPager > ul > li.active {
+	vertical-align: bottom;
 }

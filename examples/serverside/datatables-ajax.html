@@ -5,17 +5,38 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<script src="../../../platform/platform.js" debug log="bind,ready,events"></script>
+	<script src="../../../platform/platform.js"></script>
 	<link rel="import" href="../../datatables-ajax.html">
 	<link rel="import" href="../json-stringify.html">
 	<link rel="import" href="../project-docs.html">
-	<style>
-		.paramType { color: #ddd }
+	<link rel="import" href="../../sortable-table.html">
+	<style shim-shadowdom>
+		.paramType { color: #526E9C }
+		sortable-table.datatables::shadow td.column-first_name,
+		sortable-table.datatables::shadow td.column-last_name,
+		sortable-table.datatables::shadow td.column-position,
+		sortable-table.datatables::shadow td.column-office,
+		sortable-table.datatables::shadow td.column-start_date,
+		sortable-table.datatables::shadow td.column-salary {
+			padding-right: 5px;
+			width: 250px;
+			vertical-align: middle;
+		}
+		sortable-table.datatables::shadow td.column-start_date {
+			text-align: center;
+		}
+		sortable-table.datatables::shadow td.column-salary {
+			text-align: right;
+		}
 	</style>
 </head>
 <body unresolved is="project-docs">
 
 	<h1>DataTables AJAX</h1>
+
+	This is a REST API using JSON to pass paged data from the server to the client.<br>
+
+	<p>
 
 	The <code style="font-weight:bold">datatables-ajax</code> component is a client-side binding to a server-side XHR datasource,
 	supporting paging, sorting, <span style="text-decoration: line-through;" title="Not yet supported by this web component">and filtering.</span>
@@ -25,6 +46,40 @@
 	The API was designed for the popular <a href="https://github.com/DataTables/DataTables" target="_blank" alt="DataTables on GitHub">
 	DataTables</a> table plug-in for jQuery, and full documentation can be found on the DataTables.net web site:<br>
 	<a href="http://datatables.net/manual/server-side" target="_blank" alt="API documentation">http://datatables.net/manual/server-side</a>
+
+	<p>
+
+	<pre>
+	&lt;sortable-table pageSize="10"&gt;
+		&lt;datatables-ajax role="datasource" url="<a href="../datatables.net/server_processing.php?draw=2&start=0&length=9999999&columns[0][data]=first_name&columns[0][name]=first_name&columns[0][searchable]=true&columns[0][orderable]=true&columns[0][search][value]=&columns[0][search][regex]=false&columns[1][data]=last_name&columns[1][name]=last_name&columns[1][searchable]=true&columns[1][orderable]=true&columns[1][search][value]=&columns[1][search][regex]=false&columns[2][data]=position&columns[2][name]=position&columns[2][searchable]=true&columns[2][orderable]=true&columns[2][search][value]=&columns[2][search][regex]=false&columns[3][data]=office&columns[3][name]=office&columns[3][searchable]=true&columns[3][orderable]=true&columns[3][search][value]=&columns[3][search][regex]=false&columns[4][data]=start_date&columns[4][name]=start_date&columns[4][searchable]=true&columns[4][orderable]=true&columns[4][search][value]=&columns[4][search][regex]=false&columns[5][data]=salary&columns[5][name]=salary&columns[5][searchable]=true&columns[5][orderable]=true&columns[5][search][value]=&columns[5][search][regex]=false" target="_blank" alt="api">datatables.net/server_processing.php</a>"&gt;&lt;/datatables-ajax&gt;
+	&lt;/sortable-table&gt;
+	</pre>
+
+	<p>
+
+	<em>The server is hosted in the Netherlands, so users outside of Europe might notice extra latency loading data</em><br>
+
+	<template is="auto-binding">
+		<sortable-table
+			class="datatables default"
+			footerTemplate="defaultPager"
+			pageSize="10"
+			loading="{{loading}}"
+		>
+			<sortable-column name="first_name">First</sortable-column>
+			<sortable-column name="last_name">Last</sortable-column>
+			<sortable-column name="position">Position</sortable-column>
+			<sortable-column name="office">Office</sortable-column>
+			<sortable-column name="start_date" formula="function(v){ return (new Date(v * 1000)).toString().substring(4,15); }">Start Date</sortable-column>
+			<sortable-column name="salary" formula="function(v){ return '$' + v; }">Salary</sortable-column>
+
+			<datatables-ajax role="datasource" url="../datatables.net/server_processing.php"></datatables-ajax>
+		</sortable-table>
+
+		<p>
+
+		Data is loading = {{loading}}
+	</template>
 
 	<p>
 

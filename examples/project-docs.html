@@ -40,7 +40,7 @@
 					<core-item link="themes/extjs4.html" label="ExtJS 4"></core-item>
 				</core-submenu>
 				<core-submenu on-tap="{{submenuclick}}" label="Alt. Themes" icon="drive-spreadsheet">
-					<core-item link="themes/alt.html" label="Index"></core-item>
+					<core-item link="themes/alt.html" label="Basic Setup"></core-item>
 					<core-item link="themes/article.html" label="Article"></core-item>
 				</core-submenu>
 				<core-submenu on-tap="{{submenuclick}}" label="Templates" icon="drive-drawing">
@@ -60,9 +60,10 @@
 					<core-item link="nested-tables.html" label="Nesting Tables in Cells"></core-item>
 				</core-submenu>
 				<core-submenu on-tap="{{submenuclick}}" label="Server-Side" icon="cloud-circle">
-					<core-item link="serverside/index.html" label="Options"></core-item>
+					<core-item link="serverside/index.html" label="API Support"></core-item>
 					<core-item link="serverside/datatables-ajax.html" label="DataTables.net AJAX"></core-item>
 					<core-item link="serverside/extjs-ajax.html" label="ExtJS REST AJAX"></core-item>
+					<core-item link="serverside/flickr-jsonp.html" label="JSONP"></core-item>
 					<core-item link="serverside/indexeddb-fruit.html" label="IndexedDB"></core-item>
 				</core-submenu>
 				<core-submenu on-tap="{{submenuclick}}" label="Features" icon="drive-keep">
@@ -72,9 +73,10 @@
 					<core-item link="selected-rows.html" label="Selected Rows"></core-item>
 					<core-item link="paging.html" label="Paging, Top N Rows"></core-item>
 				</core-submenu>
+				<!--
 				<core-submenu on-tap="{{submenuclick}}" label="Demos" icon="launch">
-					<core-item link="flickr_demo/index.html" label="Flickr using JSONP"></core-item>
 				</core-submenu>
+				-->
 			</core-menu>
 		</core-header-panel>
 
@@ -86,7 +88,9 @@
 		<template if="{{!raw}}">
 			<div tool flex><content select="h1"></content></div>
 			<div tool style="float:right">
-				<a href="https://github.com/stevenrskelton/sortable-table" title="View on GitHub" target="_blank"><img src="GitHub-Mark-64px.png" alt="GitHub" height="50"></a>
+				<a href="https://github.com/stevenrskelton/sortable-table" title="View on GitHub" target="_blank">
+					<img src="GitHub-Mark-64px.png" alt="GitHub" height="50">
+				</a>
 			</div>
 		</template>
 

@@ -5,17 +5,31 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<script src="../../../platform/platform.js" debug log="bind,ready,events"></script>
+	<script src="../../../platform/platform.js"></script>
 	<link rel="import" href="../../extjs-ajax.html">
 	<link rel="import" href="../json-stringify.html">
 	<link rel="import" href="../project-docs.html">
-	<style>
-		.paramType { color: #ddd }
+	<link rel="import" href="../../sortable-table.html">
+	<link rel="import" href="../my-filters.html">
+	<style shim-shadowdom>
+		.paramType { color: #526E9C }
+		sortable-table::shadow td.column-last,
+		sortable-table::shadow td.column-volume,
+		sortable-table::shadow td.column-daily,
+		sortable-table::shadow td.column-ytd {
+			text-align: right;
+			padding-right: 5px;
+			width: 10%;
+		}
 	</style>
 </head>
 <body unresolved is="project-docs">
 
 	<h1>ExtJS AJAX</h1>
+
+	This is a REST API using JSON to pass paged data from the server to the client.
+
+	<p>
 
 	The <code style="font-weight:bold">extj-ajax</code> component is a client-side binding to a server-side XHR datasource,
 	supporting paging, sorting, <span style="text-decoration: line-through;" title="Not yet supported by this web component">and filtering.</span>
@@ -24,6 +38,39 @@
 
 	The API was designed for both version 4 and 5 of Sencha's <a href="http://www.sencha.com/products/extjs/" target="_blank" alt="Sencha's ExtJS">
 	ExtJS Grid</a> (available free under <a href="http://www.gnu.org/copyleft/gpl.html" alt="GPL3" target="_blank">GPL 3</a>), and full documentation can be found on Sencha's web site.
+
+	<p>
+
+	<pre>
+	&lt;sortable-table pageSize="10"&gt;
+		&lt;extjs-ajax role="datasource" url="<a href="../extjs/grid-filter.php" target="_blank" alt="api">extjs/grid-filter.php</a>"&gt;&lt;/extjs-ajax&gt;
+	&lt;/sortable-table&gt;
+	</pre>
+
+	<p>
+
+	<em>The server is hosted in the Netherlands, so users outside of Europe might notice extra latency loading data</em><br>
+
+	<template is="auto-binding">
+		<sortable-table
+			class="default"
+			footerTemplate="defaultPager"
+			pageSize="10"
+			loading="{{loading}}"
+		>
+			<sortable-column name="name">Name</sortable-column>
+			<sortable-column name="last" formula="currency">Last</sortable-column>
+			<sortable-column name="volume" formula="function(v){ if(v > 1000000) return v/1000000 + 'M'; else return v/1000 + 'K'; }">Volume</sortable-column>
+			<sortable-column name="daily" formula="function(v){ return v + ' %'; }">Daily</sortable-column>
+			<sortable-column name="ytd" formula="function(v){ if(v) return v + ' %'; else return '-'; }">YTD</sortable-column>
+
+			<extjs-ajax role="datasource" url="../extjs/grid-filter.php"></extjs-ajax>
+		</sortable-table>
+
+		<p>
+
+		Data is loading = {{loading}}
+	</template>
 
 	<p>
 

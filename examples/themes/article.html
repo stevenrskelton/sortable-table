@@ -9,6 +9,7 @@
 	<link rel="import" href="../../sortable-table.html">
 	<link rel="import" href="../fruit-icon.html">
 	<link rel="stylesheet" href="../../css/article.css" shim-shadowdom>
+	<link rel="import" href="../project-docs.html">
 	<style shim-shadowdom>
 		#paginationDiv sortable-table::shadow > table > thead,
 		#paginationDiv sortable-table::shadow > table > tbody {
@@ -20,26 +21,21 @@
 		}
 	</style>
 </head>
-<body unresolved>
-	<div class="jumbotron">
-		<div class="container">
-			<h1>Article Theme</h1>
-			<p>
-				The <code>class="article"</code> CSS theme is designed to be a flexible way to present sorted data that doesn't fit into a tabular format.
-				<p>
-				Like all Web Components, <a href="https://w3c.github.io/webcomponents/spec/shadow/" alt="Shadow DOM" target="_blank">Shadow DOM</a> prevents CSS styles
-				from affecting style within a component.
-				<p>
-				To style <strong>sortable-table</strong>, use the special <code>::shadow</code> or <code>/deep/</code> CSS selectors.
-			</p>
-		</div>
-	</div>
+<body unresolved is="project-docs">
 
-	<section>
-		<h2>Pagination Templates</h2>
+	<h1>Article Theme</h1>
+	<p>
+		The <code>class="article"</code> CSS theme is designed to be a flexible way to present sorted data that doesn't fit into a tabular format.
+		<p>
+		Like all Web Components, <a href="https://w3c.github.io/webcomponents/spec/shadow/" alt="Shadow DOM" target="_blank">Shadow DOM</a> prevents CSS styles
+		from affecting style within a component.
+		<p>
+		To style <strong>sortable-table</strong>, use the special <code>::shadow</code> or <code>/deep/</code> CSS selectors.
+	</p>
 
-		<div id="paginationDiv"></div>
-	</section>
+	<h2>Pagination Templates</h2>
+
+	<div id="paginationDiv"></div>
 
 	<template id="pagination">
 		<div template class="panel panel-default">

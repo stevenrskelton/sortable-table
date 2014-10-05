@@ -73,7 +73,7 @@
 		</li>
 	</ol>
 	
-	<h2>Node Attributes</h2>
+	<h2>Element Attributes</h2>
 
 	<table class="docs">
 		<thead>
@@ -86,28 +86,16 @@
 		</thead>
 		<tbody>
 			<tr>
-				<td><code>data</code></td>
-				<td><em>array</em></td>
-				<td><code>[]</code></td>
-				<td>Data rows</td>
+				<td><code>args</code></td>
+				<td><em>object</em></td>
+				<td><code>{}</code></td>
+				<td>Custom meta-data to be made available in templates</td>
 			</tr>
 			<tr>
-				<td><code>columns</code></td>
-				<td><em>array</em></td>
-				<td><code>[]</code></td>
-				<td>Columns to display, with options. If <code>[]</code>, columns will be computed from <code>data</code>.  <em>See</em> <a href="#columns">Columns</a></td>
-			</tr>
-			<tr>
-				<td><code>sortColumn</code></td>
+				<td><code>cellTemplate</code></td>
 				<td><em>string</em></td>
 				<td><code>null</code></td>
-				<td>Current sorted <code>column.name</code></td>
-			</tr>
-			<tr>
-				<td><code>sortDescending</code></td>
-				<td><em>boolean</em></td>
-				<td><code>false</code></td>
-				<td>Current sorted column sort direction</td>
+				<td><em>See</em> <a href="#table--celltemplate">Table § cellTemplate</a></td>
 			</tr>
 			<tr>
 				<td><code>checkbox</code></td>
@@ -116,10 +104,82 @@
 				<td>Renders a checkbox column as first column, facilitating row selection.</td>
 			</tr>
 			<tr>
+				<td><code>columns</code></td>
+				<td><em>array</em></td>
+				<td><code>[]</code></td>
+				<td>Columns to display, with options. If <code>[]</code>, columns will be computed from <code>data</code>.  <em>See</em> <a href="#columns">Columns</a></td>
+			</tr>
+			<tr>
+				<td><code>data</code></td>
+				<td><em>array</em></td>
+				<td><code>[]</code></td>
+				<td>Data rows</td>
+			</tr>
+			<tr>
+				<td><code>dataSize</code></td>
+				<td><em>int</em></td>
+				<td><code>0</code></td>
+				<td>Size of <code>data</code>, greater than or equal to <code>length</code> if paging enabled</td>
+			</tr>
+			<tr>
 				<td><code>disableColumnMove</code></td>
 				<td><em>boolean</em></td>
 				<td><code>false</code></td>
 				<td>Disables columns from being drag-and-dropped into different positions.  Drag-and-drop will be automatically disabled if entire row templates (<code>rowTemplate</code> or <code>rowEditorTemplate</code>) are used. CSS styling using <em>:nth-of-type</em> will likely break unless this is set to true.</td>
+			</tr>
+			<tr>
+				<td><code>footerTemplate</code></td>
+				<td><em>string</em></td>
+				<td><code>null</code></td>
+				<td><em>See</em> <a href="#table--footertemplate">Table § footerTemplate</a></td>
+			</tr>
+			<tr>
+				<td><code>grid</code></td>
+				<td><em>boolean</em></td>
+				<td><code>false</code></td>
+				<td>Parameter to toggle between row/grid style in <code>article</code> theme</td>
+			</tr>
+			<tr>
+				<td><code>headerTemplate</code></td>
+				<td><em>string</em></td>
+				<td><code>null</code></td>
+				<td><em>See</em> <a href="#table--headertemplate">Table § headerTemplate</a></td>
+			</tr>
+			<tr>
+				<td><code>loading</code></td>
+				<td><em>boolean</em></td>
+				<td><code>false</code></td>
+				<td>Is set to true if data is being retrieved by an external datasource</td>
+			</tr>
+			<tr>
+				<td><code>multiRowEdit</code></td>
+				<td><em>boolean</em></td>
+				<td><code>false</code></td>
+				<td>Multiple rows can be part of a single edited and undo.</td>
+			</tr>
+			<tr>
+				<td><code>multiSelect</code></td>
+				<td><em>boolean</em></td>
+				<td><code>false</code></td>
+				<td>Multiple rows can be selected</td>
+			</tr>
+			<tr>
+				<td><code>page</code></td>
+				<td><em>int</em></td>
+				<td><code>1</code></td>
+				<td>Number of pages to skip, <code>pageSize * (page-1)</code> records skipped.</td>
+			</tr>
+			<tr>
+				<td><code>pageSize</code></td>
+				<td><em>int</em></td>
+				<td><code>-1</code></td>
+				<td>Maximum number of records to display, <code>-1</code> is all records.</td>
+			</tr>
+			<tr>
+				<td><code>rowEditorTemplate</code></td>
+				<td><em>string</em></td>
+				<td><code>null</code></td>
+				<td><em>See</em> <a href="#table--roweditortemplate">Table § rowEditorTemplate</a></td>
 			</tr>
 			<tr>
 				<td><code>rowSelection</code></td>
@@ -128,10 +188,10 @@
 				<td>Enable user interactive row selection</td>
 			</tr>
 			<tr>
-				<td><code>multiSelect</code></td>
-				<td><em>boolean</em></td>
-				<td><code>false</code></td>
-				<td>Multiple rows can be selected</td>
+				<td><code>rowTemplate</code></td>
+				<td><em>string</em></td>
+				<td><code>null</code></td>
+				<td><em>See</em> <a href="#table--rowtemplate">Table § rowTemplate</a></td>
 			</tr>
 			<tr>
 				<td><code>selected</code></td>
@@ -146,47 +206,22 @@
 				<td>Elements of <code>data</code> (if <code>multiSelect</code>)</td>
 			</tr>
 			<tr>
-				<td><code>selectedRowStyle</code></td>
-				<td><em>string</em></td>
-				<td>
-				<code>background-color:</code> <code>rgba(0,96,200,0.2);</code></td>
-				<td>CSS style to apply to <code>selected</code> row</td>
-			</tr>
-			<tr>
-				<td><code>pageSize</code></td>
-				<td><em>int</em></td>
-				<td><code>-1</code></td>
-				<td>Maximum number of records to display, <code>-1</code> is all records.</td>
-			</tr>
-			<tr>
-				<td><code>page</code></td>
-				<td><em>int</em></td>
-				<td><code>1</code></td>
-				<td>Number of pages to skip, <code>pageSize * (page-1)</code> records skipped.</td>
-			</tr>
-			<tr>
-				<td><code>rowTemplate</code></td>
+				<td><code>sortColumn</code></td>
 				<td><em>string</em></td>
 				<td><code>null</code></td>
-				<td><em>See</em> <a href="#table--rowtemplate">Table § rowTemplate</a></td>
+				<td>Current sorted <code>column.name</code></td>
 			</tr>
 			<tr>
-				<td><code>rowEditorTemplate</code></td>
-				<td><em>string</em></td>
-				<td><code>null</code></td>
-				<td><em>See</em> <a href="#table--roweditortemplate">Table § rowEditorTemplate</a></td>
+				<td><code>sortDescending</code></td>
+				<td><em>boolean</em></td>
+				<td><code>false</code></td>
+				<td>Current sorted column sort direction</td>
 			</tr>
 			<tr>
-				<td><code>cellTemplate</code></td>
-				<td><em>string</em></td>
-				<td><code>null</code></td>
-				<td><em>See</em> <a href="#table--celltemplate">Table § cellTemplate</a></td>
-			</tr>
-			<tr>
-				<td><code>headerTemplate</code></td>
-				<td><em>string</em></td>
-				<td><code>null</code></td>
-				<td><em>See</em> <a href="#table--headertemplate">Table § headerTemplate</a></td>
+				<td><code>userSort</code></td>
+				<td><em>boolean</em></td>
+				<td><code>false</code></td>
+				<td>Disables built in sort and makes rows reorderable via user drag-and-drop</td>
 			</tr>
 		</tbody>
 	</table>

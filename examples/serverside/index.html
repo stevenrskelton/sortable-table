@@ -12,40 +12,8 @@
 	<link rel="import" href="../indexeddb/indexeddb-fruit.html">
 	<link rel="import" href="../project-docs.html">
 	<link rel="import" href="../my-filters.html">
-	<link rel="stylesheet" href="../../css/extjs4.css" shim-shadowdom>
-
 	<style shim-shadowdom>
-		.paramType { color: #ddd }
-		sortable-table.datatables::shadow td.column-first_name,
-		sortable-table.datatables::shadow td.column-last_name,
-		sortable-table.datatables::shadow td.column-position,
-		sortable-table.datatables::shadow td.column-office,
-		sortable-table.datatables::shadow td.column-start_date,
-		sortable-table.datatables::shadow td.column-salary {
-			padding-right: 5px;
-			width: 250px;
-			vertical-align: middle;
-		}
-		sortable-table.datatables::shadow td.column-start_date {
-			text-align: center;
-		}
-		sortable-table.datatables::shadow td.column-salary {
-			text-align: right;
-		}
-		sortable-table.extjsajax::shadow td.column-last,
-		sortable-table.extjsajax::shadow td.column-volume,
-		sortable-table.extjsajax::shadow td.column-daily,
-		sortable-table.extjsajax::shadow td.column-ytd {
-			text-align: right;
-			padding-right: 5px;
-			width: 10%;
-		}
-		sortable-table.extjs4::shadow tbody td { line-height: 1.2em; }
-		sortable-table.extjs4::shadow td.column-name { width: 30%; }
-		sortable-table.extjs4::shadow td.column-energy,
-		sortable-table.extjs4::shadow td.column-protein,
-		sortable-table.extjs4::shadow td.column-fat,
-		sortable-table.extjs4::shadow td.column-carbohydrates { width: 15%; text-align: right; }
+		.paramType { color: #526E9C }
 	</style>
 </head>
 <body unresolved is="project-docs">
@@ -57,7 +25,7 @@
 
 	<h2>Plug-in Support for Custom APIs</h2>
 
-	The <code>&lt;sortable-table&gt;</code> will try to load any node from its content if that has <code><strong>role="datasource"</strong></code>.<br>
+	The <code>&lt;sortable-table&gt;</code> will try to load any node from its content that has <code><strong>role="datasource"</strong></code>.<br>
 	This means any custom element can be used as a datasource, as long as it implements the following attributes:<br>
 	<pre>
 	<strong>&lt;your-component</strong>
@@ -66,138 +34,12 @@
 		search=<span class="paramType">[string]</span>
 		sortColumn=<span class="paramType">[string]</span>
 		sortDescending=<span class="paramType">[boolean]</span>
-		columns='<span class="paramType">[array({ name: [string] })]</span>'
+		columns=<span class="paramType">[array({ name: [string] })]</span>
 		<em>(output)</em> loading=<span class="paramType">[boolean]</span>
 		<em>(output)</em> data=<span class="paramType">[array(json)]</span>
 		<em>(output)</em> dataSize=<span class="paramType">[int]</span>
 	<strong>&gt;&lt;/your-component&gt;</strong>
 	</pre>
-
-	<p>
-
-	<h2>DataTables.net API</h2>
-
-	This is a REST API using JSON to pass paged data from the server to the client.<br>
-	See the <a href="datatables-ajax.html" alt="datatables-ajax documentation">full documentation</a>.
-
-	<p>
-
-	<pre>
-	&lt;sortable-table pageSize="10"&gt;
-		&lt;datatables-ajax role="datasource" url="<a href="../datatables.net/server_processing.php?draw=2&start=0&length=9999999&columns[0][data]=first_name&columns[0][name]=first_name&columns[0][searchable]=true&columns[0][orderable]=true&columns[0][search][value]=&columns[0][search][regex]=false&columns[1][data]=last_name&columns[1][name]=last_name&columns[1][searchable]=true&columns[1][orderable]=true&columns[1][search][value]=&columns[1][search][regex]=false&columns[2][data]=position&columns[2][name]=position&columns[2][searchable]=true&columns[2][orderable]=true&columns[2][search][value]=&columns[2][search][regex]=false&columns[3][data]=office&columns[3][name]=office&columns[3][searchable]=true&columns[3][orderable]=true&columns[3][search][value]=&columns[3][search][regex]=false&columns[4][data]=start_date&columns[4][name]=start_date&columns[4][searchable]=true&columns[4][orderable]=true&columns[4][search][value]=&columns[4][search][regex]=false&columns[5][data]=salary&columns[5][name]=salary&columns[5][searchable]=true&columns[5][orderable]=true&columns[5][search][value]=&columns[5][search][regex]=false" target="_blank" alt="api">datatables.net/server_processing.php</a>"&gt;&lt;/datatables-ajax&gt;
-	&lt;/sortable-table&gt;
-	</pre>
-
-	<p>
-
-	<em>The server is hosted in the Netherlands, so users outside of Europe might notice extra latency loading data</em><br>
-
-	<template is="auto-binding">
-		<sortable-table
-			class="datatables default"
-			footerTemplate="defaultPager"
-			pageSize="10"
-			loading="{{loading}}"
-		>
-			<sortable-column name="first_name">First</sortable-column>
-			<sortable-column name="last_name">Last</sortable-column>
-			<sortable-column name="position">Position</sortable-column>
-			<sortable-column name="office">Office</sortable-column>
-			<sortable-column name="start_date" formula="function(v){ return (new Date(v * 1000)).toString().substring(4,15); }">Start Date</sortable-column>
-			<sortable-column name="salary" formula="function(v){ return '$' + v; }">Salary</sortable-column>
-
-			<datatables-ajax role="datasource" url="../datatables.net/server_processing.php"></datatables-ajax>
-		</sortable-table>
-
-		<p>
-
-		Data is loading = {{loading}}
-	</template>
-
-	<hr style="width:75%;height:1px;border:none;color:#DDD;background-color:#DDD;" align="left">
-
-	<h2>ExtJS API</h2>
-
-	This is a REST API using JSON to pass paged data from the server to the client.<br>
-	See the <a href="extjs-ajax.html" alt="extjs-ajax documentation">full documentation</a>.
-
-	<p>
-
-	<pre>
-	&lt;sortable-table pageSize="10"&gt;
-		&lt;extjs-ajax role="datasource" url="<a href="../extjs/grid-filter.php" target="_blank" alt="api">extjs/grid-filter.php</a>"&gt;&lt;/extjs-ajax&gt;
-	&lt;/sortable-table&gt;
-	</pre>
-
-	<p>
-
-	<em>The server is hosted in the Netherlands, so users outside of Europe might notice extra latency loading data</em><br>
-
-	<template is="auto-binding">
-		<sortable-table
-			class="extjsajax default"
-			footerTemplate="defaultPager"
-			pageSize="10"
-			loading="{{loading}}"
-		>
-			<sortable-column name="name">Name</sortable-column>
-			<sortable-column name="last" formula="currency">Last</sortable-column>
-			<sortable-column name="volume" formula="function(v){ if(v > 1000000) return v/1000000 + 'M'; else return v/1000 + 'K'; }">Volume</sortable-column>
-			<sortable-column name="daily" formula="function(v){ return v + ' %'; }">Daily</sortable-column>
-			<sortable-column name="ytd" formula="function(v){ if(v) return v + ' %'; else return '-'; }">YTD</sortable-column>
-
-			<extjs-ajax role="datasource" url="../extjs/grid-filter.php"></extjs-ajax>
-		</sortable-table>
-
-		<p>
-
-		Data is loading = {{loading}}
-	</template>
-
-	<hr style="width:75%;height:1px;border:none;color:#DDD;background-color:#DDD;" align="left">
-
-	<h2>IndexedDB API</h2>
-
-	An alternative to server-side storage is using HTML5's built in database IndexedDB.<br>
-	The benefits are low-latency, offline browsing support, reduced server load, and it maintains high performance as data is stored/processed outside of the document DOM.<br>
-
-	<p>
-
-	This is a working sample that should be adapted to individual need.
-	See the <a href="indexeddb-fruit.html" alt="IndexedDB tests">full documentation</a>.
-
-	<p>
-
-	<pre>
-	&lt;sortable-table pageSize="10"&gt;
-		&lt;indexeddb-fruit role="datasource"&gt;&lt;/indexeddb-fruit&gt;
-	&lt;/sortable-table&gt;
-	</pre>
-
-	<template is="auto-binding">
-
-		<div class="x-panel x-grid" style="width:715px">
-			<div class="x-panel-header-default-framed-top">Measure per 100 grams; raw</div>
-			<sortable-table
-				class="extjs4"
-				footerTemplate="defaultPager"
-				pageSize="10"
-				loading="{{loading}}"
-			>
-				<sortable-column name="name">Fruit</sortable-column>
-				<sortable-column name="energy">Energy (kcal)</sortable-column>
-				<sortable-column name="protein">Protein (g)</sortable-column>
-				<sortable-column name="fat">Fat, total (g)</sortable-column>
-				<sortable-column name="carbohydrates">Carbohydrate (g)</sortable-column>
-
-				<indexeddb-fruit role="datasource"></indexeddb-fruit>
-			</sortable-table>
-		</div>
-
-		<p>
-
-		Data is loading = {{loading}}
-	</template>
 
 </body>
 </html>

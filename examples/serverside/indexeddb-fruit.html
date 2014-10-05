@@ -5,13 +5,21 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<script src="../../../platform/platform.js" debug log="bind,ready,events"></script>
+	<script src="../../../platform/platform.js"></script>
 	<link rel="import" href="../../../polymer/polymer.html">
+	<link rel="import" href="../../sortable-table.html">
 	<link rel="import" href="../indexeddb/indexeddb-fruit.html">
 	<link rel="import" href="../json-stringify.html">
 	<link rel="import" href="../project-docs.html">
-	<style>
-		.paramType { color: #ddd }
+	<link rel="stylesheet" href="../../css/extjs4.css" shim-shadowdom>
+	<style shim-shadowdom>
+		.paramType { color: #526E9C }
+		sortable-table.extjs4::shadow tbody td { line-height: 1.2em; }
+		sortable-table.extjs4::shadow td.column-name { width: 30%; }
+		sortable-table.extjs4::shadow td.column-energy,
+		sortable-table.extjs4::shadow td.column-protein,
+		sortable-table.extjs4::shadow td.column-fat,
+		sortable-table.extjs4::shadow td.column-carbohydrates { width: 15%; text-align: right; }
 	</style>
 </head>
 <body unresolved is="project-docs">
@@ -22,6 +30,48 @@
 	IndexedDB</a>, a full implementation would require a secondary method to load the initial DB on each user's browser.
 
 	<p>
+
+	While queries run in the client's browser, data is not processed as part of the document or UI thread.<br>
+	This puts it into a middle ground as an alternative to server-side processing.<br>
+	The benefits are low-latency, offline browsing support, reduced server load, and it maintains high performance as data is stored/processed outside of the document DOM.<br>
+
+	<p>
+
+	This is a working sample that should be adapted to individual need.<br>
+	<em style="color:red">Firefox on Mac OS seems to take issue with IndexedDB</em>
+
+	<p>
+
+	<pre>
+	&lt;sortable-table pageSize="10"&gt;
+		&lt;indexeddb-fruit role="datasource"&gt;&lt;/indexeddb-fruit&gt;
+	&lt;/sortable-table&gt;
+	</pre>
+
+	<template is="auto-binding">
+
+		<div class="x-panel x-grid" style="width:715px">
+			<div class="x-panel-header-default-framed-top">Measure per 100 grams; raw</div>
+			<sortable-table
+				class="extjs4"
+				footerTemplate="defaultPager"
+				pageSize="10"
+				loading="{{loading}}"
+			>
+				<sortable-column name="name">Fruit</sortable-column>
+				<sortable-column name="energy">Energy (kcal)</sortable-column>
+				<sortable-column name="protein">Protein (g)</sortable-column>
+				<sortable-column name="fat">Fat, total (g)</sortable-column>
+				<sortable-column name="carbohydrates">Carbohydrate (g)</sortable-column>
+
+				<indexeddb-fruit role="datasource"></indexeddb-fruit>
+			</sortable-table>
+		</div>
+
+		<p>
+
+		Data is loading = {{loading}}
+	</template>
 
 	<hr style="width:75%;height:1px;border:none;color:#DDD;background-color:#DDD;" align="left">
 
