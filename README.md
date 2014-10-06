@@ -91,7 +91,7 @@ There are many capable Javascript grids, this one aims to have all the same feat
 
 	```html
 	<link rel="stylesheet"
-		href="bower_components/sortable-table/css/bootstrap.css" shim-shadowdom>
+	      href="bower_components/sortable-table/css/bootstrap.css" shim-shadowdom>
 	```
 	And include `class="bootstrap"` on any `sortable-table` to apply.
 
