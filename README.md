@@ -90,7 +90,7 @@ There are many capable Javascript grids, this one aims to have all the same feat
 4. Import a theme, like the [Bootstrap](http://getbootstrap.com/) compatible theme _(Optional)_:
 
 	```html
-	<link rel="stylesheet" href="../css/bootstrap.css" shim-shadowdom>
+	<link rel="stylesheet" href="bower_components/sortable-table/css/bootstrap.css" shim-shadowdom>
 	```
 	And include `class="bootstrap"` on any `sortable-table` to apply.
 
