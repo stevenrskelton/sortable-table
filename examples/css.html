@@ -28,43 +28,52 @@
 
 	<h1>CSS</h1>
 
-	All columns are Column names
+	All columns have CSS classes based on position and their data column's name.<br>
+	Individual columns can be styled using CSS.
 
-	<style shim-shadowdom>
-		::shadow .sortable-table-td-alice {
-			width: 75px;
-			text-align: right;
-		}
-		::shadow .sortable-table-td-bill {
-			width: 75px;
-			text-align: right;
-		}
-		::shadow .sortable-table-td-casey {
-			width: 75px;
-			text-align: right;
-		}
-		::shadow .sortable-table-td-average {
-			font-weight: bold;
-			width: 100px;
-			text-align: right;
-		}
-		::shadow tr:nth-of-type(even) .sortable-table-td-average {
-			background-color: rgba(0,132,180,0.15);
-		}
-		::shadow tr:nth-of-type(odd) .sortable-table-td-average {
-			background-color: rgba(0,132,180,0.05);
-		}
-		::shadow .sortable-table-td-total {
-			font-weight: bold;
-			width: 100px;
-			text-align: right;
-		}
-		::shadow tr:nth-of-type(even) .sortable-table-td-total {
-		
-		}
-	</style>
+	<template is="auto-binding">
+		<style shim-shadowdom>
+			::shadow .column-alice {
+				width: 75px;
+				text-align: right;
+			}
+			::shadow .column-bill {
+				width: 75px;
+				text-align: right;
+			}
+			::shadow .column-casey {
+				width: 75px;
+				text-align: right;
+			}
+			::shadow .column-average {
+				font-weight: bold;
+				width: 100px;
+				text-align: right;
+			}
+			::shadow tr:nth-of-type(even) .column-average {
+				background-color: rgba(0,132,180,0.15);
+			}
+			::shadow tr:nth-of-type(odd) .column-average {
+				background-color: rgba(0,132,180,0.05);
+			}
+			::shadow .column-total {
+				font-weight: bold;
+				width: 100px;
+				text-align: right;
+			}
+			::shadow tr:nth-of-type(even) .column-total {
+			
+			}
+		</style>
+		<alice-column columns="{{columns}}" checkbox="{{isCheckbox}}"></alice-column>
 
-		<sortable-table class="default">
+		<p>
+
+		<input type="checkbox" checked="{{isCheckbox}}" id="iscb"><label for="iscb"><code>checkbox</code></label>
+
+		<p>
+
+		<sortable-table id="stable" class="default" checkbox="{{isCheckbox}}" columns="{{columns}}">
 			<sortable-column name="fruit" cellTemplate="fruitsTemplate">Fruit</sortable-column>
 			<sortable-column name="alice">Alice</sortable-column>
 			<sortable-column name="bill">Bill</sortable-column>
@@ -92,6 +101,139 @@
 				{fruit: 'strawberry', alice: 4, bill: 5, casey: 2 }
 			]
 		</sortable-table>
-	</div>
+	</template>
+
+	<p>
+
+	<h2>CSS Classes</h2>
+
+	<table class="docs">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Element Types</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><code>sortable-table</code></td>
+				<td><code>table</code></td>
+				<td>Root <code>table</code> used for web component.</td>
+			</tr>
+			<tr>
+				<td><code>checkbox-column</code></td>
+				<td><code>th</code>, <code>td</code></td>
+				<td>Column used to display selection checkboxes</td>
+			</tr>
+			<tr>
+				<td><code>column-<strong>N</strong></code></td>
+				<td><code>th</code>, <code>td</code></td>
+				<td><em>(N is an integer)</em> Data columns, in order of display.  This is useful when formatting independant of whether
+					a checkbox column is or is not displayed.  When a checkbox is not displayed, <code>column-0</code> will
+					refer to <code>td:nth-of-type(0)</code>, but with a checkbox it will be <code>td:nth-of-type(1)</code></td>
+			</tr>
+			<tr>
+				<td><code>column-<strong>NAME</strong></code></td>
+				<td><code>th</code>, <code>td</code></td>
+				<td><em>(NAME is a <code>column</code>'s <code>name</code></em>) This is what should be used to style column cells.
+				Styles will be fixed to a column even when columns are reordered for display.</td>
+			</tr>
+			<tr>
+				<td><code>grid</code></td>
+				<td><code>tbody</code></td>
+				<td>Added when <code>{{grid}}</code> is <code>true</code></td>
+			</tr>
+			<tr>
+				<td><code>selected-row</code></td>
+				<td><code>tr</code></td>
+				<td>Added to any row that has been selected (1 or more)</td>
+			</tr>
+			<tr>
+				<td><code>editor-row</code></td>
+				<td><code>tr</code></td>
+				<td>Added to a row that is being edited (at most 1 row)</td>
+			</tr>
+			<tr>
+				<td><code>edited-row</code></td>
+				<td><code>tr</code></td>
+				<td>Added to any row that has been been edited and the change is part of the undo stack. (at most 1; or 1 or more if <code>multiRowEdit</code> is <code>true</code>)</td>
+			</tr>
+			<tr>
+				<td><code>simplePager</code></td>
+				<td><code>div</code></td>
+				<td>Built-in footer template</td>
+			</tr>
+			<tr>
+				<td><code>indexedPager</code></td>
+				<td><code>div</code></td>
+				<td>Built-in footer template</td>
+			</tr>
+			<tr>
+				<td><code>defaultPager</code></td>
+				<td><code>div</code></td>
+				<td>Built-in footer template</td>
+			</tr>
+			<tr>
+				<td><code>articlePager</code></td>
+				<td><code>table</code></td>
+				<td>Built-in footer template</td>
+			</tr>
+			<tr>
+				<td><code>infinitePager</code></td>
+				<td><code>div</code></td>
+				<td>Built-in footer template</td>
+			</tr>
+		</tbody>
+	</table>
+	<polymer-element name="alice-column" attributes="columns checkbox">
+		<template>
+			<h2>Info on Column <code>alice</code></h2>
+			<table>
+				<tr>
+					<td><strong>DOM index:</strong></td>
+					<td style="text-align:center">{{nodeIndex}}</td>
+				</tr>
+				<tr>
+					<td><strong><code>columns</code> index:</strong></td>
+					<td style="text-align:center">{{index}}</td>
+				</tr>
+				<tr>
+					<td><strong>CSS classes:</strong></td>
+					<td style="text-align:center">{{classes}}</td>
+				</tr>
+			</table>
+		</template>
+		<script>
+		"use strict";
+		Polymer({
+			observe: {
+				checkbox: 'refresh',
+				columns: 'refresh'
+			},
+			refresh: function(){
+				this.nodeIndex = '';
+				this.index = '';
+				this.classes = '';
+				if(this.columns){
+					var self = this;
+					this.async(function(){
+						var alice = self.columns.filter(function(e,i){
+							if(e.name === 'alice'){
+								self.index = i;
+								return true;
+							}else return false;
+						});
+						var sr = document.getElementById('stable').shadowRoot;
+						var th = sr.querySelector('th.column-alice');
+						var tr = sr.querySelector('thead  > tr');
+						self.nodeIndex = [].indexOf.call(tr.querySelectorAll('th'),th);
+						self.classes = th.classList;
+					});
+				}
+			}
+		});
+		</script>
+	</polymer-element>
 </body>
 </html>

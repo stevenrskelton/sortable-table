@@ -73,14 +73,15 @@
 }
 
 .bootstrap::shadow .btn.disabled,
-.bootstrap::shadow .btn[disabled],
-.bootstrap::shadow fieldset[disabled] .btn{
-	pointer-events:none;
-	cursor:not-allowed;
-	filter:alpha(opacity=65);
+.bootstrap::shadow .btn[disabled=""],
+.bootstrap::shadow [role="button"][disabled=""],
+.bootstrap::shadow [role="button"].disabled {
+	cursor: not-allowed;
+	filter: alpha(opacity=65) grayscale(100%);
 	-webkit-box-shadow:none;
 	box-shadow:none;
-	opacity:.65
+	opacity:.65;
+	-webkit-filter: grayscale(100%);
 }
 .bootstrap::shadow .btn-primary{
 	color:#fff;
@@ -106,19 +107,14 @@
 
 .bootstrap::shadow .btn-primary.disabled,
 .bootstrap::shadow .btn-primary[disabled],
-.bootstrap::shadow fieldset[disabled] .btn-primary,
 .bootstrap::shadow .btn-primary.disabled:hover,
 .bootstrap::shadow .btn-primary[disabled]:hover,
-.bootstrap::shadow fieldset[disabled] .btn-primary:hover,
 .bootstrap::shadow .btn-primary.disabled:focus,
 .bootstrap::shadow .btn-primary[disabled]:focus,
-.bootstrap::shadow fieldset[disabled] .btn-primary:focus,
 .bootstrap::shadow .btn-primary.disabled:active,
 .bootstrap::shadow .btn-primary[disabled]:active,
-.bootstrap::shadow fieldset[disabled] .btn-primary:active,
 .bootstrap::shadow .btn-primary.disabled.active,
-.bootstrap::shadow .btn-primary[disabled].active,
-.bootstrap::shadow fieldset[disabled] .btn-primary.active{
+.bootstrap::shadow .btn-primary[disabled].active {
 	background-color:#428bca;
 	border-color:#357ebd
 }
@@ -145,19 +141,14 @@
 
 .bootstrap::shadow .btn-default.disabled,
 .bootstrap::shadow .btn-default[disabled],
-.bootstrap::shadow fieldset[disabled] .btn-default,
 .bootstrap::shadow .btn-default.disabled:hover,
 .bootstrap::shadow .btn-default[disabled]:hover,
-.bootstrap::shadow fieldset[disabled] .btn-default:hover,
 .bootstrap::shadow .btn-default.disabled:focus,
 .bootstrap::shadow .btn-default[disabled]:focus,
-.bootstrap::shadow fieldset[disabled] .btn-default:focus,
 .bootstrap::shadow .btn-default.disabled:active,
 .bootstrap::shadow .btn-default[disabled]:active,
-.bootstrap::shadow fieldset[disabled] .btn-default:active,
 .bootstrap::shadow .btn-default.disabled.active,
-.bootstrap::shadow .btn-default[disabled].active,
-.bootstrap::shadow fieldset[disabled] .btn-default.active {
+.bootstrap::shadow .btn-default[disabled].active {
 	background-color:#fff;
 	border-color:#ccc
 }
@@ -274,8 +265,7 @@
 }
 
 .bootstrap::shadow .form-control[disabled],
-.bootstrap::shadow .form-control[readonly],
-.bootstrap::shadow fieldset[disabled] .form-control{
+.bootstrap::shadow .form-control[readonly] {
 	cursor:not-allowed;
 	background-color:#eee;
 }
@@ -326,7 +316,7 @@
 .bootstrap::shadow .pagination {
 	display:inline-block;
 	padding-left:0;
-	margin: 5px 0 0 0;
+	margin: 0;
 	border-radius:4px;
 }
 
@@ -501,7 +491,7 @@
 }
 .bootstrap::shadow .infinitePager > .loading {
 	border-radius: 4px;
-	line-height:24px;
+	line-height:28px;
 	color:#fff;
 	text-align:center;
 	background-color:#428bca;
@@ -522,8 +512,43 @@
 	text-align: center;
 	width: 100%;
 	cursor: pointer;
-	line-height:10px;
+	line-height:14px;
 }
 .bootstrap::shadow table.articlePager td:nth-of-type(2) {
 	padding-left: 10px;
+}
+.bootstrap::shadow .simplePager > span:nth-of-type(2) {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+.bootstrap::shadow .indexedPager {
+	height: 34px;
+}
+.bootstrap::shadow .indexedPager > ul > li:first-of-type a,
+.bootstrap::shadow .defaultPager > div:nth-of-type(1) > button:nth-of-type(1) {
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAGcSURBVDjLxVM7SEJRGP5vmVfpAWGFERJUONQWLtEQOUQRbUK09IDW1mp1KKPBsdGlWqKIqGiLoq0aggqxraFARMpX95535xxCNLouDh04cM7//3yvwzGEEFDPaoA6l6vyEj3MaDmcc0CMX23NdY9X9iPxlxijsHK8GmxxUMAh1O+BAb8bEKZVnZntVMyisFYiotnRgkU4UMaByC0Hy/XpzWQ80GGuTwy1GUULO1tQrIQJQBLIsriuTW4kE71d3qWg3wNM9gqIOYeoWDHlGuALYQhHn/cCPnNpsMeEjyIBW9bzP8B/KlCsSAJ4TQNyiI0M97WaPe1NkM4TyJco+FpcQC3irECxYsVuM/iyaBFTplltzHU+6sx/KagCKCDlX0A6R5TXp5O77NHl4wd43QYYoOwJEAg7A6iEEZHsMijpVbzuhCLPqdzBzcMnNHsadT7CZrUUMB2gjVnZ6/v+6GzqMbt7e5/V+fBaIaqEbfUKEqByMH0enu8cu+AE0QVBqDOAYk2cvUmfUiqrHsxcTy36QqcE3K7lyrrx77/xG/TSBY2ALCinAAAAAElFTkSuQmCC);
+	background-position: center center;
+	background-repeat: no-repeat;
+	color: transparent;
+}
+.bootstrap::shadow .simplePager > button:nth-of-type(1),
+.bootstrap::shadow .defaultPager > div:nth-of-type(1) > button:nth-of-type(2) {
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAEXSURBVDjLY/j//z8DJZiBLgZkz37Ynjrz4ReyDEideb89afrDf5ET7v4n2YCEqXf7qpY9/T9r76v/Xu03STMgasLteaVLHv+fufvl/6k7X/y3qrlCvAHBvTeXFC54ANbctv7p/95Nz/5rFZ0nzoCAzpuPsuc++D91x4v/jasf/y9aeP9/89rH/6VTTxJngGPDtc3xU+/879789H/5kgf/02fd+V+17OF/yZhjxBmgVXCaRT3v7BqP1mv/a1Y+/J824/b/woX3/osHHSAtECVjjqy0Lb/wP2/+3f+Zs+/8F3XfS3o0inntXWSeffJ/0tRb/0Ucdv4nKyEJW25ZYBh/5L+w5fb/ZCdlQYMNs4WMt/wfuMyEDwMA0Irn/pDRT58AAAAASUVORK5CYII=);
+	background-position: center center;
+	background-repeat: no-repeat;
+	color: transparent;
+}
+.bootstrap::shadow .simplePager > button:nth-of-type(2),
+.bootstrap::shadow .defaultPager > div:nth-of-type(2) > button:nth-of-type(1) {
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAEdSURBVDjLY/j//z8DJZiB6gY0rH7xpW7li3YKDHj1v2bli38lix61k2VA5fJn/9eeeP+/fcOL/wlT7/aRbEDegkf/Vxx/93/xobf/S5c8/u/ecm0eSQYkTX/4f+HBN/8nbX/xf+bul/8Tp9/9r1N0dgnRBgT33QZqfPW/YdXj/42rH//v2vjkv3fHtf9SScceEWWAc8u1/xO2Pv9fsvjB//IlD4CGPPrvXH/5v2Tksc1EGWBaful/+/on/4sW3gfGxsP/9lUX/ksEH1gj6rqdhSgDlPPO/q9b8fB/5bIH/23LL/wXD9i7kqRAlEo6+b908f3/NiXn/4t57V1EcjRKRB75b1145r+o684FZCUkMb8D/0Uct88euMxEKgYA7Ojrv4CgE7EAAAAASUVORK5CYII=);
+	background-position: center center;
+	background-repeat: no-repeat;
+	color: transparent;
+}
+.bootstrap::shadow .indexedPager > ul > li:last-of-type a,
+.bootstrap::shadow .defaultPager > div:nth-of-type(2) > button:nth-of-type(2) {
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAGeSURBVDjLxZO/axRRFIW/N7o7CZIIKhosAoIIopWNqEX0L7ARG0EU0V4UVLBJJVjY2FgsgiykCOY/SIw2tgHJqEELUUzQJpudcd/c9+M+ixBYhNkmhae7X3E498AxKSV2o4xdau/wMfv6V6XK89mrRx4N8zud78ve6UXxivjAwv0TpinBvqg8uNf98WQYWqucmh7j0ukJSknNL1ivnDmWm8OT7Ye3Xnx7tsMH4hAfcV6prGs2EBdQYPpgm6n97buXn669BCglYV1CvFJKbO7gj0+4oPRt5PhUi02b3zz/+EMbDLUbo24Z+labDaxVJCi9QSAzcPLoOC24tlj0ZHI8Q3wkWN9sMBCH80rtInsMZCZRB6USrco65hmgoxKUkhCfIEGeG94WW6x87S+QOPR7080cmGiRZESJld1uO28Zllb7rKz15n92zl5Rq0kk4oKS6jgqQUS88q7oUXwpu+vdc9cBkjiC2+5n5At9qywXPT593nq1Pnfhxg5PdcR7xUcl+dBsEKzn42rZ2ZifuT3M1Srv32yQgvLv+Mx/X+Nfknb5JPA+HGwAAAAASUVORK5CYII=);
+	background-position: center center;
+	background-repeat: no-repeat;
+	color: transparent;
 }

@@ -153,22 +153,20 @@
 	<template id="simplePager">
 		<div class="simplePager" horizontal layout center>
 			<span flex>{{dataSize}} Results</span>
-			<span>
-				<button disabled?="{{page<=1}}" class="btn btn-primary btn-sm" on-click="{{moveToPreviousPage}}">&#10094;</button>
-				{{page}} of {{lastPage}}
-				<button disabled?="{{page>=lastPage}}" class="btn btn-primary btn-sm" on-click="{{moveToNextPage}}">&#10095;</button>
-			</span>
+			<button disabled?="{{page<=1}}" class="btn btn-default btn-sm" on-click="{{moveToPreviousPage}}">&lt;</button>
+			<span>{{page}} of {{lastPage}}</span>
+			<button disabled?="{{page>=lastPage}}" class="btn btn-default btn-sm" on-click="{{moveToNextPage}}">&gt;</button>
 		</div>
 	</template>
 
 	<template id="indexedPager">
 		<div class="indexedPager" style="width:100%;text-align:center;font-weight:normal;">
 			<ul class="pagination">
-				<li class="{{page==1 ? 'disabled' : ''}}" disabled?="{{page==1}}" on-click="{{moveToFirstPage}}" role="button"><a href="#" onclick="return false;">«</a></li>
+				<li class="{{page==1 ? 'disabled' : ''}}" disabled?="{{page==1}}" on-click="{{moveToFirstPage}}" role="button"><a href="#" onclick="return false;">&lt;</a></li>
 				<template repeat="{{i in lastPage | naturalNumbers(page)}}">
 					<li class="{{page==i ? 'active' : ''}}" on-click="{{moveToPage}}" role="button"><a href="#" onclick="return false;">{{i}}</a></li>
 				</template>
-				<li class="{{page==lastPage ? 'disabled' : ''}}" disabled="{{page==lastPage}}" on-click="{{moveToLastPage}}" role="button"><a href="#" onclick="return false;">»</a></li>
+				<li class="{{page==lastPage ? 'disabled' : ''}}" disabled="{{page==lastPage}}" on-click="{{moveToLastPage}}" role="button"><a href="#" onclick="return false;">&gt;</a></li>
 			</ul>
 		</div>
 	</template>
@@ -176,8 +174,8 @@
 	<template id="defaultPager">
 		<div class="defaultPager" horizontal layout center>
 			<div class="btn-group">
-				<button disabled?="{{page==1}}" class="btn btn-default btn-sm" on-click="{{moveToFirstPage}}">&#9198;</button><!--
-				--><button disabled?="{{page<=1}}" class="btn btn-default btn-sm" on-click="{{moveToPreviousPage}}">&#9194;</button>
+				<button disabled?="{{page==1}}" class="btn btn-default btn-sm" on-click="{{moveToFirstPage}}">|&lt;</button><!--
+				--><button disabled?="{{page<=1}}" class="btn btn-default btn-sm" on-click="{{moveToPreviousPage}}">&lt;</button>
 			</div>
 
 			<span class="x-toolbar-separator-horizontal"></span>
@@ -187,8 +185,8 @@
 			<span class="x-toolbar-separator-horizontal"></span>
 
 			<div class="btn-group">
-				<button disabled?="{{page>=lastPage}}" class="btn btn-default btn-sm" on-click="{{moveToNextPage}}">&#9193;</button><!--
-				--><button disabled?="{{page==lastPage}}" class="btn btn-default btn-sm" on-click="{{moveToLastPage}}">&#9197;</button>
+				<button disabled?="{{page>=lastPage}}" class="btn btn-default btn-sm" on-click="{{moveToNextPage}}">&gt;</button><!--
+				--><button disabled?="{{page==lastPage}}" class="btn btn-default btn-sm" on-click="{{moveToLastPage}}">&gt;|</button>
 			</div>
 			<span flex style="text-align:right;margin-right:6px;">Displaying {{page > lastPage ? (lastPage-1) * pageSize + 1 : ((page - 1) * pageSize) + 1}} - {{page >= lastPage ? dataSize : page * pageSize}} of {{dataSize}}</span>
 		</div>

@@ -7,12 +7,15 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<script src="../../../platform/platform.js" debug log="bind,ready,events"></script>
 	<link rel="import" href="../../sortable-table.html">
+	<link rel="import" href="../../../core-icon-button/core-icon-button.html">
 	<link rel="import" href="../fruit-icon.html">
 	<link rel="import" href="../project-docs.html">
+	<link rel="import" href="../../../prism-js/prism-js.html">
 	<link rel="stylesheet" href="../../css/extjs4.css" shim-shadowdom>
 	<link rel="stylesheet" href="../../css/bootstrap.css" shim-shadowdom>
 	<link rel="stylesheet" href="../../css/espn.css" shim-shadowdom>
 	<style shim-shadowdom>
+		core-icon-button { margin: 0 6px }
 		sortable-table::shadow > table > tbody > tr > td.column-alice,
 		sortable-table::shadow > table > tbody > tr > td.column-bill,
 		sortable-table::shadow > table > tbody > tr > td.column-casey,
@@ -47,18 +50,19 @@
 
 	<hr style="width:75%;height:1px;border:none;color:#DDD;background-color:#DDD;" align="left">
 
-	<h3>A theme inspired by Bootstrap <a href="bootstrap.html" alt="Bootstrap Theme"><button>See full options ➦</button></a></h3>
+	<h3>
+		A theme inspired by Bootstrap <a href="../../css/bootstrap.css" target="_blank"><core-icon-button icon="file-download">CSS</core-icon-button></a>
+		<a href="bootstrap.html" alt="Bootstrap Theme" target="_blank"><core-icon-button icon="visibility">options</core-icon-button></a>
+	</h3>
 
-	<pre>&lt;link rel="stylesheet" href="<a href="../../css/bootstrap.css" target="_blank">../../css/bootstrap.css</a>" <strong>shim-shadowdom</strong>&gt;</pre>
+	<prism-js language="markup">&lt;link rel="stylesheet" href="../../css/bootstrap.css" shim-shadowdom&gt;
 
-	<pre>
 &lt;div class="panel panel-default"&gt;
 	&lt;div class="panel-heading"&gt;Optional heading&lt;/div&gt;
-	&lt;sortable-table <strong>class="bootstrap"</strong> footerTemplate="indexedPager"&gt;
+	&lt;sortable-table class="bootstrap" footerTemplate="indexedPager"&gt;
 		&lt;!-- data --&gt;
 	&lt;/sortable-table&gt;
-&lt;/div&gt;
-	</pre>
+&lt;/div&gt;</prism-js>
 
 	<p>
 
@@ -105,18 +109,18 @@
 
 	<hr style="width:75%;height:1px;border:none;color:#DDD;background-color:#DDD;" align="left">
 
-	<h3>A theme inspired by Sencha's ExtJS 4 Grid <a href="extjs4.html" alt="ExtJS 4 Theme"><button>See full options ➦</button></a></h3>
+	<h3>
+		A theme inspired by Sencha's ExtJS 4 Grid <a href="../../css/extjs4.css" target="_blank"><core-icon-button icon="file-download">CSS</core-icon-button></a> <a href="extjs4.html" alt="ExtJS 4 Theme" target="_blank"><core-icon-button icon="visibility">options</core-icon-button></a></a>
+	</h3>
 
-	<pre>&lt;link rel="stylesheet" href="<a href="../../css/extjs4.css" target="_blank">../../css/extjs4.css</a>" <strong>shim-shadowdom</strong>&gt;</pre>
+	<prism-js language="markup">&lt;link rel="stylesheet" href="../../css/extjs4.css" shim-shadowdom&gt;
 
-	<pre>
 &lt;div class="x-panel x-grid x-panel-default-framed"&gt;
 	&lt;div class="x-panel-header-default-framed-top"&gt;Optional heading&lt;/div&gt;
-	&lt;sortable-table <strong>class="extjs4"</strong> footerTemplate="defaultPager"&gt;
+	&lt;sortable-table class="extjs4" footerTemplate="defaultPager"&gt;
 		&lt;!-- data --&gt;
 	&lt;/sortable-table&gt;
-&lt;/div&gt;
-	</pre>
+&lt;/div&gt;</prism-js>
 
 	<p>
 
@@ -163,18 +167,19 @@
 
 	<hr style="width:75%;height:1px;border:none;color:#DDD;background-color:#DDD;" align="left">
 
-	<h3>A theme inspired by ESPN.com</h3>
+	<h3>
+		A theme inspired by ESPN.com <a href="../../css/espn.css" target="_blank"><core-icon-button icon="file-download">CSS</core-icon-button></a>
+	</h3>
 
-	<pre>&lt;link rel="stylesheet" href="<a href="../../css/espn.css" target="_blank">../../css/espn.css</a>" <strong>shim-shadowdom</strong>&gt;</pre>
+	<prism-js language="markup">&lt;link rel="stylesheet" href="../../css/espn.css" shim-shadowdom&gt;
 
-	<pre>
 &lt;div class="mod-container"&gt;
 	&lt;div class="mod-header"&gt;Optional heading&lt;/div&gt;
-	&lt;sortable-table <strong>class="espn"</strong> footerTemplate="simplePager"&gt;
+	&lt;sortable-table class="espn" footerTemplate="simplePager"&gt;
 		&lt;!-- data --&gt;
 	&lt;/sortable-table&gt;
 &lt;/div&gt;
-	</pre>
+	</prism-js>
 
 	<p>
 
@@ -221,7 +226,5 @@
 			]
 		</sortable-table>
 	</div>
-
-	<index-links page="themes.html"></index-links>
 </body>
 </html>

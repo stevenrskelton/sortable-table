@@ -6,12 +6,15 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<script src="../../../platform/platform.js"></script>
+	<link rel="import" href="../../../core-icon-button/core-icon-button.html">
 	<link rel="import" href="../../sortable-table.html">
 	<link rel="import" href="../my-filters.html">
 	<link rel="import" href="../fruit-icon.html">
 	<link rel="import" href="../project-docs.html">
+	<link rel="import" href="../../../prism-js/prism-js.html">
 	<link rel="stylesheet" href="../../css/article.css" shim-shadowdom>
 	<style shim-shadowdom>
+		core-icon-button { margin: 0 6px }
 		.article::shadow table.nutrients {
 			font-family: verdana,Arial,Helvetica,sans-serif;
 		}
@@ -100,106 +103,107 @@
 
 	<code>grid</code> should refresh render when changed, and have a suitable CSS formatting.
 
-	<h3>Article theme <a href="article.html" alt="Article Theme"><button>See full options ➦</button></a></h3>
+	<h3>Article theme <a href="../../css/article.css" target="_blank"><core-icon-button icon="file-download">CSS</core-icon-button></a>
+		<a href="article.html" alt="Article Theme"><core-icon-button icon="visibility">options</core-icon-button></a>
+	</h3>
 
-	<pre>&lt;link rel="stylesheet" href="<a href="../../css/article.css" target="_blank">../../css/article.css</a>" <strong>shim-shadowdom</strong>&gt;</pre>
+	<prism-js language="markup">&lt;link rel="stylesheet" href="../../css/article.css" shim-shadowdom&gt;
 
-	<pre>
-&lt;sortable-table <strong>class="article"</strong> rowTemplate="fruitDescTemplate" footerTemplate="articlePager"&gt;
+&lt;sortable-table class="article" rowTemplate="fruitDescTemplate" footerTemplate="articlePager"&gt;
 	&lt;!-- data --&gt;
-&lt;/sortable-table&gt;
-	</pre>
+&lt;/sortable-table&gt;</prism-js>
 
 	<p>
-<template is="auto-binding">
-	<sortable-table
-		class="article"
-		rowTemplate="fruitDescTemplate"
-		footerTemplate="articlePager"
-		checkbox
-		multiSelect
-		rowSelection
-		pageSize="2"
-	>
-		<sortable-column name="fruit">Fruit</sortable-column>
-		<sortable-column name="energy">Calories</sortable-column>
-		<sortable-column name="carbohydrates">Carbs</sortable-column>
-		<sortable-column name="protein">Protein</sortable-column>
-		<sortable-column name="fat">Fat</sortable-column>
-		<sortable-column name="fibre">Fibre</sortable-column>
 
-		<template id="fruitDescTemplate">
-			<template if="{{!grid}}">
-				<td>
-					<fruit-icon fruit="{{record.fields.fruit.value}}"></fruit-icon>
-				</td>
-				<td colspan="4">
-					<h3 style="margin:0;">{{record.row.fruit}}</h3>
-					<a href="{{record.row.link}}" target="_blank" style="font-size:small">{{record.row.link}}</a>
-					<p>
-						{{record.row.description}}
-					</p>
-					<span style="font-size:90%">Scientific Name: <em>{{record.row.scientificName}}</em></span>
-				</td>
-				<td>
-					<table class="nutrients">
-						<caption>Nutritive value per 100 g</caption>
-						<tr><td>Energy</td>						<td>{{record.row.energy}} Kcal</td>		<td>{{record.row.energy / 2000 * 100 | round(2)}}%</td></tr>
-						<tr><td class="alt">Carbohydrates</td>	<td>{{record.row.carbohydrates}} g</td>	<td>{{record.row.carbohydrates / 125 * 100 | round(2)}} %</td></tr>
-						<tr><td>Protein</td>					<td>{{record.row.protein}} g</td>		<td>{{record.row.protein / 50 * 100 | round(2)}} %</td></tr>
-						<tr><td class="alt">Total Fat</td>		<td>{{record.row.fat}} g</td>			<td>{{record.row.fat / 35 * 100 | round(2)}} %</td></tr>
-						<tr><td>Dietary Fibre</td>				<td>{{record.row.fibre}} g</td>			<td>{{record.row.fibre / 40 * 100 | round(2)}} %</td></tr>
-					</table>
-				</td>
-			</template>
-			<template if="{{grid}}">
-				<td style="width:100%;text-align:center;">
-					<div>
+	<template is="auto-binding">
+		<sortable-table
+			class="article"
+			rowTemplate="fruitDescTemplate"
+			footerTemplate="articlePager"
+			checkbox
+			multiSelect
+			rowSelection
+			pageSize="2"
+		>
+			<sortable-column name="fruit">Fruit</sortable-column>
+			<sortable-column name="energy">Calories</sortable-column>
+			<sortable-column name="carbohydrates">Carbs</sortable-column>
+			<sortable-column name="protein">Protein</sortable-column>
+			<sortable-column name="fat">Fat</sortable-column>
+			<sortable-column name="fibre">Fibre</sortable-column>
+
+			<template id="fruitDescTemplate">
+				<template if="{{!grid}}">
+					<td>
 						<fruit-icon fruit="{{record.fields.fruit.value}}"></fruit-icon>
-						<h3 style="display:inline;">{{record.row.fruit}}</h3>
-					</div>
-					<table class="nutrients" style="text-align:left;margin-left:auto;margin-right:auto">
-						<caption>Nutritive value per 100 g</caption>
-						<tr><td>Energy</td>						<td>{{record.row.energy}} Kcal</td>		<td>{{record.row.energy / 2000 * 100 | round(2)}}%</td></tr>
-						<tr><td class="alt">Carbohydrates</td>	<td>{{record.row.carbohydrates}} g</td>	<td>{{record.row.carbohydrates / 125 * 100 | round(2)}} %</td></tr>
-						<tr><td>Protein</td>					<td>{{record.row.protein}} g</td>		<td>{{record.row.protein / 50 * 100 | round(2)}} %</td></tr>
-						<tr><td class="alt">Total Fat</td>		<td>{{record.row.fat}} g</td>			<td>{{record.row.fat / 35 * 100 | round(2)}} %</td></tr>
-						<tr><td>Dietary Fibre</td>				<td>{{record.row.fibre}} g</td>			<td>{{record.row.fibre / 40 * 100 | round(2)}} %</td></tr>
-					</table>
-					<a href="{{record.row.link}}" target="_blank" style="font-size:small">{{record.row.link}}</a>
-				</td>
+					</td>
+					<td colspan="4">
+						<h3 style="margin:0;">{{record.row.fruit}}</h3>
+						<a href="{{record.row.link}}" target="_blank" style="font-size:small">{{record.row.link}}</a>
+						<p>
+							{{record.row.description}}
+						</p>
+						<span style="font-size:90%">Scientific Name: <em>{{record.row.scientificName}}</em></span>
+					</td>
+					<td>
+						<table class="nutrients">
+							<caption>Nutritive value per 100 g</caption>
+							<tr><td>Energy</td>						<td>{{record.row.energy}} Kcal</td>		<td>{{record.row.energy / 2000 * 100 | round(2)}}%</td></tr>
+							<tr><td class="alt">Carbohydrates</td>	<td>{{record.row.carbohydrates}} g</td>	<td>{{record.row.carbohydrates / 125 * 100 | round(2)}} %</td></tr>
+							<tr><td>Protein</td>					<td>{{record.row.protein}} g</td>		<td>{{record.row.protein / 50 * 100 | round(2)}} %</td></tr>
+							<tr><td class="alt">Total Fat</td>		<td>{{record.row.fat}} g</td>			<td>{{record.row.fat / 35 * 100 | round(2)}} %</td></tr>
+							<tr><td>Dietary Fibre</td>				<td>{{record.row.fibre}} g</td>			<td>{{record.row.fibre / 40 * 100 | round(2)}} %</td></tr>
+						</table>
+					</td>
+				</template>
+				<template if="{{grid}}">
+					<td style="width:100%;text-align:center;">
+						<div>
+							<fruit-icon fruit="{{record.fields.fruit.value}}"></fruit-icon>
+							<h3 style="display:inline;">{{record.row.fruit}}</h3>
+						</div>
+						<table class="nutrients" style="text-align:left;margin-left:auto;margin-right:auto">
+							<caption>Nutritive value per 100 g</caption>
+							<tr><td>Energy</td>						<td>{{record.row.energy}} Kcal</td>		<td>{{record.row.energy / 2000 * 100 | round(2)}}%</td></tr>
+							<tr><td class="alt">Carbohydrates</td>	<td>{{record.row.carbohydrates}} g</td>	<td>{{record.row.carbohydrates / 125 * 100 | round(2)}} %</td></tr>
+							<tr><td>Protein</td>					<td>{{record.row.protein}} g</td>		<td>{{record.row.protein / 50 * 100 | round(2)}} %</td></tr>
+							<tr><td class="alt">Total Fat</td>		<td>{{record.row.fat}} g</td>			<td>{{record.row.fat / 35 * 100 | round(2)}} %</td></tr>
+							<tr><td>Dietary Fibre</td>				<td>{{record.row.fibre}} g</td>			<td>{{record.row.fibre / 40 * 100 | round(2)}} %</td></tr>
+						</table>
+						<a href="{{record.row.link}}" target="_blank" style="font-size:small">{{record.row.link}}</a>
+					</td>
+				</template>
 			</template>
-		</template>
 
-		[
-			{fruit: 'apple', energy: 50, carbohydrates: 13.81, protein: 0.26, fat: 0.17, fibre: 2.4,
-				description: 'Delicious and crunchy, apple fruit is one of the most popular and favorite fruits among the health conscious, fitness lovers who firmly believe in the concept of “health is wealth.” This wonderful fruit is packed with rich phyto-nutrients that, in the true sense, indispensable for optimal health. The antioxidants in apple have several health promoting and disease prevention properties, and thereby, truly justifying the adage, “an apple a day keeps the doctor away.”',
-				link: 'http://www.nutrition-and-you.com/apple-fruit.html',
-				scientificName: 'Malus domestica'
-			},
-			{fruit: 'banana', energy: 90, carbohydrates: 22.84, protein: 1.09, fat: 0.33, fibre: 2.6,
-				description: 'Go for banana fruit; nature\'s own energy-rich food that comes in a safety envelope! Fresh, creamy, and delicious dessert bananas are one of the cheapest and easily available year around. Botanically, the fruit belongs to the family of Musaceae. Commercially, it is one of the widely cultivated crops in the tropical and subtropical zones.',
-				link: 'http://www.nutrition-and-you.com/banana-fruit.html',
-				scientificName: 'Musa acuminata colla'
-			},
-			{fruit: 'grape', energy: 69, carbohydrates: 18.0, protein: 0.72, fat: 0.16, fibre: 0.9,
-				description: 'Widely popular, grapes are regarded in many cultures as “the queen of fruits," since centuries. These tiny berries are the storehouse of numerous health promoting phyto-nutrients such as poly-phenolic antioxidants, vitamins, and minerals. No wonder why many of us include them as an integral part of our diet, be it in the form of fresh table fruits, juice, or in salads! Botanically, they are small round berries; grow in clusters on a perennial and deciduous woody vine of the genus: Vitis. Grapes are native to Europe and Mediterranean regions but now widely cultivated all around the world.',
-				link: 'http://www.nutrition-and-you.com/grape-fruit.html',
-				scientificName: 'Vitis vinifera, Vitis labrusca, Vitis rotundifolia'
-			},
-			{fruit: 'pear', energy: 58, carbohydrates: 13.81, protein: 0.38, fat: 0.12, fibre: 3.1,
-				description: 'Sweet, delicious and rich flavored pears offer crunchiness of apples yet juicy as peach and nectarine. They are widely popular, particularly in the whole of the northern hemisphere, for their unique nutrient qualities. Botanically, it is a "pome fruit” produced in the Rosaceae family of trees, in the Pyrus genus. Pome fruit trees are average sized trees found in the semi-tropical regions around the northern hemisphere and also include apple, loquat, medlar...etc.',
-				link: 'http://www.nutrition-and-you.com/pear-fruit.html',
-				scientificName: 'Pyrus communis'
-			},
-			{fruit: 'strawberry', energy: 32, carbohydrates: 7.7, protein: 0.67, fat: 0.3, fibre: 2.0,
-				description: 'Delicious, rich-red, sweet, yet gently tart strawberries are among the most popular berries. These berries are native to Europe, however, nowadays cultivated as an important commercial crop in many temperate regions all over the world. Botanically, the plant is a low-growing runner (creeper) belonging to the family of Rosaceae, in the genus: Fragaria.',
-				link: 'http://www.nutrition-and-you.com/strawberry-fruit.html',
-				scientificName: 'Fragaria X ananassa'
-			}
-		]
+			[
+				{fruit: 'apple', energy: 50, carbohydrates: 13.81, protein: 0.26, fat: 0.17, fibre: 2.4,
+					description: 'Delicious and crunchy, apple fruit is one of the most popular and favorite fruits among the health conscious, fitness lovers who firmly believe in the concept of “health is wealth.” This wonderful fruit is packed with rich phyto-nutrients that, in the true sense, indispensable for optimal health. The antioxidants in apple have several health promoting and disease prevention properties, and thereby, truly justifying the adage, “an apple a day keeps the doctor away.”',
+					link: 'http://www.nutrition-and-you.com/apple-fruit.html',
+					scientificName: 'Malus domestica'
+				},
+				{fruit: 'banana', energy: 90, carbohydrates: 22.84, protein: 1.09, fat: 0.33, fibre: 2.6,
+					description: 'Go for banana fruit; nature\'s own energy-rich food that comes in a safety envelope! Fresh, creamy, and delicious dessert bananas are one of the cheapest and easily available year around. Botanically, the fruit belongs to the family of Musaceae. Commercially, it is one of the widely cultivated crops in the tropical and subtropical zones.',
+					link: 'http://www.nutrition-and-you.com/banana-fruit.html',
+					scientificName: 'Musa acuminata colla'
+				},
+				{fruit: 'grape', energy: 69, carbohydrates: 18.0, protein: 0.72, fat: 0.16, fibre: 0.9,
+					description: 'Widely popular, grapes are regarded in many cultures as “the queen of fruits," since centuries. These tiny berries are the storehouse of numerous health promoting phyto-nutrients such as poly-phenolic antioxidants, vitamins, and minerals. No wonder why many of us include them as an integral part of our diet, be it in the form of fresh table fruits, juice, or in salads! Botanically, they are small round berries; grow in clusters on a perennial and deciduous woody vine of the genus: Vitis. Grapes are native to Europe and Mediterranean regions but now widely cultivated all around the world.',
+					link: 'http://www.nutrition-and-you.com/grape-fruit.html',
+					scientificName: 'Vitis vinifera, Vitis labrusca, Vitis rotundifolia'
+				},
+				{fruit: 'pear', energy: 58, carbohydrates: 13.81, protein: 0.38, fat: 0.12, fibre: 3.1,
+					description: 'Sweet, delicious and rich flavored pears offer crunchiness of apples yet juicy as peach and nectarine. They are widely popular, particularly in the whole of the northern hemisphere, for their unique nutrient qualities. Botanically, it is a "pome fruit” produced in the Rosaceae family of trees, in the Pyrus genus. Pome fruit trees are average sized trees found in the semi-tropical regions around the northern hemisphere and also include apple, loquat, medlar...etc.',
+					link: 'http://www.nutrition-and-you.com/pear-fruit.html',
+					scientificName: 'Pyrus communis'
+				},
+				{fruit: 'strawberry', energy: 32, carbohydrates: 7.7, protein: 0.67, fat: 0.3, fibre: 2.0,
+					description: 'Delicious, rich-red, sweet, yet gently tart strawberries are among the most popular berries. These berries are native to Europe, however, nowadays cultivated as an important commercial crop in many temperate regions all over the world. Botanically, the plant is a low-growing runner (creeper) belonging to the family of Rosaceae, in the genus: Fragaria.',
+					link: 'http://www.nutrition-and-you.com/strawberry-fruit.html',
+					scientificName: 'Fragaria X ananassa'
+				}
+			]
 
-	</sortable-table>
-</template>
+		</sortable-table>
+	</template>
 </body>
 </html>
