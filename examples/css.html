@@ -11,16 +11,37 @@
 	<link rel="import" href="project-docs.html">
 
 	<style shim-shadowdom>
-		sortable-table { width: 500px; margin-left: 65px; }
-		sortable-table::shadow td.column-alice,
-		sortable-table::shadow td.column-bill,
-		sortable-table::shadow td.column-casey,
-		sortable-table::shadow td.column-average,
-		sortable-table::shadow td.column-total {
+		sortable-table {
+			width: 650px;
+			margin-left: 25px;
+		}
+		::shadow td.column-alice {
+			width: 75px;
 			text-align: right;
-			padding-right: 5px;
+		}
+		::shadow td.column-bill {
+			width: 75px;
+			text-align: right;
+		}
+		::shadow td.column-casey {
+			width: 75px;
+			text-align: right;
+		}
+		::shadow td.column-average {
+			font-weight: bold;
 			width: 100px;
-			vertical-align: middle;
+			text-align: right;
+		}
+		::shadow tr:nth-of-type(even) .column-average {
+			background-color: rgba(0,132,180,0.15);
+		}
+		::shadow tr:nth-of-type(odd) .column-average {
+			background-color: rgba(0,132,180,0.05);
+		}
+		::shadow td.column-total {
+			font-weight: bold;
+			width: 100px;
+			text-align: right;
 		}
 	</style>
 </head>
@@ -32,39 +53,7 @@
 	Individual columns can be styled using CSS.
 
 	<template is="auto-binding">
-		<style shim-shadowdom>
-			::shadow .column-alice {
-				width: 75px;
-				text-align: right;
-			}
-			::shadow .column-bill {
-				width: 75px;
-				text-align: right;
-			}
-			::shadow .column-casey {
-				width: 75px;
-				text-align: right;
-			}
-			::shadow .column-average {
-				font-weight: bold;
-				width: 100px;
-				text-align: right;
-			}
-			::shadow tr:nth-of-type(even) .column-average {
-				background-color: rgba(0,132,180,0.15);
-			}
-			::shadow tr:nth-of-type(odd) .column-average {
-				background-color: rgba(0,132,180,0.05);
-			}
-			::shadow .column-total {
-				font-weight: bold;
-				width: 100px;
-				text-align: right;
-			}
-			::shadow tr:nth-of-type(even) .column-total {
-			
-			}
-		</style>
+
 		<alice-column columns="{{columns}}" checkbox="{{isCheckbox}}"></alice-column>
 
 		<p>

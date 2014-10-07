@@ -7,6 +7,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<script src="../../platform/platform.js"></script>
 	<link rel="import" href="../sortable-table.html">
+	<link rel="import" href="../../prism-js/prism-js.html">
 	<link rel="import" href="fruit-icon.html">
 	<link rel="import" href="project-docs.html">
 	<style shim-shadowdom>
@@ -29,26 +30,26 @@
 
 	The <code>sortable-column</code> elements should work the same way as a <code>columns</code> array.
 
-	<pre>
-	&lt;sortable-table&gt;
-		&lt;sortable-column name="fruit" cellTemplate="fruitsTemplate"&gt;Type of Fruit&lt;/sortable-column&gt;
-		&lt;sortable-column name="alice"&gt;&lt;/sortable-column&gt;
-		&lt;sortable-column name="bill"&gt;&lt;/sortable-column&gt;
-		&lt;sortable-column name="casey"&gt;&lt;/sortable-column&gt;
-		&lt;template id="fruitsTemplate"&gt;
-			&lt;td&gt;
-				&lt;fruit-icon fruit="{{value}}"&gt;&lt;/fruit-icon&gt; {{value}}
-			&lt;/td&gt;
-		&lt;/template&gt;
-		[
-			{ "fruit":"apple",	"alice": 4,	"bill": 10,	"casey": 2 },
-			{ "fruit":"banana",	"alice": 0,	"bill": 4,	"casey": 0 },
-			{ "fruit":"grape",	"alice": 2,	"bill": 3,	"casey": 5 },
-			{ "fruit":"pear",	"alice": 4,	"bill": 2,	"casey": 8 },
-			{ "fruit":"strawberry",	"alice": 0,	"bill": 14,	"casey": 0 }
-		]
-	&lt;/sortable-table&gt;
-	</pre>
+	<prism-js language="markup">&lt;sortable-table&gt;
+	&lt;sortable-column name="fruit" cellTemplate="fruitsTemplate"&gt;Type of Fruit&lt;/sortable-column&gt;
+	&lt;sortable-column name="alice"&gt;&lt;/sortable-column&gt;
+	&lt;sortable-column name="bill"&gt;&lt;/sortable-column&gt;
+	&lt;sortable-column name="casey"&gt;&lt;/sortable-column&gt;
+	&lt;template id="fruitsTemplate"&gt;
+		&lt;td&gt;
+			&lt;fruit-icon fruit="{{value}}"&gt;&lt;/fruit-icon&gt; {{value}}
+		&lt;/td&gt;
+	&lt;/template&gt;
+	[
+		{ "fruit":"apple",	"alice": 4,	"bill": 10,	"casey": 2 },
+		{ "fruit":"banana",	"alice": 0,	"bill": 4,	"casey": 0 },
+		{ "fruit":"grape",	"alice": 2,	"bill": 3,	"casey": 5 },
+		{ "fruit":"pear",	"alice": 4,	"bill": 2,	"casey": 8 },
+		{ "fruit":"strawberry",	"alice": 0,	"bill": 14,	"casey": 0 }
+	]
+&lt;/sortable-table&gt;	</prism-js>
+
+	<p>
 
 	<sortable-table class="default">
 		<sortable-column name="fruit" cellTemplate="fruitsTemplate">Type of Fruit</sortable-column>
@@ -74,19 +75,19 @@
 	If data is only specified using arrays and column information isn't available, column names are ascending integers.
 
 	<p>
-	<strong>Note:</strong> If columns are named, then <code>data</code> must also name columns within the rows. This is intentional to
-	avoid reformatting the <code>data</code> array.
+		<strong>Note:</strong> If columns are named, then <code>data</code> must also name columns within the rows. This is intentional to
+		avoid reformatting the <code>data</code> array.
 	</p>
 
-	<pre>
-	&lt;sortable-table&gt;
-		[[ "apple", 4, 10, 2 ],
-		 [ "banana", 0, 4, 0 ],
-		 [ "grape", 2, 3, 5 ],
-		 [ "pear", 4, 2, 8 ],
-		 [ "strawberry", 0, 14, 0 ]]
-	&lt;/sortable-table&gt;
-	</pre>
+	<prism-js language="markup">&lt;sortable-table&gt;
+   [[ "apple", 4, 10, 2 ],
+	[ "banana", 0, 4, 0 ],
+	[ "grape", 2, 3, 5 ],
+	[ "pear", 4, 2, 8 ],
+	[ "strawberry", 0, 14, 0 ]]
+&lt;/sortable-table&gt;</prism-js>
+
+	<p>
 
 	<sortable-table class="default">
 		[[ "apple", 4, 10, 2 ],

@@ -81,7 +81,11 @@
 	font-weight: 700;
 	padding-right: 4px;
 }
-.article::shadow > table > tfoot > tr > td > table.articlePager td select {
+.article::shadow > table > tfoot > tr > td > table.articlePager td select,
+.article::shadow .defaultPager > div > button,
+.article::shadow .simplePager > button,
+.article::shadow .indexedPager > ul > li > a {
+	font: inherit;
 	-webkit-appearance: none;
 	border: 1px solid #ccc;
 	color: #333;
@@ -90,7 +94,16 @@
 }
 .article::shadow > table > tfoot > tr > td > table.articlePager td select:hover,
 .article::shadow > table > tfoot > tr > td > table.articlePager td select:active,
-.article::shadow > table > tfoot > tr > td > table.articlePager td select:focus {
+.article::shadow > table > tfoot > tr > td > table.articlePager td select:focus,
+.article::shadow .defaultPager > div > button:not([disabled=""]):hover,
+.article::shadow .defaultPager > div > button:not([disabled=""]):active,
+.article::shadow .defaultPager > div > button:not([disabled=""]):focus,
+.article::shadow .simplePager > button:not([disabled=""]):hover,
+.article::shadow .simplePager > button:not([disabled=""]):active,
+.article::shadow .simplePager > button:not([disabled=""]):focus,
+.article::shadow .indexedPager > ul > li > a:not([disabled=""]):hover,
+.article::shadow .indexedPager > ul > li > a:not([disabled=""]):active,
+.article::shadow .indexedPager > ul > li > a:not([disabled=""]):focus {
 	color: #d38b28;
 }
 .article::shadow > table > thead > tr > th.column-0.sorted-column-asc,
@@ -140,4 +153,30 @@
 }
 .article::shadow .indexedPager > ul > li.active {
 	vertical-align: bottom;
+}
+.article::shadow .indexedPager > ul > li:first-of-type a:after,
+.article::shadow .defaultPager > div:nth-of-type(1) > button:nth-of-type(1):after {
+	content: 'First';
+}
+.article::shadow .simplePager > button:nth-of-type(1):after,
+.article::shadow .defaultPager > div:nth-of-type(1) > button:nth-of-type(2):after {
+	content: 'Previous';
+}
+.article::shadow .simplePager > button:nth-of-type(2):after,
+.article::shadow .defaultPager > div:nth-of-type(2) > button:nth-of-type(1):after {
+	content: 'Next';
+}
+.article::shadow .indexedPager > ul > li:last-of-type a:after,
+.article::shadow .defaultPager > div:nth-of-type(2) > button:nth-of-type(2):after {
+	content: 'Last';
+}
+.article::shadow .defaultPager > div > button,
+.article::shadow .simplePager > button,
+.article::shadow .indexedPager > ul > li > a {
+	padding: 0;
+	min-width: 90px;
+	border: none;
+	background-color: inherit;
+	font-weight: 700;
+	outline: none;
 }

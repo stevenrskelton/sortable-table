@@ -376,7 +376,7 @@ sortable-table.extjs4 {
 }
 .extjs4::shadow .indexedPager li {
 	display: inline-block;
-	padding: 0 8px;
+	padding: 0 4px;
 	line-height: 22px;
 }
 .extjs4::shadow .indexedPager li a {
