@@ -11,6 +11,7 @@
 	<link rel="import" href="fruit-icon.html">
 	<link rel="import" href="project-docs.html">
 	<style shim-shadowdom>
+		.indent { margin-left: 65px; }
 		sortable-table { width: 500px; margin-left: 65px; }
 		sortable-table::shadow td.column-alice,
 		sortable-table::shadow td.column-bill,
@@ -47,7 +48,7 @@
 		{ "fruit":"pear",	"alice": 4,	"bill": 2,	"casey": 8 },
 		{ "fruit":"strawberry",	"alice": 0,	"bill": 14,	"casey": 0 }
 	]
-&lt;/sortable-table&gt;	</prism-js>
+&lt;/sortable-table&gt;</prism-js>
 
 	<p>
 
@@ -96,5 +97,43 @@
 		 [ "pear", 4, 2, 8 ],
 		 [ "strawberry", 0, 14, 0 ]]
 	</sortable-table>
+
+	<h2>Binding in DOM Elements</h2>
+
+	All attributes (excluding <code>name</code>) in each <code>sortable-column</code> can be bound to.
+
+	<prism-js language="markup">&lt;sortable-table&gt;
+	&lt;sortable-column name="fruit" title="{{column1}}"&gt;&lt;/sortable-column&gt;
+	&lt;sortable-column name="alice"&gt;{{column2}}&lt;/sortable-column&gt;
+	[
+		{ "fruit":"apple",	"alice": 4,	"bill": 10,	"casey": 2 },
+		{ "fruit":"banana",	"alice": 0,	"bill": 4,	"casey": 0 },
+		{ "fruit":"grape",	"alice": 2,	"bill": 3,	"casey": 5 },
+		{ "fruit":"pear",	"alice": 4,	"bill": 2,	"casey": 8 },
+		{ "fruit":"strawberry",	"alice": 0,	"bill": 14,	"casey": 0 }
+	]
+&lt;/sortable-table&gt;</prism-js>
+
+	<template is="auto-binding">
+		<table class="indent">
+			<tr>
+				<td>Column 1 title : </td><td><input type="text" value="{{column1}}"></td>
+			</tr>
+			<tr>
+				<td>Column 2 #text : </td><td><input type="text" value="{{column2}}"></td>
+			</tr>
+		</table>
+		<sortable-table class="default">
+			<sortable-column name="fruit" title="{{column1}}"></sortable-column>
+			<sortable-column name="alice">{{column2}}</sortable-column>
+			[
+				{ "fruit":"apple",		"alice": 4,	"bill": 10,	"casey": 2 },
+				{ "fruit":"banana",		"alice": 0,	"bill": 4,	"casey": 0 },
+				{ "fruit":"grape",		"alice": 2,	"bill": 3,	"casey": 5 },
+				{ "fruit":"pear",		"alice": 4,	"bill": 2,	"casey": 8 },
+				{ "fruit":"strawberry",	"alice": 0,	"bill": 14,	"casey": 0 }
+			]
+		</sortable-table>
+	</template>
 </body>
 </html>

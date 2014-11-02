@@ -436,37 +436,30 @@
 				var columnNodes = this.querySelectorAll('sortable-column');
 				var c = [];
 				var self = this;
-				if(columnNodes.length > 0){
-					[].forEach.call(columnNodes, function(n, index) {
-						var name = n.getAttribute('name');
-						if(!name || name === '') name = index;
-						if(String(name).indexOf(' ') > -1) alert('Column name `'+name+'` contains an illegal character (` `)');
-						var title = n.getAttribute('title');
-						if(!title || title === '') title = n.textContent.trim();
-						if(title === '') title = name;
-						var formula = n.getAttribute('formula');
-						if(formula){
-							var match = formula.match(/function[^\(]*\(([^\)]*)\)[^\{]*{([^\}]*)\}/);
-							if (match) {
-								var args = match[1].split(',').map(function(arg) { return arg.replace(/\s+/, ''); });
-								formula = new Function(args, match[2]);
-							}else if(self[formula]){
-								//not an inlined function, assume it's a member of this
-								formula = self[formula]
-							}else if(PolymerExpressions.prototype[formula]){
-								//not an inlined function, or member of this, check PolymerExpressions.prototype
-								formula = PolymerExpressions.prototype[formula];
-							}else if(formula.substring(0,29) === 'PolymerExpressions.prototype.'){
-								var f = formula.substring(29);
-								formula = PolymerExpressions.prototype[f];
-								if(!formula) alert('Could not load formula `'+ formula +'` from PolymerExpressions.prototype for column `' + name + '`');
-							}else alert('Could not load formula `'+ formula +'` for column `' + name + '`');
+				if(this.columnObserver) this.columnObserver.disconnect();
+				this.columnObserver = new MutationObserver(function(mutations) {
+					mutations.forEach(function(m) {
+						var sortableColumn = null;
+						if(m.type === 'attributes' && m.target.nodeName === 'SORTABLE-COLUMN'){
+							sortableColumn = self.readSortableColumn.call(self, m.target, null);
+						}else if(m.type === "characterData"){
+							sortableColumn = self.readSortableColumn.call(self, m.target.parentNode, null);
 						}
-						c.push({
-							name: name, title: title, formula: formula,
-							cellTemplate: n.getAttribute('cellTemplate'),
-							headerTemplate: n.getAttribute('headerTemplate'),
-							footerTemplate: n.getAttribute('footerTemplate')
+						if(sortableColumn){
+							var i = self.columns.findIndex(function(e){
+								return e.name === sortableColumn.name;
+							});
+							self.columns.splice(i, 1, sortableColumn);
+						}
+					});
+				});
+				if(columnNodes.length > 0){
+					[].forEach.call(columnNodes, function(n, index){
+						c.push(self.readSortableColumn.call(self, n, index));
+						self.columnObserver.observe(n, {
+							attributes: true,
+							subtree: true,
+							characterData: true
 						});
 					});
 					this.columns = c;
@@ -484,6 +477,38 @@
 					this.columns = c;
 				}
 			}
+		},
+		readSortableColumn: function(n, index){
+			var name = n.getAttribute('name');
+			if(!name || name === '') name = index;
+			if(String(name).indexOf(' ') > -1) alert('Column name `'+name+'` contains an illegal character (` `)');
+			var title = n.getAttribute('title');
+			if(!title || title === '') title = n.textContent.trim();
+			if(title === '') title = name;
+			var formula = n.getAttribute('formula');
+			if(formula){
+				var match = formula.match(/function[^\(]*\(([^\)]*)\)[^\{]*{([^\}]*)\}/);
+				if (match) {
+					var args = match[1].split(',').map(function(arg) { return arg.replace(/\s+/, ''); });
+					formula = new Function(args, match[2]);
+				}else if(this[formula]){
+					//not an inlined function, assume it's a member of this
+					formula = this[formula]
+				}else if(PolymerExpressions.prototype[formula]){
+					//not an inlined function, or member of this, check PolymerExpressions.prototype
+					formula = PolymerExpressions.prototype[formula];
+				}else if(formula.substring(0,29) === 'PolymerExpressions.prototype.'){
+					var f = formula.substring(29);
+					formula = PolymerExpressions.prototype[f];
+					if(!formula) alert('Could not load formula `'+ formula +'` from PolymerExpressions.prototype for column `' + name + '`');
+				}else alert('Could not load formula `'+ formula +'` for column `' + name + '`');
+			}
+			return {
+				name: name, title: title, formula: formula,
+				cellTemplate: n.getAttribute('cellTemplate'),
+				headerTemplate: n.getAttribute('headerTemplate'),
+				footerTemplate: n.getAttribute('footerTemplate')
+			};
 		},
 		/**
 		 *	Change Observers
@@ -1035,5 +1060,28 @@
 			this.forceFooterRefresh++;
 		}
 	});
+	//polyfills
+	if (!Array.prototype.findIndex) {
+		Array.prototype.findIndex = function(predicate) {
+			if (this == null) {
+				throw new TypeError('Array.prototype.find called on null or undefined');
+			}
+			if (typeof predicate !== 'function') {
+				throw new TypeError('predicate must be a function');
+			}
+			var list = Object(this);
+			var length = list.length >>> 0;
+			var thisArg = arguments[1];
+			var value;
+
+			for (var i = 0; i < length; i++) {
+			value = list[i];
+			if (predicate.call(thisArg, value, i, list)) {
+				return i;
+			}
+			}
+			return -1;
+		};
+	}
 </script>
 </polymer-element>
