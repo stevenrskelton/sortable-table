@@ -260,7 +260,7 @@
 							on-dragleave="{{handleTHDragLeave}}"
 							on-drop="{{handleTHDrop}}"
 							on-dragend="{{handleTHDragEnd}}"
-						>{{!(column.title) ? column.name : column.title}}</th>
+						>{{column.title == null ? column.name : column.title}}</th>
 					</template>
 				</template>
 			</tr>
@@ -483,8 +483,11 @@
 			if(!name || name === '') name = index;
 			if(String(name).indexOf(' ') > -1) alert('Column name `'+name+'` contains an illegal character (` `)');
 			var title = n.getAttribute('title');
-			if(!title || title === '') title = n.textContent.trim();
-			if(title === '') title = name;
+			if(title === null){
+				title = n.textContent.trim();
+				if(title === '') title = name;
+			}
+			var sortable = n.getAttribute('sortable');
 			var formula = n.getAttribute('formula');
 			if(formula){
 				var match = formula.match(/function[^\(]*\(([^\)]*)\)[^\{]*{([^\}]*)\}/);
@@ -504,7 +507,7 @@
 				}else alert('Could not load formula `'+ formula +'` for column `' + name + '`');
 			}
 			return {
-				name: name, title: title, formula: formula,
+				name: name, title: title, formula: formula, sortable: sortable,
 				cellTemplate: n.getAttribute('cellTemplate'),
 				headerTemplate: n.getAttribute('headerTemplate'),
 				footerTemplate: n.getAttribute('footerTemplate')
@@ -895,7 +898,9 @@
 		 *	Template Functions
 		 */
 		changeSort: function(e,p){
-			if(!this.userSort && e.target.templateInstance.model.column){
+			if(!this.userSort && e.target.templateInstance.model.column &&
+			e.target.templateInstance.model.column.sortable !== false &&
+			e.target.templateInstance.model.column.sortable !== 'false'){
 				var clickedSortColumn = e.target.templateInstance.model.column.name;
 				if(clickedSortColumn === this.sortColumn){
 					//column already sorted, reverse sort
