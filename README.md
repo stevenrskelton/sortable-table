@@ -78,7 +78,7 @@ There are many capable Javascript grids, this one aims to have all the same feat
 2. Import Web Components' polyfill:
 
 	```html
-	<script src="bower_components/platform/platform.js"></script>
+	<script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
 	```
 
 3. Import Custom Element:

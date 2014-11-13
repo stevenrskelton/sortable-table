@@ -1,6 +1,5 @@
 {
   "name": "sortable-table",
-  "version": "0.10.0",
   "homepage": "https://github.com/stevenrskelton/sortable-table",
   "description": "Polymer Web Component that generates a sortable <table> from inlined or AJAX JSON, JSON5, and arrays.",
   "main": "sortable-table.html",
@@ -30,15 +29,15 @@
     "ajax"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#>=0.4.2",
-    "core-ajax": "Polymer/core-ajax#>=0.4.2",
-    "json5": "json5#>=0.3.0",
+    "polymer": "Polymer/polymer#>=0.5.1",
+    "core-ajax": "Polymer/core-ajax#>=0.5.1",
+    "json5": "json5#>=0.4.0",
     "time-elements": "time-elements#>=0.4.0"
   },
   "devDependencies": {
-    "bootstrap": "bootstrap#>=3.2.0",
-    "core-elements": "Polymer/core-elements#>=0.4.2",
-    "paper-item": "Polymer/paper-item#>=0.4.2",
+    "bootstrap": "bootstrap#>=3.3.1",
+    "core-elements": "Polymer/core-elements#>=0.5.1",
+    "paper-item": "Polymer/paper-item#>=0.5.1",
     "prism-js": "prism-js#>=0.1.0",
     "polymer-jsonp": "polymer/polymer-jsonp#>=0.3.0"
   }
