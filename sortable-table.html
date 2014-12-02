@@ -926,7 +926,7 @@
 
 			var sortedArray;
 
-			if(key && !this.dataSource && !this.userSort){
+			if(key!==null && !this.dataSource && !this.userSort){
 				sortedArray = array.sort(function(a, b) {
 					var x, y;
 					//determine if computed field
