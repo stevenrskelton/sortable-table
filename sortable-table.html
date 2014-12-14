@@ -926,53 +926,58 @@
 
 			var sortedArray;
 
+			var sortFunction = function(a, b) {
+				var x, y;
+				//determine if computed field
+				var formula = null;
+				for(var i=0;i<columns.length;i++){
+					if(columns[i].name === key){
+						formula = columns[i].formula;
+						break;
+					}
+				}
+				if(formula){
+					if(typeof a[key] === 'undefined'){
+						x = formula(a, args);
+						y = formula(b, args);
+					}else{
+						x = formula(a[key], a, args);
+						y = formula(b[key], b, args);
+					}
+				}else{
+					x = a[key];
+					y = b[key];
+				}
+				if(typeof x === 'undefined' || typeof y === 'undefined'){
+					//sort undefined after
+					if(typeof x === 'undefined'){
+						return !desc;
+					}else{
+						return desc;
+					}
+				}else{
+					if (typeof x === "string" && typeof y === "string"){
+						if(isNaN(x) || isNaN(y)){
+							x = x.toLowerCase();
+							y = y.toLowerCase();
+						}else{
+							x = +x;
+							y = +y;
+						}
+					}
+					if(desc){
+						return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+					}else{
+						return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+					}
+				}
+			};
+
 			if(key!==null && !this.dataSource && !this.userSort){
-				sortedArray = array.sort(function(a, b) {
-					var x, y;
-					//determine if computed field
-					var formula = null;
-					for(var i=0;i<columns.length;i++){
-						if(columns[i].name === key){
-							formula = columns[i].formula;
-							break;
-						}
-					}
-					if(formula){
-						if(typeof a[key] === 'undefined'){
-							x = formula(a, args);
-							y = formula(b, args);
-						}else{
-							x = formula(a[key], a, args);
-							y = formula(b[key], b, args);
-						}
-					}else{
-						x = a[key];
-						y = b[key];
-					}
-					if(typeof x === 'undefined' || typeof y === 'undefined'){
-						//sort undefined after
-						if(typeof x === 'undefined'){
-							return !desc;
-						}else{
-							return desc;
-						}
-					}else{
-						if (typeof x === "string" && typeof y === "string"){
-							if(isNaN(x) || isNaN(y)){
-								x = x.toLowerCase();
-								y = y.toLowerCase();
-							}else{
-								x = +x;
-								y = +y;
-							}
-						}
-						if(desc){
-							return ((x < y) ? 1 : ((x > y) ? -1 : 0));
-						}else{
-							return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-						}
-					}
-				});
+				if(array.every(function(element, index) {
+					return (index + 1 >= array.length) || sortFunction(element, array[index+1])<=0;
+				})) sortedArray = array;
+				else sortedArray = array.sort(sortFunction);
 			}else sortedArray = array;
 
 			var records = [];
