@@ -14,15 +14,35 @@
 <polymer-element
 	name="sortable-table"
 	attributes="
-		args cellTemplate checkbox columns data dataSize disableColumnMove
-		footerTemplate grid headerTemplate loading multiRowEdit multiSelect
-		page pageSize rowEditorTemplate rowSelection rowTemplate selected
-		sortColumn sortDescending userSort
+		args
+		cellTemplate
+		checkbox
+		columns
+		data
+		dataSize
+		disableColumnMove
+		filters
+		footerTemplate
+		grid
+		headerTemplate
+		loading
+		multiRowEdit
+		multiSelect
+		page
+		pageSize
+		rowEditorTemplate
+		rowSelection
+		rowTemplate
+		selected
+		sortColumn
+		sortDescending
+		userSort
 	"
 	style="display:block"
 >
 <template>
 	<content select='[role="datasource"]'></content>
+	<content select="core-scroll-threshold"></content>
 	<style>
 	.sortable-table {
 		width: 100%;
@@ -262,11 +282,43 @@
 							on-dragleave="{{handleTHDragLeave}}"
 							on-drop="{{handleTHDrop}}"
 							on-dragend="{{handleTHDragEnd}}"
-						>{{column.title == null ? column.name : column.title}}</th>
+						>
+							<img
+								src="{{resolvePath('img/icons/find.png')}}"
+								alt="Filter"
+								style="float:right;display:{{ filters ? 'block' : 'none' }};padding-top:2px"
+								on-click="{{selectFilter}}"
+							>{{column.title == null ? column.name : column.title}}
+						</th>
 					</template>
 				</template>
 			</tr>
 		</thead>
+		<template bind="{{columns | generateColumnFilters as columnFilters}}">
+			<thead>
+					<tr>
+						<template if="{{checkbox}}">
+							<th>eeee</th>
+						</template>
+						<template repeat="{{filterColumn in columnFilters}}">
+							<th style="vertical-align: top">
+								<template repeat="{{filter,f in filterColumn.filters}}">
+									<img
+										src="{{resolvePath('img/icons/delete.png')}}"
+										alt="Remove Filter"
+										on-click="{{removeFilter}}"
+										height="16"
+										style="float:right;padding-top:1px"
+									>
+									<div style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+										{{filter.text}}
+									</div>
+								</template>
+							</th>
+						</template>
+					</tr>
+			</thead>
+		</template>
 		<tbody class="{{grid ? ' grid' : ''}}">
 			<template repeat="{{record in data | sortByKey(sortColumn, sortDescending, columns, selected, pageSize, page, args, editRow, (args || []).length + (selected || []).length + data.length + forceRefresh)}}">
 				<tr
@@ -599,6 +651,25 @@
 			this.lastPage = Math.max(1,Math.ceil(this.dataSize / this.pageSize));
 		},
 		pageChanged: function(){ if(this.dataSource) this.dataSource.start = (this.page - 1) * this.pageSize; },
+		/**
+		 *	Row Filter
+		 */
+		filters: true,
+		generateColumnFilters: function(columns){
+			return this.columns.map(function(element){
+				return { column: element, filters: [{text: 'hi' },{text: 'element.filters'}] };
+			});
+		},
+		selectFilter: function(column){
+			this.filters.push({ text: 'filter' });
+		console.log('filter');
+			console.log(column);
+		},
+		removeFilter: function(e,i,o){
+			var model = o.templateInstance.model;
+			var index = model.filterColumn.filters.indexOf(model.filter);
+			model.filterColumn.filters.splice(index, 1);
+		},
 		/**
 		 *	Row Edit
 		 */
