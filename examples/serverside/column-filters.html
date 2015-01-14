@@ -1,0 +1,38 @@
+<link rel="import" href="../../../polymer/polymer.html">
+<polymer-element name="column-filters" attributes="filters columns">
+	<template>
+		<template repeat="{{filter in filters}}">
+			<select value="{{filter.columnName}}" on-change="{{refresh}}">
+				<option value="">-</option>
+				<template repeat="{{column in columns}}">
+					<option value="{{column.name}}">{{column.text}}</option>
+				</template>
+			</select>
+			<select value="{{filter.op}}" on-change="{{refresh}}">
+				<option value="=">=</option>
+				<option value="≥">≥</option>
+				<option value=">">&lt;</option>
+				<option value="≤">≤</option>
+				<option value="<">&gt;</option>
+			</select>
+			<input type="text" value="{{filter.value}}" on-change="{{refresh}}">
+			<button on-click="{{removeFilter}}">X</button><br>
+		</template>
+	</template>
+	<script>
+	Polymer({
+		filters: [],
+		columns: [],
+		newFilter: function(){
+			this.filters.push({ columnName: '', op: '=', value: '' });
+		},
+		removeFilter: function(e,i,o){
+			var index = this.filters.indexOf(o.templateInstance.model.filter);
+			this.filters.splice(index, 1);
+		},
+		refresh: function(){
+			this.filters = this.filters.slice();;
+		}
+	});
+	</script>
+</polymer-element>  

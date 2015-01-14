@@ -9,7 +9,7 @@
 
 <polymer-element hidden
 	name="datatables-ajax"
-	attributes="url withCredentials start length search sortColumn sortDescending columns data dataSize loading"
+	attributes="url withCredentials start length search sortColumn sortDescending filters columns data dataSize loading"
 >
 <script>
 	"use strict";
@@ -21,6 +21,7 @@
 		search: "",
 		sortColumn: null,
 		sortDescending: false,
+		filters: [],
 		columns: null,
 		ajax: null,
 		draw: 0,
@@ -80,12 +81,20 @@
 					"columns[0][search][value]": "",
 					"columns[0][search][regex]": false*/
 				};
+				var filters = this.filters;
+				var columnFilters = function(column){
+					var r = '';
+					filters.forEach(function(element){
+						if(element.columnName === column.name) r = element.value;
+					});
+					return r;
+				};
 				this.columns.forEach(function(element,i){
 					params["columns[" + i + "][data]"] = element.name;
 					params["columns[" + i + "][name]"] = element.name;
 					params["columns[" + i + "][searchable]"] = true;
 					params["columns[" + i + "][orderable]"] = true;
-					params["columns[" + i + "][search][value]"] = "";
+					params["columns[" + i + "][search][value]"] = columnFilters(element);
 					params["columns[" + i + "][search][regex]"] = false;
 				});
 				if(this.sortColumn){
@@ -113,6 +122,7 @@
 				this.ajax.go();
 			}
 		},
+		filtersChanged: function(){ this.job('go',this.go); },
 		columnsChanged: function(){ this.job('go',this.go); },
 		startChanged: function(){ this.job('go',this.go); },
 		lengthChanged: function(){ this.job('go',this.go); },

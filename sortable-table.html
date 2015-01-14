@@ -5,6 +5,7 @@
 -->
 
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../core-dropdown/core-dropdown.html">
 <script src="columnDragMixin.js"></script>
 <script src="rowDragMixin.js"></script>
 <script src="../json5/lib/json5.js"></script>
@@ -57,6 +58,10 @@
 		display: block;
 		margin-left: auto;
 		margin-right: auto;
+	}
+	.open-below {
+		top: 22px;
+		border: 1px solid #ddd;
 	}
 	th.checkbox-column input[type=checkbox] {
 		vertical-align: middle;
@@ -283,44 +288,58 @@
 							on-drop="{{handleTHDrop}}"
 							on-dragend="{{handleTHDragEnd}}"
 						>
-							<img
-								src="{{resolvePath('img/icons/find.png')}}"
-								alt="Filter"
-								style="float:right;display:{{ filters ? 'block' : 'none' }};padding-top:2px"
-								on-click="{{selectFilter}}"
-							>{{column.title == null ? column.name : column.title}}
+							<template if="{{filters}}">
+								<div style="float:right;padding-top:2px"  horizontal layout center relative on-click="{{createFilter}}">
+									<img alt="Filter" src="{{resolvePath('img/icons/find.png')}}">
+									<core-dropdown halign="right" class="open-below">
+										<button on-click="{{addFilter}}">&gt;</button>
+										<button on-click="{{addFilter}}">&lt;</button>
+										<button on-click="{{addFilter}}">=</button>
+										<input type="text">
+									</core-dropdown>
+								</div>
+							</template>
+							{{column.title == null ? column.name : column.title}}
 						</th>
 					</template>
 				</template>
 			</tr>
 		</thead>
-		<template bind="{{columns | generateColumnFilters as columnFilters}}">
+		<template if="{{forceFilterRefresh}}" bind="{{columns | generateColumnFilters(forceFilterRefresh) as columnFilters}}">
 			<thead>
-					<tr>
-						<template if="{{checkbox}}">
-							<th>eeee</th>
-						</template>
-						<template repeat="{{filterColumn in columnFilters}}">
-							<th style="vertical-align: top">
-								<template repeat="{{filter,f in filterColumn.filters}}">
-									<img
-										src="{{resolvePath('img/icons/delete.png')}}"
-										alt="Remove Filter"
-										on-click="{{removeFilter}}"
-										height="16"
-										style="float:right;padding-top:1px"
-									>
-									<div style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
-										{{filter.text}}
-									</div>
-								</template>
-							</th>
-						</template>
-					</tr>
+				<tr>
+					<template if="{{checkbox}}">
+						<th>
+							<img
+								src="{{resolvePath('img/icons/cancel.png')}}"
+								alt="Clear Filters"
+								on-click="{{clearFilters}}"
+								height="16"
+								style="padding-top:1px"
+							>
+						</th>
+					</template>
+					<template repeat="{{filterColumn in columnFilters}}">
+						<th style="vertical-align: top">
+							<template repeat="{{filter,f in filterColumn.filters}}">
+								<img
+									src="{{resolvePath('img/icons/delete.png')}}"
+									alt="Remove Filter"
+									on-click="{{removeFilter}}"
+									height="16"
+									style="float:right;padding-top:1px"
+								>
+								<div style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+									{{filter.text}}
+								</div>
+							</template>
+						</th>
+					</template>
+				</tr>
 			</thead>
 		</template>
 		<tbody class="{{grid ? ' grid' : ''}}">
-			<template repeat="{{record in data | sortByKey(sortColumn, sortDescending, columns, selected, pageSize, page, args, editRow, (args || []).length + (selected || []).length + data.length + forceRefresh)}}">
+			<template repeat="{{record in data | sortByKey(sortColumn, sortDescending, columns, selected, pageSize, page, args, editRow, (args || []).length + (selected || []).length + data.length + forceRefresh + forceFilterRefresh)}}">
 				<tr
 					class="{{record.selected ? 'selected-row' : '' }}{{record.editMode ? ' editor-row' : ''}}{{record.dirty ? ' edited-row' : ''}}"
 					on-click="{{rowSelect}}"
@@ -655,20 +674,47 @@
 		 *	Row Filter
 		 */
 		filters: true,
+		forceFilterRefresh: 0,
 		generateColumnFilters: function(columns){
-			return this.columns.map(function(element){
-				return { column: element, filters: [{text: 'hi' },{text: 'element.filters'}] };
-			});
+			return this.columns;
 		},
 		selectFilter: function(column){
 			this.filters.push({ text: 'filter' });
-		console.log('filter');
+			console.log('filter');
 			console.log(column);
+		},
+		createFilter: function(event,i,o){
+			event.stopPropagation();
+			var dropdown = o.querySelector('core-dropdown');
+			if(dropdown.style.display == 'none') dropdown.toggle();
+		},
+		addFilter: function(event,i,o){
+			var op = o.innerText;
+			var model = o.templateInstance.model;
+			var dropdown = o.parentElement;
+			var input = dropdown.querySelector('input[type="text"]');
+			if(!model.column.filters) model.column.filters = [];
+			var text = op + ' ' + input.value;
+			model.column.filters.push({text: text, op: op, value: input.value});
+			dropdown.toggle();
+			input.value = '';
+			this.forceFilterRefresh++;
 		},
 		removeFilter: function(e,i,o){
 			var model = o.templateInstance.model;
 			var index = model.filterColumn.filters.indexOf(model.filter);
 			model.filterColumn.filters.splice(index, 1);
+			if(model.columns.every(function(column){
+				return !column.filters || column.filters.length === 0;
+			})) this.forceFilterRefresh = 0;
+		},
+		clearFilters: function(e,i,o){
+			if(confirm('Clear all filters?')){
+				this.columns.forEach(function(column){
+					column.filters = null;
+				});
+				this.forceFilterRefresh = 0;
+			}
 		},
 		/**
 		 *	Row Edit
@@ -844,6 +890,32 @@
 					}
 				}
 			};
+			var checkColumnFilters = function(column,row){
+				if(column.filters && column.filters.length){
+					var value = row[column.name];
+					return column.filters.some(function(filter){
+						switch (filter.op){
+							case ">":
+								return value > filter.value;
+							case "≥":
+								return value >= filter.value;
+							case "<":
+								return value < filter.value;
+							case "≤":
+								return value <= filter.value;
+							case "=":
+								return value == filter.value;
+							default:
+								return false;
+						}
+					});
+				}else return true;
+			};
+
+			var filteredArray = array.filter(function(row){
+				return columns.every(function(column,columnIndex) { return checkColumnFilters(column,row); })
+			});
+			array = filteredArray;
 
 			if(key!==null && !this.dataSource && !this.userSort){
 				if(array.every(function(element, index) {

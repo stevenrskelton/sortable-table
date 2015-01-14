@@ -10,6 +10,7 @@
 	<link rel="import" href="../json-stringify.html">
 	<link rel="import" href="../project-docs.html">
 	<link rel="import" href="../../sortable-table.html">
+	<link rel="import" href="column-filters.html">
 	<style shim-shadowdom>
 		.paramType { color: #526E9C }
 		sortable-table.datatables::shadow td.column-first_name,
@@ -142,7 +143,21 @@
 					</select>
 				</td>
 				<td><input type="checkbox" checked="{{sortDescending}}">Descending</td>
-				<td>Column by which to sort the records.</td>
+				<td>Column by which to sort the records. <strong>This API only supports 1 filter per column</strong></td>
+			</tr>
+			<tr>
+				<td style="white-space: nowrap;vertical-align:top" rowspan="2">Filter Columns</td>
+				<td colspan="2"><button onclick="document.getElementById('cf').newFilter()">New Filter</button></td>
+				<td>Columns to filter by.</td>
+			</tr>
+			<tr>
+				<td colspan="3"><column-filters id="cf" filters="{{columnFilters}}"
+				columns='[{"name":"first_name","text":"First Name"},
+				{"name":"last_name","text":"Last Name"},
+				{"name":"position","text":"Position"},
+				{"name":"office","text":"Office"},
+				{"name":"start_date","text":"Start Date"},
+				{"name":"salary","text":"Salary"}]'></column-filters></td>
 			</tr>
 		</table>
 
@@ -155,6 +170,7 @@
 			length="{{length}}"
 			sortColumn="{{sortColumn}}"
 			sortDescending="{{sortDescending}}"
+			filters="{{columnFilters}}"
 			columns='[
 				{"name":"first_name"},
 				{"name":"last_name"},
@@ -179,6 +195,5 @@
 			style="overflow-y:auto;display:block;border:1px solid #333;"
 		></json-stringify>
 	</template>
-
 </body>
 </html>
