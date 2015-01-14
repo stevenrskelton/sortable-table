@@ -11,6 +11,7 @@
 	<link rel="import" href="../project-docs.html">
 	<link rel="import" href="../../sortable-table.html">
 	<link rel="import" href="../my-filters.html">
+	<link rel="import" href="column-filters.html">
 	<style shim-shadowdom>
 		.paramType { color: #526E9C }
 		sortable-table::shadow td.column-last,
@@ -135,6 +136,20 @@
 				<td><input type="checkbox" checked="{{sortDescending}}">Descending</td>
 				<td>Column by which to sort the records.</td>
 			</tr>
+			<tr>
+				<td style="white-space: nowrap;vertical-align:top" rowspan="2">Filter Columns</td>
+				<td colspan="2"><button onclick="document.getElementById('cf').newFilter()">New Filter</button></td>
+				<td>Columns to filter by.</td>
+			</tr>
+			<tr>
+				<td colspan="3"><column-filters id="cf" filters="{{filters}}" filterOps="{{filterOps}}"
+				columns='[{"name":"id","text":"ID"},
+				{"name":"name","text":"Name"},
+				{"name":"last","text":"Last Price"},
+				{"name":"volume","text":"Volume"},
+				{"name":"daily","text":"Daily Change %"},
+				{"name":"ytd","text":"YTD Change %"}]'></column-filters></td>
+			</tr>
 		</table>
 
 		<extjs-ajax
@@ -146,6 +161,8 @@
 			length="{{length}}"
 			sortColumn="{{sortColumn}}"
 			sortDescending="{{sortDescending}}"
+			filters="{{filters}}"
+			filterOps="{{filterOps}}"
 			columns='[
 				{"name":"id"},
 				{"name":"name"},
@@ -167,6 +184,14 @@
 
 		<json-stringify
 			data="{{data}}"
+			style="overflow-y:auto;display:block;border:1px solid #333;"
+		></json-stringify>
+
+		<br>
+
+		<em>Column Filters</em>
+		<json-stringify
+			data="{{filters}}"
 			style="overflow-y:auto;display:block;border:1px solid #333;"
 		></json-stringify>
 	</template>

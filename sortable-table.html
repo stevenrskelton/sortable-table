@@ -8,6 +8,8 @@
 <link rel="import" href="../core-dropdown/core-dropdown.html">
 <script src="columnDragMixin.js"></script>
 <script src="rowDragMixin.js"></script>
+<script src="columnFiltersMixin.js"></script>
+<script src="rowEditorMixin.js"></script>
 <script src="../json5/lib/json5.js"></script>
 <script src="../time-elements/time-elements.js"></script>
 <link rel="import" href="html-echo.html">
@@ -21,8 +23,8 @@
 		columns
 		data
 		dataSize
+		disableColumnFilters
 		disableColumnMove
-		filters
 		footerTemplate
 		grid
 		headerTemplate
@@ -288,13 +290,13 @@
 							on-drop="{{handleTHDrop}}"
 							on-dragend="{{handleTHDragEnd}}"
 						>
-							<template if="{{filters}}">
+							<template if="{{!disableColumnFilters}}">
 								<div style="float:right;padding-top:2px"  horizontal layout center relative on-click="{{createFilter}}">
 									<img alt="Filter" src="{{resolvePath('img/icons/find.png')}}">
 									<core-dropdown halign="right" class="open-below">
-										<button on-click="{{addFilter}}">&gt;</button>
-										<button on-click="{{addFilter}}">&lt;</button>
-										<button on-click="{{addFilter}}">=</button>
+										<template repeat="{{filterOp in getFilterOps(column)}}">
+											<button on-click="{{addFilter}}" title="{{filterOp.title}}" data-op="{{filterOp.op}}">{{filterOp.html}}</button>
+										</template>
 										<input type="text">
 									</core-dropdown>
 								</div>
@@ -305,7 +307,7 @@
 				</template>
 			</tr>
 		</thead>
-		<template if="{{forceFilterRefresh}}" bind="{{columns | generateColumnFilters(forceFilterRefresh) as columnFilters}}">
+		<template if="{{forceFilterRefresh}}" bind="{{columns | observing(forceFilterRefresh) as columns}}">
 			<thead>
 				<tr>
 					<template if="{{checkbox}}">
@@ -319,9 +321,9 @@
 							>
 						</th>
 					</template>
-					<template repeat="{{filterColumn in columnFilters}}">
+					<template repeat="{{column in columns}}">
 						<th style="vertical-align: top">
-							<template repeat="{{filter,f in filterColumn.filters}}">
+							<template repeat="{{filter in column.filters}}">
 								<img
 									src="{{resolvePath('img/icons/delete.png')}}"
 									alt="Remove Filter"
@@ -330,7 +332,7 @@
 									style="float:right;padding-top:1px"
 								>
 								<div style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
-									{{filter.text}}
+									{{filter.op}} {{filter.value}}
 								</div>
 							</template>
 						</th>
@@ -433,6 +435,7 @@
 					this.dataSource.length = this.pageSize;
 					this.dataSource.sortColumn = this.sortColumn;
 					this.dataSource.sortDescending = this.sortDescending;
+					if(!!this.dataSource.filterOps) this.filterOps = this.dataSource.filterOps;
 					var self = this;
 					(new PathObserver(this.dataSource, 'loading')).open(function(newValue) {
 						self.loading = newValue;
@@ -474,6 +477,7 @@
 		/**
 		 *	Logic
 		 */
+		observing: function(o){ return o; },
 		isArray: function(a){
 			return Object.prototype.toString.call(a) === '[object Array]';
 		},
@@ -670,118 +674,7 @@
 			this.lastPage = Math.max(1,Math.ceil(this.dataSize / this.pageSize));
 		},
 		pageChanged: function(){ if(this.dataSource) this.dataSource.start = (this.page - 1) * this.pageSize; },
-		/**
-		 *	Row Filter
-		 */
-		filters: true,
-		forceFilterRefresh: 0,
-		generateColumnFilters: function(columns){
-			return this.columns;
-		},
-		selectFilter: function(column){
-			this.filters.push({ text: 'filter' });
-			console.log('filter');
-			console.log(column);
-		},
-		createFilter: function(event,i,o){
-			event.stopPropagation();
-			var dropdown = o.querySelector('core-dropdown');
-			if(dropdown.style.display == 'none') dropdown.toggle();
-		},
-		addFilter: function(event,i,o){
-			var op = o.innerText;
-			var model = o.templateInstance.model;
-			var dropdown = o.parentElement;
-			var input = dropdown.querySelector('input[type="text"]');
-			if(!model.column.filters) model.column.filters = [];
-			var text = op + ' ' + input.value;
-			model.column.filters.push({text: text, op: op, value: input.value});
-			dropdown.toggle();
-			input.value = '';
-			this.forceFilterRefresh++;
-		},
-		removeFilter: function(e,i,o){
-			var model = o.templateInstance.model;
-			var index = model.filterColumn.filters.indexOf(model.filter);
-			model.filterColumn.filters.splice(index, 1);
-			if(model.columns.every(function(column){
-				return !column.filters || column.filters.length === 0;
-			})) this.forceFilterRefresh = 0;
-		},
-		clearFilters: function(e,i,o){
-			if(confirm('Clear all filters?')){
-				this.columns.forEach(function(column){
-					column.filters = null;
-				});
-				this.forceFilterRefresh = 0;
-			}
-		},
-		/**
-		 *	Row Edit
-		 */
-		editChanged: false,
-		editRow: null,
-		updateEditChanged: function(){
-			if(this.undoStack.length > 1) this.editChanged = true;
-			else if(this.undoStack.length === 1) this.editChanged = this.rowHasBeenEdited(this.undoStack[0]);
-			else this.editChanged = false;
-			return this.editChanged;
-		},
-		rowHasBeenEdited: function(undoElement){
-			return Object.getOwnPropertyNames(undoElement.original).some(function(val, idx, array) {
-				return undoElement.ref[val] !== undoElement.original[val] && undoElement.original[val] !== null;
-			});
-		},
-		rowEdit: function(e,p){
-			if(this.rowEditorTemplate && (this.multiRowEdit || this.undoStack.length === 0)){
-				var model = e.target.templateInstance.model;
-				var row = model.row;
-				if(model.record) row = model.record.row;
 
-				if(this.undoStack.length > 0 && !this.rowHasBeenEdited(this.undoStack[this.undoStack.length - 1])) this.undoStack.pop();
-
-				if(this.undoStack.length === 0){
-					this.editChanged = false;
-					this.undoStack.push({
-						ref: row,
-						original: JSON.parse(JSON.stringify(row))
-					});
-				}else{
-					this.editChanged = true;
-					if(this.undoStack[this.undoStack.length - 1].ref !== row){
-						this.undoStack.push({
-							ref: row,
-							original: JSON.parse(JSON.stringify(row))
-						});
-					}
-				}
-				this.editRow = row;
-			}
-		},
-		closeEdit: function(e){
-			this.editChanged = false;
-			this.undoStack = [];
-			this.editRow = null;
-		},
-		undoAllEdit: function(e){
-			while(this.undoStack.length>0) this.undoEdit.call(this, e);
-		},
-		undoEdit: function(e){
-			if(this.undoStack.length > 0){
-				var self = this;
-				var first = this.undoStack.pop();
-				Object.getOwnPropertyNames(first.original).forEach(function(val, idx, array) {
-					if(first.ref[val] !== first.original[val] && first.original[val] !== null)
-						first.ref[val] = first.original[val];
-				});
-				if(this.undoStack.length > 0) this.editRow = this.undoStack[this.undoStack.length - 1].ref;
-				else this.editRow = null;
-				this.refreshFooter();
-			}
-		},
-		cancelEdit: function(e){
-			this.undoAllEdit.call(this, e); this.closeEdit.call(this, e);
-		},
 		/**
 		 *	Checkbox helper functions
 		 */
@@ -799,18 +692,6 @@
 			}else{
 				this.selected = [];
 			}
-		},
-		/**
-		 *	Row Editor helper functions
-		 */
-		moveToPage: function(e){ this.page = Number(e.currentTarget.textContent); },
-		moveToPreviousPage: function(){ if(this.page > 1) this.page--; },
-		moveToNextPage: function(){ if(this.dataSize > this.page * this.pageSize) this.page++; },
-		moveToFirstPage: function(){ this.page = 1; },
-		moveToLastPage: function(){ this.page = this.lastPage; },
-		showMore: function(){
-			if(!this.originalPageSize) this.originalPageSize = this.pageSize;
-			this.pageSize = Math.min(this.dataSize, this.pageSize + this.originalPageSize);
 		},
 		/**
 		 *	Template Functions
@@ -895,6 +776,8 @@
 					var value = row[column.name];
 					return column.filters.some(function(filter){
 						switch (filter.op){
+							case "=":
+								return value == filter.value;
 							case ">":
 								return value > filter.value;
 							case "≥":
@@ -903,8 +786,6 @@
 								return value < filter.value;
 							case "≤":
 								return value <= filter.value;
-							case "=":
-								return value == filter.value;
 							default:
 								return false;
 						}
@@ -912,10 +793,12 @@
 				}else return true;
 			};
 
-			var filteredArray = array.filter(function(row){
-				return columns.every(function(column,columnIndex) { return checkColumnFilters(column,row); })
-			});
-			array = filteredArray;
+			if(!this.dataSource){
+				var filteredArray = array.filter(function(row){
+					return columns.every(function(column,columnIndex) { return checkColumnFilters(column,row); })
+				});
+				array = filteredArray;
+			}
 
 			if(key!==null && !this.dataSource && !this.userSort){
 				if(array.every(function(element, index) {
@@ -1013,7 +896,7 @@
 			this.updateEditChanged();
 			this.forceFooterRefresh++;
 		}
-	}, columnDragMixin, rowDragMixin));
+	}, columnDragMixin, rowDragMixin, columnFiltersMixin, rowEditorMixin));
 	//polyfills
 	if (!Array.prototype.findIndex) {
 		Array.prototype.findIndex = function(predicate) {

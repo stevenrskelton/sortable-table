@@ -143,7 +143,7 @@
 					</select>
 				</td>
 				<td><input type="checkbox" checked="{{sortDescending}}">Descending</td>
-				<td>Column by which to sort the records. <strong>This API only supports 1 filter per column</strong></td>
+				<td>Column by which to sort the records. <strong>This API only supports 1 "Contains" filter per column.</strong></td>
 			</tr>
 			<tr>
 				<td style="white-space: nowrap;vertical-align:top" rowspan="2">Filter Columns</td>
@@ -151,7 +151,7 @@
 				<td>Columns to filter by.</td>
 			</tr>
 			<tr>
-				<td colspan="3"><column-filters id="cf" filters="{{columnFilters}}"
+				<td colspan="3"><column-filters id="cf" filters="{{filters}}" filterOps="{{filterOps}}"
 				columns='[{"name":"first_name","text":"First Name"},
 				{"name":"last_name","text":"Last Name"},
 				{"name":"position","text":"Position"},
@@ -170,7 +170,8 @@
 			length="{{length}}"
 			sortColumn="{{sortColumn}}"
 			sortDescending="{{sortDescending}}"
-			filters="{{columnFilters}}"
+			filters="{{filters}}"
+			filterOps="{{filterOps}}"
 			columns='[
 				{"name":"first_name"},
 				{"name":"last_name"},
@@ -192,6 +193,14 @@
 
 		<json-stringify
 			data="{{data}}"
+			style="overflow-y:auto;display:block;border:1px solid #333;"
+		></json-stringify>
+
+		<br>
+
+		<em>Column Filters</em>
+		<json-stringify
+			data="{{filters}}"
 			style="overflow-y:auto;display:block;border:1px solid #333;"
 		></json-stringify>
 	</template>

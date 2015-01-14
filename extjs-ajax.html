@@ -9,7 +9,7 @@
 
 <polymer-element hidden
 	name="extjs-ajax"
-	attributes="url withCredentials start length search sortColumn sortDescending columns data dataSize loading"
+	attributes="url withCredentials start length search sortColumn sortDescending filters filterOps columns data dataSize loading"
 >
 <script>
 	"use strict";
@@ -21,6 +21,8 @@
 		search: "",
 		sortColumn: null,
 		sortDescending: false,
+		filters: [],
+		filterOps: [{title:'Equals',op:'='},{title:'Less Than',op:'<'},{title:'Less Than Or Equal',op:'≤'},{title:'Greater Than',op:'>'},{title:'Greater Than Or Equal',op:'≥'}],
 		columns: [],
 		ajax: null,
 		loading: false,

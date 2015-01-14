@@ -9,7 +9,7 @@
 
 <polymer-element hidden
 	name="datatables-ajax"
-	attributes="url withCredentials start length search sortColumn sortDescending filters columns data dataSize loading"
+	attributes="url withCredentials start length search sortColumn sortDescending filters filterOps columns data dataSize loading"
 >
 <script>
 	"use strict";
@@ -22,6 +22,7 @@
 		sortColumn: null,
 		sortDescending: false,
 		filters: [],
+		filterOps: ['Contains'],
 		columns: null,
 		ajax: null,
 		draw: 0,
@@ -85,7 +86,7 @@
 				var columnFilters = function(column){
 					var r = '';
 					filters.forEach(function(element){
-						if(element.columnName === column.name) r = element.value;
+						if(element.column === column.name) r = element.value;
 					});
 					return r;
 				};
