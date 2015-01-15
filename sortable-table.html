@@ -23,8 +23,8 @@
 		columns
 		data
 		dataSize
-		disableColumnFilters
 		disableColumnMove
+		filterTemplate
 		footerTemplate
 		grid
 		headerTemplate
@@ -270,6 +270,27 @@
 		</div>
 	</template>
 
+	<template id="defaultFilters">
+		<div style="float:right;padding-top:2px"  horizontal layout center relative on-click="{{createFilter}}">
+			<img alt="Filter" src="{{resolvePath('img/icons/find.png')}}">
+			<core-dropdown halign="right" class="open-below">
+				<input type="text" on-keypress="{{addFilterReturn}}" data-op="=">
+			</core-dropdown>
+		</div>
+	</template>
+
+	<template id="fullFilters">
+		<div style="float:right;padding-top:2px"  horizontal layout center relative on-click="{{createFilter}}">
+			<img alt="Filter" src="{{resolvePath('img/icons/find.png')}}">
+			<core-dropdown halign="right" class="open-below">
+				<template repeat="{{filterOp in getFilterOps(column)}}">
+					<button on-click="{{addFilter}}" title="{{filterOp.title}}" data-op="{{filterOp.op}}">{{filterOp.html}}</button>
+				</template>
+				<input type="text">
+			</core-dropdown>
+		</div>
+	</template>
+
 	<table class="sortable-table">
 		<thead>
 			<tr on-click="{{changeSort}}">
@@ -290,17 +311,7 @@
 							on-drop="{{handleTHDrop}}"
 							on-dragend="{{handleTHDragEnd}}"
 						>
-							<template if="{{!disableColumnFilters}}">
-								<div style="float:right;padding-top:2px"  horizontal layout center relative on-click="{{createFilter}}">
-									<img alt="Filter" src="{{resolvePath('img/icons/find.png')}}">
-									<core-dropdown halign="right" class="open-below">
-										<template repeat="{{filterOp in getFilterOps(column)}}">
-											<button on-click="{{addFilter}}" title="{{filterOp.title}}" data-op="{{filterOp.op}}">{{filterOp.html}}</button>
-										</template>
-										<input type="text">
-									</core-dropdown>
-								</div>
-							</template>
+							<template ref="{{filterTemplate}}" bind></template>
 							{{column.title == null ? column.name : column.title}}
 						</th>
 					</template>
@@ -771,29 +782,9 @@
 					}
 				}
 			};
-			var checkColumnFilters = function(column,row){
-				if(column.filters && column.filters.length){
-					var value = row[column.name];
-					return column.filters.some(function(filter){
-						switch (filter.op){
-							case "=":
-								return value == filter.value;
-							case ">":
-								return value > filter.value;
-							case "≥":
-								return value >= filter.value;
-							case "<":
-								return value < filter.value;
-							case "≤":
-								return value <= filter.value;
-							default:
-								return false;
-						}
-					});
-				}else return true;
-			};
 
 			if(!this.dataSource){
+				var checkColumnFilters = this.checkColumnFilters;
 				var filteredArray = array.filter(function(row){
 					return columns.every(function(column,columnIndex) { return checkColumnFilters(column,row); })
 				});

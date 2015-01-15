@@ -22,7 +22,7 @@
 		sortColumn: null,
 		sortDescending: false,
 		filters: [],
-		filterOps: [{title:'Equals',op:'='},{title:'Less Than',op:'<'},{title:'Less Than Or Equal',op:'≤'},{title:'Greater Than',op:'>'},{title:'Greater Than Or Equal',op:'≥'}],
+		filterOps: [{title:'=',op:'eq',html:'='},{title:'<',op:'lt',html:'<'},{title:'>',op:'gt',html:'>'},{title:'In',op:'in',html:'In'}],
 		columns: [],
 		ajax: null,
 		loading: false,
@@ -68,6 +68,11 @@
 					var dir = this.sortDescending ? 'DESC' : 'ASC';
 					params.sort = JSON.stringify([{ property: this.sortColumn, direction: dir }]);
 				} 
+				if(this.filters && this.filters.length > 0){
+					params.filter = JSON.stringify(this.filters.map(function(filter){
+						return { "comparison": filter.op, "value":filter.value, "field": filter.column, "type": "numeric" };
+					}));
+				}
 				this.ajax.params = params;
 				this.openTransactionCount++;
 				if(!this.loading) this.loading = true;

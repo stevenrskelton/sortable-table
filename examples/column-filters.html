@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sortable Table using Polymer Web Components</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<script src="../../webcomponentsjs/webcomponents.min.js"></script>
+	<link rel="import" href="../sortable-table.html">
+	<link rel="import" href="project-docs.html">
+	<style>
+		sortable-table { width: 800px; }
+	</style>
+</head>
+<body unresolved is="project-docs">
+
+	<h1>Column Filters</h1>
+
+	<p>
+		Rows should be filterable using column-type specific expressions.<br>
+		Customized templates should be allowed for different filtering.<br>
+		Paging expressions should work correctly.<br>
+		Selectioned elements should behave correctly when changing filters.<br>
+		Columns with formulas should allow appropriate filtering.<br>
+	</p>
+
+	<template is="auto-binding" id="demo1">
+		<strong>Enabled Interactions:</strong><br>
+		<input type="checkbox" checked="{{rowSelection}}">rowSelection<br>
+		<input type="checkbox" checked="{{multiSelect}}">multiSelect<br>
+		<input type="checkbox" checked="{{checkbox}}">checkbox<br>
+
+		<p>
+
+		<h2><code>defaultFilters</code> Template</h2>
+
+		<sortable-table
+			class="default"
+			data="{{data}}"
+			selected="{{selected}}"
+			rowSelection="{{rowSelection}}"
+			multiSelect="{{multiSelect}}"
+			checkbox="{{checkbox}}"
+			filterTemplate="defaultFilters"
+		></sortable-table>
+
+		<h2><code>fullFilters</code> Template</h2>
+
+		<sortable-table
+			class="default"
+			data="{{data}}"
+			selected="{{selected}}"
+			rowSelection="{{rowSelection}}"
+			multiSelect="{{multiSelect}}"
+			checkbox="{{checkbox}}"
+			filterTemplate="fullFilters"
+		></sortable-table>
+	</template>
+	<script>
+		var data = [
+			{id: 0, fruit: 'apple', alice: 4, bill: 10, casey: 2 },
+			{id: 1, fruit: 'banana', alice: 0, bill: 4, casey: 0 },
+			{id: 2, fruit: 'grape', alice: 2, bill: 3, casey: 5 },
+			{id: 3, fruit: 'pear', alice: 4, bill: 2, casey: 8 },
+			{id: 4, fruit: 'strawberry', alice: 0, bill: 14, casey: 0 }
+		];
+		window.addEventListener('polymer-ready', function(){
+			document.getElementById('demo1').data = data;
+		});
+	</script>
+</body>
+</html>

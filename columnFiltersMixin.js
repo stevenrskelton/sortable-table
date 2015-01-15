@@ -2,8 +2,16 @@
  *	Column Filters
  */
 var columnFiltersMixin = {
-	disableColumnFilters: false,
-	filterOps: [{title:'Equals',op:'='},{title:'Less Than',op:'<'},{title:'Greater Than',op:'>'}],
+	filterTemplate: null,
+	filterOps: [
+		{ title:'Equals', op:'=' },
+		{ title:'Less Than', op:'<' },
+		{ title:'Greater Than', op:'>' },
+		{ title:'Less Than Or Equal', op:'≤' },
+		{ title:'Greater Than Or Equal', op:'≥' },
+		{ title:'Starts With', op:'Starts With', type:'string' },
+		{ title:'Contains', op:'Contains', type:'string' }
+	],
 	getFilterOps: function(column){
 		return this.filterOps.map(function(element){
 			if(typeof element === 'object') return {title:element.title||element.op,op:element.op,html:element.html||element.op};
@@ -24,6 +32,9 @@ var columnFiltersMixin = {
 		event.stopPropagation();
 		var dropdown = o.querySelector('core-dropdown');
 		if(dropdown.style.display == 'none') dropdown.toggle();
+	},
+	addFilterReturn: function(event,i,o){
+		if(event.keyCode === 13) this.addFilter(event,i,o);
 	},
 	addFilter: function(event,i,o){
 		var dropdown = o.parentElement;
@@ -55,5 +66,30 @@ var columnFiltersMixin = {
 			});
 			this.forceFilterRefresh = 0;
 		}
+	},
+	checkColumnFilters: function(column,row){
+		if(column.filters && column.filters.length){
+			var value = row[column.name];
+			return column.filters.every(function(filter){
+				switch (filter.op){
+					case "=":
+						return value == filter.value;
+					case ">":
+						return value > filter.value;
+					case "≥":
+						return value >= filter.value;
+					case "<":
+						return value < filter.value;
+					case "≤":
+						return value <= filter.value;
+					case "Starts With":
+						return value.indexOf(filter.value) == 0;
+					case "Contains":
+						return value.indexOf(filter.value) > -1;
+					default:
+						return false;
+				}
+			});
+		}else return true;
 	}
 }
