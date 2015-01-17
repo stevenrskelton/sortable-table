@@ -553,3 +553,44 @@
 	margin-top: 2px;
 	height: 18px;
 }
+
+.bootstrap::shadow .dropdown-menu {
+	position:absolute;
+	top:100%;
+	left:0;
+	z-index:1000;
+	display:none;
+	float:left;
+	min-width:160px;
+	padding:5px 0;
+	margin:2px 0 0;
+	font-size:14px;
+	text-align:left;
+	list-style:none;
+	background-color:#fff;
+	-webkit-background-clip:padding-box;
+	background-clip:padding-box;
+	border:1px solid #ccc;
+	border:1px solid rgba(0,0,0,.15);
+	border-radius:4px;
+	-webkit-box-shadow:0 6px 12px rgba(0,0,0,.175);
+	box-shadow:0 6px 12px rgba(0,0,0,.175);
+}
+.bootstrap::shadow .open > .dropdown-menu {
+    display: block;
+}
+.bootstrap::shadow .dropdown-menu .divider {
+    height: 1px;
+    margin: 9px 0px;
+    overflow: hidden;
+    background-color: #E5E5E5;
+}
+.bootstrap::shadow th .btn {
+	padding: 0;
+	width: 24px;
+	height: 24px;
+	border-color: transparent;
+}
+.bootstrap::shadow th .btn:hover {
+	border-color: #CCC;
+}

@@ -40,18 +40,21 @@
 	font-family:Verdana,Arial,Helvetica,sans-serif;
 	vertical-align:middle
 }
-.espn::shadow th {
+.espn::shadow thead th {
 	text-align:center;
 	background-color:#d6d6d6;
-	cursor:pointer;
 	background:#e8e8e8;
-	background-image:-webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #CECECE), color-stop(100%, #E7E7E7));
-	background-image:-moz-linear-gradient(top, #CECECE,#E7E7E7);
-	background-image:linear-gradient(top, #CECECE,#E7E7E7);
 	border-bottom:1px #c2c2c2 solid;
 	font-weight:700;
 	color:#444;
 	font-size:11px;
+	line-height: 18px;
+}
+.espn::shadow thead:first-of-type th {
+	cursor:pointer;
+	background-image:-webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #CECECE), color-stop(100%, #E7E7E7));
+	background-image:-moz-linear-gradient(top, #CECECE,#E7E7E7);
+	background-image:linear-gradient(top, #CECECE,#E7E7E7);
 	text-decoration:underline;
 }
 .espn::shadow .sortable-table-footer {

@@ -51,8 +51,9 @@
 				class="bootstrap"
 				rowTemplate="row"
 				rowEditorTemplate="editor"
+				filterTemplate="bootstrapFilters"
 			>
-				<sortable-column name="fruit" footerTemplate="footerLabel">Fruit</sortable-column>
+				<sortable-column name="fruit" footerTemplate="footerLabel" datatype="string">Fruit</sortable-column>
 				<sortable-column name="alice" footerTemplate="footer">Alice</sortable-column>
 				<sortable-column name="bill" footerTemplate="footer">Bill</sortable-column>
 				<sortable-column name="casey" footerTemplate="footer">Casey</sortable-column>
@@ -152,6 +153,7 @@
 				rowTemplate="row"
 				rowEditorTemplate="editor"
 				footerTemplate="updateCancelTemplate"
+				filterTemplate="fullFilters"
 				multiRowEdit
 			>
 				<sortable-column name="fruit" footerTemplate="footerLabel">Fruit</sortable-column>
@@ -247,6 +249,7 @@
 				class="espn"
 				rowTemplate="row"
 				rowEditorTemplate="editor"
+				filterTemplate="fullFilters"
 				multiRowEdit
 			>
 				<sortable-column name="fruit" footerTemplate="footerLabel">Fruit</sortable-column>
