@@ -12,7 +12,7 @@ There are many capable Javascript grids, this one aims to have all the same feat
 - Click column headers to sort
 - Drag-and-Drop columns to reorder
 - Edit rows with multi-row Undo
-- Row paging, checkbox selection, and multi-select
+- Row paging, filtering, checkbox selection, and multi-select
 - Supports table, single row/article, and flowing grid layouts
 - Use of HTML5 `template` for customization (Cells, Rows, Column Headers and Footers)
 - 2-way data binding with the outside world
@@ -50,6 +50,8 @@ There are many capable Javascript grids, this one aims to have all the same feat
 > [Alternative Row Themes](http://files.stevenskelton.ca/sortable-table/examples/themes/alt.html)
 
 > [Row Editor with Undo Functionality](http://files.stevenskelton.ca/sortable-table/examples/row-editor.html)
+
+> [Row Filtering](http://files.stevenskelton.ca/sortable-table/examples/column-filters.html)
 
 > [Additional Arguments](http://files.stevenskelton.ca/sortable-table/examples/args.html)
 
