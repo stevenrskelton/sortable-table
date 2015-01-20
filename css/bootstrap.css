@@ -553,7 +553,6 @@
 	margin-top: 2px;
 	height: 18px;
 }
-
 .bootstrap::shadow .dropdown-menu {
 	position:absolute;
 	top:100%;
@@ -562,7 +561,7 @@
 	display:none;
 	float:left;
 	min-width:160px;
-	padding:5px 0;
+	padding: 4px;
 	margin:2px 0 0;
 	font-size:14px;
 	text-align:left;
@@ -591,6 +590,12 @@
 	height: 24px;
 	border-color: transparent;
 }
-.bootstrap::shadow th .btn:hover {
+.bootstrap::shadow th .btn:hover,
+.bootstrap::shadow th .btn:active,
+.bootstrap::shadow th .btn:focus {
 	border-color: #CCC;
+}
+.bootstrap::shadow th .open > .btn {
+	border-color: #CCC;
+	background-color: #E6E6E6;
 }

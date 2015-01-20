@@ -1,7 +1,7 @@
 /**
- *	Column Filters
+ *	Row Filters
  */
-var columnFiltersMixin = {
+var rowFiltersMixin = {
 	filterTemplate: null,
 	filterOps: [
 		{ title:'Equals', op:'=' },

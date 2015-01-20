@@ -8,7 +8,7 @@
 <link rel="import" href="../core-dropdown/core-dropdown.html">
 <script src="columnDragMixin.js"></script>
 <script src="rowDragMixin.js"></script>
-<script src="columnFiltersMixin.js"></script>
+<script src="rowFiltersMixin.js"></script>
 <script src="rowEditorMixin.js"></script>
 <script src="../json5/lib/json5.js"></script>
 <script src="../time-elements/time-elements.js"></script>
@@ -88,6 +88,16 @@
 	table.articlePager td:nth-of-type(3) {
 		cursor: pointer;
 	}
+	.sortable-table thead .dropdown-menu {
+		position: absolute;
+		z-index: 1000;
+		display: none;
+		list-style: outside none none;
+		background-color: #FFF;
+	}
+	.sortable-table thead .open > .dropdown-menu {
+		display: block;
+	}
 	:host(.default) .sortable-table {
 		border-collapse: collapse;
 		border: 1px solid #ccc;
@@ -147,6 +157,17 @@
 	}
 	:host(.default) .sortable-table tbody tr.selected-row {
 		background-color: rgba(0,96,200,0.2);
+	}
+	:host(.default) .sortable-table thead .dropdown-menu {
+		border: 1px solid #ccc;
+		background-color: #0084B4;
+		text-align: left;
+		min-width: 160px;
+		padding: 4px;
+		margin-top: 1px;
+	}
+	:host(.default) .sortable-table thead .dropdown-menu .btn {
+		text-align: center;
 	}
 	@-webkit-keyframes progress-bar-stripes{
 		from{
@@ -279,7 +300,7 @@
 		</div>
 	</template>
 
-	<template id="bootstrapFilters">
+	<template id="verticalFilters">
 		<div class="btn-group" style="float:right;" on-click="{{stopPropagation}}">
 			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false" on-click="{{setFiltersWidth}}">
 				<img alt="Filter" src="{{resolvePath('img/filter.svg')}}" height="16">
@@ -291,7 +312,7 @@
 					<template repeat="{{filterOp in getFilterOps(column)}}">
 						<tr>
 							<td><input type="text" data-op="{{filterOp.op}}" on-keypress="{{addFilterReturn}}"></td>
-							<td><button on-click="{{addFilter}}" title="{{filterOp.title}}" style="white-space: nowrap;width:100%">{{filterOp.html}}</button></td>
+							<td class="btn btn-primary" on-click="{{addFilter}}" title="{{filterOp.title}}" style="white-space:nowrap;display:table-cell;padding:0 6px;min-width:24px">{{filterOp.html}}</td>
 						</tr>
 					</template>
 				</table></li>
@@ -916,7 +937,7 @@
 			this.updateEditChanged();
 			this.forceFooterRefresh++;
 		}
-	}, columnDragMixin, rowDragMixin, columnFiltersMixin, rowEditorMixin));
+	}, columnDragMixin, rowDragMixin, rowFiltersMixin, rowEditorMixin));
 	//polyfills
 	if (!Array.prototype.findIndex) {
 		Array.prototype.findIndex = function(predicate) {

@@ -51,7 +51,7 @@ There are many capable Javascript grids, this one aims to have all the same feat
 
 > [Row Editor with Undo Functionality](http://files.stevenskelton.ca/sortable-table/examples/row-editor.html)
 
-> [Row Filtering](http://files.stevenskelton.ca/sortable-table/examples/column-filters.html)
+> [Row Filtering](http://files.stevenskelton.ca/sortable-table/examples/row-filters.html)
 
 > [Additional Arguments](http://files.stevenskelton.ca/sortable-table/examples/args.html)
 

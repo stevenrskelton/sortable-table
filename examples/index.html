@@ -131,7 +131,7 @@
 				<td><code>filterTemplate</code></td>
 				<td><em>string</em></td>
 				<td><code>null</code></td>
-				<td>Sets a template to use to enable column filtering. <em>See</em> <a href="column-filters.html">§ Column Filters</a>.</td>
+				<td>Sets a template to use to enable row filtering. <em>See</em> <a href="row-filters.html">§ Row Filters</a>.</td>
 			</tr>
 			<tr>
 				<td><code>filterOps</code></td>
@@ -257,22 +257,10 @@
 		</thead>
 		<tbody>
 			<tr>
-				<td><code>name</code></td>
-				<td><em>string</em></td>
-				<td><em>required</em></td>
-				<td>Name of row property</td>
-			</tr>
-			<tr>
-				<td><code>title</code></td>
-				<td><em>string</em></td>
-				<td><code>name</code></td>
-				<td>Text to display in column header</td>
-			</tr>
-			<tr>
-				<td><code>formula</code></td>
-				<td><em>function</em></td>
-				<td><code>null</code></td>
-				<td>Single parameter <code>row</code>, return will override any value for property in <code>data</code>, as well as be used for sorting</td>
+				<td><code>args</code></td>
+				<td><em>object</em></td>
+				<td><code>{}</code></td>
+				<td>Custom meta-data to be made available in templates</td>
 			</tr>
 			<tr>
 				<td><code>cellTemplate</code></td>
@@ -281,10 +269,10 @@
 				<td><em>See</em> <a href="#column--celltemplate">Column § cellTemplate</a></td>
 			</tr>
 			<tr>
-				<td><code>headerTemplate</code></td>
+				<td><code>datatype</code></td>
 				<td><em>string</em></td>
 				<td><code>null</code></td>
-				<td><em>See</em> <a href="#column--headertemplate">Column § headerTemplate</a></td>
+				<td>Optional specification of type of data in the column.</td>
 			</tr>
 			<tr>
 				<td><code>footerTemplate</code></td>
@@ -293,12 +281,37 @@
 				<td><em>See</em> <a href="#column--footertemplate">Column § footerTemplate</a></td>
 			</tr>
 			<tr>
+				<td><code>formula</code></td>
+				<td><em>function</em></td>
+				<td><code>null</code></td>
+				<td>Single parameter <code>row</code>, return will override any value for property in <code>data</code>, as well as be used for sorting</td>
+			</tr>
+			<tr>
+				<td><code>headerTemplate</code></td>
+				<td><em>string</em></td>
+				<td><code>null</code></td>
+				<td><em>See</em> <a href="#column--headertemplate">Column § headerTemplate</a></td>
+			</tr>
+			<tr>
+				<td><code>name</code></td>
+				<td><em>string</em></td>
+				<td><em>required</em></td>
+				<td>Name of row property</td>
+			</tr>
+			<tr>
 				<td><code>sortable</code></td>
 				<td><em>boolean</em></td>
 				<td><code>null</code></td>
 				<td>If <code>false</code>, column cannot be sorted by clicking on the column header.</td>
 			</tr>
+			<tr>
+				<td><code>title</code></td>
+				<td><em>string</em></td>
+				<td><code>name</code></td>
+				<td>Text to display in column header</td>
+			</tr>
 		</tbody>
 	</table>
+	<br>
 </body>
 </html>

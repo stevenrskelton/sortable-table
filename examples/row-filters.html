@@ -14,7 +14,7 @@
 </head>
 <body unresolved is="project-docs">
 
-	<h1>Column Filters</h1>
+	<h1>Row Filters</h1>
 
 	<p>
 		Rows should be filterable using column-type specific expressions.<br>
@@ -54,6 +54,18 @@
 			multiSelect="{{multiSelect}}"
 			checkbox="{{checkbox}}"
 			filterTemplate="fullFilters"
+		></sortable-table>
+
+		<h2><code>verticalFilters</code> Template</h2>
+
+		<sortable-table
+			class="default"
+			data="{{data}}"
+			selected="{{selected}}"
+			rowSelection="{{rowSelection}}"
+			multiSelect="{{multiSelect}}"
+			checkbox="{{checkbox}}"
+			filterTemplate="verticalFilters"
 		></sortable-table>
 	</template>
 	<script>
