@@ -469,14 +469,14 @@
 		showFooter: false,
 		grid: false,
 		toggleGrid: function(e){ this.grid = !this.grid; },
-		args: {},
 		dataSource: null,
 		userSort: false,
 		loading: false,
-		created: function(){
-			if(!this.data) this.data = [];
-			if(!this.columns) this.columns = [];
-			this.undoStack = [];
+		publish: {
+			args: {},
+			data: [],
+			columns: [],
+			undoStack: []
 		},
 		ready: function(){
 			var self = this;
@@ -637,6 +637,7 @@
 			}
 			return {
 				name: name,
+				index: index,
 				title: title,
 				formula: formula,
 				sortable: sortable,
@@ -662,7 +663,7 @@
 			//explode columns if simple text array
 			if(self.columns.length > 0 && typeof self.columns[0] === 'string'){
 				self.columns = self.columns.map(function(column, index, array) {
-					return { name: index, title: column };
+					return { name: column, index: index, title: column };
 				});
 			}
 			//watch templateIds since if added/modified we need to copy those templates into the shadow dom
@@ -718,7 +719,11 @@
 		},
 		sortColumnChanged: function(){ if(this.dataSource) this.dataSource.sortColumn = this.sortColumn; },
 		sortDescendingChanged: function(){ if(this.dataSource) this.dataSource.sortDescending = this.sortDescending; },
-		dataChanged: function(){ this.rebuildColumns(); this.pageSizeChanged(); },
+		dataChanged: function(o,n){
+			if(n === null) this.data = [];
+			this.rebuildColumns();
+			this.pageSizeChanged();
+		},
 		cellTemplateChanged: function(a, t){ this.addTemplateIfNotInDocument(t); },
 		rowTemplateChanged: function(a, t){ this.addTemplateIfNotInDocument(t); },
 		headerTemplateChanged: function(a, t){ this.addTemplateIfNotInDocument(t); this.forceRefresh++; },
@@ -726,7 +731,7 @@
 		rowEditorTemplateChanged: function(a, t){ this.addTemplateIfNotInDocument(t); },
 		pageSizeChanged: function(){
 			if(this.dataSource) this.dataSource.length = this.pageSize;
-			else this.dataSize = this.data.length;
+			else if(this.data) this.dataSize = this.data.length;
 			this.lastPage = Math.max(1,Math.ceil(this.dataSize / this.pageSize));
 		},
 		pageChanged: function(){ if(this.dataSource) this.dataSource.start = (this.page - 1) * this.pageSize; },
@@ -863,6 +868,9 @@
 				end = (pageSize < Number.MAX_VALUE) ? Math.min(start + +pageSize, sortedArray.length) : sortedArray.length;
 			}
 
+			var valueSelector = function(row,column){ return row[column.name]; };
+			if(sortedArray.length > 0 && this.isArray(sortedArray[0])) valueSelector = function(row,column){ return row[column.index]; };
+
 			for(var i=start;i<end;i++){
 				var row = sortedArray[i];
 				var isSelected = isMultiSelect ? selected.indexOf(row) > -1 : row === selected;
@@ -874,10 +882,11 @@
 				columns.forEach(function(column, index, array) {
 					var value;
 					if(column.formula){
-						if(typeof row[column.name] !== 'undefined') value = column.formula(row[column.name], row, args);
-						else value = column.formula(row, args);
+						if(typeof row[column.name] !== 'undefined' || typeof row[column.index] !== 'undefined'){
+							value = column.formula(valueSelector(row, column), row, args);
+						} else value = column.formula(row, args);
 					}else{
-						value = row[column.name];
+						value = valueSelector(row, column);
 					}
 					fields[column.name] = { value: value, row: row, column: column, sortColumn: key, args: args };
 				});
