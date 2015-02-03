@@ -1,0 +1,8 @@
+[
+{"Leg":1,"Site":"Site1","Hole":"Hole1","Taxon_abundance":"Taxon_abundance1","Taxon":"Taxon1","Fossil_group":"Fossil_group1","Water_depth":"Water_depth1","Sample_age_ma":"Sample_age_ma1","Latitude":45.1,"Longitude":75.3,"Ocean_code":"Ocean_code1","Hole_id":1},
+{"Leg":2,"Site":"Site2","Hole":"Hole2","Taxon_abundance":"Taxon_abundance2","Taxon":"Taxon2","Fossil_group":"Fossil_group2","Water_depth":"Water_depth2","Sample_age_ma":"Sample_age_ma2","Latitude":45.2,"Longitude":75.3,"Ocean_code":"Ocean_code2","Hole_id":2},
+{"Leg":3,"Site":"Site3","Hole":"Hole3","Taxon_abundance":"Taxon_abundance3","Taxon":"Taxon3","Fossil_group":"Fossil_group3","Water_depth":"Water_depth3","Sample_age_ma":"Sample_age_ma3","Latitude":45.3,"Longitude":75.3,"Ocean_code":"Ocean_code3","Hole_id":3},
+{"Leg":4,"Site":"Site4","Hole":"Hole4","Taxon_abundance":"Taxon_abundance4","Taxon":"Taxon4","Fossil_group":"Fossil_group4","Water_depth":"Water_depth4","Sample_age_ma":"Sample_age_ma4","Latitude":45.4,"Longitude":75.3,"Ocean_code":"Ocean_code4","Hole_id":4},
+{"Leg":5,"Site":"Site5","Hole":"Hole5","Taxon_abundance":"Taxon_abundance5","Taxon":"Taxon5","Fossil_group":"Fossil_group5","Water_depth":"Water_depth5","Sample_age_ma":"Sample_age_ma5","Latitude":45.5,"Longitude":75.3,"Ocean_code":"Ocean_code5","Hole_id":5},
+{"Leg":6,"Site":"Site6","Hole":"Hole6","Taxon_abundance":"Taxon_abundance6","Taxon":"Taxon6","Fossil_group":"Fossil_group6","Water_depth":"Water_depth6","Sample_age_ma":"Sample_age_ma6","Latitude":45.6,"Longitude":75.3,"Ocean_code":"Ocean_code6","Hole_id":6}
+]

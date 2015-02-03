@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sortable Table using Polymer Web Components</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<script src="../../../webcomponentsjs/webcomponents.min.js"></script>
+	<link rel="import" href="../../sortable-table.html">
+	<link rel="import" href="../../../polymer/polymer.html">
+	<link rel="import" href="../../../paper-input/paper-input.html">
+	<link rel="import" href="../../../paper-button/paper-button.html">
+	<link rel="import" href="../../../core-ajax/core-ajax.html">
+</head>
+<body unresolved>
+
+<polymer-element name="add-node" attributes="url">
+  <template>
+    <style>
+      paper-input {
+        color:#000000;
+        text-align:left;
+      }
+      paper-button.colored {
+        background:#000000;
+        color:#ffffff;
+      }
+      .centered {
+        display:block;
+        text-align:center;
+        width:100%;
+      }
+    </style>
+
+    <form id="form_1">
+      <paper-input floatingLabel label="Leg" value="{{leg}}"></paper-input>
+       <paper-input floatingLabel label="Site:" value="{{site}}"></paper-input>
+       <paper-input floatingLabel label="Hole:" value="{{hole}}"></paper-input>
+       <paper-input floatingLabel label="Genus:" value="{{genus}}"></paper-input>
+       <paper-input floatingLabel label="Species:" value="{{species}}"></paper-input>
+       <paper-input floatingLabel label="Sub-species:" value="{{subspecies}}"></paper-input>
+       <paper-input floatingLabel label="Fossile Group:" value="{{fossile_group}}"></paper-input>
+       <paper-input floatingLabel label="Time Range:" value="{{time_range}}"></paper-input>
+       <paper-input floatingLabel label="Latitude:" value="{{latitude}}"></paper-input>
+       <paper-input floatingLabel label="Longitude:" value="{{longitude}}"></paper-input>
+       <paper-input floatingLabel label="Ocean:" value="{{ocean}}"></paper-input>
+       <paper-input floatingLabel label="Hole ID:" value="{{hole_id}}"></paper-input>
+      <div class="centered">
+        <paper-button on-tap="{{doSend}}" class="colored"  label="Search"></paper-button>
+      </div>
+    </form>
+
+    <core-ajax id="ajax"  method="GET" handleAs="json" url="{{url}}" response="{{response}}" >
+    </core-ajax>
+
+	<sortable-table columns='["Leg","Site","Hole","Hole_id","Ocean_code","Taxon_abundance","Taxon","Fossil_group","Water_depth","Sample_age_ma","Sample_depth_mbsf","Latitude","Longitude"]'
+	data="{{response}}">
+    </sortable-table>
+
+    <!--<template repeat="{{response}}"><p>{{Leg}} {{Site}} {{Hole}} {{Taxon}} {{Sample_age_ma}} {{Latitude}} {{Longitude}} </p></template> -->
+  </template>
+  <script>
+    Polymer('add-node', {
+      doSend: function(event, detail, sender){
+         this.$.ajax.go();
+      }
+    });
+  </script>
+</polymer-element> 
+
+<add-node url="31.json"></add-node>
+
+</body>
