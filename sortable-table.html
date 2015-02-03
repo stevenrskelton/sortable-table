@@ -599,7 +599,7 @@
 						Object.keys(this.data[i]).forEach(function(property) {
 							if (unique.indexOf(property) === -1) {
 								unique.push(property);
-								c.push({name: property});
+								c.push({name: property, index: unique.length-1 });
 							}
 						});
 					}
