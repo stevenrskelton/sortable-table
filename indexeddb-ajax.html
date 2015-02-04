@@ -1,0 +1,122 @@
+<link rel="import" href="../../../polymer/polymer.html">
+<link rel="import" href="../../../core-ajax/core-ajax.html">
+
+<polymer-element hidden
+	name="indexeddb-ajax"
+	attributes="url withCredentials start length search sortColumn sortDescending columns data dataSize loading dbVersion dbName dbStoreName"
+>
+<template>
+    <core-ajax id="ajax" withCredentials="{{withCredentials}}" method="GET" handleAs="json" url="{{url}}" on-core-response="{{ajaxResponse}}"></core-ajax>
+</template>
+<script>
+	"use strict";
+	Polymer({
+		url: null,
+		withCredentials: false,
+		start: 0,
+		length: -1,
+		search: "",
+		sortColumn: null,
+		sortDescending: false,
+		db: null,
+		loading: false,
+		openTransactionCount: 0,
+		created: function(){
+			if(!this.columns) this.columns = [];
+		},
+		dbVersion: 1,
+		dbName: "default",
+		dbStoreName: "default",
+		json: "",
+		ready: function() {
+			var self = this;
+			var request = indexedDB.open(this.dbName, this.dbVersion);
+			request.onupgradeneeded = function(event) {
+				var db = event.target.result;
+				self.$.ajax.xhrArgs = { sync: true };
+				self.$.ajax.go();
+
+				var response = self.upgradeXHR.response;
+				delete self.upgradeXHR;
+
+				if(db.objectStoreNames.contains(self.dbStoreName)) db.deleteObjectStore(self.dbStoreName);
+				var objectStore = db.createObjectStore(self.dbStoreName, { autoIncrement: true });
+
+				var columns = self.columns;
+				if(columns.length === 0 && response[0]){
+					var head = response[0];
+					for (var prop in head) {
+						if(head.hasOwnProperty(prop)){
+							objectStore.createIndex(prop, prop, { unique: false });
+						}
+					}
+				}else{
+					columns.forEach(function(element){
+						objectStore.createIndex(element.name, element.name, { unique: false });
+					});
+				}
+
+				objectStore.transaction.oncomplete = function(event) {
+					// Store values in the newly created objectStore.
+					var innerObjectStore = db.transaction(self.dbName, "readwrite").objectStore(self.dbStoreName);
+					response.forEach(function(element){
+						innerObjectStore.add(element);
+					});
+					self.db = db;
+				}
+			};
+			request.onsuccess = function(event) {
+				self.db = request.result;
+				self.job('go',self.go);
+			};
+		},
+		ajaxResponse: function(e,o){
+			this.upgradeXHR = o;
+		},
+		go: function(){
+			if(this.db){
+				if(this.columns.length>0){
+					var self = this;
+					var objectStore = this.db.transaction([self.dbName], "readonly").objectStore(self.dbStoreName);
+					var index;
+					if(this.sortColumn) objectStore = objectStore.index(this.sortColumn);
+					var skip = this.start;
+					var length = this.length;
+					var results = [];
+					var direction = this.sortDescending ? "prev" : "next";
+					this.openTransactionCount += 2;
+					if(!this.loading) this.loading = true;
+					objectStore.count().onsuccess = function(event){
+						self.dataSize = event.target.result;
+						self.openTransactionCount--;
+						if(self.openTransactionCount === 0) self.loading = false;
+					}
+					objectStore.openCursor(null, direction).onsuccess = function(event) {
+						var cursor = event.target.result;
+						if (cursor && length !== 0) {
+							if(skip>0){
+								cursor.advance(skip);
+								skip = 0;
+							}else{
+								length--;
+								var obj = cursor.value;
+								results.push(obj);
+								cursor.continue();
+							}
+						}else{
+							self.data = results;
+							self.openTransactionCount--;
+							if(self.openTransactionCount === 0) self.loading = false;
+						}
+					};
+				};
+			}else this.job('go',this.go);
+		},
+		columnsChanged: function(){ this.job('go',this.go); },
+		startChanged: function(){ this.job('go',this.go); },
+		lengthChanged: function(){ this.job('go',this.go); },
+		sortColumnChanged: function(){ this.job('go',this.go); },
+		sortDescendingChanged: function(){ this.job('go',this.go); }
+	});
+</script>
+</polymer-element>

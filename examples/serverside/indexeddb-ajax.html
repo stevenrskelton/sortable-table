@@ -8,7 +8,7 @@
 	<script src="../../../webcomponentsjs/webcomponents.min.js"></script>
 	<link rel="import" href="../../../polymer/polymer.html">
 	<link rel="import" href="../../sortable-table.html">
-	<link rel="import" href="../indexeddb/indexeddb-fruit.html">
+	<link rel="import" href="../../indexeddb-ajax.html">
 	<link rel="import" href="../json-stringify.html">
 	<link rel="import" href="../project-docs.html">
 	<link rel="stylesheet" href="../../css/extjs4.css" shim-shadowdom>
@@ -26,8 +26,8 @@
 
 	<h1>IndexedDB</h1>
 
-	The is a sample implementation using only HTML5 <a href="http://www.w3.org/TR/IndexedDB/" target="_blank" alt="IndexedDB on W3C">
-	IndexedDB</a>, a full implementation would require a secondary method to load the initial DB on each user's browser.
+	The is an implementation of HTML5 <a href="http://www.w3.org/TR/IndexedDB/" target="_blank" alt="IndexedDB on W3C">
+	IndexedDB</a>, using an XHR request to load a versioned JSON file.
 
 	<p>
 
@@ -44,7 +44,7 @@
 
 	<pre>
 	&lt;sortable-table pageSize="10"&gt;
-		&lt;indexeddb-fruit role="datasource"&gt;&lt;/indexeddb-fruit&gt;
+		&lt;indexeddb-ajax role="datasource" url="<a href="./fruits.json">./fruits.json</a>" dbVersion="48"&gt;&lt;/indexeddb-ajax&gt;
 	&lt;/sortable-table&gt;
 	</pre>
 
@@ -64,7 +64,7 @@
 				<sortable-column name="fat">Fat, total (g)</sortable-column>
 				<sortable-column name="carbohydrates">Carbohydrate (g)</sortable-column>
 
-				<indexeddb-fruit role="datasource"></indexeddb-fruit>
+				<indexeddb-ajax role="datasource" url="./fruits.json" dbVersion="48"></indexeddb-ajax>
 			</sortable-table>
 		</div>
 
@@ -78,7 +78,11 @@
 	<h2>Basic Use</h2>
 
 	<pre>
-	<strong>&lt;indexeddb-fruit</strong>
+	<strong>&lt;indexeddb-ajax</strong>
+		url=<span class="paramType">[string]</span>
+		dbName=<span class="paramType">[optional string]</span>
+		dbStoreName=<span class="paramType">[optional string]</span>
+		dbVersion=<span class="paramType">[string]</span>
 		start=<span class="paramType">[int]</span>
 		length=<span class="paramType">[int]</span>
 		sortColumn=<span class="paramType">[string]</span>
@@ -90,7 +94,7 @@
 			{"name":"fat"},
 			{"name":"carbohydrates"}
 		]'
-	<strong>&gt;&lt;/indexeddb-fruit&gt;</strong>
+	<strong>&gt;&lt;/indexeddb-ajax&gt;</strong>
 	</pre>
 
 	<hr style="width:75%;height:1px;border:none;color:#DDD;background-color:#DDD;" align="left">
@@ -132,7 +136,9 @@
 			</tr>
 		</table>
 
-		<indexeddb-fruit
+		<indexeddb-ajax
+			url="./fruits.json"
+			dbVersion="48"
 			data="{{data}}"
 			dataSize="{{dataSize}}"
 			loading="{{loading}}"
@@ -147,7 +153,7 @@
 				{"name":"fat"},
 				{"name":"carbohydrates"}
 			]'
-		></indexeddb-fruit>
+		></indexeddb-ajax>
 
 		<p>
 
