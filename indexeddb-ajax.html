@@ -77,7 +77,7 @@
 			if(this.db){
 				if(this.columns.length>0){
 					var self = this;
-					var objectStore = this.db.transaction([self.dbName], "readonly").objectStore(self.dbStoreName);
+					var objectStore = this.db.transaction([self.dbStoreName], "readonly").objectStore(self.dbStoreName);
 					var index;
 					if(this.sortColumn) objectStore = objectStore.index(this.sortColumn);
 					var skip = this.start;
