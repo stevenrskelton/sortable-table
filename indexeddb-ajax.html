@@ -58,7 +58,7 @@
 
 				objectStore.transaction.oncomplete = function(event) {
 					// Store values in the newly created objectStore.
-					var innerObjectStore = db.transaction(self.dbName, "readwrite").objectStore(self.dbStoreName);
+					var innerObjectStore = db.transaction(self.dbStoreName, "readwrite").objectStore(self.dbStoreName);
 					response.forEach(function(element){
 						innerObjectStore.add(element);
 					});
