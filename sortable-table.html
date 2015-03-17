@@ -555,6 +555,10 @@
 			/* copy template from content into shadow dom */
 			if(templateId && this.shadowRoot && !this.shadowRoot.getElementById(templateId)){
 				var t = this.querySelector('#'+templateId);
+				if(!t) {
+					t = [].filter.call(this.children, function(o){ return o.id === templateId; });
+					if(t.length > 0) t = t[0];
+				}
 				if(t) this.shadowRoot.appendChild(t);
 				else alert('Could not find template `' + templateId + '`');
 			}
