@@ -176,3 +176,168 @@
 	});
 </script>
 </polymer-element>
+
+<!-- include prism -->
+<script src="prism/prismjs/prism.js"></script>
+
+<!-- include he for escaping -->
+<script src="prism/he/he.js"></script>
+
+<polymer-element name="prism-js" attributes="language linenumbers escape linehighlight theme inputValue">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <pre class="{{ linenumbers? 'line-numbers': '' }}" data-line="{{ linehighlight }}"><code id="codeviewer" class="language-{{language}}"></code></pre>
+  </template>
+  <script>
+    (function() {
+      Polymer('prism-js', {
+        /**
+        * The `language` attribute specifies the language class for the
+        * code snippet. To specify CSS as the language to use, simply
+        * set `language` to `css`. This automatically prepends the 'language'
+        * portion of the 'language-xxxx' class Prism uses.
+        *
+        * @attribute language
+        * @type string
+        * @default *
+        */
+        language: '*',
+        /**
+        * The `linenumbers` attribute toggles displaying line numbers at
+        * the beginning of code lines. Consult the [Line Numbers](http://prismjs.com/plugins/line-numbers/)
+        * plugin for further information.
+        *
+        * @attribute linenumbers
+        * @type boolean
+        * @default false
+        */
+        linenumbers: false,
+        /**
+        * The `escape` attribute will escape the code snippet prior to passing
+        * it to Prism for highlighting.
+        *
+        * @attribute escape
+        * @type boolean
+        * @default false
+        */
+        escape: false,
+        /**
+        * The `linehighlight` attribute highlights specific lines and/or line ranges.
+        * (e.g "1-5"). Consult the [Line Highlight](http://prismjs.com/plugins/line-highlight/)
+        * plugin documentation for further information.
+        *
+        * @attribute linehighlight
+        * @type string
+        * @default ''
+        */
+        linehighlight: '',
+        /**
+        * The `theme` attribute specifies the name of a valid Prism theme
+        * to use from the selection of themes available in the official Prism
+        * [package](https://github.com/LeaVerou/prism/tree/gh-pages/themes). The
+        * 'prism-' portion of the theme filename is automatically prepended for
+        * you. To set the theme to use the `prism-tomorrow.css` theme file, just
+        * set `theme` to 'tomorrow'.
+        *
+        * @attribute theme
+        * @type string
+        * @default ''
+        */
+        theme: '',
+        /**
+        * The `inputValue` attribute allows you to manually pass a string
+        * to be used as the code source for the element. Changes to the
+        * `inputValue` cause the element to be re-highlighted. This is useful
+        * for editors wishing to use the element.
+        *
+        * @attribute inputValue
+        * @type string
+        * @default ''
+        */
+        inputValue: '',
+        attached: function () {
+          this.highlight();
+        },
+
+        /**
+         * The `highlight` method will re-apply Prism highlighting
+         * as well as any theme or plugin highlighting supported to the
+         * current element. This should only be used if you are certain
+         * the content/inputValue of the snippet has changed.
+         *
+         * @method highlight
+         */
+        highlight: function () {
+          if (this.inputValue.length > 0) {
+            this.innerHTML = this.inputValue;
+          }
+
+          if (this.escape) {
+            this.innerHTML = he.encode(this.innerHTML);
+          }
+
+          this.$.codeviewer.innerHTML = this.innerHTML;
+          Prism.highlightElement(this.$.codeviewer);
+
+          this.injectTheme();
+          this.injectPluginStylesheets();
+        },
+
+        /**
+        * The `injectTheme` method dynamically injects a stylesheet for
+        * themining based on the `theme` attribute.
+        *
+        * @method injectTheme
+        */
+        injectTheme: function () {
+          var cssFile;
+          if (this.theme.length > 0) {
+            cssFile = 'prism/prismjs/prism-' + this.theme + '.css';
+          } else {
+            cssFile = 'prism/prismjs/prism.css';
+          }
+          this.injectStylesheet(cssFile);
+        },
+
+        injectPluginStylesheets: function () {
+          if (this.linenumbers) {
+            this.injectStylesheet('assets/line-numbers.css');
+          }
+
+          if (this.linehighlight.length > 0) {
+            this.injectStylesheet('assets/line-highlight.css');
+            this.injectStylesheet('assets/line-highlight-fix.css');
+          }
+        },
+        /**
+         * The `injectStylesheet` method will dynamically inject a
+         * stylesheet into the shadowRoot of the element before converting
+         * it to a form that can be interpreted by Polymer. This method
+         * is used internally and may be useful if working with plugins
+         * that require styling Shadow DOM.
+         *
+         * @method injectStylesheet
+         * @param {String} src a valid path to a stylesheet
+         */
+        injectStylesheet: function (src) {
+          if (src.length > 0) {
+            var link = document.createElement('link');
+            link.type = 'text/css';
+            link.rel = 'stylesheet';
+            link.href = src;
+            this.shadowRoot.appendChild(link);
+            this.element.convertSheetsToStyles(this.shadowRoot);
+          }
+        },
+
+        inputValueChanged: function () {
+          this.highlight();
+        }
+      });
+    })();
+  </script>
+</polymer-element>
