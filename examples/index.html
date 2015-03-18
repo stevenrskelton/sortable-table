@@ -269,10 +269,22 @@
 				<td><em>See</em> <a href="#column--celltemplate">Column § cellTemplate</a></td>
 			</tr>
 			<tr>
+				<td><code>class</code></td>
+				<td><em>string</em></td>
+				<td><code></code></td>
+				<td>CSS classes for row cells.</td>
+			</tr>
+			<tr>
 				<td><code>datatype</code></td>
 				<td><em>string</em></td>
 				<td><code>null</code></td>
 				<td>Optional specification of type of data in the column.</td>
+			</tr>
+			<tr>
+				<td><code>footerClass</code></td>
+				<td><em>string</em></td>
+				<td><code></code></td>
+				<td>CSS classes for empty footer cell (if rendered)</td>
 			</tr>
 			<tr>
 				<td><code>footerTemplate</code></td>
@@ -285,6 +297,12 @@
 				<td><em>function</em></td>
 				<td><code>null</code></td>
 				<td>Single parameter <code>row</code>, return will override any value for property in <code>data</code>, as well as be used for sorting</td>
+			</tr>
+			<tr>
+				<td><code>headerClass</code></td>
+				<td><em>string</em></td>
+				<td><code></code></td>
+				<td>CSS classes for header cell</td>
 			</tr>
 			<tr>
 				<td><code>headerTemplate</code></td>

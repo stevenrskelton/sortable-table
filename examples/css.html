@@ -43,14 +43,28 @@
 			width: 100px;
 			text-align: right;
 		}
+		::shadow .bold {
+			font-weight: bold !important;
+		}
+		::shadow .red {
+			color: DarkRed !important;
+		}
+		::shadow .blue {
+			color: DarkBlue;
+		}
+		::shadow .redBG {
+			background-color: DarkRed !important;
+		}
 	</style>
 </head>
 <body unresolved is="project-docs">
 
 	<h1>CSS</h1>
 
+	<h2>Built-in CSS Classes</h2>
+
 	All columns have CSS classes based on position and their data column's name.<br>
-	Individual columns can be styled using CSS.
+	Individual columns can be styled using CSS via built-in css classes.
 
 	<template is="auto-binding">
 
@@ -94,7 +108,7 @@
 
 	<p>
 
-	<h2>CSS Classes</h2>
+	<h3>CSS Classes</h3>
 
 	<table class="docs">
 		<thead>
@@ -224,5 +238,54 @@
 		});
 		</script>
 	</polymer-element>
+
+	<h2>User Specified CSS Classes</h2>
+
+	Sometimes the column name might not be the easiest way to specify a specific column's CSS.  Column definitions allow header, row, and footer CSS 
+	classes to be set using <code>headerClass</code>, <code>class</code>, <code>footerClass</code> respectivily.
+
+	<p>
+
+	<prism-js language="css" escape="true">	.bold  { font-weight: bold;         }
+	.red   { color: DarkRed;            }
+	.blue  { color: DarkBlue;           }
+	.redRB { background-color: DarkRed; }</prism-js>
+
+	<prism-js language="markup" escape="true">	<sortable-table>
+		<sortable-column>Fruit</sortable-column>
+		<sortable-column headerClass="red bold">Alice</sortable-column>
+		<sortable-column class="blue bold">Bill</sortable-column>
+		<sortable-column footerClass="redBG">Casey</sortable-column>
+	</sortable-table></prism-js>
+
+	<sortable-table id="stable" class="default">
+		<sortable-column cellTemplate="fruitsTemplate" footerTemplate="footerText">Fruit</sortable-column>
+		<sortable-column headerClass="red bold">Alice</sortable-column>
+		<sortable-column class="blue bold">Bill</sortable-column>
+		<sortable-column footerClass="redBG">Casey</sortable-column>
+
+		<template id="fruitsTemplate">
+			<td style="text-align:left;vertical-align:middle;width:250px;">
+				<fruit-icon fruit="{{value}}"></fruit-icon>
+				{{value}}
+			</td>
+		</template>
+		<template id="footerText">
+			<td>Fruits!</td>
+		</template>
+
+		[
+			['apple', 4, 10, 2 ],
+			['banana', 0, 4, 0 ],
+			['grape', 2, 3, 5 ],
+			['pear', 4, 2, 8 ],
+			['strawberry', 0, 14, 0 ],
+			['apple', 5, 6, 4 ],
+			['banana', 3, 9, 2 ],
+			['grape', 8, 3, 0 ],
+			['pear', 0, 7, 4 ],
+			['strawberry', 4, 5, 2 ]
+		]
+	</sortable-table>
 </body>
 </html>

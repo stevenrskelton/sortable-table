@@ -341,7 +341,7 @@
 				<template repeat="{{column,i in columns}}">
 					<template ref="{{column.headerTemplate || headerTemplate}}" bind>
 						<th
-							class="column-{{column.name}} column-{{i}}
+							class="{{column.headerClass}} column-{{column.name}} column-{{i}}
 								{{sortColumn == column.name && sortDescending ? 'sorted-column-desc' : ''}}
 								{{sortColumn == column.name && !sortDescending ? 'sorted-column-asc' : ''}}"
 							draggable="{{!disableColumnMove && !(rowTemplate || rowEditorTemplate)}}"
@@ -414,7 +414,7 @@
 						<template repeat="{{column in columns}}" bind>
 							<template ref="{{column.cellTemplate || cellTemplate}}" bind="{{record.fields[column.name]}}">
 								<td
-									class="column-{{column.name}}
+									class="{{column.class}} column-{{column.name}}
 										{{sortColumn == column.name && sortDescending ? 'sorted-column-desc' : ''}}
 										{{sortColumn == column.name && !sortDescending ? 'sorted-column-asc' : ''}}"
 								>{{value}}</td>
@@ -433,7 +433,7 @@
 					<template repeat="{{column in columns}}">
 						<template bind="{{templateData in data | selectProperty(column, args, forceFooterRefresh)}}">
 							<template ref="{{column.footerTemplate}}" bind="{{templateData}}">
-								<td></td>
+								<td class="{{column.footerClass}}"></td>
 							</template>
 						</template>
 					</template>
@@ -648,7 +648,10 @@
 				datatype: n.getAttribute('datatype'),
 				cellTemplate: n.getAttribute('cellTemplate'),
 				headerTemplate: n.getAttribute('headerTemplate'),
-				footerTemplate: n.getAttribute('footerTemplate')
+				footerTemplate: n.getAttribute('footerTemplate'),
+				headerClass: n.getAttribute('headerClass') || '',
+				class: n.getAttribute('class') || '',
+				footerClass: n.getAttribute('footerClass') || ''
 			};
 		},
 		/**
