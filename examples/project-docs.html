@@ -183,7 +183,7 @@
 <!-- include he for escaping -->
 <script src="prism/he/he.js"></script>
 
-<polymer-element name="prism-js" attributes="language linenumbers escape linehighlight theme inputValue">
+<polymer-element name="prism-js" attributes="language linenumbers escape linehighlight theme inputValue mirror">
   <template>
     <style>
       :host {
@@ -191,10 +191,15 @@
       }
     </style>
     <pre class="{{ linenumbers? 'line-numbers': '' }}" data-line="{{ linehighlight }}"><code id="codeviewer" class="language-{{language}}"></code></pre>
+    <template if="{{mirror}}"><content></content></template>
   </template>
   <script>
     (function() {
       Polymer('prism-js', {
+        /**
+        * Include contents in DOM
+        */
+        mirror: false,
         /**
         * The `language` attribute specifies the language class for the
         * code snippet. To specify CSS as the language to use, simply
@@ -277,10 +282,11 @@
           }
 
           if (this.escape) {
-            this.innerHTML = he.encode(this.innerHTML);
+			this.$.codeviewer.innerHTML = he.encode(this.innerHTML);
+          }else{
+			this.$.codeviewer.innerHTML = this.innerHTML;
           }
 
-          this.$.codeviewer.innerHTML = this.innerHTML;
           Prism.highlightElement(this.$.codeviewer);
 
           this.injectTheme();
@@ -341,3 +347,52 @@
     })();
   </script>
 </polymer-element>
+
+<script>
+	function sortableTableCellText(sortableTable){
+		var data = [];
+		var tbodyTR = sortableTable.shadowRoot.querySelectorAll('tbody > tr');
+		[].forEach.call(tbodyTR, function(row){
+			var rowData = [];
+			var td = row.querySelectorAll('td');
+			[].forEach.call(td, function(cell){
+				if(cell.innerText) rowData.push(cell.innerText);
+				else rowData.push(cell.textContent.trim());
+			});
+			data.push(rowData);
+		});
+		return data;
+	}
+	function sortableTableCells(sortableTable){
+		var data = [];
+		var tbodyTR = sortableTable.shadowRoot.querySelectorAll('tbody > tr');
+		[].forEach.call(tbodyTR, function(row){
+			var rowData = [];
+			var td = row.querySelectorAll('td');
+			[].forEach.call(td, function(cell){
+				rowData.push(cell);
+			});
+			data.push(rowData);
+		});
+		return data;
+	}
+	function sortableTableColumnHeaderText(sortableTable){
+		var data = [];
+		var theadTR = sortableTable.shadowRoot.querySelector('thead > tr');
+		var theadTH = theadTR.querySelectorAll('th');
+		[].forEach.call(theadTH, function(column){
+			if(column.innerText) data.push(column.innerText);
+			else data.push(column.textContent.trim());
+		});
+		return data;
+	}
+	function sortableTableColumnHeaders(sortableTable){
+		var data = [];
+		var theadTR = sortableTable.shadowRoot.querySelector('thead > tr');
+		var theadTH = theadTR.querySelectorAll('th');
+		[].forEach.call(theadTH, function(column){
+			data.push(column);
+		});
+		return data;
+	}
+</script>

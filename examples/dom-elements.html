@@ -6,13 +6,13 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<script src="../../webcomponentsjs/webcomponents.min.js"></script>
+	<script src="../../web-component-tester/browser.js"></script>
 	<link rel="import" href="../sortable-table.html">
-	<link rel="import" href="../../prism-js/prism-js.html">
 	<link rel="import" href="fruit-icon.html">
 	<link rel="import" href="project-docs.html">
 	<style shim-shadowdom>
 		.indent { margin-left: 65px; }
-		sortable-table { width: 500px; margin-left: 65px; }
+		sortable-table { width: 500px; margin-left: 25px; }
 		sortable-table::shadow td.column-alice,
 		sortable-table::shadow td.column-bill,
 		sortable-table::shadow td.column-casey,
@@ -31,45 +31,24 @@
 
 	The <code>sortable-column</code> elements should work the same way as a <code>columns</code> array.
 
-	<prism-js language="markup">&lt;sortable-table&gt;
-	&lt;sortable-column name="fruit" cellTemplate="fruitsTemplate"&gt;Type of Fruit&lt;/sortable-column&gt;
-	&lt;sortable-column name="alice"&gt;&lt;/sortable-column&gt;
-	&lt;sortable-column name="bill"&gt;&lt;/sortable-column&gt;
-	&lt;sortable-column name="casey"&gt;&lt;/sortable-column&gt;
-	&lt;template id="fruitsTemplate"&gt;
-		&lt;td&gt;
-			&lt;fruit-icon fruit="{{value}}"&gt;&lt;/fruit-icon&gt; {{value}}
-		&lt;/td&gt;
-	&lt;/template&gt;
+	<prism-js language="markup" escape="true" mirror><sortable-table class="default" id="example1">
+	<sortable-column name="fruit" cellTemplate="fruitsTemplate">Type of Fruit</sortable-column>
+	<sortable-column name="alice"></sortable-column>
+	<sortable-column name="bill"></sortable-column>
+	<sortable-column name="casey"></sortable-column>
+	<template id="fruitsTemplate">
+		<td style="text-align:left">
+			<fruit-icon fruit="{{value}}"></fruit-icon> {{value}}
+		</td>
+	</template>
 	[
-		{ "fruit":"apple",	"alice": 4,	"bill": 10,	"casey": 2 },
-		{ "fruit":"banana",	"alice": 0,	"bill": 4,	"casey": 0 },
-		{ "fruit":"grape",	"alice": 2,	"bill": 3,	"casey": 5 },
-		{ "fruit":"pear",	"alice": 4,	"bill": 2,	"casey": 8 },
+		{ "fruit":"apple",		"alice": 4,	"bill": 10,	"casey": 2 },
+		{ "fruit":"banana",		"alice": 0,	"bill": 4,	"casey": 0 },
+		{ "fruit":"grape",		"alice": 2,	"bill": 3,	"casey": 5 },
+		{ "fruit":"pear",		"alice": 4,	"bill": 2,	"casey": 8 },
 		{ "fruit":"strawberry",	"alice": 0,	"bill": 14,	"casey": 0 }
 	]
-&lt;/sortable-table&gt;</prism-js>
-
-	<p>
-
-	<sortable-table class="default">
-		<sortable-column name="fruit" cellTemplate="fruitsTemplate">Type of Fruit</sortable-column>
-		<sortable-column name="alice"></sortable-column>
-		<sortable-column name="bill"></sortable-column>
-		<sortable-column name="casey"></sortable-column>
-		<template id="fruitsTemplate">
-			<td style="text-align:left">
-				<fruit-icon fruit="{{value}}"></fruit-icon> {{value}}
-			</td>
-		</template>
-		[
-			{ "fruit":"apple",		"alice": 4,	"bill": 10,	"casey": 2 },
-			{ "fruit":"banana",		"alice": 0,	"bill": 4,	"casey": 0 },
-			{ "fruit":"grape",		"alice": 2,	"bill": 3,	"casey": 5 },
-			{ "fruit":"pear",		"alice": 4,	"bill": 2,	"casey": 8 },
-			{ "fruit":"strawberry",	"alice": 0,	"bill": 14,	"casey": 0 }
-		]
-	</sortable-table>
+</sortable-table></prism-js>
 
 	<p>
 
@@ -80,60 +59,132 @@
 		avoid reformatting the <code>data</code> array.
 	</p>
 
-	<prism-js language="markup">&lt;sortable-table&gt;
-   [[ "apple", 4, 10, 2 ],
-	[ "banana", 0, 4, 0 ],
-	[ "grape", 2, 3, 5 ],
-	[ "pear", 4, 2, 8 ],
-	[ "strawberry", 0, 14, 0 ]]
-&lt;/sortable-table&gt;</prism-js>
-
-	<p>
-
-	<sortable-table class="default">
-		[[ "apple", 4, 10, 2 ],
-		 [ "banana", 0, 4, 0 ],
-		 [ "grape", 2, 3, 5 ],
-		 [ "pear", 4, 2, 8 ],
-		 [ "strawberry", 0, 14, 0 ]]
-	</sortable-table>
+	<prism-js language="markup" escape="true" mirror><sortable-table class="default" id="example2">
+	[[ "apple", 4, 10, 2 ],
+		[ "banana", 0, 4, 0 ],
+		[ "grape", 2, 3, 5 ],
+		[ "pear", 4, 2, 8 ],
+		[ "strawberry", 0, 14, 0 ]]
+</sortable-table></prism-js>
 
 	<h2>Binding in DOM Elements</h2>
 
 	All attributes (excluding <code>name</code>) in each <code>sortable-column</code> can be bound to.
 
-	<prism-js language="markup">&lt;sortable-table&gt;
-	&lt;sortable-column name="fruit" title="{{column1}}"&gt;&lt;/sortable-column&gt;
-	&lt;sortable-column name="alice"&gt;{{column2}}&lt;/sortable-column&gt;
-	[
-		{ "fruit":"apple",	"alice": 4,	"bill": 10,	"casey": 2 },
-		{ "fruit":"banana",	"alice": 0,	"bill": 4,	"casey": 0 },
-		{ "fruit":"grape",	"alice": 2,	"bill": 3,	"casey": 5 },
-		{ "fruit":"pear",	"alice": 4,	"bill": 2,	"casey": 8 },
-		{ "fruit":"strawberry",	"alice": 0,	"bill": 14,	"casey": 0 }
-	]
-&lt;/sortable-table&gt;</prism-js>
-
-	<template is="auto-binding">
+	<template is="auto-binding" id="example3template">
 		<table class="indent">
 			<tr>
-				<td>Column 1 title : </td><td><input type="text" value="{{column1}}"></td>
+				<td>Column 1 title : </td><td><input type="text" value="{{column1}}" id="titleAttribute"></td>
 			</tr>
 			<tr>
-				<td>Column 2 #text : </td><td><input type="text" value="{{column2}}"></td>
+				<td>Column 2 #text : </td><td><input type="text" value="{{column2}}" id="titleText"></td>
 			</tr>
 		</table>
-		<sortable-table class="default">
-			<sortable-column name="fruit" title="{{column1}}"></sortable-column>
-			<sortable-column name="alice">{{column2}}</sortable-column>
-			[
-				{ "fruit":"apple",		"alice": 4,	"bill": 10,	"casey": 2 },
-				{ "fruit":"banana",		"alice": 0,	"bill": 4,	"casey": 0 },
-				{ "fruit":"grape",		"alice": 2,	"bill": 3,	"casey": 5 },
-				{ "fruit":"pear",		"alice": 4,	"bill": 2,	"casey": 8 },
-				{ "fruit":"strawberry",	"alice": 0,	"bill": 14,	"casey": 0 }
-			]
-		</sortable-table>
+		<prism-js language="markup" escape="true" mirror><sortable-table class="default" id="example3">
+	<sortable-column name="fruit" title="{{column1}}"></sortable-column>
+	<sortable-column name="alice">{{column2}}</sortable-column>
+	[
+		{ "fruit":"apple",		"alice": 4,	"bill": 10,	"casey": 2 },
+		{ "fruit":"banana",		"alice": 0,	"bill": 4,	"casey": 0 },
+		{ "fruit":"grape",		"alice": 2,	"bill": 3,	"casey": 5 },
+		{ "fruit":"pear",		"alice": 4,	"bill": 2,	"casey": 8 },
+		{ "fruit":"strawberry",	"alice": 0,	"bill": 14,	"casey": 0 }
+	]
+</sortable-table></prism-js>
 	</template>
+
+	<script>
+	suite('example1', function() {
+		var sortableTable = document.getElementById('example1');
+		test('correct data', function() {
+			var data = sortableTableCellText(sortableTable);
+			assert.deepEqual(data[0],['apple','4','10','2']);
+			assert.deepEqual(data[1],['banana','0','4','0']);
+			assert.deepEqual(data[2],['grape','2','3','5']);
+			assert.deepEqual(data[3],['pear','4','2','8']);
+			assert.deepEqual(data[4],['strawberry','0','14','0']);
+			assert.lengthOf(data, 5);
+			
+			var columns = sortableTableColumnHeaderText(sortableTable);
+			assert.deepEqual(columns, ['Type of Fruit','alice','bill','casey']);
+		});
+		test('templated fruit column', function() {
+			var data = sortableTableCells(sortableTable);
+			data.forEach(function(row){
+				assert.ok(row[0].querySelector('fruit-icon'));
+			});
+		});
+	});
+	suite('example2', function() {
+		var sortableTable = document.getElementById('example2');
+		test('correct data', function() {
+			var data = sortableTableCellText(sortableTable);
+			assert.deepEqual(data[0],['apple','4','10','2']);
+			assert.deepEqual(data[1],['banana','0','4','0']);
+			assert.deepEqual(data[2],['grape','2','3','5']);
+			assert.deepEqual(data[3],['pear','4','2','8']);
+			assert.deepEqual(data[4],['strawberry','0','14','0']);
+			assert.lengthOf(data, 5);
+			
+			var columns = sortableTableColumnHeaderText(sortableTable);
+			assert.deepEqual(columns, ['0','1','2','3']);
+		});
+		test('sorts data ascending', function(done) {
+			sortableTable.sortColumn = '2';
+			sortableTable.sortDescending = false;
+			flush(function() {
+				var data = sortableTableCellText(sortableTable);
+				assert.deepEqual(data[3],['apple','4','10','2']);
+				assert.deepEqual(data[2],['banana','0','4','0']);
+				assert.deepEqual(data[1],['grape','2','3','5']);
+				assert.deepEqual(data[0],['pear','4','2','8']);
+				assert.deepEqual(data[4],['strawberry','0','14','0']);
+				assert.lengthOf(data, 5);
+				done();
+			});
+		});
+		test('sorts data descending', function(done) {
+			sortableTable.sortColumn = '2';
+			sortableTable.sortDescending = true;
+			flush(function() {
+				var data = sortableTableCellText(sortableTable);
+				assert.deepEqual(data[1],['apple','4','10','2']);
+				assert.deepEqual(data[2],['banana','0','4','0']);
+				assert.deepEqual(data[3],['grape','2','3','5']);
+				assert.deepEqual(data[4],['pear','4','2','8']);
+				assert.deepEqual(data[0],['strawberry','0','14','0']);
+				assert.lengthOf(data, 5);
+				done();
+			});
+		});
+	});
+	suite('example3', function() {
+		flush(function(){
+			var template = document.getElementById('example3template');
+			var sortableTable = document.getElementById('example3');
+
+			test('default headers', function() {
+				var columns = sortableTableColumnHeaderText(sortableTable);
+				assert.deepEqual(columns, ['','alice']);
+			});
+			test('changed title attribute', function(done) {
+				template.model.column1 = 'titleAttribute';
+				flush(function() {
+					var columns = sortableTableColumnHeaderText(sortableTable);
+					assert.deepEqual(columns, ['titleAttribute','alice']);
+					done();
+				});
+			});
+			test('changed #text title', function(done) {
+				template.model.column2 = 'titleText';
+				flush(function() {
+					var columns = sortableTableColumnHeaderText(sortableTable);
+					assert.deepEqual(columns, ['titleAttribute','titleText']);
+					done();
+				});
+			});
+		});
+	});
+	</script>
 </body>
 </html>

@@ -41,12 +41,14 @@
 		sortDescending
 		userSort
 	"
-	style="display:block"
 >
 <template>
 	<content select='[role="datasource"]'></content>
 	<content select="core-scroll-threshold"></content>
 	<style>
+	:host {
+		display:block;
+	}
 	.sortable-table {
 		width: 100%;
 		max-width: 100%;
