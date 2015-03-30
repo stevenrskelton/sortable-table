@@ -64,16 +64,7 @@
 	suite('example1', function() {
 		var sortableTable = document.getElementById('example1');
 		test('generates columns', function() {
-			var data = sortableTableCellText(sortableTable);
-			assert.deepEqual(data[0],['apple','4','10','2']);
-			assert.deepEqual(data[1],['banana','0','4','0']);
-			assert.deepEqual(data[2],['grape','2','3','5']);
-			assert.deepEqual(data[3],['pear','4','2','8']);
-			assert.deepEqual(data[4],['strawberry','0','14','0']);
-			assert.lengthOf(data, 5);
-			
-			var columns = sortableTableColumnHeaderText(sortableTable);
-			assert.deepEqual(columns, ['fruit','alice','bill','casey']);
+			sortableTableHasStandardDataSet(sortableTable);
 		});
 		test('sorts data ascending', function(done) {
 			sortableTable.sortColumn = 'bill';

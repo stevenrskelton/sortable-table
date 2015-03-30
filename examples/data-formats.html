@@ -6,11 +6,12 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<script src="../../webcomponentsjs/webcomponents.min.js"></script>
+	<script src="../../web-component-tester/browser.js"></script>
 	<link rel="import" href="../sortable-table.html">
 	<link rel="import" href="project-docs.html">
 
 	<style shim-shadowdom>
-		sortable-table { width: 500px; margin-left: 65px; }
+		sortable-table { width: 500px; margin-left: 15px; }
 		sortable-table::shadow td.column-alice,
 		sortable-table::shadow td.column-bill,
 		sortable-table::shadow td.column-casey,
@@ -32,63 +33,33 @@
 
 	<h3>Inlined Content</h3>
 
-	<pre>
-	&lt;sortable-table&gt;
-	[
-		{ "fruit":"apple",	"alice": 4,	"bill": 10,	"casey": 2 },
-		{ "fruit":"banana",	"alice": 0,	"bill": 4,	"casey": 0 },
-		{ "fruit":"grape",	"alice": 2,	"bill": 3,	"casey": 5 },
-		{ "fruit":"pear",	"alice": 4,	"bill": 2,	"casey": 8 },
-		{ "fruit":"strawberry",	"alice": 0,	"bill": 14,	"casey": 0 }
-	]
-	&lt;/sortable-table&gt;
-	</pre>
-
-	<p>
-
-	<sortable-table class="default">
-	[
-		{ "fruit":"apple",		"alice": 4,	"bill": 10,	"casey": 2 },
-		{ "fruit":"banana",		"alice": 0,	"bill": 4,	"casey": 0 },
-		{ "fruit":"grape",		"alice": 2,	"bill": 3,	"casey": 5 },
-		{ "fruit":"pear",		"alice": 4,	"bill": 2,	"casey": 8 },
-		{ "fruit":"strawberry",	"alice": 0,	"bill": 14,	"casey": 0 }
-	]
-	</sortable-table>
+	<prism-js language="markup" escape="true" mirror><sortable-table class="default" id="example1">
+[
+	{ "fruit":"apple",		"alice": 4,	"bill": 10,	"casey": 2 },
+	{ "fruit":"banana",		"alice": 0,	"bill": 4,	"casey": 0 },
+	{ "fruit":"grape",		"alice": 2,	"bill": 3,	"casey": 5 },
+	{ "fruit":"pear",		"alice": 4,	"bill": 2,	"casey": 8 },
+	{ "fruit":"strawberry",	"alice": 0,	"bill": 14,	"casey": 0 }
+]
+</sortable-table></prism-js>
 
 	<p>
 
 	<h3>DOM</h3>
 
-	<pre>
-	&lt;sortable-table&gt;
-		&lt;sortable-column&gt;fruit&lt;/sortable-column&gt;
-		&lt;sortable-column&gt;alice&lt;/sortable-column&gt;
-		&lt;sortable-column&gt;bill&lt;/sortable-column&gt;
-		&lt;sortable-column&gt;casey&lt;/sortable-column&gt;
-		[
-			[ "apple", 4, 10, 2 ],
-			[ "banana", 0, 4, 0 ],
-			[ "grape", 2, 3, 5 ],
-			[ "pear", 4, 2, 8 ],
-			[ "strawberry", 0, 14, 0 ]
-		]
-	&lt;/sortable-table&gt;
-	</pre>
-
-	<sortable-table class="default">
-		<sortable-column>fruit</sortable-column>
-		<sortable-column>alice</sortable-column>
-		<sortable-column>bill</sortable-column>
-		<sortable-column>casey</sortable-column>
-		[
-			[ "apple", 4, 10, 2 ],
-			[ "banana", 0, 4, 0 ],
-			[ "grape", 2, 3, 5 ],
-			[ "pear", 4, 2, 8 ],
-			[ "strawberry", 0, 14, 0 ]
-		]
-	</sortable-table>
+	<prism-js language="markup" escape="true" mirror><sortable-table class="default" id="example2">
+	<sortable-column>fruit</sortable-column>
+	<sortable-column>alice</sortable-column>
+	<sortable-column>bill</sortable-column>
+	<sortable-column>casey</sortable-column>
+	[
+		[ "apple", 4, 10, 2 ],
+		[ "banana", 0, 4, 0 ],
+		[ "grape", 2, 3, 5 ],
+		[ "pear", 4, 2, 8 ],
+		[ "strawberry", 0, 14, 0 ]
+	]
+</sortable-table></prism-js>
 
 	<p>
 
@@ -97,15 +68,14 @@
 	While binding full <a href="http://json.org/" target="_blank">JSON</a> objects to attributes may be necessary for advanced operation, the custom element is smart enought to figure things out if given simple arrays.<br>
 	If the <code>data</code> is specifies as Arrays and not Objects, be sure to specify <code>columns</code> as well otherwise column headers will be the integers 0 to N.
 
-	<pre>
-	&lt;sortable-table columns='["fruit","alice","bill","casey"]' data='[
-		[ "apple", 4, 10, 2 ],
-		[ "banana", 0, 4, 0 ],
-		[ "grape", 2, 3, 5 ],
-		[ "pear", 4, 2, 8 ],
-		[ "strawberry", 0, 14, 0 ] ]'&gt;
-	&lt;/sortable-table&gt;
-	</pre>
+	<prism-js language="markup">&lt;sortable-table class="default" columns='["fruit","alice","bill","casey"]' data='[
+	[ "apple", 4, 10, 2 ],
+	[ "banana", 0, 4, 0 ],
+	[ "grape", 2, 3, 5 ],
+	[ "pear", 4, 2, 8 ],
+	[ "strawberry", 0, 14, 0 ]
+]'&gt;
+&lt;/sortable-table&gt;</prism-js>
 
 	<sortable-table class="default" columns='["fruit","alice","bill","casey"]' data='[
 		[ "apple", 4, 10, 2 ],
@@ -113,24 +83,22 @@
 		[ "grape", 2, 3, 5 ],
 		[ "pear", 4, 2, 8 ],
 		[ "strawberry", 0, 14, 0 ]
-	]'>
+	]' id="example3">
 	</sortable-table>
 
 	<p>Or mix simple attributes with inlined content:</p>
 
-	<pre>
-	&lt;sortable-table columns='["fruit","alice","bill","casey"]'&gt;
-	[
-		[ "apple", 4, 10, 2 ],
-		[ "banana", 0, 4, 0 ],
-		[ "grape", 2, 3, 5 ],
-		[ "pear", 4, 2, 8 ],
-		[ "strawberry", 0, 14, 0 ]
-	]
-	&lt;/sortable-table&gt;
-	</pre>
+	<prism-js language="markup">&lt;sortable-table class="default" columns='["fruit","alice","bill","casey"]'&gt;
+[
+	[ "apple", 4, 10, 2 ],
+	[ "banana", 0, 4, 0 ],
+	[ "grape", 2, 3, 5 ],
+	[ "pear", 4, 2, 8 ],
+	[ "strawberry", 0, 14, 0 ]
+]
+&lt;/sortable-table&gt;</prism-js>
 
-	<sortable-table class="default" columns='["fruit","alice","bill","casey"]'>
+	<sortable-table class="default" columns='["fruit","alice","bill","casey"]' id="example4">
 	[
 		[ "apple", 4, 10, 2 ],
 		[ "banana", 0, 4, 0 ],
@@ -144,30 +112,50 @@
 
 	While more advanced Javascript binding is possible, loading data into the component can be as simple as assignment of a JSON array.
 
-	<pre>
-	&lt;script&gt;
-		window.addEventListener('polymer-ready', function(){
-			document.getElementById('mytable').data = [
-			  { "fruit":"apple",		"alice": 4,	"bill": 10,	"casey": 2 },
-			  { "fruit":"banana",		"alice": 0,	"bill": 4,	"casey": 0 },
-			  { "fruit":"grape",		"alice": 2,	"bill": 3,	"casey": 5 },
-			  { "fruit":"pear",		"alice": 4,	"bill": 2,	"casey": 8 },
-			  { "fruit":"strawberry",	"alice": 0,	"bill": 14,	"casey": 0 }
-			];
-		});
-	&lt;/script&gt;
-	&lt;sortable-table id="mytable"&gt;&lt;/sortable-table&gt;
-	</pre>
-	<script>
+	<prism-js language="markup" escape="true" mirror><script>
 	window.addEventListener('polymer-ready', function(){
-	document.getElementById('mytable').data = 	[
-		{ "fruit":"apple",		"alice": 4,	"bill": 10,	"casey": 2 },
-		{ "fruit":"banana",		"alice": 0,	"bill": 4,	"casey": 0 },
-		{ "fruit":"grape",		"alice": 2,	"bill": 3,	"casey": 5 },
-		{ "fruit":"pear",		"alice": 4,	"bill": 2,	"casey": 8 },
-		{ "fruit":"strawberry",	"alice": 0,	"bill": 14,	"casey": 0 }
-	];});
-	</script>
-	<sortable-table class="default" id="mytable"></sortable-table>
+		document.getElementById('example5').data = [
+			{ "fruit":"apple",		"alice": 4,	"bill": 10,	"casey": 2 },
+			{ "fruit":"banana",		"alice": 0,	"bill": 4,	"casey": 0 },
+			{ "fruit":"grape",		"alice": 2,	"bill": 3,	"casey": 5 },
+			{ "fruit":"pear",		"alice": 4,	"bill": 2,	"casey": 8 },
+			{ "fruit":"strawberry",	"alice": 0,	"bill": 14,	"casey": 0 }
+		];
+	});
+</script>
+<sortable-table class="default" id="example5"></sortable-table></prism-js>
+
+<script>
+	suite('example1', function() {
+		var sortableTable = document.getElementById('example1');
+		test('correct data', function() {
+			sortableTableHasStandardDataSet(sortableTable);
+		});
+	});
+	suite('example2', function() {
+		var sortableTable = document.getElementById('example2');
+		test('correct data', function() {
+			sortableTableHasStandardDataSet(sortableTable);
+		});
+	});
+	suite('example3', function() {
+		var sortableTable = document.getElementById('example3');
+		test('correct data', function() {
+			sortableTableHasStandardDataSet(sortableTable);
+		});
+	});
+	suite('example4', function() {
+		var sortableTable = document.getElementById('example4');
+		test('correct data', function() {
+			sortableTableHasStandardDataSet(sortableTable);
+		});
+	});
+	suite('example5', function() {
+		var sortableTable = document.getElementById('example5');
+		test('correct data', function() {
+			sortableTableHasStandardDataSet(sortableTable);
+		});
+	});
+</script>
 </body>
 </html>
