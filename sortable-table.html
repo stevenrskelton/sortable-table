@@ -558,11 +558,11 @@
 			if(templateId && this.shadowRoot && !this.shadowRoot.getElementById(templateId)){
 				var t = this.querySelector('#'+templateId);
 				if(!t) {
-					t = [].filter.call(this.children, function(o){ return o.id === templateId; });
-					if(t.length > 0) t = t[0];
+					var f = [].filter.call(this.children, function(o){ return o.id === templateId; });
+					if(f.length > 0) t = f[0];
 				}
 				if(t) this.shadowRoot.appendChild(t);
-				else alert('Could not find template `' + templateId + '`');
+				else console.log('ERROR: Could not find template `' + templateId + '`');
 			}
 		},
 		rebuildColumns: function(){
