@@ -3,32 +3,35 @@
          columnDragMixin, rowDragMixin, rowFiltersMixin, rowEditorMixin */
 "use strict";
 Polymer(Polymer.mixin({
+    columnWatches: null,
+    dataSize: 0,
+    dataSource: null,
     disableColumnMove: false,
     footerTemplate: null,
+    grid: false,
     headerTemplate: null,
     lastPage: 1,
+    loading: false,
+    multiRowEdit: false,
     multiSelect: false,
     page: 1,
     pageSize: Number.MAX_VALUE,
-    dataSize: 0,
     rowEditorTemplate: null,
-    multiRowEdit: false,
     rowSelection: false,
     rowTemplate: null,
     selected: null,
+    showFooter: false,
     sortColumn: null,
     sortDescending: false,
-    showFooter: false,
-    grid: false,
-    toggleGrid: function () { this.grid = !this.grid; },
-    dataSource: null,
     userSort: false,
-    loading: false,
     publish: {
         args: {},
         data: [],
-        columns: [],
-        undoStack: []
+        columns: []
+    },
+    created: function () {
+        this.undoStack = [];
+        this.columnWatches = [];
     },
     ready: function () {
         var self = this;
@@ -82,19 +85,23 @@ Polymer(Polymer.mixin({
     /**
       *    Logic
       */
-    observing: function (o) { return o; },
-    isArray: function (a) {
-        return Object.prototype.toString.call(a) === '[object Array]';
+    observing: function (o) {
+        return o;
     },
-    stopPropagation: function (e) { e.stopPropagation(); },
+    stopPropagation: function (e) {
+        e.stopPropagation();
+    },
     customFormat: function (v, format) {
         if (format) {
             return format(v);
         }
         return v;
     },
+    toggleGrid: function () {
+        this.grid = !this.grid;
+    },
     toggleRowFromSelected: function (row) {
-        if (this.isArray(this.selected)) {
+        if (Array.isArray(this.selected)) {
             var index = this.selected.indexOf(row);
             if (index > -1) {
                 this.selected.splice(index, 1);
@@ -109,7 +116,6 @@ Polymer(Polymer.mixin({
             }
         }
     },
-    columnWatches: [],
     addTemplateIfNotInDocument: function (templateId) {
         /* copy template from content into shadow dom */
         if (templateId && this.shadowRoot && !this.shadowRoot.getElementById(templateId)) {
@@ -161,16 +167,14 @@ Polymer(Polymer.mixin({
                 this.columnsChanged();
             } else if (this.data !== null && this.data.length > 0) {
                 var unique = [];
-                var i;
-                var f = function (property) {
-                    if (unique.indexOf(property) === -1) {
-                        unique.push(property);
-                        c.push({name: property, index: unique.length - 1 });
-                    }
-                };
-                for (i = 0; i < this.data.length; i++) {
-                    Object.keys(this.data[i]).forEach(f);
-                }
+                this.data.forEach(function (row) {
+                    Object.keys(row).forEach(function (property) {
+                        if (unique.indexOf(property) === -1) {
+                            unique.push(property);
+                            c.push({name: property, index: unique.length - 1 });
+                        }
+                    });
+                });
                 this.columns = c;
             }
         }
@@ -229,15 +233,15 @@ Polymer(Polymer.mixin({
     /**
       *    Change Observers
       */
-    argsChanged: function (oldValue, newValue) {
-        var observer = new ObjectObserver(newValue);
+    argsChanged: function (oldVal, newVal) {
+        var observer = new ObjectObserver(newVal);
         var self = this;
         observer.open(function (added, removed, changed, getOldValueFn) {
             self.forceFooterRefresh++;
             self.forceRefresh++;
         });
     },
-    columnsChanged: function () {
+    columnsChanged: function (oldVal, newVal) {
         var self = this;
         //explode columns if simple text array
         if (self.columns.length > 0 && typeof self.columns[0] === 'string') {
@@ -247,52 +251,50 @@ Polymer(Polymer.mixin({
         }
         //watch templateIds since if added/modified we need to copy those templates into the shadow dom
         function addTemplateWatches(column, field) {
-            var i;
-            for (i = 0; i < self.columnWatches.length; i++) {
-                /*jslint nomen: true*/
-                if (self.columnWatches[i].object_ === column && self.columnWatches[i].path_[0] === field) { return; }
-                /*jslint evil: false*/
+            /*jslint nomen: true*/
+            if (self.columnWatches.every(function (watch) {
+                    return !(watch.object_ === column && watch.path_[0] === field);
+                })) {
+                var observer = new PathObserver(column, field);
+                self.columnWatches.push(observer);
+                observer.open(function (added, removed, changed, getOldValueFn) {
+                    self.columnsChanged();
+                });
             }
-            var observer = new PathObserver(column, field);
-            self.columnWatches.push(observer);
-            observer.open(function (added, removed, changed, getOldValueFn) {
-                self.columnsChanged();
-            });
+            /*jslint evil: false*/
         }
-        var i, c;
-        for (i = 0; i < this.columns.length; i++) {
-            c = this.columns[i];
-            this.addTemplateIfNotInDocument(c.cellTemplate);
-            this.addTemplateIfNotInDocument(c.headerTemplate);
-            this.addTemplateIfNotInDocument(c.footerTemplate);
-            if (c.footerTemplate) { this.showFooter = true; }
-            addTemplateWatches(c, 'cellTemplate');
-            addTemplateWatches(c, 'headerTemplate');
-            addTemplateWatches(c, 'footerTemplate');
-        }
+        this.columns.forEach(function (column) {
+            self.addTemplateIfNotInDocument(column.cellTemplate);
+            self.addTemplateIfNotInDocument(column.headerTemplate);
+            self.addTemplateIfNotInDocument(column.footerTemplate);
+            if (column.footerTemplate) { self.showFooter = true; }
+            addTemplateWatches(column, 'cellTemplate');
+            addTemplateWatches(column, 'headerTemplate');
+            addTemplateWatches(column, 'footerTemplate');
+        });
         if (this.dataSource) { this.dataSource.columns = this.columns; }
         this.forceRefresh++;
     },
-    rowSelectionChanged: function (a, val) {
+    rowSelectionChanged: function (oldVal, newVal) {
         var table = this.shadowRoot.querySelector('tbody');
         if (table) {
-            if (val) {
+            if (newVal) {
                 table.classList.add('row-selection');
             } else {
                 table.classList.remove('row-selection');
             }
         }
     },
-    multiSelectChanged: function (a, val) {
-        if (val) {
-            if (!this.isArray(this.selected)) {
+    multiSelectChanged: function (oldVal, newVal) {
+        if (newVal) {
+            if (!Array.isArray(this.selected)) {
                 if (this.selected) {
                     this.selected = [this.selected];
                 } else {
                     this.selected = [];
                 }
             }
-        } else if (this.isArray(this.selected)) {
+        } else if (Array.isArray(this.selected)) {
             if (this.selected.length > 0) {
                 this.selected = this.selected[0];
             } else {
@@ -300,28 +302,44 @@ Polymer(Polymer.mixin({
             }
         }
     },
-    selectedChanged: function (a, val) {
-        if (val) {
-            if (this.isArray(val)) {
+    selectedChanged: function (oldVal, newVal) {
+        if (newVal) {
+            if (Array.isArray(newVal)) {
                 if (!this.multiSelect) { this.multiSelect = true; }
             } else {
                 if (this.multiSelect) { this.multiSelect = false; }
             }
         }
     },
-    sortColumnChanged: function () { if (this.dataSource) { this.dataSource.sortColumn = this.sortColumn; } },
-    sortDescendingChanged: function () { if (this.dataSource) { this.dataSource.sortDescending = this.sortDescending; } },
-    dataChanged: function (o, n) {
-        if (n === null) { this.data = []; }
+    sortColumnChanged: function (oldVal, newVal) {
+        if (this.dataSource) { this.dataSource.sortColumn = this.sortColumn; }
+    },
+    sortDescendingChanged: function (oldVal, newVal) {
+        if (this.dataSource) { this.dataSource.sortDescending = this.sortDescending; }
+    },
+    dataChanged: function (oldVal, newVal) {
+        if (newVal === null) { this.data = []; }
         this.rebuildColumns();
         this.pageSizeChanged();
     },
-    cellTemplateChanged: function (a, t) { this.addTemplateIfNotInDocument(t); },
-    rowTemplateChanged: function (a, t) { this.addTemplateIfNotInDocument(t); },
-    headerTemplateChanged: function (a, t) { this.addTemplateIfNotInDocument(t); this.forceRefresh++; },
-    footerTemplateChanged: function (a, t) { this.addTemplateIfNotInDocument(t); this.forceRefresh++; },
-    rowEditorTemplateChanged: function (a, t) { this.addTemplateIfNotInDocument(t); },
-    pageSizeChanged: function () {
+    cellTemplateChanged: function (oldVal, newVal) {
+        this.addTemplateIfNotInDocument(newVal);
+    },
+    rowTemplateChanged: function (oldVal, newVal) {
+        this.addTemplateIfNotInDocument(newVal);
+    },
+    rowEditorTemplateChanged: function (oldVal, newVal) {
+        this.addTemplateIfNotInDocument(newVal);
+    },
+    headerTemplateChanged: function (oldVal, newVal) {
+        this.addTemplateIfNotInDocument(newVal);
+        this.forceRefresh++;
+    },
+    footerTemplateChanged: function (oldVal, newVal) {
+        this.addTemplateIfNotInDocument(newVal);
+        this.forceRefresh++;
+    },
+    pageSizeChanged: function (oldVal, newVal) {
         if (this.dataSource) {
             this.dataSource.length = this.pageSize;
         } else if (this.data) {
@@ -329,7 +347,7 @@ Polymer(Polymer.mixin({
         }
         this.lastPage = Math.max(1, Math.ceil(this.dataSize / this.pageSize));
     },
-    pageChanged: function () { if (this.dataSource) { this.dataSource.start = (this.page - 1) * this.pageSize; } },
+    pageChanged: function (oldVal, newVal) { if (this.dataSource) { this.dataSource.start = (this.page - 1) * this.pageSize; } },
     /**
       *    Checkbox helper functions
       */
@@ -341,10 +359,10 @@ Polymer(Polymer.mixin({
     },
     checkall: function (e) {
         if (e.target.checked) {
-            var i;
-            for (i = 0; i < this.data.length; i++) {
-                if (this.selected.indexOf(this.data[i]) === -1) { this.selected.push(this.data[i]); }
-            }
+            var selected = this.selected;
+            this.data.forEach(function (row) {
+                if (selected.indexOf(row) === -1) { selected.push(row); }
+            });
         } else {
             this.selected = [];
         }
@@ -387,17 +405,14 @@ Polymer(Polymer.mixin({
 
         var sortedArray;
 
+        var keyColumn = columns.find(function (column) {
+            return column.name === key;
+        });
+
         var sortFunction = function (a, b) {
             var x, y;
             //determine if computed field
-            var formula = null;
-            var i;
-            for (i = 0; i < columns.length; i++) {
-                if (columns[i].name === key) {
-                    formula = columns[i].formula;
-                    break;
-                }
-            }
+            var formula = keyColumn.formula;
             if (formula) {
                 if (a[key] === undefined) {
                     x = formula(a, args);
@@ -453,7 +468,7 @@ Polymer(Polymer.mixin({
         }
 
         var records = [];
-        var isMultiSelect = this.isArray(selected);
+        var isMultiSelect = Array.isArray(selected);
 
         if (page < 1) { page = 1; }
 
@@ -468,20 +483,19 @@ Polymer(Polymer.mixin({
         }
 
         var valueSelector = function (row, column) { return row[column.name]; };
-        if (sortedArray.length > 0 && this.isArray(sortedArray[0])) {
+        if (sortedArray.length > 0 && Array.isArray(sortedArray[0])) {
             valueSelector = function (row, column) { return row[column.index]; };
         }
 
-        var i, row, isSelected, isEditMode, isDirty, isInUndo, fields;
-        var f = function (i) {
-            row = sortedArray[i];
+        var i, isSelected, isEditMode, isDirty, isInUndo, fields;
+        var f = function (row) {
             isSelected = isMultiSelect ? selected.indexOf(row) > -1 : row === selected;
             isEditMode = this.editRow === row;
             isDirty = false;
             isInUndo = this.undoStack.filter(function (element) { return element.ref === row; });
             if (isInUndo.length > 0) { isDirty = this.rowHasBeenEdited(isInUndo[0]); }
             fields = {};
-            columns.forEach(function (column, index, array) {
+            columns.forEach(function (column) {
                 var value;
                 if (column.formula) {
                     if (row[column.name] !== undefined || row[column.index] !== undefined) {
@@ -496,16 +510,14 @@ Polymer(Polymer.mixin({
             });
             records.push({ selected: isSelected, editMode: isEditMode, dirty: isDirty, fields: fields, row: row });
         };
-        var self = this;
-        for (i = start; i < end; i++) { f.call(self, i); }
+        for (i = start; i < end; i++) { f.call(this, sortedArray[i]); }
         return records;
     },
     selectProperty: function (objects, column, args) {
         var arr = [];
         var rowArr = [];
-        var i, row, value;
-        for (i = 0; i < objects.length; i++) {
-            row = objects[i];
+        objects.forEach(function (row) {
+            var value;
             if (column.formula) {
                 if (row[column.name] === undefined) {
                     value = column.formula(row, args);
@@ -517,7 +529,7 @@ Polymer(Polymer.mixin({
             }
             rowArr.push(row[column.name]);
             arr.push(value);
-        }
+        });
         return { values: arr, rowValues: rowArr, column: column, args: args };
     },
     naturalNumbers: function (n, mid) {
