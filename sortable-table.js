@@ -24,10 +24,63 @@ Polymer(Polymer.mixin({
     sortColumn: null,
     sortDescending: false,
     userSort: false,
+    datatypes: null,
+    undefinedCompareFunction: function (x, y) {
+        if (x === undefined || x === null) {
+            if (y === undefined || y === null) { return 0; }
+            return 1;
+        }
+        if (y === undefined || y === null) { return -1; }
+        return null;
+    },
     publish: {
         args: {},
         data: [],
-        columns: []
+        columns: [],
+        datatypes: {
+            number: function (x, y) {
+                var nx = +x;
+                var ny = +y;
+                if (nx < ny) { return -1; }
+                if (nx > ny) { return 1; }
+                return 0;
+            },
+            string: function (x, y) {
+                var nx, ny;
+                switch (typeof x) {
+                case 'string':
+                    nx = x;
+                    break;
+                case 'number':
+                    nx = String(x);
+                    break;
+                default:
+                    nx = x.valueOf ? x.valueOf() : x;
+                    break;
+                }
+                switch (typeof y) {
+                case 'string':
+                    ny = y;
+                    break;
+                case 'number':
+                    ny = String(y);
+                    break;
+                default:
+                    ny = y.valueOf ? y.valueOf() : y;
+                    break;
+                }
+                if (nx < ny) { return -1; }
+                if (nx > ny) { return 1; }
+                return 0;
+            },
+            date: function (x, y) {
+                var nx = x.toDateString ? x : new Date(x);
+                var ny = y.toDateString ? y : new Date(y);
+                if (nx < ny) { return -1; }
+                if (nx > ny) { return 1; }
+                return 0;
+            }
+        }
     },
     created: function () {
         this.undoStack = [];
@@ -83,8 +136,8 @@ Polymer(Polymer.mixin({
         this.onMutation(this, this.ready);
     },
     /**
-      *    Logic
-      */
+    *    Logic
+    */
     observing: function (o) {
         return o;
     },
@@ -231,8 +284,8 @@ Polymer(Polymer.mixin({
         };
     },
     /**
-      *    Change Observers
-      */
+    *    Change Observers
+    */
     argsChanged: function (oldVal, newVal) {
         var observer = new ObjectObserver(newVal);
         var self = this;
@@ -349,8 +402,8 @@ Polymer(Polymer.mixin({
     },
     pageChanged: function (oldVal, newVal) { if (this.dataSource) { this.dataSource.start = (this.page - 1) * this.pageSize; } },
     /**
-      *    Checkbox helper functions
-      */
+    *    Checkbox helper functions
+    */
     checkbox: false,
     checkedbox: function (e) {
         var row = e.target.templateInstance.model.record.row;
@@ -368,8 +421,8 @@ Polymer(Polymer.mixin({
         }
     },
     /**
-      *    Template Functions
-      */
+    *    Template Functions
+    */
     changeSort: function (e, p) {
         if (!this.userSort && e.target.templateInstance.model.column &&
                 e.target.templateInstance.model.column.sortable !== false &&
@@ -398,73 +451,93 @@ Polymer(Polymer.mixin({
         });
     },
     /**
-      *    Expression Filters
-      */
+    *    Expression Filters
+    */
     sortByKey: function (array, key, desc, columns, selected, pageSize, page, args, l) {
         //ignore l, it is used to trigger observe.js watch only
+        var self = this;
+
+        function applyFilters(arr) {
+            if (!self.dataSource) {
+                var checkColumnFilters = self.checkColumnFilters;
+                var filteredArray = arr.filter(function (row) {
+                    return columns.every(function (column, columnIndex) { return checkColumnFilters(column, row); });
+                });
+                return filteredArray;
+            }
+            return arr;
+        }
 
         var sortedArray;
 
-        var keyColumn = columns.find(function (column) {
-            return column.name === key;
-        });
-
-        var sortFunction = function (a, b) {
-            var x, y;
-            //determine if computed field
-            var formula = keyColumn.formula;
-            if (formula) {
-                if (a[key] === undefined) {
-                    x = formula(a, args);
-                    y = formula(b, args);
-                } else {
-                    x = formula(a[key], a, args);
-                    y = formula(b[key], b, args);
-                }
-            } else {
-                x = a[key];
-                y = b[key];
-            }
-            if (x === undefined || y === undefined) {
-                //sort undefined after
-                if (x === undefined) {
-                    return !desc;
-                }
-                return desc;
-            }
-            if (typeof x === "string" && typeof y === "string") {
-                if (isNaN(x) || isNaN(y)) {
-                    x = x.toLowerCase();
-                    y = y.toLowerCase();
-                } else {
-                    x = +x;
-                    y = +y;
-                }
-            }
-            if (desc) {
-                return ((x < y) ? 1 : ((x > y) ? -1 : 0));
-            }
-            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-        };
-
-        if (!this.dataSource) {
-            var checkColumnFilters = this.checkColumnFilters;
-            var filteredArray = array.filter(function (row) {
-                return columns.every(function (column, columnIndex) { return checkColumnFilters(column, row); });
+        if (key) {
+            var keyColumn = columns.find(function (column) {
+                return column.name === key;
             });
-            array = filteredArray;
-        }
+            var keyColumnIndex = columns.indexOf(keyColumn);
+            if (keyColumnIndex > -1 && Array.isArray(array[0])) { key = keyColumnIndex; }
 
-        if (key !== null && !this.dataSource && !this.userSort) {
-            if (array.every(function (element, index) {
-                    return (index + 1 >= array.length) || sortFunction(element, array[index + 1]) <= 0;
-                })) {
-                sortedArray = array;
+            var sortCompare;
+            if (keyColumn && keyColumn.datatype) {
+                sortCompare = this.datatypes[keyColumn.datatype];
+            }
+
+            if (!sortCompare) {
+                sortCompare = function (x, y) {
+                    if (typeof x === "string" && typeof y === "string") {
+                        if (isNaN(x) || isNaN(y)) {
+                            x = x.toLowerCase();
+                            y = y.toLowerCase();
+                        } else {
+                            x = x.valueOf ? x.valueOf() : +x;
+                            y = y.valueOf ? y.valueOf() : +y;
+                        }
+                    }
+                    if (x < y) { return -1; }
+                    if (x > y) { return 1; }
+                    return 0;
+                };
+            }
+
+            var sortFunction = function (a, b) {
+                var x, y;
+                //determine if computed field
+                var formula = keyColumn.formula;
+                if (formula) {
+                    if (a[key] === undefined) {
+                        x = formula(a, args);
+                        y = formula(b, args);
+                    } else {
+                        x = formula(a[key], a, args);
+                        y = formula(b[key], b, args);
+                    }
+                } else {
+                    x = a[key];
+                    y = b[key];
+                }
+
+                var u = self.undefinedCompareFunction(x, y);
+                if (u !== null) { return u; }
+
+                if (desc) { return sortCompare(y, x); }
+                return sortCompare(x, y);
+            };
+
+            array = applyFilters(array);
+
+            if (!this.dataSource && !this.userSort) {
+                if (array.every(function (element, index) {
+                        return (index + 1 >= array.length) || sortFunction(element, array[index + 1]) <= 0;
+                    })) {
+                    sortedArray = array;
+                } else {
+                    sortedArray = array.sort(sortFunction);
+                }
             } else {
-                sortedArray = array.sort(sortFunction);
+                sortedArray = array;
             }
         } else {
-            sortedArray = array;
+            sortedArray = applyFilters(array);
         }
 
         var records = [];
@@ -487,7 +560,7 @@ Polymer(Polymer.mixin({
             valueSelector = function (row, column) { return row[column.index]; };
         }
 
-        var i, isSelected, isEditMode, isDirty, isInUndo, fields;
+        var isSelected, isEditMode, isDirty, isInUndo, fields;
         var f = function (row) {
             isSelected = isMultiSelect ? selected.indexOf(row) > -1 : row === selected;
             isEditMode = this.editRow === row;
@@ -510,6 +583,8 @@ Polymer(Polymer.mixin({
             });
             records.push({ selected: isSelected, editMode: isEditMode, dirty: isDirty, fields: fields, row: row });
         };
+
+        var i;
         for (i = start; i < end; i++) { f.call(this, sortedArray[i]); }
         return records;
     },

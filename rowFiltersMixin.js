@@ -98,7 +98,10 @@ var rowFiltersMixin = {
             return column.filters.every(function (filter) {
                 switch (filter.op) {
                 case "=":
-                    return value === filter.value;
+                    /*jslint eqeq: true*/
+                    var r = value == filter.value;
+                    /*jslint eqeq: false*/
+                    return r;
                 case ">":
                     return value > filter.value;
                 case "≥":

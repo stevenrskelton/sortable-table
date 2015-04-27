@@ -3,9 +3,6 @@
 @element sortable-table
 @demo http://files.stevenskelton.ca/sortable-table/examples/
 -->
-
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../core-dropdown/core-dropdown.html">
 <script>
 //ECMAScript 6 polyfills
 if (!Array.prototype.findIndex) {
@@ -58,448 +55,451 @@ if (!Array.isArray) {
   };
 }
 </script>
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../core-dropdown/core-dropdown.html">
+<link rel="import" href="html-echo.html">
+
 <script src="columnDragMixin.js"></script>
 <script src="rowDragMixin.js"></script>
 <script src="rowFiltersMixin.js"></script>
 <script src="rowEditorMixin.js"></script>
 <script src="../json5/lib/json5.js"></script>
 <script src="../time-elements/time-elements.js"></script>
-<link rel="import" href="html-echo.html">
 
 <polymer-element
-	name="sortable-table"
-	attributes="
-		args
-		cellTemplate
-		checkbox
-		columns
-		data
-		dataSize
-		disableColumnMove
-		filterTemplate
-		footerTemplate
-		grid
-		headerTemplate
-		loading
-		multiRowEdit
-		multiSelect
-		page
-		pageSize
-		rowEditorTemplate
-		rowSelection
-		rowTemplate
-		selected
-		sortColumn
-		sortDescending
-		userSort
-	"
+    name="sortable-table"
+    attributes="
+        args
+        cellTemplate
+        checkbox
+        columns
+        data
+        dataSize
+        disableColumnMove
+        filterTemplate
+        footerTemplate
+        grid
+        headerTemplate
+        loading
+        multiRowEdit
+        multiSelect
+        page
+        pageSize
+        rowEditorTemplate
+        rowSelection
+        rowTemplate
+        selected
+        sortColumn
+        sortDescending
+        userSort
+    "
 >
-<template>
-	<content select='[role="datasource"]'></content>
-	<content select="core-scroll-threshold"></content>
-	<style>
-	:host {
-		display:block;
-	}
-	.sortable-table {
-		width: 100%;
-		max-width: 100%;
-		border-collapse: collapse;
-	}
-	.checkbox-column {
-		width: 1em;
-		vertical-align: middle;
-	}
-	.checkbox-column input[type=checkbox] {
-		display: block;
-		margin-left: auto;
-		margin-right: auto;
-	}
-	.open-below {
-		top: 22px;
-		border: 1px solid #ddd;
-	}
-	th.checkbox-column input[type=checkbox] {
-		vertical-align: middle;
-	}
-	tbody.grid {
-		font-size: 0;
-	}
-	tbody.grid > tr {
-		box-sizing: border-box;
-		display: inline-block;
-		font-size: initial;
-	}
-	table.articlePager {
-		width: 100%;
-	}
-	table.articlePager td:first-of-type {
-		cursor: pointer;
-	}
-	table.articlePager td:nth-of-type(2) {
-		width: 100%;
-	}
-	table.articlePager td:nth-of-type(3) {
-		cursor: pointer;
-	}
-	.sortable-table thead .dropdown-menu {
-		position: absolute;
-		z-index: 1000;
-		display: none;
-		list-style: outside none none;
-		background-color: #FFF;
-	}
-	.sortable-table thead .open > .dropdown-menu {
-		display: block;
-	}
-	:host(.default) .sortable-table {
-		border-collapse: collapse;
-		border: 1px solid #ccc;
-	}
-	:host(.default) .sortable-table .row-selection {
-		cursor: pointer;
-	}
-	:host(.default) .sortable-table tbody td {
-		border: 1px dotted #ccc;
-	}
-	:host(.default) .sortable-table tbody tr:nth-of-type(even) {
-		background-color: rgba(255,255,224,0.25);
-	}
-	:host(.default) .sortable-table tfoot td {
-		border: 1px solid #ccc;
-		background-color: #F5F8FA;
-	}
-	:host(.default) .sortable-table thead th {
-		border: 1px solid #ccc;
-		background-color: #0084B4;
-		color: white;
-		cursor: pointer;
-	}
-	:host(.default) .sortable-table thead th.sorted-column-asc {
-		text-decoration: overline;
-	}
-	:host(.default) .sortable-table thead th.sorted-column-desc {
-		text-decoration: underline;
-	}
-	:host(.default) .sortable-table thead th.column-move-right {
-		border-right-color: #FBBA37;
-		background: #FBBA37; /* Older browsers */
-		background: -moz-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* FF3.6+ */
-		background: -webkit-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* Chrome10+,Safari5.1+ */
-		background: -o-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* Opera 11.10+ */
-		background: -ms-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* IE10+ */
-		background: linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* W3C */
-	}
-	:host(.default) .sortable-table thead th.column-move-left {
-		border-left-color: #FBBA37;
-		background: #FBBA37; /* Older browsers */
-		background: -moz-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* FF3.6+ */
-		background: -webkit-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* Chrome10+,Safari5.1+ */
-		background: -o-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* Opera 11.10+ */
-		background: -ms-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* IE10+ */
-		background: linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* W3C */
-	}
-	:host(.default) .sortable-table thead th.column-in-move,
-	:host(.default) .sortable-table tbody tr.row-in-move {
-		opacity: 0.4;
-	}
-	:host(.default) .sortable-table tbody tr.row-move-above {
-		background-color: purple;
-	}
-	:host(.default) .sortable-table tbody tr.row-move-below {
-		background-color: red;
-	}
-	:host(.default) .sortable-table tbody tr.selected-row {
-		background-color: rgba(0,96,200,0.2);
-	}
-	:host(.default) .sortable-table thead .dropdown-menu {
-		border: 1px solid #ccc;
-		background-color: #0084B4;
-		text-align: left;
-		min-width: 160px;
-		padding: 4px;
-		margin-top: 1px;
-	}
-	:host(.default) .sortable-table thead .dropdown-menu .btn {
-		text-align: center;
-	}
-	@-webkit-keyframes progress-bar-stripes{
-		from{
-			background-position:40px 0
-		}
-		to{
-			background-position:0 0
-		}
-	}
-	@-o-keyframes progress-bar-stripes{
-		from{
-			background-position:40px 0
-		}
-		to{
-			background-position:0 0
-		}
-	}
-	@keyframes progress-bar-stripes{
-		from{
-			background-position:40px 0
-		}
+    <template>
+        <content select='[role="datasource"]'></content>
+        <content select="core-scroll-threshold"></content>
+        <style>
+        :host {
+            display:block;
+        }
+        .sortable-table {
+            width: 100%;
+            max-width: 100%;
+            border-collapse: collapse;
+        }
+        .checkbox-column {
+            width: 1em;
+            vertical-align: middle;
+        }
+        .checkbox-column input[type=checkbox] {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .open-below {
+            top: 22px;
+            border: 1px solid #ddd;
+        }
+        th.checkbox-column input[type=checkbox] {
+            vertical-align: middle;
+        }
+        tbody.grid {
+            font-size: 0;
+        }
+        tbody.grid > tr {
+            box-sizing: border-box;
+            display: inline-block;
+            font-size: initial;
+        }
+        table.articlePager {
+            width: 100%;
+        }
+        table.articlePager td:first-of-type {
+            cursor: pointer;
+        }
+        table.articlePager td:nth-of-type(2) {
+            width: 100%;
+        }
+        table.articlePager td:nth-of-type(3) {
+            cursor: pointer;
+        }
+        .sortable-table thead .dropdown-menu {
+            position: absolute;
+            z-index: 1000;
+            display: none;
+            list-style: outside none none;
+            background-color: #FFF;
+        }
+        .sortable-table thead .open > .dropdown-menu {
+            display: block;
+        }
+        :host(.default) .sortable-table {
+            border-collapse: collapse;
+            border: 1px solid #ccc;
+        }
+        :host(.default) .sortable-table .row-selection {
+            cursor: pointer;
+        }
+        :host(.default) .sortable-table tbody td {
+            border: 1px dotted #ccc;
+        }
+        :host(.default) .sortable-table tbody tr:nth-of-type(even) {
+            background-color: rgba(255,255,224,0.25);
+        }
+        :host(.default) .sortable-table tfoot td {
+            border: 1px solid #ccc;
+            background-color: #F5F8FA;
+        }
+        :host(.default) .sortable-table thead th {
+            border: 1px solid #ccc;
+            background-color: #0084B4;
+            color: white;
+            cursor: pointer;
+        }
+        :host(.default) .sortable-table thead th.sorted-column-asc {
+            text-decoration: overline;
+        }
+        :host(.default) .sortable-table thead th.sorted-column-desc {
+            text-decoration: underline;
+        }
+        :host(.default) .sortable-table thead th.column-move-right {
+            border-right-color: #FBBA37;
+            background: #FBBA37; /* Older browsers */
+            background: -moz-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* FF3.6+ */
+            background: -webkit-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* IE10+ */
+            background: linear-gradient(left, #0084B4 50%, #FBBA37 100%); /* W3C */
+        }
+        :host(.default) .sortable-table thead th.column-move-left {
+            border-left-color: #FBBA37;
+            background: #FBBA37; /* Older browsers */
+            background: -moz-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* FF3.6+ */
+            background: -webkit-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* IE10+ */
+            background: linear-gradient(left, #FBBA37 0%, #0084B4 50%); /* W3C */
+        }
+        :host(.default) .sortable-table thead th.column-in-move,
+        :host(.default) .sortable-table tbody tr.row-in-move {
+            opacity: 0.4;
+        }
+        :host(.default) .sortable-table tbody tr.row-move-above {
+            background-color: purple;
+        }
+        :host(.default) .sortable-table tbody tr.row-move-below {
+            background-color: red;
+        }
+        :host(.default) .sortable-table tbody tr.selected-row {
+            background-color: rgba(0,96,200,0.2);
+        }
+        :host(.default) .sortable-table thead .dropdown-menu {
+            border: 1px solid #ccc;
+            background-color: #0084B4;
+            text-align: left;
+            min-width: 160px;
+            padding: 4px;
+            margin-top: 1px;
+        }
+        :host(.default) .sortable-table thead .dropdown-menu .btn {
+            text-align: center;
+        }
+        @-webkit-keyframes progress-bar-stripes{
+            from{
+                background-position:40px 0
+            }
+            to{
+                background-position:0 0
+            }
+        }
+        @-o-keyframes progress-bar-stripes{
+            from{
+                background-position:40px 0
+            }
+            to{
+                background-position:0 0
+            }
+        }
+        @keyframes progress-bar-stripes{
+            from{
+                background-position:40px 0
+            }
 
-		to{
-			background-position:0 0
-		}
-	}
-	.indexedPager > ul > li:first-of-type a:after,
-	.defaultPager > div:nth-of-type(1) > button:nth-of-type(1):after {
-		content: '«';
-	}
-	.simplePager > button:nth-of-type(1):after,
-	.defaultPager > div:nth-of-type(1) > button:nth-of-type(2):after {
-		content: '‹';
-	}
-	.simplePager > button:nth-of-type(2):after,
-	.defaultPager > div:nth-of-type(2) > button:nth-of-type(1):after {
-		content: '›';
-	}
-	.indexedPager > ul > li:last-of-type a:after,
-	.defaultPager > div:nth-of-type(2) > button:nth-of-type(2):after {
-		content: '»';
-	}
-</style>
+            to{
+                background-position:0 0
+            }
+        }
+        .indexedPager > ul > li:first-of-type a:after,
+        .defaultPager > div:nth-of-type(1) > button:nth-of-type(1):after {
+            content: '«';
+        }
+        .simplePager > button:nth-of-type(1):after,
+        .defaultPager > div:nth-of-type(1) > button:nth-of-type(2):after {
+            content: '‹';
+        }
+        .simplePager > button:nth-of-type(2):after,
+        .defaultPager > div:nth-of-type(2) > button:nth-of-type(1):after {
+            content: '›';
+        }
+        .indexedPager > ul > li:last-of-type a:after,
+        .defaultPager > div:nth-of-type(2) > button:nth-of-type(2):after {
+            content: '»';
+        }
+        </style>
 
-	<template id="html">
-		<html-echo html="{{value}}"></html-echo>
-	</template>
+        <template id="html">
+            <html-echo html="{{value}}"></html-echo>
+        </template>
 
-	<template id="simplePager">
-		<div class="simplePager" horizontal layout center>
-			<span flex>{{dataSize}} Results</span>
-			<button disabled?="{{page<=1}}" class="btn btn-default btn-sm" on-click="{{moveToPreviousPage}}"></button>
-			<span>{{page}} of {{lastPage}}</span>
-			<button disabled?="{{page>=lastPage}}" class="btn btn-default btn-sm" on-click="{{moveToNextPage}}"></button>
-		</div>
-	</template>
+        <template id="simplePager">
+            <div class="simplePager" horizontal layout center>
+                <span flex>{{dataSize}} Results</span>
+                <button disabled?="{{page<=1}}" class="btn btn-default btn-sm" on-click="{{moveToPreviousPage}}"></button>
+                <span>{{page}} of {{lastPage}}</span>
+                <button disabled?="{{page>=lastPage}}" class="btn btn-default btn-sm" on-click="{{moveToNextPage}}"></button>
+            </div>
+        </template>
 
-	<template id="indexedPager">
-		<div class="indexedPager" style="width:100%;text-align:center;font-weight:normal;">
-			<ul class="pagination">
-				<li class="{{page==1 ? 'disabled' : ''}}" disabled?="{{page==1}}" on-click="{{moveToFirstPage}}" role="button"><a href="#" onclick="return false;"></a></li>
-				<template repeat="{{i in lastPage | naturalNumbers(page)}}">
-					<li class="{{page==i ? 'active' : ''}}" on-click="{{moveToPage}}" role="button"><a href="#" onclick="return false;">{{i}}</a></li>
-				</template>
-				<li class="{{page==lastPage ? 'disabled' : ''}}" disabled="{{page==lastPage}}" on-click="{{moveToLastPage}}" role="button"><a href="#" onclick="return false;"></a></li>
-			</ul>
-		</div>
-	</template>
+        <template id="indexedPager">
+            <div class="indexedPager" style="width:100%;text-align:center;font-weight:normal;">
+                <ul class="pagination">
+                    <li class="{{page==1 ? 'disabled' : ''}}" disabled?="{{page==1}}" on-click="{{moveToFirstPage}}" role="button"><a href="#" onclick="return false;"></a></li>
+                    <template repeat="{{i in lastPage | naturalNumbers(page)}}">
+                        <li class="{{page==i ? 'active' : ''}}" on-click="{{moveToPage}}" role="button"><a href="#" onclick="return false;">{{i}}</a></li>
+                    </template>
+                    <li class="{{page==lastPage ? 'disabled' : ''}}" disabled="{{page==lastPage}}" on-click="{{moveToLastPage}}" role="button"><a href="#" onclick="return false;"></a></li>
+                </ul>
+            </div>
+        </template>
 
-	<template id="defaultPager">
-		<div class="defaultPager" horizontal layout center>
-			<div class="btn-group">
-				<button disabled?="{{page==1}}" class="btn btn-default btn-sm" on-click="{{moveToFirstPage}}"></button><!--
-				--><button disabled?="{{page<=1}}" class="btn btn-default btn-sm" on-click="{{moveToPreviousPage}}"></button>
-			</div>
+        <template id="defaultPager">
+            <div class="defaultPager" horizontal layout center>
+                <div class="btn-group">
+                    <button disabled?="{{page==1}}" class="btn btn-default btn-sm" on-click="{{moveToFirstPage}}"></button><!--
+                    --><button disabled?="{{page<=1}}" class="btn btn-default btn-sm" on-click="{{moveToPreviousPage}}"></button>
+                </div>
 
-			<span class="x-toolbar-separator-horizontal"></span>
+                <span class="x-toolbar-separator-horizontal"></span>
 
-			<span style="margin:0 8px">Page <input type="number" style="width:30px;text-align:right;margin:0;display:inline-block;padding-bottom:2px;" min="1" max="{{lastPage}}" value="{{page}}"> of {{lastPage}}</span>
+                <span style="margin:0 8px">Page <input type="number" style="width:30px;text-align:right;margin:0;display:inline-block;padding-bottom:2px;" min="1" max="{{lastPage}}" value="{{page}}"> of {{lastPage}}</span>
 
-			<span class="x-toolbar-separator-horizontal"></span>
+                <span class="x-toolbar-separator-horizontal"></span>
 
-			<div class="btn-group">
-				<button disabled?="{{page>=lastPage}}" class="btn btn-default btn-sm" on-click="{{moveToNextPage}}"></button><!--
-				--><button disabled?="{{page==lastPage}}" class="btn btn-default btn-sm" on-click="{{moveToLastPage}}"></button>
-			</div>
-			<span flex style="text-align:right;margin-right:6px;">Displaying {{page > lastPage ? (lastPage-1) * pageSize + 1 : ((page - 1) * pageSize) + 1}} - {{page >= lastPage ? dataSize : page * pageSize}} of {{dataSize}}</span>
-		</div>
-	</template>
+                <div class="btn-group">
+                    <button disabled?="{{page>=lastPage}}" class="btn btn-default btn-sm" on-click="{{moveToNextPage}}"></button><!--
+                    --><button disabled?="{{page==lastPage}}" class="btn btn-default btn-sm" on-click="{{moveToLastPage}}"></button>
+                </div>
+                <span flex style="text-align:right;margin-right:6px;">Displaying {{page > lastPage ? (lastPage-1) * pageSize + 1 : ((page - 1) * pageSize) + 1}} - {{page >= lastPage ? dataSize : page * pageSize}} of {{dataSize}}</span>
+            </div>
+        </template>
 
-	<template id="articlePager">
-		<table class="articlePager">
-			<tr>
-				<template if="{{dataSize > pageSize}}">
-					<td role="button" class="btn btn-default" on-click="{{showMore}}">Show More</td>
-				</template>
-				<template if="{{dataSize <= pageSize}}">
-					<td style="display:none"></td>
-				</template>
-				<td><span class="x-toolbar-separator-horizontal" hidden?="{{dataSize <= pageSize}}"></span> Showing {{pageSize}} of {{dataSize}}</td>
-				<td>
-					<template if="{{grid!=null}}">
-						<select on-change="{{toggleGrid}}">
-							<option value="grid" selected?="{{grid}}">▦ Grid</option>
-							<option value="grid" selected?="{{!grid}}">▤ List</option>
-						</select>
-					</template>
-				</td>
-			</tr>
-		</table>
-	</template>
+        <template id="articlePager">
+            <table class="articlePager">
+                <tr>
+                    <template if="{{dataSize > pageSize}}">
+                        <td role="button" class="btn btn-default" on-click="{{showMore}}">Show More</td>
+                    </template>
+                    <template if="{{dataSize <= pageSize}}">
+                        <td style="display:none"></td>
+                    </template>
+                    <td><span class="x-toolbar-separator-horizontal" hidden?="{{dataSize <= pageSize}}"></span> Showing {{pageSize}} of {{dataSize}}</td>
+                    <td>
+                        <template if="{{grid!=null}}">
+                            <select on-change="{{toggleGrid}}">
+                                <option value="grid" selected?="{{grid}}">▦ Grid</option>
+                                <option value="grid" selected?="{{!grid}}">▤ List</option>
+                            </select>
+                        </template>
+                    </td>
+                </tr>
+            </table>
+        </template>
 
-	<template id="infinitePager">
-		<div class="infinitePager">
-			<template if="{{loading}}">
-				<div class="loading">Loading</div>
-			</template>
-			<template if="{{!loading && ((data.length < dataSize) || (page < lastPage))}}">
-				<button class="more btn btn-primary" on-click="{{showMore}}">More</div>
-			</template>
-		</div>
-	</template>
+        <template id="infinitePager">
+            <div class="infinitePager">
+                <template if="{{loading}}">
+                    <div class="loading">Loading</div>
+                </template>
+                <template if="{{!loading && ((data.length < dataSize) || (page < lastPage))}}">
+                    <button class="more btn btn-primary" on-click="{{showMore}}">More</div>
+                </template>
+            </div>
+        </template>
 
-	<template id="simpleFilters">
-		<div style="float:right;padding-top:2px"  horizontal layout center relative on-click="{{stopPropagation}}">
-			<img alt="Filter" src="{{resolvePath('img/icons/find.png')}}" on-click="{{setFiltersWidth}}">
-			<core-dropdown halign="right" class="open-below dropdown-menu">
-				<input type="text" on-keypress="{{addFilterReturn}}" data-op="=">
-			</core-dropdown>
-		</div>
-	</template>
+        <template id="simpleFilters">
+            <div style="float:right;padding-top:2px"  horizontal layout center relative on-click="{{stopPropagation}}">
+                <img alt="Filter" src="{{resolvePath('img/icons/find.png')}}" on-click="{{setFiltersWidth}}">
+                <core-dropdown halign="right" class="open-below dropdown-menu">
+                    <input type="text" on-keypress="{{addFilterReturn}}" data-op="=">
+                </core-dropdown>
+            </div>
+        </template>
 
-	<template id="verticalFilters">
-		<div class="btn-group" style="float:right;" on-click="{{stopPropagation}}">
-			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false" on-click="{{setFiltersWidth}}">
-				<img alt="Filter" src="{{resolvePath('img/filter.svg')}}" height="16">
-			</button>
-			<ul class="dropdown-menu" role="menu">
-				<li style="text-align:center" on-click="{{closeFilter}}">Add New Filter</li>
-				<li class="divider"></li>
-				<li><table>
-					<template repeat="{{filterOp in getFilterOps(column)}}">
-						<tr>
-							<td><input type="text" data-op="{{filterOp.op}}" on-keypress="{{addFilterReturn}}"></td>
-							<td class="btn btn-primary" on-click="{{addFilter}}" title="{{filterOp.title}}" style="white-space:nowrap;display:table-cell;padding:0 6px;min-width:24px">{{filterOp.html}}</td>
-						</tr>
-					</template>
-				</table></li>
-			</ul>
-		</div>
-	</template>
+        <template id="verticalFilters">
+            <div class="btn-group" style="float:right;" on-click="{{stopPropagation}}">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false" on-click="{{setFiltersWidth}}">
+                    <img alt="Filter" src="{{resolvePath('img/filter.svg')}}" height="16">
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li style="text-align:center" on-click="{{closeFilter}}">Add New Filter</li>
+                    <li class="divider"></li>
+                    <li><table>
+                        <template repeat="{{filterOp in getFilterOps(column)}}">
+                            <tr>
+                                <td><input type="text" data-op="{{filterOp.op}}" on-keypress="{{addFilterReturn}}"></td>
+                                <td class="btn btn-primary" on-click="{{addFilter}}" title="{{filterOp.title}}" style="white-space:nowrap;display:table-cell;padding:0 6px;min-width:24px">{{filterOp.html}}</td>
+                            </tr>
+                        </template>
+                    </table></li>
+                </ul>
+            </div>
+        </template>
 
-	<template id="fullFilters">
-		<div style="float:right;padding-top:2px"  horizontal layout center relative on-click="{{stopPropagation}}">
-			<img alt="Filter" src="{{resolvePath('img/icons/find.png')}}" on-click="{{setFiltersWidth}}">
-			<core-dropdown halign="right" class="open-below dropdown-menu">
-				<template repeat="{{filterOp in getFilterOps(column)}}">
-					<button on-click="{{addFilter}}" title="{{filterOp.title}}" data-op="{{filterOp.op}}">{{filterOp.html}}</button>
-				</template>
-				<input type="text">
-			</core-dropdown>
-		</div>
-	</template>
+        <template id="fullFilters">
+            <div style="float:right;padding-top:2px"  horizontal layout center relative on-click="{{stopPropagation}}">
+                <img alt="Filter" src="{{resolvePath('img/icons/find.png')}}" on-click="{{setFiltersWidth}}">
+                <core-dropdown halign="right" class="open-below dropdown-menu">
+                    <template repeat="{{filterOp in getFilterOps(column)}}">
+                        <button on-click="{{addFilter}}" title="{{filterOp.title}}" data-op="{{filterOp.op}}">{{filterOp.html}}</button>
+                    </template>
+                    <input type="text">
+                </core-dropdown>
+            </div>
+        </template>
 
-	<table class="sortable-table">
-		<thead>
-			<tr on-click="{{changeSort}}">
-				<template if="{{checkbox}}">
-					<th class="checkbox-column"><input type="checkbox" on-change="{{checkall}}" hidden?="{{!multiSelect}}" checked?="{{dataSize == selected.length}}"></th>
-				</template>
-				<template repeat="{{column,i in columns}}">
-					<template ref="{{column.headerTemplate || headerTemplate}}" bind>
-						<th
-							class="{{column.headerClass}} column-{{column.name}} column-{{i}}
-								{{sortColumn == column.name && sortDescending ? 'sorted-column-desc' : ''}}
-								{{sortColumn == column.name && !sortDescending ? 'sorted-column-asc' : ''}}"
-							draggable="{{!disableColumnMove && !(rowTemplate || rowEditorTemplate)}}"
-							on-dragstart="{{handleTHDragStart}}"
-							on-dragenter="{{handleTHDragEnter}}"
-							on-dragover="{{handleTHDragOver}}"
-							on-dragleave="{{handleTHDragLeave}}"
-							on-drop="{{handleTHDrop}}"
-							on-dragend="{{handleTHDragEnd}}"
-						>
-							<template ref="{{filterTemplate}}" bind></template>
-							{{column.title == null ? column.name : column.title}}
-						</th>
-					</template>
-				</template>
-			</tr>
-		</thead>
-		<template if="{{forceFilterRefresh}}" bind="{{columns | observing(forceFilterRefresh) as columns}}">
-			<thead>
-				<tr>
-					<template if="{{checkbox}}">
-						<th>
-							<img
-								src="{{resolvePath('img/icons/cancel.png')}}"
-								alt="Clear Filters"
-								on-click="{{clearFilters}}"
-								height="16"
-								style="padding-top:1px"
-							>
-						</th>
-					</template>
-					<template repeat="{{column in columns}}">
-						<th style="vertical-align: top">
-							<template repeat="{{filter in column.filters}}">
-								<img
-									src="{{resolvePath('img/icons/delete.png')}}"
-									alt="Remove Filter"
-									on-click="{{removeFilter}}"
-									height="16"
-									style="float:right;padding-top:1px"
-								>
-								<div style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
-									{{filter.op}} {{filter.value}}
-								</div>
-							</template>
-						</th>
-					</template>
-				</tr>
-			</thead>
-		</template>
-		<tbody class="{{grid ? ' grid' : ''}}">
-			<template repeat="{{record in data | sortByKey(sortColumn, sortDescending, columns, selected, pageSize, page, args, editRow, (args || []).length + (selected || []).length + data.length + forceRefresh + forceFilterRefresh)}}">
-				<tr
-					class="{{record.selected ? 'selected-row' : '' }}{{record.editMode ? ' editor-row' : ''}}{{record.dirty ? ' edited-row' : ''}}"
-					on-click="{{rowSelect}}"
-					on-dblclick="{{rowEdit}}"
-					draggable="{{userSort}}"
-					on-dragstart="{{handleTRDragStart}}"
-					on-dragenter="{{handleTRDragEnter}}"
-					on-dragover="{{handleTRDragOver}}"
-					on-dragleave="{{handleTRDragLeave}}"
-					on-drop="{{handleTRDrop}}"
-					on-dragend="{{handleTRDragEnd}}"
-				>
-					<template if="{{checkbox}}">
-						<td class="checkbox-column"><input type="checkbox" on-change="{{checkedbox}}" checked?="{{record.selected}}"></td>
-					</template>
-					<template if="{{record.editMode}}" ref="{{rowEditorTemplate}}"></template>
-					<template if="{{!record.editMode}}" ref="{{rowTemplate}}" bind>
-						<template repeat="{{column in columns}}" bind>
-							<template ref="{{column.cellTemplate || cellTemplate}}" bind="{{record.fields[column.name]}}">
-								<td
-									class="{{column.class}} column-{{column.name}}
-										{{sortColumn == column.name && sortDescending ? 'sorted-column-desc' : ''}}
-										{{sortColumn == column.name && !sortDescending ? 'sorted-column-asc' : ''}}"
-								>{{value}}</td>
-							</template>
-						</template>
-					</template>
-				</tr>
-			</template>
-		</tbody>
-		<tfoot>
-			<template if="{{showFooter && forceFooterRefresh}}">
-				<tr class="footercells">
-					<template if="{{checkbox}}">
-						<td></td>
-					</template>
-					<template repeat="{{column in columns}}">
-						<template bind="{{templateData in data | selectProperty(column, args, forceFooterRefresh)}}">
-							<template ref="{{column.footerTemplate}}" bind="{{templateData}}">
-								<td class="{{column.footerClass}}"></td>
-							</template>
-						</template>
-					</template>
-				</tr>
-			</template>
-			<template if="{{footerTemplate && forceRefresh && forceFooterRefresh}}">
-				<tr>
-					<td colspan="{{columns.length + (checkbox ? 1 : 0)}}"><template ref="{{footerTemplate}}" bind></template></td>
-				</tr>
-			</template>
-		</tfoot>
-	</table>
-</template>
-<script src="sortable-table.js"></script>
+        <table class="sortable-table">
+            <thead>
+                <tr on-click="{{changeSort}}">
+                    <template if="{{checkbox}}">
+                        <th class="checkbox-column"><input type="checkbox" on-change="{{checkall}}" hidden?="{{!multiSelect}}" checked?="{{dataSize == selected.length}}"></th>
+                    </template>
+                    <template repeat="{{column,i in columns}}">
+                        <template ref="{{column.headerTemplate || headerTemplate}}" bind>
+                            <th
+                                class="{{column.headerClass}} column-{{column.name}} column-{{i}}
+                                    {{sortColumn == column.name && sortDescending ? 'sorted-column-desc' : ''}}
+                                    {{sortColumn == column.name && !sortDescending ? 'sorted-column-asc' : ''}}"
+                                draggable="{{!disableColumnMove && !(rowTemplate || rowEditorTemplate)}}"
+                                on-dragstart="{{handleTHDragStart}}"
+                                on-dragenter="{{handleTHDragEnter}}"
+                                on-dragover="{{handleTHDragOver}}"
+                                on-dragleave="{{handleTHDragLeave}}"
+                                on-drop="{{handleTHDrop}}"
+                                on-dragend="{{handleTHDragEnd}}"
+                            >
+                                <template ref="{{filterTemplate}}" bind></template>
+                                {{column.title == null ? column.name : column.title}}
+                            </th>
+                        </template>
+                    </template>
+                </tr>
+            </thead>
+            <template if="{{forceFilterRefresh}}" bind="{{columns | observing(forceFilterRefresh) as columns}}">
+                <thead>
+                    <tr>
+                        <template if="{{checkbox}}">
+                            <th>
+                                <img
+                                    src="{{resolvePath('img/icons/cancel.png')}}"
+                                    alt="Clear Filters"
+                                    on-click="{{clearFilters}}"
+                                    height="16"
+                                    style="padding-top:1px"
+                                >
+                            </th>
+                        </template>
+                        <template repeat="{{column in columns}}">
+                            <th style="vertical-align: top">
+                                <template repeat="{{filter in column.filters}}">
+                                    <img
+                                        src="{{resolvePath('img/icons/delete.png')}}"
+                                        alt="Remove Filter"
+                                        on-click="{{removeFilter}}"
+                                        height="16"
+                                        style="float:right;padding-top:1px"
+                                    >
+                                    <div style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                                        {{filter.op}} {{filter.value}}
+                                    </div>
+                                </template>
+                            </th>
+                        </template>
+                    </tr>
+                </thead>
+            </template>
+            <tbody class="{{grid ? ' grid' : ''}}">
+                <template repeat="{{record in data | sortByKey(sortColumn, sortDescending, columns, selected, pageSize, page, args, editRow, (args || []).length + (selected || []).length + data.length + forceRefresh + forceFilterRefresh)}}">
+                    <tr
+                        class="{{record.selected ? 'selected-row' : '' }}{{record.editMode ? ' editor-row' : ''}}{{record.dirty ? ' edited-row' : ''}}"
+                        on-click="{{rowSelect}}"
+                        on-dblclick="{{rowEdit}}"
+                        draggable="{{userSort}}"
+                        on-dragstart="{{handleTRDragStart}}"
+                        on-dragenter="{{handleTRDragEnter}}"
+                        on-dragover="{{handleTRDragOver}}"
+                        on-dragleave="{{handleTRDragLeave}}"
+                        on-drop="{{handleTRDrop}}"
+                        on-dragend="{{handleTRDragEnd}}"
+                    >
+                        <template if="{{checkbox}}">
+                            <td class="checkbox-column"><input type="checkbox" on-change="{{checkedbox}}" checked?="{{record.selected}}"></td>
+                        </template>
+                        <template if="{{record.editMode}}" ref="{{rowEditorTemplate}}"></template>
+                        <template if="{{!record.editMode}}" ref="{{rowTemplate}}" bind>
+                            <template repeat="{{column in columns}}" bind>
+                                <template ref="{{column.cellTemplate || cellTemplate}}" bind="{{record.fields[column.name]}}">
+                                    <td
+                                        class="{{column.class}} column-{{column.name}}
+                                            {{sortColumn == column.name && sortDescending ? 'sorted-column-desc' : ''}}
+                                            {{sortColumn == column.name && !sortDescending ? 'sorted-column-asc' : ''}}"
+                                    >{{value}}</td>
+                                </template>
+                            </template>
+                        </template>
+                    </tr>
+                </template>
+            </tbody>
+            <tfoot>
+                <template if="{{showFooter && forceFooterRefresh}}">
+                    <tr class="footercells">
+                        <template if="{{checkbox}}">
+                            <td></td>
+                        </template>
+                        <template repeat="{{column in columns}}">
+                            <template bind="{{templateData in data | selectProperty(column, args, forceFooterRefresh)}}">
+                                <template ref="{{column.footerTemplate}}" bind="{{templateData}}">
+                                    <td class="{{column.footerClass}}"></td>
+                                </template>
+                            </template>
+                        </template>
+                    </tr>
+                </template>
+                <template if="{{footerTemplate && forceRefresh && forceFooterRefresh}}">
+                    <tr>
+                        <td colspan="{{columns.length + (checkbox ? 1 : 0)}}"><template ref="{{footerTemplate}}" bind></template></td>
+                    </tr>
+                </template>
+            </tfoot>
+        </table>
+    </template>
+    <script src="sortable-table.js"></script>
 </polymer-element>

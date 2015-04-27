@@ -116,8 +116,8 @@
 				var data = sortableTableCellText(sortableTable);
 				assert.deepEqual(data[0],['apple','4','2','4','','']);
 				assert.deepEqual(data[1],['banana','0','4','','0','']);
-				assert.deepEqual(data[4],['grape','2','','','','']);
-				assert.deepEqual(data[3],['pear','4','','','','2']);
+				assert.deepEqual(data[3],['grape','2','','','','']);
+				assert.deepEqual(data[4],['pear','4','','','','2']);
 				assert.deepEqual(data[2],['strawberry','','14','','2','']);
 				assert.lengthOf(data, 5);
 				done();
@@ -128,11 +128,11 @@
 			sortableTable.sortDescending = true;
 			flush(function() {
 				var data = sortableTableCellText(sortableTable);
-				assert.deepEqual(data[4],['apple','4','2','4','','']);
-				assert.deepEqual(data[3],['banana','0','4','','0','']);
-				assert.deepEqual(data[0],['grape','2','','','','']);
-				assert.deepEqual(data[1],['pear','4','','','','2']);
-				assert.deepEqual(data[2],['strawberry','','14','','2','']);
+				assert.deepEqual(data[2],['apple','4','2','4','','']);
+				assert.deepEqual(data[1],['banana','0','4','','0','']);
+				assert.deepEqual(data[3],['grape','2','','','','']);
+				assert.deepEqual(data[4],['pear','4','','','','2']);
+				assert.deepEqual(data[0],['strawberry','','14','','2','']);
 				assert.lengthOf(data, 5);
 				done();
 			});
