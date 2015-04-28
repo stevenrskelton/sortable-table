@@ -50,10 +50,49 @@
         ['banana',      '3',    '4/12/2015 14:20',  2.34,   'organic'   ],
         ['grape',       '12',   '4/5/2015 15:33',   9.63,   13          ],
         ['pear',        '-14',  '3/1/2015 22:11',   -10.94, 3           ],
-        ['strawberry',  '240',  '4/13/2015 10:01',  185.11, ''          ]
-    ]   
+        ['strawberry',  '240',  '4/13/2015 10:01',  185.11, ''          ],
+        ['kiwi',        null,   null,               null,   null        ]
+    ]
 </sortable-table></prism-js>
 
+    <p>
+        Leaving the <code>datatype</code> empty should work pretty well, but will be slower.
+    </p>
+
+    <prism-js language="markup" escape="true" mirror><sortable-table class="default" id="example2">
+    <sortable-column name="fruit"></sortable-column>
+    <sortable-column name="count"></sortable-column>
+    <sortable-column name="date"></sortable-column>
+    <sortable-column name="weight"></sortable-column>
+    <sortable-column name="desc"></sortable-column>
+    [
+        ['apple',       '40',   '4/13/2015 9:45',   null,   null        ],
+        ['banana',      '3',    '4/12/2015 14:20',  2.34,   'organic'   ],
+        ['grape',       '12',   '4/5/2015 15:33',   9.63,   13          ],
+        ['pear',        '-14',  '3/1/2015 22:11',   -10.94, 3           ],
+        ['strawberry',  '240',  '4/13/2015 10:01',  185.11, ''          ],
+        ['kiwi',        null,   null,               null,   null        ]
+    ]
+</sortable-table></prism-js>
+<!--
+    <p>
+        Custom sorting functions can be added by setting the <code>datatype</code> to a new name, and adding a property by <br>
+        the same name to <code>sortabletable.datatypes</code>.
+    </p>
+
+        <prism-js language="markup" escape="true" mirror><sortable-table class="default" id="example3">
+    <sortable-column name="fruit"></sortable-column>
+    <sortable-column name="length" datatype="charlength" formula="function(field, row){ return (field || row[0]).length; }"></sortable-column>
+    [
+        ['apple'        ],
+        ['banana'       ],
+        ['grape'        ],
+        ['pear'         ],
+        ['strawberry'   ],
+        ['kiwi'         ]
+    ]
+</sortable-table></prism-js>
+-->
     <script>
     suite('example1', function() {
         var sortableTable = document.getElementById('example1');
@@ -67,7 +106,8 @@
                 assert.equal(data[2][0],'grape');
                 assert.equal(data[0][0],'pear');
                 assert.equal(data[4][0],'strawberry');
-                assert.lengthOf(data, 5);
+                assert.equal(data[5][0],'kiwi');
+                assert.lengthOf(data, 6);
                 done();
             });
         });
@@ -81,7 +121,8 @@
                 assert.equal(data[2][0],'grape');
                 assert.equal(data[4][0],'pear');
                 assert.equal(data[0][0],'strawberry');
-                assert.lengthOf(data, 5);
+                assert.equal(data[5][0],'kiwi');
+                assert.lengthOf(data, 6);
                 done();
             });
         });
@@ -96,7 +137,8 @@
                 assert.equal(data[1][0],'grape');
                 assert.equal(data[0][0],'pear');
                 assert.equal(data[4][0],'strawberry');
-                assert.lengthOf(data, 5);
+                assert.equal(data[5][0],'kiwi');
+                assert.lengthOf(data, 6);
                 done();
             });
         });
@@ -110,7 +152,8 @@
                 assert.equal(data[3][0],'grape');
                 assert.equal(data[4][0],'pear');
                 assert.equal(data[0][0],'strawberry');
-                assert.lengthOf(data, 5);
+                assert.equal(data[5][0],'kiwi');
+                assert.lengthOf(data, 6);
                 done();
             });
         });
@@ -125,7 +168,8 @@
                 assert.equal(data[2][0],'grape');
                 assert.equal(data[0][0],'pear');
                 assert.equal(data[3][0],'strawberry');
-                assert.lengthOf(data, 5);
+                assert.equal(data[5][0],'kiwi');
+                assert.lengthOf(data, 6);
                 done();
             });
         });
@@ -139,7 +183,8 @@
                 assert.equal(data[1][0],'grape');
                 assert.equal(data[3][0],'pear');
                 assert.equal(data[0][0],'strawberry');
-                assert.lengthOf(data, 5);
+                assert.equal(data[5][0],'kiwi');
+                assert.lengthOf(data, 6);
                 done();
             });
         });
@@ -154,11 +199,12 @@
                 assert.equal(data[1][0],'grape');
                 assert.equal(data[2][0],'pear');
                 assert.equal(data[0][0],'strawberry');
-                assert.lengthOf(data, 5);
+                assert.equal(data[5][0],'kiwi');
+                assert.lengthOf(data, 6);
                 done();
             });
         });
-        test('sorts string descending', function(done) {
+        test('sorts strings descending', function(done) {
             sortableTable.sortColumn = 'desc';
             sortableTable.sortDescending = true;
             flush(function() {
@@ -168,11 +214,155 @@
                 assert.equal(data[2][0],'grape');
                 assert.equal(data[1][0],'pear');
                 assert.equal(data[3][0],'strawberry');
-                assert.lengthOf(data, 5);
+                assert.equal(data[5][0],'kiwi');
+                assert.lengthOf(data, 6);
                 done();
             });
         });
     });
+
+    suite('example2 - auto datatype columns', function() {
+        var sortableTable = document.getElementById('example2');
+        test('sorts number ascending', function(done) {
+            sortableTable.sortColumn = 'count';
+            sortableTable.sortDescending = false;
+            flush(function() {
+                var data = sortableTableCellText(sortableTable);
+                assert.equal(data[3][0],'apple');
+                assert.equal(data[1][0],'banana');
+                assert.equal(data[2][0],'grape');
+                assert.equal(data[0][0],'pear');
+                assert.equal(data[4][0],'strawberry');
+                assert.equal(data[5][0],'kiwi');
+                assert.lengthOf(data, 6);
+                done();
+            });
+        });
+        test('sorts number descending', function(done) {
+            sortableTable.sortColumn = 'count';
+            sortableTable.sortDescending = true;
+            flush(function() {
+                var data = sortableTableCellText(sortableTable);
+                assert.equal(data[1][0],'apple');
+                assert.equal(data[3][0],'banana');
+                assert.equal(data[2][0],'grape');
+                assert.equal(data[4][0],'pear');
+                assert.equal(data[0][0],'strawberry');
+                assert.equal(data[5][0],'kiwi');
+                assert.lengthOf(data, 6);
+                done();
+            });
+        });
+
+        test('sorts date ascending', function(done) {
+            sortableTable.sortColumn = 'date';
+            sortableTable.sortDescending = false;
+            flush(function() {
+                var data = sortableTableCellText(sortableTable);
+                assert.equal(data[3][0],'apple');
+                assert.equal(data[2][0],'banana');
+                assert.equal(data[1][0],'grape');
+                assert.equal(data[0][0],'pear');
+                assert.equal(data[4][0],'strawberry');
+                assert.equal(data[5][0],'kiwi');
+                assert.lengthOf(data, 6);
+                done();
+            });
+        });
+        test('sorts date descending', function(done) {
+            sortableTable.sortColumn = 'date';
+            sortableTable.sortDescending = true;
+            flush(function() {
+                var data = sortableTableCellText(sortableTable);
+                assert.equal(data[1][0],'apple');
+                assert.equal(data[2][0],'banana');
+                assert.equal(data[3][0],'grape');
+                assert.equal(data[4][0],'pear');
+                assert.equal(data[0][0],'strawberry');
+                assert.equal(data[5][0],'kiwi');
+                assert.lengthOf(data, 6);
+                done();
+            });
+        });
+
+        test('sorts float number ascending', function(done) {
+            sortableTable.sortColumn = 'weight';
+            sortableTable.sortDescending = false;
+            flush(function() {
+                var data = sortableTableCellText(sortableTable);
+                assert.equal(data[4][0],'apple');
+                assert.equal(data[1][0],'banana');
+                assert.equal(data[2][0],'grape');
+                assert.equal(data[0][0],'pear');
+                assert.equal(data[3][0],'strawberry');
+                assert.equal(data[5][0],'kiwi');
+                assert.lengthOf(data, 6);
+                done();
+            });
+        });
+        test('sorts float number descending', function(done) {
+            sortableTable.sortColumn = 'weight';
+            sortableTable.sortDescending = true;
+            flush(function() {
+                var data = sortableTableCellText(sortableTable);
+                assert.equal(data[4][0],'apple');
+                assert.equal(data[2][0],'banana');
+                assert.equal(data[1][0],'grape');
+                assert.equal(data[3][0],'pear');
+                assert.equal(data[0][0],'strawberry');
+                assert.equal(data[5][0],'kiwi');
+                assert.lengthOf(data, 6);
+                done();
+            });
+        });
+        //sorts strings ascending should fail, mixed column content
+        //sorts strings descending should fail, mixed column content
+    });
+/*
+    suite('example3 - custom datatype', function() {
+        var sortableTable = document.getElementById('example3');
+        function setDataType(){
+            sortableTable.datatypes['charlength'] = function(x, y){
+                var cx = x.length;
+                var cy = y.length;
+                if(x < y) return -1;
+                if(x > y) return 1;
+                return 0;
+            };
+        }
+        test('sorts ascending', function(done) {
+            setDataType();
+            sortableTable.sortColumn = 'length';
+            sortableTable.sortDescending = false;
+            flush(function() {
+                var data = sortableTableCellText(sortableTable);
+                assert.equal(data[3][0],'apple');
+                assert.equal(data[1][0],'banana');
+                assert.equal(data[2][0],'grape');
+                assert.equal(data[0][0],'pear');
+                assert.equal(data[4][0],'strawberry');
+                assert.equal(data[5][0],'kiwi');
+                assert.lengthOf(data, 6);
+                done();
+            });
+        });
+        test('sorts descending', function(done) {
+            setDataType();
+            sortableTable.sortColumn = 'length';
+            sortableTable.sortDescending = true;
+            flush(function() {
+                var data = sortableTableCellText(sortableTable);
+                assert.equal(data[1][0],'apple');
+                assert.equal(data[3][0],'banana');
+                assert.equal(data[2][0],'grape');
+                assert.equal(data[4][0],'pear');
+                assert.equal(data[0][0],'strawberry');
+                assert.equal(data[5][0],'kiwi');
+                assert.lengthOf(data, 6);
+                done();
+            });
+        });
+    });*/
     </script>
 </body>
 </html>

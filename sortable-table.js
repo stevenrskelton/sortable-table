@@ -484,15 +484,23 @@ Polymer(Polymer.mixin({
 
             if (!sortCompare) {
                 sortCompare = function (x, y) {
-                    if (typeof x === "string" && typeof y === "string") {
-                        if (isNaN(x) || isNaN(y)) {
-                            x = x.toLowerCase();
-                            y = y.toLowerCase();
-                        } else {
-                            x = x.valueOf ? x.valueOf() : +x;
-                            y = y.valueOf ? y.valueOf() : +y;
+                    var typeOfX = typeof x;
+                    var typeOfY = typeof y;
+                    if (typeOfX === "number" || typeOfY === "number") {
+                        return self.datatypes["number"](x, y);
+                    }
+                    if (typeOfX === "string" || typeOfY === "string") {
+                        if (!isNaN(x) && !isNaN(y)) {
+                           return self.datatypes["number"](x, y);
                         }
                     }
+                    var dateX = new Date(x);
+                    var dateY = new Date(y);
+                    if (!isNaN(dateX) && !isNaN(dateY)) {
+                        return self.datatypes["number"](dateX, dateY);
+                    }
+                    x = x.valueOf ? x.valueOf() : x;
+                    y = y.valueOf ? y.valueOf() : y;
                     if (x < y) { return -1; }
                     if (x > y) { return 1; }
                     return 0;
