@@ -154,7 +154,7 @@ Polymer(Polymer.mixin({
         this.grid = !this.grid;
     },
     toggleRowFromSelected: function (row) {
-        if (Array.isArray(this.selected)) {
+        if (this.multiSelect && Array.isArray(this.selected)) {
             var index = this.selected.indexOf(row);
             if (index > -1) {
                 this.selected.splice(index, 1);
@@ -356,6 +356,12 @@ Polymer(Polymer.mixin({
         }
     },
     selectedChanged: function (oldVal, newVal) {
+        // Automatic switching to multiSelect in case an
+        // array is passed does not work if table data is represented
+        // as an array of arrays. In such a case, newVal is
+        // of type array but represents a single row in a table.
+        // Disabling for now.
+        /*
         if (newVal) {
             if (Array.isArray(newVal)) {
                 if (!this.multiSelect) { this.multiSelect = true; }
@@ -363,6 +369,7 @@ Polymer(Polymer.mixin({
                 if (this.multiSelect) { this.multiSelect = false; }
             }
         }
+        */
     },
     sortColumnChanged: function (oldVal, newVal) {
         if (this.dataSource) { this.dataSource.sortColumn = this.sortColumn; }
@@ -549,7 +556,6 @@ Polymer(Polymer.mixin({
         }
 
         var records = [];
-        var isMultiSelect = Array.isArray(selected);
 
         if (page < 1) { page = 1; }
 
@@ -570,7 +576,7 @@ Polymer(Polymer.mixin({
 
         var isSelected, isEditMode, isDirty, isInUndo, fields;
         var f = function (row) {
-            isSelected = isMultiSelect ? selected.indexOf(row) > -1 : row === selected;
+            isSelected = this.multiSelect ? selected.indexOf(row) > -1 : row === selected;
             isEditMode = this.editRow === row;
             isDirty = false;
             isInUndo = this.undoStack.filter(function (element) { return element.ref === row; });
